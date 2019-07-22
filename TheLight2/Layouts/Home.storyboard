@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14810.11" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Izl-5v-Je2">
+    <device id="retina6_5" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14766.13"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--SplitViewController-->
+        <scene sceneID="Fn9-hL-Dpo">
+            <objects>
+                <splitViewController storyboardIdentifier="mainSplit" title="SplitViewController" id="Izl-5v-Je2" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Home" image="home30sel" id="2YI-CO-C5U"/>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="3PL-tl-pRi"/>
+                    <connections>
+                        <segue destination="Tm4-tg-AZ9" kind="relationship" relationship="detailViewController" id="bIW-hz-cwH"/>
+                        <segue destination="YHA-Rw-dpi" kind="relationship" relationship="masterViewController" id="yhl-bI-Eph"/>
+                    </connections>
+                </splitViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zQq-IY-jba" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-7071" y="2882"/>
+        </scene>
+        <!--Master-->
+        <scene sceneID="dUW-T9-p0b">
+            <objects>
+                <tableViewController storyboardIdentifier="homeId" title="Master" id="2kW-Ye-qva" customClass="MasterViewController" customModule="TheLight2" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="gSo-8O-UMj">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" textLabel="3cq-ew-Smh" style="IBUITableViewCellStyleDefault" id="c0S-kt-QtM">
+                                <rect key="frame" x="0.0" y="28" width="414" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="c0S-kt-QtM" id="ul2-hp-hMQ">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3cq-ew-Smh">
+                                            <rect key="frame" x="20" y="0.0" width="374" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="2kW-Ye-qva" id="jZB-PF-ptI"/>
+                            <outlet property="delegate" destination="2kW-Ye-qva" id="jSc-Na-EIY"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Master" id="mmQ-Ym-Ea2"/>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="xuX-mf-2HV">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </refreshControl>
+                    <connections>
+                        <segue destination="8dP-Rd-8AP" kind="showDetail" identifier="snapshotSegue" id="Xe5-i3-6kr"/>
+                        <segue destination="BMu-ah-Db5" kind="showDetail" identifier="geotifySegue" id="Cxr-qW-djN"/>
+                        <segue destination="7iJ-e5-9PE" kind="showDetail" identifier="searchMapSegue" id="sUE-7K-6Te"/>
+                        <segue destination="FDd-ir-fVb" kind="show" identifier="showzipSegue" id="I3U-D0-UJr"/>
+                        <segue destination="cQs-K3-Vg9" kind="show" identifier="showsalesmanSegue" id="1m6-9q-Z3Z"/>
+                        <segue destination="mxF-ad-HMj" kind="show" identifier="showjobSegue" id="CZv-Lr-efr"/>
+                        <segue destination="hgu-Fc-VnF" kind="show" identifier="showproductSegue" id="kqH-vM-ID5"/>
+                        <segue destination="SFk-LG-wCV" kind="show" identifier="showadSegue" id="REv-VY-K9V"/>
+                        <segue destination="4r3-7n-vJH" kind="showDetail" identifier="contactSegue" id="ZL7-V3-0Aj"/>
+                        <segue destination="4iz-qn-nmg" kind="showDetail" identifier="transmitbeaconSegue" id="yBz-H8-Pb5"/>
+                        <segue destination="NXg-Xe-QIp" kind="showDetail" identifier="spotbeaconSegue" id="QlZ-ah-nU8"/>
+                        <segue destination="tN9-fC-7hB" kind="showDetail" identifier="musicSegue" id="nFI-ya-y3K"/>
+                        <segue destination="dgD-1u-2P3" kind="showDetail" identifier="showDetail" id="jXa-rY-nIT"/>
+                        <segue destination="vqX-0h-M8u" kind="showDetail" identifier="youtubeSegue" id="3WG-vZ-KyQ"/>
+                        <segue destination="7Ms-ZK-PX7" kind="showDetail" identifier="codegenSegue" id="hQ0-GF-Wlq"/>
+                        <segue destination="1x6-Tg-NbL" kind="showDetail" identifier="statisticSegue" id="TAX-D6-Kqk"/>
+                        <segue destination="fz5-jn-doc" kind="showDetail" identifier="userSegue" id="mY3-16-sea"/>
+                        <segue destination="Sma-WJ-739" kind="showDetail" identifier="socialSegue" id="byB-8e-ilO"/>
+                        <segue destination="bco-uJ-Hbh" kind="showDetail" identifier="notificationSegue" id="ONa-2f-7JF"/>
+                        <segue destination="G3L-fx-zag" kind="show" identifier="showemployeeSegue" id="oAH-Fo-otT"/>
+                        <segue destination="Ukd-Ap-mOE" kind="show" identifier="showvendSegue" id="ynp-hA-gwn"/>
+                        <segue destination="9Pk-z6-hVh" kind="show" identifier="showcustSegue" id="gHb-61-k1r"/>
+                        <segue destination="Bcn-kV-Kxt" kind="show" identifier="showleadSegue" id="nLj-mu-mp6"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2gG-VI-uf2" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-5313" y="3358"/>
+        </scene>
+        <!--SnapshotVC-->
+        <scene sceneID="FjJ-OF-VQe">
+            <objects>
+                <viewController storyboardIdentifier="snapshotId" extendedLayoutIncludesOpaqueBars="YES" id="aFC-bs-XXI" customClass="SnapshotVC" customModule="TheLight2" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="jYU-AB-WBS">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="141" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="P1q-LH-bwJ">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" red="0.92549633980000001" green="0.92547911410000006" blue="0.9254907966" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="oDK-n9-mG6" customClass="TableViewCell" customModule="TheLight2" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="141"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="oDK-n9-mG6" id="uqw-zx-DE8">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="141"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VGY-IK-9kG">
+                                                    <rect key="frame" x="24" y="11" width="365" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="97f-0x-B7V">
+                                                    <rect key="frame" x="24" y="38" width="365" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="q9u-fb-uHa">
+                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="141"/>
+                                                    <color key="backgroundColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="97x-eE-8oJ">
+                                                        <size key="itemSize" width="120" height="120"/>
+                                                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                        <inset key="sectionInset" minX="1" minY="0.0" maxX="1" maxY="0.0"/>
+                                                    </collectionViewFlowLayout>
+                                                    <cells>
+                                                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cellId" id="rMl-Uj-8DE" customClass="CollectionViewCell" customModule="TheLight2" customModuleProvider="target">
+                                                            <rect key="frame" x="1" y="10.666666666666666" width="100" height="120"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                                                <rect key="frame" x="0.0" y="0.0" width="100" height="120"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                            </view>
+                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <size key="customSize" width="100" height="120"/>
+                                                        </collectionViewCell>
+                                                    </cells>
+                                                    <connections>
+                                                        <outlet property="dataSource" destination="aFC-bs-XXI" id="1jl-WE-wux"/>
+                                                        <outlet property="delegate" destination="aFC-bs-XXI" id="1GS-rS-crA"/>
+                                                    </connections>
+                                                </collectionView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="q9u-fb-uHa" secondAttribute="bottom" id="1J6-PL-UIZ"/>
+                                                <constraint firstItem="q9u-fb-uHa" firstAttribute="leading" secondItem="uqw-zx-DE8" secondAttribute="leading" id="AD9-Xi-Zb7"/>
+                                                <constraint firstItem="q9u-fb-uHa" firstAttribute="top" secondItem="uqw-zx-DE8" secondAttribute="top" id="MqZ-0P-FiH"/>
+                                                <constraint firstAttribute="trailing" secondItem="q9u-fb-uHa" secondAttribute="trailing" id="t0g-Qf-wp2"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="collectionView" destination="q9u-fb-uHa" id="8qX-WP-0wp"/>
+                                            <outlet property="snapdetailLabel" destination="97f-0x-B7V" id="bue-kb-XkA"/>
+                                            <outlet property="snaptitleLabel" destination="VGY-IK-9kG" id="KKR-2R-cCz"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="aFC-bs-XXI" id="OhH-DG-IBO"/>
+                                    <outlet property="delegate" destination="aFC-bs-XXI" id="Bck-SE-4rc"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="P1q-LH-bwJ" firstAttribute="top" secondItem="jYU-AB-WBS" secondAttribute="top" id="6fF-e4-bs1"/>
+                            <constraint firstItem="LUc-HF-VOM" firstAttribute="trailing" secondItem="P1q-LH-bwJ" secondAttribute="trailing" id="EC2-0s-Hzy"/>
+                            <constraint firstItem="P1q-LH-bwJ" firstAttribute="leading" secondItem="LUc-HF-VOM" secondAttribute="leading" id="LhB-Fa-zu8"/>
+                            <constraint firstAttribute="bottom" secondItem="P1q-LH-bwJ" secondAttribute="bottom" id="pXj-ao-14P"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="LUc-HF-VOM"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="VnM-NX-Fux"/>
+                    <connections>
+                        <outlet property="tableView" destination="P1q-LH-bwJ" id="aaC-qp-eVk"/>
+                        <segue destination="FuS-W3-TfU" kind="showDetail" identifier="snapvideoSegue" id="DN8-N7-Fir"/>
+                        <segue destination="SRG-gV-gfj" kind="showDetail" identifier="snapuploadSegue" id="5BE-dp-dx1"/>
+                        <segue destination="oXY-iI-QpT" kind="show" identifier="snapemployeeSegue" id="iTa-ca-VP5"/>
+                        <segue destination="toN-ky-qec" kind="show" identifier="userdetailSegue" id="QNU-qT-CQ7"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tor-yU-HsV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4619" y="2682"/>
+        </scene>
+        <!--EmployeeVC-->
+        <scene sceneID="j5f-FZ-5eS">
+            <objects>
+                <viewControllerPlaceholder storyboardName="MainTable" referencedIdentifier="EmployeeVC" id="G3L-fx-zag" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="AnV-qi-Whx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3312" y="3358"/>
+        </scene>
+        <!--VendorVC-->
+        <scene sceneID="Evk-Lx-A6C">
+            <objects>
+                <viewControllerPlaceholder storyboardName="MainTable" referencedIdentifier="VendorVC" id="Ukd-Ap-mOE" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3PI-U9-UjC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3573" y="3358"/>
+        </scene>
+        <!--CustomerVC-->
+        <scene sceneID="cVg-fE-JP6">
+            <objects>
+                <viewControllerPlaceholder storyboardName="MainTable" referencedIdentifier="CustomerVC" id="9Pk-z6-hVh" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gHi-Qy-eR2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3821" y="3358"/>
+        </scene>
+        <!--LeadVC-->
+        <scene sceneID="6N2-D3-haZ">
+            <objects>
+                <viewControllerPlaceholder storyboardName="MainTable" referencedIdentifier="LeadVC" id="Bcn-kV-Kxt" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Cgm-Q1-7iZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4112" y="3358"/>
+        </scene>
+        <!--EditData-->
+        <scene sceneID="o38-LI-bYT">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EditData" id="oXY-iI-QpT" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="asd-Wc-mwL"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CHk-19-Elt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3776" y="2682"/>
+        </scene>
+        <!--ZipcodeVC-->
+        <scene sceneID="3cg-2H-jQ5">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SubTable" referencedIdentifier="ZipcodeVC" id="FDd-ir-fVb" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hhf-i7-6xt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4370" y="3500"/>
+        </scene>
+        <!--userDetailVC-->
+        <scene sceneID="eCi-bL-zVQ">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Supporting" referencedIdentifier="userDetailVC" id="toN-ky-qec" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="a9W-Oq-kIG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3954" y="3100"/>
+        </scene>
+        <!--SalesmanVC-->
+        <scene sceneID="Fz0-At-DCK">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SubTable" referencedIdentifier="SalesmanVC" id="cQs-K3-Vg9" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NkB-Rl-r7I" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4092" y="3500"/>
+        </scene>
+        <!--JobVC-->
+        <scene sceneID="mSZ-PD-cLc">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SubTable" referencedIdentifier="JobVC" id="mxF-ad-HMj" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kqN-zV-BeM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3825" y="3500"/>
+        </scene>
+        <!--ProductVC-->
+        <scene sceneID="GGi-Nf-5Jl">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SubTable" referencedIdentifier="ProductVC" id="hgu-Fc-VnF" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="A3h-tn-L9P" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3565" y="3500"/>
+        </scene>
+        <!--AdVC-->
+        <scene sceneID="30v-0N-2bR">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SubTable" referencedIdentifier="AdVC" id="SFk-LG-wCV" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LOz-Pz-0wR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3287" y="3500"/>
+        </scene>
+        <!--StatisticNC-->
+        <scene sceneID="ZxH-Wz-rjm">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SubApps" referencedIdentifier="StatisticNC" id="1x6-Tg-NbL" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="I4U-2g-v7b" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2749" y="3872"/>
+        </scene>
+        <!--ContactNC-->
+        <scene sceneID="1M0-Jy-RAL">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SubApps" referencedIdentifier="ContactNC" id="4r3-7n-vJH" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NOH-ny-3sU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4908" y="3872"/>
+        </scene>
+        <!--TransmitBeaconNC-->
+        <scene sceneID="Bx5-ve-NtT">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SubApps" referencedIdentifier="TransmitBeaconNC" id="4iz-qn-nmg" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4qb-6G-iYj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4589" y="3872"/>
+        </scene>
+        <!--SpotBeaconNC-->
+        <scene sceneID="TLQ-Bf-bcH">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SubApps" referencedIdentifier="SpotBeaconNC" id="NXg-Xe-QIp" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="q72-Ut-sSR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4260" y="3872"/>
+        </scene>
+        <!--MusicNC-->
+        <scene sceneID="9G4-XK-x10">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SubApps" referencedIdentifier="MusicNC" id="tN9-fC-7hB" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8LL-4x-Hln" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3932" y="3872"/>
+        </scene>
+        <!--DetailNC-->
+        <scene sceneID="UAy-TF-EWW">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SubApps" referencedIdentifier="DetailNC" id="dgD-1u-2P3" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3QW-LL-J0w" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3657" y="3872"/>
+        </scene>
+        <!--YouTubeNC-->
+        <scene sceneID="bzz-Bk-wS1">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SubApps" referencedIdentifier="YouTubeNC" id="vqX-0h-M8u" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VGX-O6-4AD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3355" y="3872"/>
+        </scene>
+        <!--CodeGenNC-->
+        <scene sceneID="Vop-mx-1zh">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SubApps" referencedIdentifier="CodeGenNC" id="7Ms-ZK-PX7" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9hS-Sn-KxG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3039" y="3872"/>
+        </scene>
+        <!--UserViewNC-->
+        <scene sceneID="rcz-6L-12F">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Supporting" referencedIdentifier="UserViewNC" id="fz5-jn-doc" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="edJ-FN-KR7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-5778" y="3872"/>
+        </scene>
+        <!--SocialNC-->
+        <scene sceneID="8QQ-aO-kLD">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Supporting" referencedIdentifier="SocialNC" id="Sma-WJ-739" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NWg-ya-909" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-5528" y="3872"/>
+        </scene>
+        <!--NotificationNC-->
+        <scene sceneID="XFq-W5-bnn">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Supporting" referencedIdentifier="NotificationNC" id="bco-uJ-Hbh" colorLabel="IBBuiltInLabel-Orange" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xGi-iF-DE7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-5315" y="3872"/>
+        </scene>
+        <!--Snapshot-->
+        <scene sceneID="uGq-p0-Nf2">
+            <objects>
+                <navigationController storyboardIdentifier="DetailNavigationViewController" title="Snapshot" id="Tm4-tg-AZ9" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="LvZ-6M-Xt3">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="aFC-bs-XXI" kind="relationship" relationship="rootViewController" id="6gB-kU-Iwo"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="f81-Wl-58e" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-6026" y="2682"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="EeB-7B-D6Z">
+            <objects>
+                <navigationController extendedLayoutIncludesOpaqueBars="YES" hidesBottomBarWhenPushed="YES" id="8dP-Rd-8AP" sceneMemberID="viewController">
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="aUP-6H-VuJ">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="aFC-bs-XXI" kind="relationship" relationship="rootViewController" id="vvx-Eg-jNz"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="v1H-Qz-J5W" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-5313" y="2682"/>
+        </scene>
+        <!--Home-->
+        <scene sceneID="HK5-Av-cJC">
+            <objects>
+                <navigationController storyboardIdentifier="MainNavigationViewController" title="Home" id="YHA-Rw-dpi" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Home" image="home30sel.png" id="4wj-ZF-bbn"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="hHr-46-8gG">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="2kW-Ye-qva" kind="relationship" relationship="rootViewController" id="O4u-Oj-3Fq"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1ZS-gl-lTN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-6026" y="3358"/>
+        </scene>
+        <!--News-->
+        <scene sceneID="vrU-3e-aaG">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="PlayVC" storyboardName="News" id="FuS-W3-TfU" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wH8-OI-gtL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4123" y="2183"/>
+        </scene>
+        <!--News-->
+        <scene sceneID="diI-cD-15j">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="NewsDetailController" storyboardName="News" id="SRG-gV-gfj" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xJJ-NL-cKm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4123" y="2294"/>
+        </scene>
+        <!--Geotify-->
+        <scene sceneID="WQP-M2-Gib">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Geotify" id="BMu-ah-Db5" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pMm-QT-Qoo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4396" y="3627"/>
+        </scene>
+        <!--Mapsearch-->
+        <scene sceneID="1yE-1g-Pfy">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Mapsearch" id="7iJ-e5-9PE" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VZ5-Q0-nT9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4653" y="3627"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="home30sel" width="30" height="30"/>
+        <image name="home30sel.png" width="16" height="16"/>
+    </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="vvx-Eg-jNz"/>
+    </inferredMetricsTieBreakers>
+</document>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PreferenceSpecifiers</key>
+	<array>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Key</key>
+			<string>geotifyKey</string>
+			<key>DefaultValue</key>
+			<string>NO</string>
+			<key>Title</key>
+			<string>Geotify</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Key</key>
+			<string>verseKey</string>
+			<key>DefaultValue</key>
+			<false/>
+			<key>Title</key>
+			<string>Verse of the Day</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>OTHER NOTIFICATIONS</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Push Notification</string>
+			<key>Key</key>
+			<string>pushnotifyKey</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Email Notification</string>
+			<key>Key</key>
+			<string>emailnotifyKey</string>
+			<key>DefaultValue</key>
+			<string>NO</string>
+		</dict>
+	</array>
+	<key>Strings Table</key>
+	<string>Notification</string>
+	<key>Title</key>
+	<string>Notification</string>
+</dict>
+</plist>
