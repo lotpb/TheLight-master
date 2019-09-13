@@ -13,7 +13,7 @@ protocol AddGeotificationsViewControllerDelegate {
     func addGeotificationViewController(controller: AddGeotificationVC, didAddCoordinate coordinate: CLLocationCoordinate2D, radius: Double, identifier: String, note: String, eventType: Geotification.EventType)
 }
 
-class AddGeotificationVC: UITableViewController {
+final class AddGeotificationVC: UITableViewController {
     
     @IBOutlet var addButton: UIBarButtonItem!
     @IBOutlet var zoomButton: UIBarButtonItem!

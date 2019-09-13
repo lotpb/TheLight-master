@@ -9,7 +9,7 @@
 import UIKit
 import UserNotifications
 
-class NotificationVC: UIViewController {
+final class NotificationVC: UIViewController {
     
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var customMessage: UITextField!
@@ -166,8 +166,9 @@ class NotificationVC: UIViewController {
             content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "Tornado.caf"))
             content.categoryIdentifier = "myCategory"
             
-            let imageURL = Bundle.main.url(forResource: "map", withExtension: "png")
-            let attachment = try! UNNotificationAttachment(identifier: "", url: imageURL!, options: nil)
+            let imageName = "applelogo"
+            guard let imageURL = Bundle.main.url(forResource: imageName, withExtension: "png") else { return }
+            let attachment = try! UNNotificationAttachment(identifier: imageName, url: imageURL, options: .none)
             content.attachments = [attachment]
             
           //content.userInfo = ["customNumber": 100]
@@ -239,8 +240,9 @@ class NotificationVC: UIViewController {
             content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "Tornado.caf"))
             content.categoryIdentifier = "myCategory"
             
-            let imageURL = Bundle.main.url(forResource: "news", withExtension: "png")
-            let attachment = try! UNNotificationAttachment(identifier: "", url: imageURL!, options: nil)
+            let imageName = "applelogo"
+            guard let imageURL = Bundle.main.url(forResource: imageName, withExtension: "png") else { return }
+            let attachment = try! UNNotificationAttachment(identifier: imageName, url: imageURL, options: .none)
             content.attachments = [attachment]
             content.userInfo = ["link":"https://www.facebook.com/himinihana/photos/a.104501733005072.5463.100117360110176/981809495274287"]
             

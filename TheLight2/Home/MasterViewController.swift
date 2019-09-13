@@ -18,7 +18,7 @@ import FirebaseAnalytics
 //import SwiftKeychainWrapper
 
 
-class MasterViewController: UITableViewController, UISplitViewControllerDelegate {
+final class MasterViewController: UITableViewController, UISplitViewControllerDelegate {
 
     let defaults = UserDefaults.standard
     
@@ -45,58 +45,48 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     let myLabel1: UILabel = {
         let label = UILabel(frame: .init(x: 10, y: 10, width: 74, height: 74))
         label.numberOfLines = 2
-        if #available(iOS 13.0, *) {
-            label.backgroundColor = .white
-        } else {
-            // Fallback on earlier versions
-        }
-        label.textColor = Color.goldColor
+        label.backgroundColor = .white
+        label.textColor = UIColor.systemBlue//Color.goldColor
         label.textAlignment = .center
-        //label.font = .preferredFont(forTextStyle: .subheadline)
         label.font = Font.celltitle14m
         label.layer.cornerRadius = 37.0
-        label.layer.borderColor = Color.Header.headtextColor.cgColor
+        label.layer.borderColor = UIColor.lightText.cgColor //Color.Header.headtextColor.cgColor
         label.layer.borderWidth = 1
         label.layer.masksToBounds = true
         label.isUserInteractionEnabled = true
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
     let myLabel2: UILabel = {
         let label = UILabel(frame: .init(x: 110, y: 10, width: 74, height: 74))
         label.numberOfLines = 2
-        if #available(iOS 13.0, *) {
-            label.backgroundColor = .white
-        } else {
-            // Fallback on earlier versions
-        }
-        label.textColor = Color.goldColor
+        label.backgroundColor = .white
+        label.textColor = UIColor.systemBlue
         label.textAlignment = .center
         label.font = Font.celltitle14m
         label.layer.cornerRadius = 37.0
-        label.layer.borderColor = Color.Header.headtextColor.cgColor
+        label.layer.borderColor = UIColor.lightText.cgColor
         label.layer.borderWidth = 1
         label.layer.masksToBounds = true
         label.isUserInteractionEnabled = true
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
     let myLabel3: UILabel = {
         let label = UILabel(frame: .init(x: 210, y: 10, width: 74, height: 74))
         label.numberOfLines = 2
-        if #available(iOS 13.0, *) {
-            label.backgroundColor = .white
-        } else {
-            // Fallback on earlier versions
-        }
-        label.textColor = Color.goldColor
+        label.backgroundColor = .white
+        label.textColor = UIColor.systemBlue
         label.textAlignment = .center
         label.font = Font.celltitle14m
         label.layer.cornerRadius = 37.0
-        label.layer.borderColor = Color.Header.headtextColor.cgColor
+        label.layer.borderColor = UIColor.lightText.cgColor
         label.layer.borderWidth = 1
         label.layer.masksToBounds = true
         label.isUserInteractionEnabled = true
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -279,27 +269,29 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     }
     
     func setupTableView() {
-        self.tableView!.delegate = self
-        self.tableView!.dataSource = self
-        self.tableView!.sizeToFit()
-        self.tableView!.clipsToBounds = true
-        self.tableView!.tableFooterView = UIView(frame: .zero)
-        
-        resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
-        resultsController.tableView.sizeToFit()
-        resultsController.tableView.clipsToBounds = true
-        resultsController.tableView.dataSource = self
-        resultsController.tableView.delegate = self
-        resultsController.tableView.tableFooterView = UIView(frame: .zero)
-        
         if #available(iOS 13.0, *) {
+            let bgView = UIView()
+            bgView.backgroundColor = .secondarySystemGroupedBackground
+            tableView!.backgroundView = bgView
             self.tableView!.backgroundColor = .systemGroupedBackground
             resultsController.tableView.backgroundColor = .systemGroupedBackground
         } else {
             self.tableView!.backgroundColor = Color.LGrayColor //.black
             resultsController.tableView.backgroundColor = Color.LGrayColor
         }
+        
+        self.tableView!.delegate = self
+        self.tableView!.dataSource = self
+        self.tableView!.sizeToFit()
+        self.tableView!.clipsToBounds = true
         self.tableView!.tableFooterView = UIView(frame: .zero)
+
+        resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
+        resultsController.tableView.sizeToFit()
+        resultsController.tableView.clipsToBounds = true
+        resultsController.tableView.dataSource = self
+        resultsController.tableView.delegate = self
+        resultsController.tableView.tableFooterView = UIView(frame: .zero)
     }
     
     @objc func refreshData() {
@@ -592,7 +584,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
             if (section == 0) {
                 if UIDevice.current.userInterfaceIdiom == .phone {
                     let vw = UIView()
-                    vw.backgroundColor = .black
+                    vw.backgroundColor = .systemGroupedBackground
                     //tableView.tableHeaderView = vw
 
                     myLabel1.text = String(format: "%@%d", "COUNT\n", menuItems.count )

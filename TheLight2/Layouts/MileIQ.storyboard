@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.59" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qYW-xu-jJe">
-    <device id="retina6_5" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14865.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qYW-xu-jJe">
+    <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.45"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14819.2"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -48,7 +45,7 @@
         <scene sceneID="JXS-ap-TyF">
             <objects>
                 <navigationController id="qYW-xu-jJe" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Places" image="CurrentLocation" id="RQQ-bc-3NO"/>
+                    <tabBarItem key="tabBarItem" title="Places" image="location.fill" catalog="system" id="RQQ-bc-3NO"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="OCv-Kn-9k9">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -64,6 +61,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="CurrentLocation" width="15" height="15"/>
+        <image name="location.fill" catalog="system" width="64" height="60"/>
     </resources>
 </document>

@@ -25,7 +25,7 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     }()
     
     private let cellId = "cellId"
-    private let imageNames = ["home", "trending", "subscriptions", "account"]
+    private let imageNames = ["house.fill", "flame.fill", "car.fill", "person.fill"]
     
     var homeController: News?
     
@@ -82,7 +82,7 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
         } else {
             cell.tintColor = UIColor.rgb(red: 91, green: 14, blue: 13)
         }
-        cell.imageView1.image = UIImage(named: imageNames[indexPath.item])?.withRenderingMode(.alwaysTemplate)
+        cell.imageView1.image = UIImage(systemName: imageNames[indexPath.item])?.withRenderingMode(.alwaysTemplate)
         
         return cell
     }
@@ -106,7 +106,7 @@ class MenuCell: CollectionViewCell {
     
     let imageView1: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(named: "home")?.withRenderingMode(.alwaysTemplate)
+        iv.image = UIImage(systemName: "house.fill")
         
         if UIDevice.current.userInterfaceIdiom == .pad  {
             iv.tintColor = .darkGray
@@ -147,7 +147,6 @@ class MenuCell: CollectionViewCell {
         addConstraint(NSLayoutConstraint(item: imageView1, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
         addConstraint(NSLayoutConstraint(item: imageView1, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0))
     } 
-    
 }
 
 

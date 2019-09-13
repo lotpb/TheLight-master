@@ -10,7 +10,7 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
-class Vendor: UIViewController {
+final class Vendor: UIViewController {
 
     @IBOutlet weak var tableView: UITableView?
     // MARK: NavigationController Hidden
@@ -112,7 +112,9 @@ class Vendor: UIViewController {
         self.tableView!.sizeToFit()
         self.tableView!.clipsToBounds = true
         if #available(iOS 13.0, *) {
-            self.tableView!.backgroundColor = .systemGray4
+            let bgView = UIView()
+            bgView.backgroundColor = .secondarySystemGroupedBackground
+            tableView!.backgroundView = bgView
         } else {
             // Fallback on earlier versions
             self.tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
@@ -507,11 +509,11 @@ extension Vendor: UITableViewDataSource {
             }
             cell.vendsubtitleLabel!.textColor = .systemGray
             cell.vendreplyButton.tintColor = .lightGray
-            cell.vendreplyButton.setImage(#imageLiteral(resourceName: "Commentfilled").withRenderingMode(.alwaysTemplate), for: .normal)
+            cell.vendreplyButton.setImage(UIImage(systemName: "bubble.left.fill"), for: .normal)
             cell.vendreplyLabel.text! = ""
             
             cell.vendlikeButton.tintColor = .lightGray
-            cell.vendlikeButton.setImage(#imageLiteral(resourceName: "Thumb Up").withRenderingMode(.alwaysTemplate), for: .normal)
+            cell.vendlikeButton.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
             
             cell.customImagelabel.text = "Vend"
             cell.customImagelabel.tag = indexPath.row
@@ -595,10 +597,7 @@ extension Vendor: UITableViewDelegate {
                 header.myLabel2.text = String(format: "%@%d", "Active\n", activeCount ?? 0)
                 header.myLabel3.text = String(format: "%@%d", "Events\n", 0)
             }
-            header.separatorView1.backgroundColor = Color.Vend.buttonColor
-            header.separatorView2.backgroundColor = Color.Vend.buttonColor
-            header.separatorView3.backgroundColor = Color.Vend.buttonColor
-            header.contentView.backgroundColor = Color.Lead.navColor
+            header.contentView.backgroundColor = Color.Vend.buttonColor//.secondarySystemFill //Color.Lead.navColor
             self.tableView!.tableHeaderView = nil //header.header
             
             return header.contentView

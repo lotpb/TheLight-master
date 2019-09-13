@@ -31,7 +31,7 @@ private func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 
-class ContactVC: UIViewController {
+final class ContactVC: UIViewController {
     
     @IBOutlet weak private var tableView: UITableView!
     @IBOutlet weak var noContactsLabel: UILabel!

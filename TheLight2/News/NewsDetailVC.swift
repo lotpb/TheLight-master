@@ -12,7 +12,7 @@ import FirebaseDatabase
 import AVFoundation
 
 
-class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDelegate, UISplitViewControllerDelegate {
+final class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDelegate, UISplitViewControllerDelegate {
     
     
     @IBOutlet weak var scrollView: UIScrollView!
@@ -51,7 +51,6 @@ class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDelegate, 
         imageView.contentMode = .scaleAspectFill // .scaleAspectFill //.scaleAspectFit
         imageView.clipsToBounds = true
         imageView.isUserInteractionEnabled = true
-        //imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -72,7 +71,7 @@ class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDelegate, 
         button.alpha = 0.9
         button.isUserInteractionEnabled = true
         button.tintColor = .white
-        button.setImage(#imageLiteral(resourceName: "play_button"), for: .normal)
+        button.setImage(UIImage(systemName: "play.circle"), for: .normal)
         let tap = UITapGestureRecognizer(target: self, action: #selector(playVideo))
         button.addGestureRecognizer(tap)
         return button
@@ -145,11 +144,6 @@ class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDelegate, 
     private func setupNavigation() {
         
         self.navigationItem.largeTitleDisplayMode = .never
-        if #available(iOS 13.0, *) {
-            //navigationController?.navigationBar.barTintColor = .red
-        } else {
-            // Fallback on earlier versions
-        }
         let editItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editData))
         let backItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(setbackButton))
         navigationItem.rightBarButtonItems = [editItem]
@@ -170,7 +164,13 @@ class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDelegate, 
         
         self.scrollView.delegate = self
         self.scrollView.minimumZoomScale = 1.0
-        self.scrollView.maximumZoomScale = 6.0
+        self.scrollView.maximumZoomScale = 5.0
+        
+        //self.scrollView.contentOffset = CGPoint(x: 500, y: 200)
+        //self.scrollView.zoomScale = 1.0
+        //self.scrollView.contentOffset = CGPoint(x: 1000, y: 450)
+        //self.scrollView.contentSize = newsImageview.bounds.size
+        //self.scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         UIView.transition(with: self.newsImageview, duration: 0.5, options: .transitionCrossDissolve, animations: {
             if (self.defaults.bool(forKey: "parsedataKey")) {
@@ -258,7 +258,7 @@ class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDelegate, 
         newsImageview.addSubview(activityIndicator)
         
         NSLayoutConstraint.activate([
-            newsImageview.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            newsImageview.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 0),
             newsImageview.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             newsImageview.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             newsImageview.bottomAnchor.constraint(equalTo: titleLabel.topAnchor, constant: -10),
@@ -327,13 +327,14 @@ class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDelegate, 
         {
             guard let photo = segue.destination as? UploadController else { return }
             
-            photo.formStat = "Update"
+            photo.formState = "Update"
             photo.objectId = self.objectId
             photo.newsImage = self.newsImageview.image
             photo.newstitle = self.titleLabel.text
             photo.newsdetail = self.newsDetail
             photo.newsStory = self.newsStory
-            photo.imageDetailurl = self.videoURL
+            photo.imageDetailurl = self.imageUrl
+            photo.videoDetailurl = self.videoURL
         }
     }
 }

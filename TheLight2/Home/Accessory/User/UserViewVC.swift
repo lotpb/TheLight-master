@@ -15,7 +15,7 @@ import CoreLocation
 import GeoFire
  
 
-class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, MKMapViewDelegate {
+final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, MKMapViewDelegate {
 
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var tableView: UITableView!

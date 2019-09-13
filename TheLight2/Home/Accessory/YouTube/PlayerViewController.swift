@@ -9,7 +9,7 @@
 import UIKit
 import YouTubePlayer
 
-class PlayerViewController: UIViewController {
+final class PlayerViewController: UIViewController {
 
     @IBOutlet var videoPlayer: YouTubePlayerView!
     

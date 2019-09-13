@@ -27,7 +27,7 @@ enum SettingName: String {
     case SwitchAccount = "Switch Account"
 }
 
-class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+final class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     lazy var blackView = UIView()
     
@@ -42,10 +42,10 @@ class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDe
     private let cellHeight: CGFloat = 50
     
     let settings: [Setting] = {
-        let settingsSetting = Setting(name: .Settings, imageName: "settings")
+        let settingsSetting = Setting(name: .Settings, imageName: "gear")
         
-        let cancelSetting = Setting(name: .Cancel, imageName: "cancel")
-        return [settingsSetting, Setting(name: .TermsPrivacy, imageName: "privacy"), Setting(name: .SendFeedback, imageName: "feedback"), Setting(name: .Help, imageName: "help"), Setting(name: .SwitchAccount, imageName: "switch_account"), cancelSetting]
+        let cancelSetting = Setting(name: .Cancel, imageName: "multiply")
+        return [settingsSetting, Setting(name: .TermsPrivacy, imageName: "lock.fill"), Setting(name: .SendFeedback, imageName: "phone.fill"), Setting(name: .Help, imageName: "questionmark.circle.fill"), Setting(name: .SwitchAccount, imageName: "person.crop.circle.fill"), cancelSetting]
     }()
     
     var homeController: News?

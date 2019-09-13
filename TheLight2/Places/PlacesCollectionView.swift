@@ -108,10 +108,10 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
         
         self.navigationItem.largeTitleDisplayMode = .never
         
-        let addButton = UIBarButtonItem(image: #imageLiteral(resourceName: "note30copy").withRenderingMode(.alwaysTemplate), style: .plain, target: self, action: #selector(self.actionButton))
+        let addButton = UIBarButtonItem(image: UIImage(systemName: "link"), style: .plain, target: self, action: #selector(self.actionButton))
         navigationItem.rightBarButtonItems = [addButton]
         
-        let gridButton = UIBarButtonItem(image: #imageLiteral(resourceName: "icon-menu-bar").withRenderingMode(.alwaysTemplate), style: .plain, target: self, action: #selector(handleOpen))
+        let gridButton = UIBarButtonItem(image: UIImage(systemName: "line.horizontal.3"), style: .plain, target: self, action: #selector(handleOpen))
         navigationItem.leftBarButtonItems = [gridButton]
     }
     
@@ -156,31 +156,41 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
     // MARK: - Button
     @objc func actionButton(_ sender: AnyObject) {
         
+        let date = Date()
+        let calendar = Calendar.current
+
+        let monthInt = calendar.dateComponents([.month], from: Date()).month!
+        let monthStr = calendar.monthSymbols[monthInt-1]
+        let monthStr1 = calendar.monthSymbols[monthInt-2]
+        let monthStr2 = calendar.monthSymbols[monthInt-3]
+        let yearCount = calendar.component(.year, from: date)
+        let yearCount1 = calendar.component(.year, from: date) - 1
+        
         let alertController = UIAlertController(title:"Send reports to:", message:"eunited@optonline", preferredStyle: .actionSheet)
         
-        let setting = UIAlertAction(title: "October 2018", style: .default, handler: { (action) in
+        let buttonOne = UIAlertAction(title: "\(monthStr) \(String(yearCount))", style: .default, handler: { (action) in
 
         })
-        let buttonTwo = UIAlertAction(title: "September 2018", style: .default, handler: { (action) in
+        let buttonTwo = UIAlertAction(title: "\(monthStr1) \(String(yearCount))", style: .default, handler: { (action) in
         
         })
-        let buttonThree = UIAlertAction(title: "August 2018", style: .default, handler: { (action) in
+        let buttonThree = UIAlertAction(title: "\(monthStr2) \(String(yearCount))", style: .default, handler: { (action) in
   
         })
-        let buttonFour = UIAlertAction(title: "2018 YTD", style: .default, handler: { (action) in
+        let buttonFour = UIAlertAction(title: "\(String(yearCount)) YTD", style: .default, handler: { (action) in
 
         })
-        let buttonSocial = UIAlertAction(title: "2017", style: .default, handler: { (action) in
+        let buttonLast = UIAlertAction(title: String(yearCount1), style: .default, handler: { (action) in
             
         })
         let buttonCancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
         }
         
-        alertController.addAction(setting)
+        alertController.addAction(buttonOne)
         alertController.addAction(buttonTwo)
         alertController.addAction(buttonThree)
         alertController.addAction(buttonFour)
-        alertController.addAction(buttonSocial)
+        alertController.addAction(buttonLast)
         alertController.addAction(buttonCancel)
         
         if let popoverController = alertController.popoverPresentationController {

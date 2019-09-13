@@ -10,7 +10,7 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
-class ProductVC: UIViewController {
+final class ProductVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView?
     // MARK: NavigationController Hidden
@@ -117,7 +117,9 @@ class ProductVC: UIViewController {
         self.tableView!.dataSource = self
         self.tableView!.sizeToFit()
         self.tableView!.clipsToBounds = true
-        self.tableView!.backgroundColor = Color.LGrayColor
+        let bgView = UIView()
+        bgView.backgroundColor = .secondarySystemGroupedBackground
+        tableView!.backgroundView = bgView
         self.tableView!.tableFooterView = UIView(frame: .zero)
   
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
@@ -379,8 +381,10 @@ extension ProductVC: UITableViewDataSource {
             
             cell.selectionStyle = .none
             cell.accessoryType = .disclosureIndicator
-            cell.customImagelabel.text = "Prod"
+            cell.customImagelabel.text = "Prod's"
             cell.customImagelabel.tag = indexPath.row
+            cell.customImagelabel.adjustsFontSizeToFitWidth = true
+            cell.customImagelabel.backgroundColor = .systemTeal
             
             if UIDevice.current.userInterfaceIdiom == .pad  {
                 cell.prodtitleLabel!.font = Font.celltitle22m
@@ -445,10 +449,7 @@ extension ProductVC: UITableViewDelegate {
                     header.myLabel2.text = String(format: "%@%d", "Active\n", activeCount ?? 0)
                     header.myLabel3.text = String(format: "%@%d", "Event\n", 0)
                 }
-                header.separatorView1.backgroundColor = Color.Table.labelColor
-                header.separatorView2.backgroundColor = Color.Table.labelColor
-                header.separatorView3.backgroundColor = Color.Table.labelColor
-                header.contentView.backgroundColor = Color.Table.navColor
+                header.contentView.backgroundColor = .systemTeal //Color.Table.labelColor
                 self.tableView!.tableHeaderView = nil //header.header
                 
                 return header.contentView

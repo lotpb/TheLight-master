@@ -13,7 +13,7 @@ import ContactsUI
 import EventKit
 import MessageUI
 
-class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
+final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     
     // MARK: NavigationController Hidden
     private var lastContentOffset: CGFloat = 0.0
@@ -28,30 +28,10 @@ class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var mainView: UIView?
     @IBOutlet weak var tableView: UIView?
-    @IBOutlet weak var mySwitch: UISwitch?
-    @IBOutlet weak var activebutton: UIButton?
-    
+
     @IBOutlet weak var listTableView: UITableView?
     @IBOutlet weak var listTableView2: UITableView?
     @IBOutlet weak var newsTableView: UITableView?
-    
-    @IBOutlet private weak var labelNo: UILabel?
-    @IBOutlet private weak var labelname: UILabel?
-    @IBOutlet private weak var labelamount: UILabel?
-    @IBOutlet private weak var labeldate: UILabel?
-    @IBOutlet private weak var labeladdress: UILabel?
-    @IBOutlet private weak var labelcity: UILabel?
-    @IBOutlet private weak var following: UILabel?
-    @IBOutlet private weak var labeldatetext: UILabel?
-    
-    var detailItem: AnyObject? {
-        didSet {
-            configureView()
-        }
-    }
-    
-    func configureView() {
-    }
     
     var formController : String?
     var status : String?
@@ -124,16 +104,114 @@ class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     var getEmail : String?
     var emailTitle :String?
     var messageBody:String?
-    
+
+    let labelname: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = ""
+        label.textColor = .systemBlue
+        label.textAlignment = .left
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
+
+    let following: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = ""
+        label.textColor = .systemGray
+        label.textAlignment = .right
+        label.sizeToFit()
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
+
+    lazy var activebutton: UIButton = {
+        let button = UIButton(type: .system)
+        button.isUserInteractionEnabled = true
+        button.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    let labelamount: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = ""
+        label.textColor = .label
+        label.textAlignment = .left
+        label.sizeToFit()
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
+
+    let labeladdress: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = ""
+        label.textColor = .label
+        label.textAlignment = .left
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
+
+    let labelcity: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .label
+        label.textAlignment = .left
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
+
+   let labeldatetext: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = ""
+        label.textColor = .systemBlue
+        label.textAlignment = .left
+        label.sizeToFit()
+        return label
+    }()
+
+    let labeldate: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = ""
+        label.textColor = .label
+        label.textAlignment = .left
+        label.sizeToFit()
+        return label
+    }()
+
     let photoImage: CustomImageView = {
         let imageView = CustomImageView()
         imageView.image = #imageLiteral(resourceName: "plus_photo")
         imageView.layer.borderColor = UIColor.systemBlue.cgColor
-        //imageView.layer.borderWidth = 2.0
         imageView.layer.masksToBounds = true
         imageView.isUserInteractionEnabled = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
+    }()
+
+    let labelNo: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = ""
+        label.textColor = .systemGray
+        label.textAlignment = .right
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
+
+    let mySwitch: UISwitch = {
+        let button = UISwitch()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.isEnabled = true
+        button.isUserInteractionEnabled = true
+        button.tintColor = .lightGray
+        button.onTintColor = .systemBlue
+        return button
     }()
     
     lazy var mapButton: UIButton = {
@@ -159,30 +237,19 @@ class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
         return refreshControl
     }()
     
+    var detailItem: AnyObject? {
+            didSet {
+                configureView()
+            }
+        }
+        
+        func configureView() {
+        }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.extendedLayoutIncludesOpaqueBars = true
-        if #available(iOS 13.0, *) {
-            //view.backgroundColor = .systemGroupedBackground
-            mainView?.backgroundColor = .systemGray6
-            //scrollWall?.backgroundColor = .systemGroupedBackground
-            contentView?.backgroundColor = .systemGroupedBackground
-            tableView?.backgroundColor = .systemGray6
-            listTableView?.backgroundColor = .systemGray6
-            listTableView2?.backgroundColor = .systemGray6
-            newsTableView?.backgroundColor = .systemGroupedBackground
-            labelname?.textColor = .systemGray
-            following?.textColor = .systemGray
-            labelamount?.textColor = .label
-            labeladdress?.textColor = .label
-            labelcity?.textColor = .label
-            labelNo?.textColor = .systemBlue
-            labeldatetext?.textColor = .systemBlue
-            labeldate?.textColor = .label
-        } else {
-            view.backgroundColor = .white
-        }
         
         setupNavigationButtons()
         //Leave this setup below
@@ -213,12 +280,6 @@ class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        self.labelname!.text = ""
-        self.labelamount!.text = ""
-        self.labeldate!.text = ""
-        self.labeladdress!.text = ""
-        self.labelcity!.text = ""
         
         self.tabBarController?.tabBar.isHidden = false
         // MARK: NavigationController Hidden
@@ -232,7 +293,6 @@ class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
         NotificationCenter.default.removeObserver(self)
         //TabBar Hidden
         self.tabBarController?.tabBar.isHidden = true
-        //UIApplication.shared.isStatusBarHidden = false
     }
     
     override func didReceiveMemoryWarning() {
@@ -255,6 +315,18 @@ class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     }
     
     func setupForm() {
+
+        if #available(iOS 13.0, *) {
+            mainView?.backgroundColor = .secondarySystemGroupedBackground
+            contentView?.backgroundColor = .secondarySystemGroupedBackground
+            tableView?.backgroundColor = .secondarySystemGroupedBackground
+            listTableView?.backgroundColor = .secondarySystemGroupedBackground
+            listTableView2?.backgroundColor = .secondarySystemGroupedBackground
+            newsTableView?.backgroundColor = .secondarySystemGroupedBackground
+        } else {
+            view.backgroundColor = .white
+        }
+        
         emailTitle = defaults.string(forKey: "emailtitleKey")
         messageBody = defaults.string(forKey: "emailmessageKey")
         let topBorder = CALayer()
@@ -269,71 +341,127 @@ class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     func setupSwitch() {
         if (self.formController == "Leads") {
             if (self.tbl11 == "Sold") {
-                self.mySwitch!.setOn(true, animated:true)
+                self.mySwitch.setOn(true, animated:true)
             } else {
-                self.mySwitch!.setOn(false, animated:true)
+                self.mySwitch.setOn(false, animated:true)
             }
         }
-        self.mySwitch!.onTintColor = .systemBlue
-        self.mySwitch!.tintColor = .lightGray
     }
     
     func setupFonts() {
         if UIDevice.current.userInterfaceIdiom == .pad  {
-            labelamount!.font = Font.Detail.ipadAmount
-            labelname!.font = Font.Detail.ipadname
-            labeldate!.font = Font.Detail.ipaddate
-            labeladdress!.font = Font.Detail.ipadaddress
-            labelcity!.font = Font.Detail.ipadaddress
-            following!.font = Font.Detail.ipaddate
+            labelamount.font = Font.Detail.ipadAmount
+            labelname.font = Font.Detail.ipadname
+            labeldate.font = Font.Detail.ipaddate
+            labeladdress.font = Font.Detail.ipadaddress
+            labelcity.font = Font.Detail.ipadaddress
+            following.font = Font.Detail.ipaddate
             mapButton.titleLabel?.font = Font.Detail.textbutton
             
         } else {
             
-            labelname!.font = Font.celltitle26r
-            labeladdress!.font = Font.Detail.textaddress
-            labelcity!.font = Font.Detail.textaddress
+            labelname.font = Font.celltitle26r
+            labeladdress.font = Font.Detail.textaddress
+            labelcity.font = Font.Detail.textaddress
             mapButton.titleLabel?.font = Font.Detail.textbutton
             
             if (self.formController == "Vendor" || self.formController == "Employee") {
-                labelamount!.font = Font.Detail.VtextAmount
-                labeldate!.font = Font.Detail.Vtextdate
+                labelamount.font = Font.Detail.VtextAmount
+                labeldate.font = Font.Detail.Vtextdate
             } else {
-                labelamount!.font = Font.Detail.textAmount
-                labeldate!.font = Font.Detail.textdate
+                labelamount.font = Font.Detail.textAmount
+                labeldate.font = Font.Detail.textdate
             }
         }
     }
     
     func setupConstraints() {
-        
+
+        mainView?.addSubview(labelname)
+        mainView?.addSubview(following)
+        mainView?.addSubview(activebutton)
+        mainView?.addSubview(labelamount)
+        mainView?.addSubview(labeladdress)
+        mainView?.addSubview(labelcity)
+        mainView?.addSubview(labeldate)
+        mainView?.addSubview(labeldatetext)
+        mainView?.addSubview(mySwitch)
         mainView?.addSubview(photoImage)
+        mainView?.addSubview(labelNo)
         mainView?.addSubview(mapButton)
 
         //mainView?.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
+
+            labelname.topAnchor.constraint(equalTo: mainView!.topAnchor, constant: 4),
+            labelname.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 15),
+            labelname.rightAnchor.constraint(equalTo: following.leftAnchor, constant: 1),
+            labelname.heightAnchor.constraint(equalToConstant: 30),
+
+            activebutton.topAnchor.constraint(equalTo: mainView!.topAnchor, constant: 9),
+            activebutton.trailingAnchor.constraint(equalTo: mainView!.trailingAnchor, constant: -15),
+            activebutton.widthAnchor.constraint(equalToConstant: 20),
+            activebutton.heightAnchor.constraint(equalToConstant: 20),
+
+            following.topAnchor.constraint(equalTo: mainView!.topAnchor, constant: 9),
+            following.rightAnchor.constraint(equalTo: activebutton.leftAnchor, constant: -5),
+            following.heightAnchor.constraint(equalToConstant: 20),
+
+            labelamount.topAnchor.constraint(equalTo: mainView!.topAnchor, constant: 60),
+            labelamount.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 15),
+            labelamount.rightAnchor.constraint(equalTo: photoImage.leftAnchor, constant: 1),
+            labelamount.heightAnchor.constraint(equalToConstant: 30),
+
+            labeladdress.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 15),
+            labeladdress.rightAnchor.constraint(equalTo: photoImage.leftAnchor, constant: 1),
+            labeladdress.heightAnchor.constraint(equalToConstant: 20),
+
+            labelcity.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 15),
+            labelcity.rightAnchor.constraint(equalTo: photoImage.leftAnchor, constant: 1),
+            labelcity.heightAnchor.constraint(equalToConstant: 20),
+
+            labeldatetext.topAnchor.constraint(equalTo: labelcity.bottomAnchor, constant: 15),
+            labeldatetext.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 15),
+            labeldatetext.heightAnchor.constraint(equalToConstant: 20),
+
+            labeldate.topAnchor.constraint(equalTo: labeldatetext.bottomAnchor, constant: 1),
+            labeldate.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 15),
+            labeldate.heightAnchor.constraint(equalToConstant: 20),
+
+            mySwitch.topAnchor.constraint(equalTo: labeldate.bottomAnchor, constant: 15),
+            mySwitch.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 15),
+
             photoImage.topAnchor.constraint(equalTo: (mainView?.topAnchor)!, constant: +65),
             photoImage.trailingAnchor.constraint( equalTo: (mainView?.trailingAnchor)!, constant: -15),
+
+            labelNo.topAnchor.constraint(equalTo: photoImage.bottomAnchor, constant: 5),
+            labelNo.rightAnchor.constraint( equalTo: photoImage.rightAnchor),
+            labelNo.widthAnchor.constraint(equalToConstant: 125),
+            labelNo.heightAnchor.constraint(equalToConstant: 20),
             
-            mapButton.bottomAnchor.constraint(equalTo: (mainView?.bottomAnchor)!, constant: -15),
-            mapButton.trailingAnchor.constraint( equalTo: (mainView?.trailingAnchor)!, constant: -15),
+            mapButton.topAnchor.constraint(equalTo: (labelNo.bottomAnchor), constant: 15),
+            mapButton.trailingAnchor.constraint( equalTo: (mainView?.trailingAnchor)!, constant: -13),
             mapButton.widthAnchor.constraint(equalToConstant: 75),
             mapButton.heightAnchor.constraint(equalToConstant: 30),
             ])
         
         if UIDevice.current.userInterfaceIdiom == .pad  {
             NSLayoutConstraint.activate([
-                (mainView?.heightAnchor.constraint(equalToConstant: 350))!,
-                photoImage.widthAnchor.constraint(equalToConstant: 300),
-                photoImage.heightAnchor.constraint(equalToConstant: 200)
+                (mainView?.heightAnchor.constraint(equalToConstant: 325))!,
+                photoImage.widthAnchor.constraint(equalToConstant: 150),
+                photoImage.heightAnchor.constraint(equalToConstant: 150),
+                labeladdress.topAnchor.constraint(equalTo: labelamount.bottomAnchor, constant: 25),
+                labelcity.topAnchor.constraint(equalTo: labeladdress.bottomAnchor, constant: 10),
                 ])
         } else {
             let width = 110 //view.frame.width/2-25
             NSLayoutConstraint.activate([
                 (mainView?.heightAnchor.constraint(equalToConstant: 265))!,
                 photoImage.widthAnchor.constraint(equalToConstant: CGFloat(width)),
-                photoImage.heightAnchor.constraint(equalToConstant: 110)
+                photoImage.heightAnchor.constraint(equalToConstant: 110),
+                labeladdress.topAnchor.constraint(equalTo: labelamount.bottomAnchor, constant: 15),
+                labelcity.topAnchor.constraint(equalTo: labeladdress.bottomAnchor, constant: 5),
                 ])
         }
     }
@@ -378,12 +506,13 @@ class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     }
     
     func followButton() {
+        
         if(self.active == "1") {
-            self.following!.text = "Following"
-            self.activebutton!.setImage(#imageLiteral(resourceName: "iosStar"), for: .normal)
+            self.following.text = "Following"
+            self.activebutton.tintColor = .systemYellow
         } else {
-            self.following!.text = "Follow"
-            self.activebutton!.setImage(#imageLiteral(resourceName: "iosStarNA"), for: .normal)
+            self.following.text = "Follow"
+            self.activebutton.tintColor = .systemGray
         }
     }
     
@@ -414,26 +543,23 @@ class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     
     // MARK: - LoadFieldData
     func fieldData() {
-
-        self.labelname!.adjustsFontSizeToFitWidth = true
-        self.labelamount?.sizeToFit()
         
         if self.leadNo != nil {
-            self.labelNo!.text = leadNo
+            self.labelNo.text = leadNo
         } else {
-           self.labelNo!.text = "None" 
+           self.labelNo.text = "None"
         }
         if self.date != nil {
-            self.labeldate!.text = date
+            self.labeldate.text = date
         }
         if self.l1datetext != nil {
-            self.labeldatetext!.text = l1datetext
+            self.labeldatetext.text = l1datetext
         }
         if self.name != nil {
-            self.labelname!.text = name
+            self.labelname.text = name
         }
         if self.address != nil {
-            self.labeladdress!.text = address
+            self.labeladdress.text = address
         }
         if self.city == nil {
             city = "City"
@@ -445,7 +571,7 @@ class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
             zip = "Zip"
         }
         if self.city != nil {
-            self.labelcity!.text = String(format: "%@ %@ %@", city!, state!, zip!)
+            self.labelcity.text = String(format: "%@ %@ %@", city!, state!, zip!)
         } else {
             city = "City"
         }
@@ -508,7 +634,7 @@ class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
             if Amount == nil {
                 Amount = 0
             }
-            labelamount!.text =  formatter.string(from: Amount!)
+            labelamount.text =  formatter.string(from: Amount!)
             
             if self.salesman != nil {
                 t22 = self.salesman
@@ -531,9 +657,9 @@ class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
         } else {
             
             if self.amount != nil {
-                labelamount!.text = self.amount
+                labelamount.text = self.amount
             } else {
-                labelamount!.text = "None"
+                labelamount.text = "None"
             }
             
             if self.tbl22 != nil {
@@ -1256,7 +1382,7 @@ extension LeadDetail: UITableViewDataSource {
         
         if #available(iOS 13.0, *) {
             cell.backgroundColor = .clear
-            cell.textLabel?.textColor = .label
+            cell.textLabel?.textColor = .systemBlue
             cell.detailTextLabel?.textColor = .label
         } else {
             cell.textLabel?.textColor = .black
@@ -1344,8 +1470,8 @@ extension LeadDetail: UITableViewDataSource {
             
             if #available(iOS 13.0, *) {
                 cell.leadtitleDetail!.textColor = .label
-                cell.leadsubtitleDetail.textColor = .systemGray
-                cell.leadreadDetail.textColor = .systemBlue
+                cell.leadsubtitleDetail.textColor = .systemBlue
+                cell.leadreadDetail.textColor = .systemGray
                 cell.leadnewsDetail.textColor = .label
             } else {
    

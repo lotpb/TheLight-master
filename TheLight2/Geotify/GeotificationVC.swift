@@ -15,7 +15,7 @@ struct PreferencesKeys {
     static let savedItems = "savedItems"
 }
 
-class GeotificationVC: UIViewController, UISplitViewControllerDelegate, RegionsProtocol {
+final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, RegionsProtocol {
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
@@ -48,8 +48,8 @@ class GeotificationVC: UIViewController, UISplitViewControllerDelegate, RegionsP
         let button = UIButton(type: .system)
         button.backgroundColor = .white
         button.setTitle("+", for: .normal)
-        button.setTitleColor(Color.DGrayColor, for: .normal)
-        button.titleEdgeInsets = .init(top: -10, left: 0, bottom: 0, right: 0)
+        button.setTitleColor(.lightGray, for: .normal)
+        button.titleEdgeInsets = .init(top: 0, left: 0, bottom: 5, right: 0)
         button.addTarget(self, action: #selector(maptype), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -58,8 +58,8 @@ class GeotificationVC: UIViewController, UISplitViewControllerDelegate, RegionsP
     lazy var floatingZoomBtn: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .white
-        button.tintColor = Color.DGrayColor //.lightGray
-        button.setImage(#imageLiteral(resourceName: "CurrentLocation").withRenderingMode(.alwaysTemplate), for: .normal)
+        button.tintColor = .lightGray
+        button.setImage(UIImage(systemName: "location.fill"), for: .normal)
         button.addTarget(self, action: #selector(zoomToCurrentLocation), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -76,8 +76,8 @@ class GeotificationVC: UIViewController, UISplitViewControllerDelegate, RegionsP
         let label = UILabel()
         label.text = "---"
         label.font = Font.celltitle16r
-        label.backgroundColor = .white
-        label.textColor = .darkGray
+        label.backgroundColor = .clear
+        label.textColor = .label
         label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -87,8 +87,8 @@ class GeotificationVC: UIViewController, UISplitViewControllerDelegate, RegionsP
         let label = UILabel()
         label.text = "searching..."
         label.font = Font.celltitle16r
-        label.backgroundColor = .white
-        label.textColor = .darkGray
+        label.backgroundColor = .clear
+        label.textColor = .label
         label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -98,8 +98,8 @@ class GeotificationVC: UIViewController, UISplitViewControllerDelegate, RegionsP
         let label = UILabel()
         label.text = "searching..."
         label.font = Font.celltitle16r
-        label.backgroundColor = .white
-        label.textColor = .darkGray
+        label.backgroundColor = .clear
+        label.textColor = .label
         label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -156,13 +156,11 @@ class GeotificationVC: UIViewController, UISplitViewControllerDelegate, RegionsP
         super.viewDidAppear(animated)
         //TabBar Hidden
         self.tabBarController?.tabBar.isHidden = false
-        UIToolbar.appearance().barTintColor = Color.toolbarColor
+        UIToolbar.appearance().barTintColor = .red //Color.toolbarColor
         
         locationManager.requestAlwaysAuthorization()
         // Setup GetAddress
         locationManager.startUpdatingLocation()
-
-        //loadAllGeotifications()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -544,14 +542,14 @@ extension GeotificationVC: MKMapViewDelegate {
             if annotationView == nil {
                 annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
                 annotationView?.canShowCallout = true
-                
+                annotationView?.pinTintColor = .systemBlue
                 annotationView?.isMultipleTouchEnabled = false
                 annotationView?.isDraggable = true
                 annotationView?.animatesDrop = true
                 
                 let removeButton = UIButton(type: .custom)
                 removeButton.frame = .init(x: 0, y: 0, width: 23, height: 23)
-                removeButton.setImage(UIImage(named: "DeleteGeotification")!, for: .normal)
+                removeButton.setImage(UIImage(systemName: "x.circle"), for: .normal)
                 annotationView?.leftCalloutAccessoryView = removeButton
             } else {
                 annotationView?.annotation = annotation

@@ -27,7 +27,7 @@ final class News: UICollectionViewController, SearchDelegate {
         let label = UILabel()
         label.text = "  Home"
         if #available(iOS 13.0, *) {
-            label.textColor = .label
+            label.textColor = .systemGray
         } else {
             label.textColor = .black
         }
@@ -38,7 +38,7 @@ final class News: UICollectionViewController, SearchDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.titleLabel.frame = .init(x: 0, y: 0, width: view.frame.width - 32, height: 30)
         self.navigationItem.titleView = self.titleLabel
         self.navigationItem.largeTitleDisplayMode = .never
@@ -99,12 +99,8 @@ final class News: UICollectionViewController, SearchDelegate {
         collectionView?.isDirectionalLockEnabled = true
         collectionView?.bounces = false
         collectionView?.showsHorizontalScrollIndicator = false
+        collectionView?.backgroundColor = .black
         
-        if #available(iOS 13.0, *) {
-            //collectionView?.backgroundColor = .red //.secondarySystemGroupedBackground
-        } else {
-            //collectionView?.backgroundColor = .white
-        }
         collectionView?.register(FeedCell.self, forCellWithReuseIdentifier: cellId)
         collectionView?.register(TrendingCell.self, forCellWithReuseIdentifier: trendingCellId)
         collectionView?.register(SubscriptionCell.self, forCellWithReuseIdentifier: subscriptionCellId)
@@ -113,7 +109,7 @@ final class News: UICollectionViewController, SearchDelegate {
     
      private func setupNavigationButtons() {
         
-        let moreButton = UIBarButtonItem(image:#imageLiteral(resourceName: "nav_more_icon").withRenderingMode(.alwaysTemplate), style: .plain, target: self, action: #selector(handleMore))
+        let moreButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: #selector(handleMore))
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action:#selector(newButton))
         let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action:#selector(handleSearch))
         navigationItem.rightBarButtonItems = [moreButton,searchButton,addButton]
@@ -176,7 +172,7 @@ final class News: UICollectionViewController, SearchDelegate {
             redView.backgroundColor = .black
         } else {
             if #available(iOS 13.0, *) {
-                //redView.backgroundColor = .red //.systemGroupedBackground
+                redView.backgroundColor = .systemRed //.systemGroupedBackground
             } else {
                 redView.backgroundColor = UIColor.rgb(red: 230, green: 32, blue: 31)
             }

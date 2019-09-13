@@ -8,7 +8,7 @@
 
 import UIKit
 
-class NavVC: UINavigationController, PlayerVCDelegate  {
+final class NavVC: UINavigationController, PlayerVCDelegate  {
 
     
     //MARK: Properties
@@ -20,7 +20,7 @@ class NavVC: UINavigationController, PlayerVCDelegate  {
     }()
     
     let statusView: UIView = {
-        let st = UIView.init(frame: UIApplication.shared.statusBarFrame)
+        let st = UIView(frame: CGRect.zero)
         st.backgroundColor = UIColor.black
         st.alpha = 0.15
         return st

@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-class PhotoSelectorController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+final class PhotoSelectorController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     private let cellId = "cellId"
     private let headerId = "headerId"

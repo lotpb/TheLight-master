@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class GetAddress: UIViewController, UITableViewDelegate, UITableViewDataSource {
+final class GetAddress: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     
     @IBOutlet weak var tableView: UITableView?
@@ -128,6 +128,7 @@ class GetAddress: UIViewController, UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
         cell.selectionStyle = .none
+        cell.textLabel!.textColor = .label
         cell.detailTextLabel!.textColor = .lightGray
         
         if UIDevice.current.userInterfaceIdiom == .pad  {
@@ -146,7 +147,7 @@ class GetAddress: UIViewController, UITableViewDelegate, UITableViewDataSource {
             if ((indexPath as NSIndexPath).row == 0) {
                 //cell.textLabel!.font =  Font.celltitle22m
                 cell.detailTextLabel!.font =  Font.celltitle22m
-                cell.textLabel!.textColor = .red
+                cell.textLabel!.textColor = .systemRed
                 cell.detailTextLabel!.textColor = .systemRed
                 
                 cell.textLabel!.text = subThoroughfare! + " " + thoroughfare!

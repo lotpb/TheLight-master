@@ -310,7 +310,7 @@ class PlaceCell: UICollectionViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
         button.tintColor = .systemGreen
-        button.setImage(#imageLiteral(resourceName: "thumb").withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(UIImage(systemName: "smallcircle.fill.circle.fill"), for: .normal)
         return button
     }()
     
@@ -319,16 +319,7 @@ class PlaceCell: UICollectionViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
         button.tintColor = .red
-        button.setImage(#imageLiteral(resourceName: "thumb").withRenderingMode(.alwaysTemplate), for: .normal)
-        return button
-    }()
-    
-    let likeBtn: UIButton = {
-        let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "cloud30copy").withRenderingMode(.alwaysTemplate), for: .normal)
-        //button.isUserInteractionEnabled = true
-        //let tap = UITapGestureRecognizer(target: self, action: #selector(PlacesCollectionView.alertButton))
-        //button.addGestureRecognizer(tap)
+        button.setImage(UIImage(systemName: "smallcircle.fill.circle.fill"), for: .normal)
         return button
     }()
     
@@ -478,10 +469,10 @@ class PlaceCell: UICollectionViewCell {
             
             //toolBar
             var homeButton, infoButton, vehicleButton, doneButton, fixedSpace, flexibleSpace: UIBarButtonItem!
-            homeButton = UIBarButtonItem(customView: likeBtn)
-            infoButton = UIBarButtonItem(barButtonSystemItem: .compose, target: nil, action: #selector(PlacesCollectionView.alertButton))
-            vehicleButton = UIBarButtonItem(barButtonSystemItem: .action, target: nil, action: #selector(PlacesCollectionView.alertButton))
-            doneButton = UIBarButtonItem(barButtonSystemItem: .trash, target: nil, action: #selector(PlacesCollectionView.alertButton))
+            homeButton = UIBarButtonItem(image: UIImage(systemName: "mappin.and.ellipse"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
+            infoButton = UIBarButtonItem(image: UIImage(systemName: "info.circle"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
+            vehicleButton = UIBarButtonItem(image: UIImage(systemName: "car.fill"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
+            doneButton = UIBarButtonItem(image: UIImage(systemName: "trash"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
             fixedSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.fixedSpace, target: nil, action: nil)
             fixedSpace.width = 15.0
             flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
@@ -512,16 +503,19 @@ extension PlaceCell: MKMapViewDelegate {
         pinView.canShowCallout = true
         pinView.isDraggable = false
         
-        let smallSquare = CGSize(width: 30, height: 30)
+        let smallSquare = CGSize(width: 20, height: 20)
         let button = UIButton(frame: .init(origin: .zero, size: smallSquare))
-        button.setBackgroundImage(UIImage(named: "car"), for: [])
+        button.setBackgroundImage(UIImage(systemName: "car.fill"), for: [])
+        
         button.addTarget(self, action: #selector(PlaceCell.getAppleMaps), for: .touchUpInside)
         pinView.leftCalloutAccessoryView = button
         
         if annotation.title == "Start"  {
             pinView.pinTintColor = .systemGreen
+            button.tintColor = .systemGreen
         } else {
             pinView.pinTintColor = .red
+            button.tintColor = .red
         }
         return pinView
     }

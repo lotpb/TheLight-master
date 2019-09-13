@@ -11,7 +11,7 @@ import SwiftUI
 import Parse
 import FirebaseDatabase
 
-class Lead: UIViewController {
+final class Lead: UIViewController {
     
     @IBOutlet weak var tableView: UITableView?
     // MARK: NavigationController Hidden
@@ -96,14 +96,6 @@ class Lead: UIViewController {
         searchController.searchBar.sizeToFit()
         searchController.obscuresBackgroundDuringPresentation = false
         
-        if let textfield = searchController.searchBar.value(forKey: "searchField") as? UITextField {
-            if let backgroundview = textfield.subviews.first {
-                backgroundview.backgroundColor = .white
-                backgroundview.layer.cornerRadius = 10
-                backgroundview.clipsToBounds = true
-            }
-        }
-        
         self.definesPresentationContext = true
     }
     
@@ -116,7 +108,10 @@ class Lead: UIViewController {
         self.tableView!.sizeToFit()
         self.tableView!.clipsToBounds = true
         if #available(iOS 13.0, *) {
-            self.tableView!.backgroundColor = .systemGray4
+            //self.tableView!.backgroundColor = .systemGray4
+            let bgView = UIView()
+            bgView.backgroundColor = .secondarySystemGroupedBackground
+            tableView!.backgroundView = bgView
         } else {
             self.tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
         }
@@ -526,24 +521,22 @@ extension Lead: UITableViewDataSource {
             }
             
             cell.selectionStyle = .none
-            if #available(iOS 13.0, *) {
-                cell.leadtitleLabel.textColor = .label
-            } else {
-                // Fallback on earlier versions
-            }
+            cell.leadtitleLabel.textColor = .label
+            cell.myLabel20.textColor = .label
+            
             cell.leadsubtitleLabel!.textColor = .systemGray
-            cell.myLabel10.backgroundColor = Color.Lead.labelColor1
-            cell.leadreplyButton.tintColor = .lightGray
-            cell.leadreplyButton.setImage(#imageLiteral(resourceName: "Commentfilled").withRenderingMode(.alwaysTemplate), for: .normal)
+            cell.myLabel10.backgroundColor = .systemGray//Color.Lead.labelColor1
+            
+            cell.leadreplyButton.setImage(UIImage(systemName: "bubble.left.fill"), for: .normal)
             cell.leadreplyLabel.text! = ""
             
             cell.leadlikeButton.tintColor = .systemYellow
-            cell.leadlikeButton.setImage(#imageLiteral(resourceName: "Thumb Up").withRenderingMode(.alwaysTemplate), for: .normal)
+            cell.leadlikeButton.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
             
             cell.customImagelabel.text = "Lead"
             cell.customImagelabel.tag = indexPath.row
             cell.customImagelabel.frame = .init(x: 10, y: 10, width: 50, height: 50)
-            cell.customImagelabel.backgroundColor = Color.Cust.labelColor
+            cell.customImagelabel.backgroundColor = Color.Lead.buttonColor //Color.Cust.labelColor
             cell.customImagelabel.layer.cornerRadius = 25.0
             
             let tap = UITapGestureRecognizer(target: self, action: #selector(imgLoadSegue))
@@ -552,7 +545,7 @@ extension Lead: UITableViewDataSource {
             
             if (defaults.bool(forKey: "parsedataKey")) {
                 
-                cell.feedItems = _feedItems[indexPath.row] as? Database
+                //cell.feedItems = _feedItems[indexPath.row] as? Database
                 
                 cell.leadtitleLabel!.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "LastName") as? String ?? ""
                 cell.leadsubtitleLabel!.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "City") as? String ?? ""
@@ -573,7 +566,7 @@ extension Lead: UITableViewDataSource {
                 } else {
                     cell.leadlikeButton!.tintColor = .lightGray
                     cell.leadlikeLabel.text! = ""
-                } 
+                }
                 
             } else {
                 //firebase
@@ -637,10 +630,7 @@ extension Lead: UITableViewDelegate {
                     header.myLabel2.text = String(format: "%@%d", "Active\n", activeCount ?? 0)
                     header.myLabel3.text = String(format: "%@%d", "Events\n", 3)
                 }
-                header.separatorView1.backgroundColor = Color.Lead.buttonColor
-                header.separatorView2.backgroundColor = Color.Lead.buttonColor
-                header.separatorView3.backgroundColor = Color.Lead.buttonColor
-                header.contentView.backgroundColor = Color.Lead.navColor
+                header.contentView.backgroundColor = .systemRed  //Color.Lead.buttonColor //Color.Lead.navColor
                 
                 return header
             }

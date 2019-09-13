@@ -17,7 +17,7 @@ import GeoFire
 import MobileCoreServices //kUTTypeImage
 import MessageUI
 
-class UserDetailController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, MKMapViewDelegate, MFMailComposeViewControllerDelegate, UITextFieldDelegate {
+final class UserDetailController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, MKMapViewDelegate, MFMailComposeViewControllerDelegate, UITextFieldDelegate {
     
     private let headerId = "headerId"
     private let cellId = "cellId"
@@ -69,7 +69,7 @@ class UserDetailController: UIViewController, UINavigationControllerDelegate, UI
     
     lazy var editProfileBtn: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Change Profile Photo", for: .normal)
+        button.setTitle("Edit Photo", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         //button.addTarget(self, action: #selector(UserProfileController.EditProfileButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -91,9 +91,9 @@ class UserDetailController: UIViewController, UINavigationControllerDelegate, UI
         let button = UIButton(type: .system)
         button.setTitle("Call", for: .normal)
         button.layer.cornerRadius = 24.0
-        button.layer.borderColor = Color.BlueColor.cgColor
+        button.layer.borderColor = UIColor.label.cgColor
         button.layer.borderWidth = 3.0
-        button.setTitleColor(Color.BlueColor, for: .normal)
+        button.setTitleColor(UIColor.label, for: .normal)
         button.addTarget(self, action: #selector(callPhone), for: .touchUpInside)
         return button
     }()
@@ -155,8 +155,8 @@ class UserDetailController: UIViewController, UINavigationControllerDelegate, UI
     }
     
     private func setupNavigationButtons() {
-        let albumBtn = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(selectPhotosAlbum))
-        let cameraBtn = UIBarButtonItem(image: #imageLiteral(resourceName: "Camcorder").withRenderingMode(.alwaysTemplate), style: .plain, target: self, action: #selector(selectCamera))
+        let albumBtn = UIBarButtonItem(image: UIImage(systemName: "camera"), style: .plain, target: self, action: #selector(selectPhotosAlbum))
+        let cameraBtn = UIBarButtonItem(image: UIImage(systemName: "video.fill"), style: .plain, target: self, action: #selector(selectCamera))
         navigationItem.rightBarButtonItems = [albumBtn, cameraBtn]
     }
     
@@ -332,9 +332,9 @@ class UserDetailController: UIViewController, UINavigationControllerDelegate, UI
     }
     
     @objc func selectPhotosAlbum() {
-        if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum) {
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
             imagePicker = UIImagePickerController()
-            imagePicker.sourceType = .savedPhotosAlbum
+            imagePicker.sourceType = .photoLibrary
             imagePicker.mediaTypes = [kUTTypeImage as String]
             imagePicker.allowsEditing = true
             imagePicker.delegate = self

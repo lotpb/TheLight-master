@@ -10,7 +10,7 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
-class BlogEditController: UIViewController {
+final class BlogEditController: UIViewController {
     
     var replylist = [BlogModel]()
     var user: UserModel?
@@ -104,7 +104,7 @@ class BlogEditController: UIViewController {
         //self.toolBar!.isTranslucent = false set in AppDelegate
         self.toolBar!.layer.masksToBounds = true
         
-        self.Like!.setImage(#imageLiteral(resourceName: "Thumb Up").withRenderingMode(.alwaysTemplate), for: .normal)
+        self.Like!.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
         if #available(iOS 13.0, *) {
             self.Like!.setTitleColor(.label, for: .normal)
         } else {

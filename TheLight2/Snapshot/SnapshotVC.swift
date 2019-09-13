@@ -119,6 +119,7 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         loadData()
         setupTableView()
         setupNavigation()
+        setupNewsNavigationItems()
         self.tableView.addSubview(self.refreshControl)
     }
     
@@ -142,7 +143,7 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
             }
         }
         
-        setMainNavItems()
+        setupNewsNavigationItems()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -159,8 +160,6 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     
     func setupNavigation() {
         navigationController?.navigationBar.prefersLargeTitles = true
-        //let searchBtn = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchButton))
-        //self.navigationItem.rightBarButtonItems = [searchBtn]
         self.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
         self.navigationItem.leftItemsSupplementBackButton = true
         if UIDevice.current.userInterfaceIdiom == .pad  {
@@ -554,11 +553,11 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     }
     
     // create a seperator on bottom of tableview
-    internal func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    internal func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {/*
         if section == 0 {
             return 0 // return height as per your requirement
-        }
-        return 7 //CGFloat.leastNormalMagnitude
+        } */
+        return 0 //CGFloat.leastNormalMagnitude
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -576,7 +575,7 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         cell.collectionView.delegate =  nil
         cell.collectionView.dataSource = nil
         if #available(iOS 13.0, *) {
-            cell.collectionView.backgroundColor = .systemBackground
+            cell.collectionView.backgroundColor = .secondarySystemGroupedBackground
         } else {
             cell.collectionView.backgroundColor = Color.Snap.collectbackColor
         }
@@ -585,7 +584,7 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         cell.customImageView.layer.borderColor = UIColor.clear.cgColor //fixed
         
         if #available(iOS 13.0, *) {
-            cell.backgroundColor =  .systemBackground
+            cell.backgroundColor =  .secondarySystemGroupedBackground
         } else {
             cell.backgroundColor = Color.Snap.collectbackColor
         }
@@ -603,7 +602,7 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         }
         
         if #available(iOS 13.0, *) {
-            cell.textLabel!.textColor = .red
+            cell.textLabel!.textColor = .systemRed
             cell.snapdetailLabel?.textColor = .label
             cell.snaptitleLabel?.textColor = .systemGray //Color.Snap.textColor1
         } else {
@@ -628,7 +627,8 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         if (indexPath.section == 0) {
             
             if (indexPath.row == 0) {
-                
+                cell.collectionView.backgroundColor = .systemGroupedBackground
+                cell.backgroundColor = .systemGroupedBackground
                 cell.accessoryType = .disclosureIndicator
                 if (defaults.bool(forKey: "parsedataKey")) {
                     cell.textLabel!.text = String(format: "%@%d", "Top News ", _feedNews.count)
@@ -663,6 +663,8 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         } else if (indexPath.section == 1) {
             
             if (indexPath.row  == 0) {
+                cell.collectionView.backgroundColor = .systemGroupedBackground
+                cell.backgroundColor = .systemGroupedBackground
                 if (defaults.bool(forKey: "parsedataKey")) {
                     cell.textLabel!.text = String(format: "%@%d", "Top Jobs ", _feedJob.count)
                 } else {
@@ -700,7 +702,8 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         }  else if (indexPath.section == 2) {
             
             if (indexPath.row == 0) {
-                
+                cell.collectionView.backgroundColor = .systemGroupedBackground
+                cell.backgroundColor = .systemGroupedBackground
                 cell.textLabel!.text = "Latest Blog"
                 cell.collectionView.reloadData()
                 return cell
@@ -742,7 +745,8 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         } else if (indexPath.section == 3) {
             
             if (indexPath.row == 0) {
-                
+                cell.collectionView.backgroundColor = .systemGroupedBackground
+                cell.backgroundColor = .systemGroupedBackground
                 cell.textLabel!.text = "Latest News"
                 cell.collectionView.reloadData()
                 return cell
@@ -789,7 +793,8 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                     //firebase
                     cell.textLabel!.text = String(format: "%@%d", "Top Users ", userlist.count)
                 }
-                
+                cell.collectionView.backgroundColor = .systemGroupedBackground
+                cell.backgroundColor = .systemGroupedBackground
                 cell.selectionStyle = .gray
                 cell.accessoryType = .disclosureIndicator
                 cell.collectionView.reloadData()
@@ -814,6 +819,8 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                     //firebase
                     cell.textLabel!.text = String(format: "%@%d", "Top Salesman ", saleslist.count)
                 }
+                cell.collectionView.backgroundColor = .systemGroupedBackground
+                cell.backgroundColor = .systemGroupedBackground
                 cell.selectionStyle = .gray
                 cell.accessoryType = .disclosureIndicator
                 cell.collectionView.reloadData()
@@ -837,6 +844,8 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                     //firebase
                     cell.textLabel!.text = String(format: "%@%d", "Top Employee ", employlist.count)
                 }
+                cell.collectionView.backgroundColor = .systemGroupedBackground
+                cell.backgroundColor = .systemGroupedBackground
                 cell.selectionStyle = .gray
                 cell.accessoryType = .disclosureIndicator
                 cell.collectionView.reloadData()
@@ -854,7 +863,8 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         } else if (indexPath.section == 7) {
             
             if (indexPath.row == 0) {
-                
+                cell.collectionView.backgroundColor = .systemGroupedBackground
+                cell.backgroundColor = .systemGroupedBackground
                 cell.textLabel!.text = "Top Notification"
                 cell.selectionStyle = .gray
                 cell.accessoryType = .disclosureIndicator
@@ -873,6 +883,8 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         }  else if (indexPath.section == 8) {
             
             if (indexPath.row == 0) {
+                cell.collectionView.backgroundColor = .systemGroupedBackground
+                cell.backgroundColor = .systemGroupedBackground
                 cell.textLabel!.text = String(format: "%@%d", "Top Event ", (events?.count)!)
                 cell.selectionStyle = .gray
                 cell.accessoryType = .disclosureIndicator

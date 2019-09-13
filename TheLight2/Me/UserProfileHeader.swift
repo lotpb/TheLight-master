@@ -16,7 +16,7 @@ protocol UserProfileHeaderDelegate {
     func didChangeToGridView()
 }
 
-class UserProfileHeader: UICollectionViewCell {
+final class UserProfileHeader: UICollectionViewCell {
     
     var delegate: UserProfileHeaderDelegate?
     var defaults = UserDefaults.standard
@@ -84,7 +84,7 @@ class UserProfileHeader: UICollectionViewCell {
     
     lazy var gridButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "grid"), for: .normal)
+        button.setImage(UIImage(systemName: "circle.grid.3x3.fill"), for: .normal)
         button.addTarget(self, action: #selector(handleChangeToGridView), for: .touchUpInside)
         return button
     }()
@@ -97,7 +97,7 @@ class UserProfileHeader: UICollectionViewCell {
     
     lazy var listButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "list"), for: .normal)
+        button.setImage(UIImage(systemName: "list.bullet"), for: .normal)
         button.tintColor = .systemGray //UIColor(white:0, alpha: 0.2)
         button.addTarget(self, action: #selector(handleChangeToListView), for: .touchUpInside)
         return button
@@ -111,7 +111,7 @@ class UserProfileHeader: UICollectionViewCell {
     
     let bookmarkButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "ribbon"), for: .normal)
+        button.setImage(UIImage(systemName: "bookmark"), for: .normal)
         button.tintColor = .systemGray //UIColor(white:0, alpha: 0.2)
         //button.addTarget(self, action: #selector(settingButton), for: .touchUpInside)
         return button
@@ -137,7 +137,8 @@ class UserProfileHeader: UICollectionViewCell {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
-        button.setImage(#imageLiteral(resourceName: "settings").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setImage(UIImage(systemName: "gear"), for: .normal)
+        button.tintColor = .label
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 3
@@ -198,10 +199,10 @@ class UserProfileHeader: UICollectionViewCell {
     private func setupBottomToolbar() {
         
         let topDividerView = UIView()
-        topDividerView.backgroundColor = UIColor.lightGray
+        topDividerView.backgroundColor = .systemGray
         
         let bottomDivivderView = UIView()
-        bottomDivivderView.backgroundColor = UIColor.lightGray
+        bottomDivivderView.backgroundColor = .systemGray
         
         let stackView = UIStackView(arrangedSubviews: [gridButton, listButton, bookmarkButton])
         

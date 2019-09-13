@@ -295,7 +295,7 @@ class AppCell: UICollectionViewCell {
         button.alpha = 0.9
         button.isUserInteractionEnabled = true
         button.tintColor = .white
-        button.setImage(#imageLiteral(resourceName: "play_button"), for: .normal)
+        button.setImage(UIImage(systemName: "play.circle"), for: .normal)
         let tap = UITapGestureRecognizer(target: self, action: #selector(playVideo))
         button.addGestureRecognizer(tap)
         return button

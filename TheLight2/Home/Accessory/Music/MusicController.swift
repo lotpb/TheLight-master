@@ -10,7 +10,7 @@ import UIKit
 import AVKit
 import AVFoundation
 
-class MusicController: UIViewController {
+final class MusicController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -319,7 +319,7 @@ extension MusicController: UISearchBarDelegate {
                 dataTask?.cancel()
             }
             // 2
-            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            //UIApplication.shared.isNetworkActivityIndicatorVisible = true
             // 3
             let expectedCharSet = CharacterSet.urlQueryAllowed
             let searchTerm = searchBar.text!.addingPercentEncoding(withAllowedCharacters: expectedCharSet)!
@@ -330,7 +330,7 @@ extension MusicController: UISearchBarDelegate {
                 data, response, error in
                 // 6
                 DispatchQueue.main.async {
-                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    //UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 }
                 // 7
                 if let error = error {

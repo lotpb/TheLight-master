@@ -10,7 +10,7 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
-class ZipcodeVC: UIViewController {
+final class ZipcodeVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     // MARK: NavigationController Hidden
@@ -112,7 +112,9 @@ class ZipcodeVC: UIViewController {
         // MARK: - TableHeader
         self.tableView?.register(HeaderViewCell.self, forCellReuseIdentifier: "Header")
         self.tableView.rowHeight = 60
-        self.tableView.backgroundColor = UIColor(white:0.90, alpha:1.0)
+        let bgView = UIView()
+        bgView.backgroundColor = .secondarySystemGroupedBackground
+        tableView!.backgroundView = bgView
         self.tableView.tableFooterView = UIView(frame: .zero)
 
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
@@ -379,6 +381,7 @@ extension ZipcodeVC: UITableViewDataSource {
             cell.accessoryType = .disclosureIndicator
             cell.customImagelabel.text = "Zip"
             cell.customImagelabel.tag = indexPath.row
+            cell.customImagelabel.backgroundColor = .systemOrange
             
             if UIDevice.current.userInterfaceIdiom == .pad  {
                 cell.ziptitleLabel!.font = Font.celltitle22m
@@ -444,12 +447,8 @@ extension ZipcodeVC: UITableViewDelegate {
                     cell.myLabel1.text = String(format: "%@%d", "Zips\n", ziplist.count)
                     cell.myLabel2.text = String(format: "%@%d", "Active\n", activeCount ?? 0)
                     cell.myLabel3.text = String(format: "%@%d", "Event\n", 0)
-                    
                 }
-                cell.separatorView1.backgroundColor = Color.Table.labelColor
-                cell.separatorView2.backgroundColor = Color.Table.labelColor
-                cell.separatorView3.backgroundColor = Color.Table.labelColor
-                cell.contentView.backgroundColor = Color.Table.navColor
+                cell.contentView.backgroundColor = .systemOrange//Color.Table.labelColor
                 self.tableView!.tableHeaderView = nil
                 
                 return cell.contentView

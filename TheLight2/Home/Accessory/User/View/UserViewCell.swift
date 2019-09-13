@@ -9,7 +9,7 @@
 import UIKit
 
 
-class UserViewCell: UICollectionViewCell {
+final class UserViewCell: UICollectionViewCell {
     
     var user: UserModel? {
         didSet {

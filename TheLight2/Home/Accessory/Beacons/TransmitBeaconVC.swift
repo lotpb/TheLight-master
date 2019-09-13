@@ -12,7 +12,7 @@ import CoreLocation
 import CoreBluetooth
 
 
-class TransmitBeaconVC: UIViewController, CBPeripheralManagerDelegate {
+final class TransmitBeaconVC: UIViewController, CBPeripheralManagerDelegate {
     
     @IBOutlet weak var btnAction: UIButton!
     @IBOutlet weak var txtMajor: UITextField!

@@ -15,7 +15,7 @@ enum ContactType {
     case cnContact
 }
 
-class CreateContactVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+final class CreateContactVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     // outlets
     @IBOutlet weak var contactImageView: UIImageView!
     @IBOutlet weak var firstNameTextfield: UITextField!

@@ -11,7 +11,7 @@ import FirebaseDatabase
 import FirebaseStorage
 import FirebaseAuth
 
-class SharePhotoController: UIViewController {
+final class SharePhotoController: UIViewController {
     
     var selectedImage: UIImage? {
         didSet {

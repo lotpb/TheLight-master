@@ -10,7 +10,7 @@ import UIKit
 //import SwiftUI
 import Parse
 
-class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewControllerDelegate {
+final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewControllerDelegate {
 
     @IBOutlet weak var scrollWall: UIScrollView!
     @IBOutlet weak var tableView: UITableView!

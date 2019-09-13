@@ -76,6 +76,16 @@
 		</dict>
 		<dict>
 			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Song</string>
+			<key>Key</key>
+			<string>soundKey</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
 			<string>General</string>
@@ -175,16 +185,6 @@
 			<string>nameColorKey</string>
 			<key>DefaultValue</key>
 			<string>1</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>Song</string>
-			<key>Key</key>
-			<string>soundKey</string>
-			<key>DefaultValue</key>
-			<false/>
 		</dict>
 		<dict>
 			<key>Type</key>

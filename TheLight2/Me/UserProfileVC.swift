@@ -15,7 +15,7 @@ import CoreLocation
 import MobileCoreServices //kUTTypeImage
 import MessageUI
 
-class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLayout, UserProfileHeaderDelegate {
+final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLayout, UserProfileHeaderDelegate {
     
     func didChangeToListView() {
         isGridView = false
@@ -99,6 +99,10 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
         setupNavigation()
 
         let refreshControl = UIRefreshControl()
+        refreshControl.backgroundColor = .clear //Color.Lead.navColor
+        refreshControl.tintColor = .label
+        let attributes = [NSAttributedString.Key.foregroundColor: UIColor.label]
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: attributes)
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         collectionView?.refreshControl = refreshControl
     }
@@ -116,7 +120,7 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
         
         // MARK: NavigationController Hidden
         NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.hideBar(notification:)), name: NSNotification.Name("hide"), object: nil)
-        setMainNavItems()
+        setupNewsNavigationItems()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -156,7 +160,7 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
         //collectionView?.contentInset = .init(top: 50,left: 50,bottom: 0,right: 50)
 
         if #available(iOS 13.0, *) {
-            collectionView?.backgroundColor = .systemGroupedBackground
+            collectionView?.backgroundColor = .secondarySystemGroupedBackground
         } else {
             collectionView?.backgroundColor = .white
         }

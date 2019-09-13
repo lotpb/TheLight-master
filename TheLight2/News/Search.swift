@@ -12,18 +12,18 @@ protocol SearchDelegate {
 
 import UIKit
 
-class Search: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
+final class Search: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     
     //MARK: Properties
     let statusView: UIView = {
-        let st = UIView.init(frame: UIApplication.shared.statusBarFrame)
+        let st = UIView(frame: CGRect.zero)
         st.backgroundColor = UIColor.black
         st.alpha = 0.15
         return st
     }()
     
     lazy var searchView: UIView = {
-       let sv = UIView.init(frame: .init(x: 0, y: 0, width: self.frame.width, height: 68))
+       let sv = UIView.init(frame: .init(x: 0, y: 10, width: self.frame.width, height: 60))
         sv.backgroundColor = UIColor.white
         sv.alpha = 0
         return sv
@@ -37,8 +37,8 @@ class Search: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldDel
     }()
     
     lazy var backButton: UIButton = {
-       let bb = UIButton.init(frame: .init(x: 0, y: 20, width: 48, height: 48))
-        bb.setBackgroundImage(UIImage.init(named: "cancel"), for: [])
+       let bb = UIButton.init(frame: .init(x: 0, y: 20, width: 30, height: 30))
+        bb.setBackgroundImage(UIImage(systemName: "magnifyingglass"), for: [])
         bb.addTarget(self, action: #selector(Search.dismiss), for: .touchUpInside)
         return bb
     }()

@@ -11,7 +11,7 @@ import MapKit
 import CoreLocation
 import AVFoundation
 
-class MapView: UIViewController {
+final class MapView: UIViewController {
     
     //@IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var travelTime: UILabel!
@@ -71,7 +71,7 @@ class MapView: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
         label.textAlignment = .center
-        label.backgroundColor = Color.LGrayColor //.white
+        label.backgroundColor = .systemRed
         label.isUserInteractionEnabled = true
         return label
     }()
@@ -81,7 +81,7 @@ class MapView: UIViewController {
         button.backgroundColor = .white
         button.setTitle("+", for: .normal)
         button.setTitleColor(.lightGray, for: .normal)
-        button.titleEdgeInsets = .init(top: -10, left: 0, bottom: 0, right: 0)
+        button.titleEdgeInsets = .init(top: 0, left: 0, bottom: 5, right: 0)
         button.addTarget(self, action: #selector(routehideView), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -91,10 +91,32 @@ class MapView: UIViewController {
         let button = UIButton(type: .system)
         button.backgroundColor = .white
         button.tintColor = .lightGray
-        button.setImage(#imageLiteral(resourceName: "CurrentLocation").withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(UIImage(systemName: "location.fill"), for: .normal)
         button.addTarget(self, action: #selector(zoomToCurrentLocation), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
+    }()
+    
+    let distanceLabel: UILabel = {
+        let label = UILabel()
+        label.text = "searching..."
+        label.font = Font.celltitle16r
+        label.backgroundColor = .clear
+        label.textColor = .label
+        label.sizeToFit()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let timeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "searching..."
+        label.font = Font.celltitle16r
+        label.backgroundColor = .clear
+        label.textColor = .label
+        label.sizeToFit()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     private func floatButton() {
@@ -181,11 +203,10 @@ class MapView: UIViewController {
     
     private func setupNavigationButtons() {
         
-        navigationItem.title = "Map"
         self.navigationItem.largeTitleDisplayMode = .always
-        
         let actionBtn = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareButton))
         navigationItem.rightBarButtonItems = [actionBtn]
+        navigationItem.title = "Map"
     }
     
     func setupMap() {
@@ -197,6 +218,7 @@ class MapView: UIViewController {
         //self.mapViewshowsPointsOfInterest = true
         self.mapView.showsCompass = true
         self.mapView.showsScale = true
+        
         if !(self.formController == "MileIQ") {
             self.mapView.userTrackingMode = .followWithHeading
         }
@@ -205,16 +227,18 @@ class MapView: UIViewController {
     func setupForm() {
         
         self.routView.isHidden = true
+        self.routView.backgroundColor = Color.DGrayColor
+        self.travelTime.textColor = .white
+        self.travelDistance.textColor = .white
+        self.stepView.textColor = .systemRed
+        
         self.stepView.font = cellsteps
         self.stepView.isSelectable = false
         self.allSteps = ""
         self.travelTime.text = ""
         self.travelDistance.text = ""
         self.travelTime.font = celllabel1
-        self.travelTime.textColor = .white
-        self.travelDistance.textColor = .white
         self.travelDistance.font = celllabel1
-        self.routView.backgroundColor = Color.DGrayColor
     }
     
     // MARK: - NavigationController Hidden
@@ -343,9 +367,6 @@ class MapView: UIViewController {
             self.mapView.addAnnotation(pointAnnotation1)
         }
         
-        //request.source = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: (startCoordinates?.latitude)!, longitude: (startCoordinates?.longitude)!), addressDictionary: nil))
-        //request.destination = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: (endCoordinates?.latitude)!, longitude: (endCoordinates?.latitude)!), addressDictionary: nil))
-        
         // MARK:  Directions
         let request = self.createDirectionsRequest(from: startCoordinates!, destination: endCoordinates!)
         let directions = MKDirections(request: request)
@@ -359,13 +380,6 @@ class MapView: UIViewController {
                 self.mapView.addOverlay(route.polyline)
                 self.mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
             }
-        
-            /*
-            guard let response = response else { return }
-            guard let primaryRoute = response.routes.first else { return }
-            
-            self.mapView.addOverlay(primaryRoute.polyline)
-            self.mapView.setVisibleMapRect(primaryRoute.polyline.boundingMapRect, animated: true) */
 
             self.showRoute(response)
             self.hideActivityIndicator()
@@ -444,7 +458,7 @@ class MapView: UIViewController {
         request.destination             = MKMapItem(placemark: destination)
         request.transportType           = .automobile
         if (self.formController == "MileIQ") {
-            request.requestsAlternateRoutes = false
+            request.requestsAlternateRoutes = true
         } else {
             request.requestsAlternateRoutes = true
         }
@@ -458,6 +472,7 @@ class MapView: UIViewController {
         directionsArray.append(directions)
         let _ = directionsArray.map { $0.cancel() }
     }
+
 //====================================================================
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -476,30 +491,47 @@ class MapView: UIViewController {
         
         view.addSubview(mapView)
         view.addSubview(addressLabel)
+        self.view.addSubview(timeLabel)
+        self.view.addSubview(distanceLabel)
         view.addSubview(floatingBtn)
         view.addSubview(floatingZoomBtn)
+        view.addSubview(routView)
         floatingBtn.autoresizingMask = [.flexibleWidth, .flexibleHeight, .flexibleBottomMargin, .flexibleRightMargin, .flexibleLeftMargin, .flexibleTopMargin]
 
+        let guide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
-        mapView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-        mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-        mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-        mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
-
-        addressLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-        addressLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-        addressLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
-        addressLabel.heightAnchor.constraint(equalToConstant: 50),
-        
-        floatingBtn.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
-        floatingBtn.bottomAnchor.constraint(equalTo: mapView.bottomAnchor, constant: -60),
-        floatingBtn.widthAnchor.constraint(equalToConstant: buttonSize),
-        floatingBtn.heightAnchor.constraint(equalToConstant: buttonSize),
-        
-        floatingZoomBtn.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
-        floatingZoomBtn.bottomAnchor.constraint(equalTo: floatingBtn.topAnchor, constant: -20),
-        floatingZoomBtn.widthAnchor.constraint(equalToConstant: buttonSize),
-        floatingZoomBtn.heightAnchor.constraint(equalToConstant: buttonSize)
+            mapView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
+            
+            addressLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            addressLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            addressLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
+            addressLabel.heightAnchor.constraint(equalToConstant: 50),
+            
+            timeLabel.topAnchor.constraint(equalTo: guide.topAnchor, constant: 15),
+            timeLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 10),
+            timeLabel.heightAnchor.constraint(equalToConstant: 25),
+            
+            distanceLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 5),
+            distanceLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 10),
+            distanceLabel.heightAnchor.constraint(equalToConstant: 25),
+            
+            floatingBtn.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 10),
+            floatingBtn.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -50),
+            floatingBtn.widthAnchor.constraint(equalToConstant: buttonSize),
+            floatingBtn.heightAnchor.constraint(equalToConstant: buttonSize),
+            
+            floatingZoomBtn.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 10),
+            floatingZoomBtn.bottomAnchor.constraint(equalTo: floatingBtn.topAnchor, constant: -25),
+            floatingZoomBtn.widthAnchor.constraint(equalToConstant: buttonSize),
+            floatingZoomBtn.heightAnchor.constraint(equalToConstant: buttonSize),
+            
+            routView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            routView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0)
+            //routView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
+            //routView.heightAnchor.constraint(equalToConstant: 80)
         ])
     }
     
@@ -532,6 +564,8 @@ class MapView: UIViewController {
         self.route = temp
         self.travelTime.text = String(format:"Time: %0.1f min drive", route.expectedTravelTime/60) as String
         self.travelDistance.text = String(format:"Distance: %0.1f miles", route.distance/1609.344) as String
+        self.timeLabel.text = String(format:"Time: %0.1f min", route.expectedTravelTime/60) as String
+        self.distanceLabel.text = String(format:"Distance: %0.1f miles", route.distance/1609.344) as String
         
         for i in 0 ..< self.route.steps.count {
             
@@ -566,7 +600,7 @@ class MapView: UIViewController {
         
         let smallSquare = CGSize(width: 30, height: 30)
         let button = UIButton(frame: CGRect(origin: .zero, size: smallSquare))
-        button.setBackgroundImage(UIImage(named: "car"), for: [])
+        button.setBackgroundImage(UIImage(systemName: "car.fill"), for: [])
         button.addTarget(self, action: #selector(MapView.getAppleMaps), for: .touchUpInside)
         pinView.leftCalloutAccessoryView = button
         
@@ -636,33 +670,13 @@ class MapView: UIViewController {
     }
     
     func pointsofinterestBtnTapped() {
-        
+        /*
         if mapView.showsPointsOfInterest == mapView.showsPointsOfInterest {
             mapView.showsPointsOfInterest = !mapView.showsPointsOfInterest
         } else {
             mapView.showsPointsOfInterest = mapView.showsPointsOfInterest
-        }
+        } */
     }
-    /*
-    func requestsAlternateRoutesBtnTapped() {
-        
-        let request = MKDirections.Request()
-        request.source = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 40.7127, longitude: -74.0059), addressDictionary: nil))
-        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 37.783333, longitude: -122.416667), addressDictionary: nil))
-        request.requestsAlternateRoutes = true
-        request.transportType = .automobile
-        
-        let directions = MKDirections(request: request)
-        
-        directions.calculate { [unowned self] response, error in
-            guard let unwrappedResponse = response else { return }
-            
-            for route in unwrappedResponse.routes {
-                self.mapView.addOverlay(route.polyline)
-                self.mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
-            }
-        }
-    } */
     
     func displayInFlyoverMode() {
         
@@ -794,7 +808,17 @@ extension MapView: MKMapViewDelegate {
         
         if overlay is MKPolyline {
             let renderer = MKPolylineRenderer(overlay: overlay)
-            renderer.strokeColor = Color.BlueColor //.systemBlue
+            
+            if mapView.overlays.count == 1 {
+                renderer.strokeColor = Color.BlueColor.withAlphaComponent(0.5)
+            }
+            else if (mapView.overlays.count == 2) {
+                renderer.strokeColor = UIColor.green.withAlphaComponent(0.5)
+            }
+            else if (mapView.overlays.count == 3) {
+                renderer.strokeColor = UIColor.red.withAlphaComponent(0.5)
+            }
+
             renderer.lineWidth = 3
             return renderer
         }

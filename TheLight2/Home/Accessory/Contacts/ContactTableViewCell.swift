@@ -10,7 +10,7 @@
 import Contacts
 import UIKit
 
-class ContactTableViewCell: UITableViewCell {
+final class ContactTableViewCell: UITableViewCell {
     // outlets
     @IBOutlet weak var contactImageView: UIImageView!
     @IBOutlet weak var contactNameLabel: UILabel!
@@ -58,6 +58,7 @@ class ContactTableViewCell: UITableViewCell {
         contactNameLabel.text = contact.name
         contactEmailLabel.text = contact.email ?? ""
         contactPhoneLabel.text = contact.phone ?? ""
+        contactPhoneLabel.adjustsFontSizeToFitWidth = true
         contactImageView.image = contact.image ?? #imageLiteral(resourceName: "profile-rabbit-toy")
         setCircularAvatar()
     }

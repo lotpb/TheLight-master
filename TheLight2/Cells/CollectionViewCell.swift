@@ -62,7 +62,7 @@ class CollectionViewCell: UICollectionViewCell {
         button.alpha = 0.9
         button.isUserInteractionEnabled = true
         button.tintColor = .white
-        button.setImage(#imageLiteral(resourceName: "play_button"), for: .normal)
+        button.setImage(UIImage(systemName: "play.circle"), for: .normal)
         let tap = UITapGestureRecognizer(target: self, action: #selector(CollectionViewCell.playVideo))
         button.addGestureRecognizer(tap)
         return button
@@ -94,7 +94,7 @@ class CollectionViewCell: UICollectionViewCell {
         playerLayer2?.removeFromSuperlayer()
         player2?.pause()
         activityIndicator.stopAnimating()
-        ///playBtn.isHidden = false //added
+        //playBtn.isHidden = false //added
         //playButton.isHidden = true
     }
     
@@ -145,10 +145,6 @@ class VideoCell: CollectionViewCell {
             subtitleLabel.text = String(format: "%@, %@", (news?.newsDetail)!, "\(news?.viewCount ?? 0) views")
             uploadbylabel.text = String(format: "%@ %@", "Uploaded", (news?.creationDate.timeAgoDisplay())!)
             storyLabel.text = news?.storyLabel
-            
-            var Liked:Int? = news?.liked as? Int
-            if Liked == nil { Liked = 0 }
-            numberLabel.text = "\(Liked!)"
             
             let imageDetailurl = news?.videoUrl
             playButton.isHidden = news?.videoUrl == ""
@@ -208,18 +204,10 @@ class VideoCell: CollectionViewCell {
         return label
     }()
     
-    let numberLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "10"
-        label.textColor = .systemBlue
-        return label
-    }()
-    
     let uploadbylabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Uploaded by:"
+        label.text = ""
         return label
     }()
     
@@ -227,7 +215,7 @@ class VideoCell: CollectionViewCell {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .lightGray
-        button.setImage(#imageLiteral(resourceName: "nav_more_icon").withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
         return button
     }()
     
@@ -236,7 +224,7 @@ class VideoCell: CollectionViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
         button.tintColor = .lightGray
-        button.setImage(#imageLiteral(resourceName: "Thumb Up").withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
         return button
     }()
     
@@ -259,7 +247,8 @@ class VideoCell: CollectionViewCell {
         button.alpha = 0.9
         button.isUserInteractionEnabled = true
         button.tintColor = .white
-        button.setImage(#imageLiteral(resourceName: "play_button"), for: .normal)
+        let config = UIImage.SymbolConfiguration(pointSize: 50)
+        button.setImage(UIImage(systemName: "play.circle", withConfiguration: config), for: .normal)
         let tap = UITapGestureRecognizer(target: self, action: #selector(playVideo))
         button.addGestureRecognizer(tap)
         return button
@@ -321,7 +310,6 @@ class VideoCell: CollectionViewCell {
         addSubview(buttonView)
         buttonView.addSubview(actionButton)
         buttonView.addSubview(likeBtn)
-        buttonView.addSubview(numberLabel)
         buttonView.addSubview(uploadbylabel)
         addSubview(separatorView)
         
@@ -363,13 +351,8 @@ class VideoCell: CollectionViewCell {
                 likeBtn.widthAnchor.constraint(equalToConstant: 20),
                 likeBtn.heightAnchor.constraint(equalToConstant: 20),
                 
-                numberLabel.topAnchor.constraint(equalTo: buttonView.topAnchor, constant: 3),
-                numberLabel.leftAnchor.constraint(equalTo: likeBtn.rightAnchor, constant: 2),
-                numberLabel.widthAnchor.constraint(equalToConstant: 20),
-                numberLabel.heightAnchor.constraint(equalToConstant: 20),
-                
                 uploadbylabel.topAnchor.constraint(equalTo: buttonView.topAnchor, constant: 3),
-                uploadbylabel.leftAnchor.constraint(equalTo: numberLabel.rightAnchor, constant: 0),
+                uploadbylabel.leftAnchor.constraint(equalTo: likeBtn.rightAnchor, constant: 5),
                 uploadbylabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
                 uploadbylabel.heightAnchor.constraint(equalToConstant: 20),
                 
@@ -424,13 +407,8 @@ class VideoCell: CollectionViewCell {
                 likeBtn.widthAnchor.constraint(equalToConstant: 20),
                 likeBtn.heightAnchor.constraint(equalToConstant: 20),
                 
-                numberLabel.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 3),
-                numberLabel.leftAnchor.constraint(equalTo: likeBtn.rightAnchor, constant: 2),
-                numberLabel.widthAnchor.constraint(equalToConstant: 20),
-                numberLabel.heightAnchor.constraint(equalToConstant: 20),
-                
                 uploadbylabel.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 3),
-                uploadbylabel.leftAnchor.constraint(equalTo: numberLabel.rightAnchor, constant: 0),
+                uploadbylabel.leftAnchor.constraint(equalTo: likeBtn.rightAnchor, constant: 5),
                 uploadbylabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
                 uploadbylabel.heightAnchor.constraint(equalToConstant: 20),
                 

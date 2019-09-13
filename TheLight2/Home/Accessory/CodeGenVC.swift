@@ -12,7 +12,7 @@ import Parse
 import FirebaseDatabase
 import FirebaseAuth
 
-class CodeGenVC: UIViewController {
+final class CodeGenVC: UIViewController {
     
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var imgQRCode: UIImageView!
@@ -111,7 +111,7 @@ class CodeGenVC: UIViewController {
     
     func setupNavigation() {
         navigationController?.navigationBar.prefersLargeTitles = true
-        let addBtn = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(newDataBtn))
+        let addBtn = UIBarButtonItem(image: UIImage(systemName: "camera"), style: .plain, target: self, action: #selector(newDataBtn))
         navigationItem.rightBarButtonItems = [addBtn]
         //navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Sign Out", style: .plain, target: self, action: #selector(self.handleLogout))
         if UIDevice.current.userInterfaceIdiom == .pad  {
@@ -127,15 +127,15 @@ class CodeGenVC: UIViewController {
         view.addSubview(self.generateBtn)
         
         NSLayoutConstraint.activate([
-            self.imageProfile.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
+            self.imageProfile.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 50),
             self.imageProfile.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             self.imageProfile.widthAnchor.constraint(equalToConstant: 85),
             self.imageProfile.heightAnchor.constraint(equalToConstant: 85),
             
-            generateBtn.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
-            generateBtn.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: 0),
-            generateBtn.widthAnchor.constraint(equalToConstant: 85),
-            generateBtn.heightAnchor.constraint(equalToConstant: 32)
+            self.generateBtn.topAnchor.constraint(equalTo: textField.topAnchor, constant: 50),
+            self.generateBtn.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: 0),
+            self.generateBtn.widthAnchor.constraint(equalToConstant: 85),
+            self.generateBtn.heightAnchor.constraint(equalToConstant: 32)
             ])
     }
     

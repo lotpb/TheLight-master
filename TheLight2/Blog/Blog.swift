@@ -80,7 +80,7 @@ final class Blog: UIViewController {
         let tabItem = tabArray?.object(at: 1) as? UITabBarItem
         tabItem?.badgeValue = nil
         
-        setupNavigationBarItems()
+        setupBlogNavigationBar()
         setupTwitterNavigationBarItems()
     }
     
@@ -590,19 +590,19 @@ extension Blog: UITableViewDataSource {
             }
             
             cell.replyButton.tintColor = .lightGray
-            cell.replyButton.setImage(#imageLiteral(resourceName: "Commentfilled").withRenderingMode(.alwaysTemplate), for: .normal)
+            cell.replyButton.setImage(UIImage(systemName: "bubble.left.fill"), for: .normal)
             cell.replyButton .addTarget(self, action: #selector(replySetButton), for: .touchUpInside)
             
             cell.likeButton.tintColor = .lightGray
-            cell.likeButton.setImage(#imageLiteral(resourceName: "Thumb Up").withRenderingMode(.alwaysTemplate), for: .normal)
+            cell.likeButton.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
             cell.likeButton.addTarget(self, action: #selector(likeSetButton), for: .touchUpInside)
             
             cell.flagButton.tintColor = .lightGray
-            cell.flagButton.setImage(#imageLiteral(resourceName: "Flag").withRenderingMode(.alwaysTemplate), for: .normal)
+            cell.flagButton.setImage(UIImage(systemName: "flag.fill"), for: .normal)
             cell.flagButton .addTarget(self, action: #selector(flagSetButton), for: .touchUpInside)
             
             cell.actionBtn.tintColor = .lightGray
-            cell.actionBtn.setImage(#imageLiteral(resourceName: "nav_more_icon").withRenderingMode(.alwaysTemplate), for: .normal)
+            cell.actionBtn.setImage(UIImage(systemName: "ellipsis"), for: .normal)
             cell.actionBtn .addTarget(self, action: #selector(showShare), for: .touchUpInside)
             
             if !(cell.numLabel.text! == "0") {

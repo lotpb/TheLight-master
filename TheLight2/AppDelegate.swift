@@ -15,10 +15,11 @@ import GoogleSignIn
 import FBSDKLoginKit
 import UserNotifications
 import CoreLocation
+import BackgroundTasks
 
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
+final class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
     
     var window: UIWindow?
     let center = UNUserNotificationCenter.current()
@@ -46,6 +47,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             "autolockKey": false,
             "pushnotifyKey": false,
             "geotifyKey": false,
+            "weatherNotifyKey": false,
+            "weatherKey": "2446726",
             "usernameKey": "Peter Balsamo",
             "passwordKey": "3911",
             "emailKey": "eunited@optonline.net",
@@ -54,8 +57,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             "versionKey": "1",
             "emailtitleKey": "TheLight Support",
             "emailmessageKey": "<h3>Programming in Swift</h3>",
-            "weatherKey": "2446726",
-            "weatherNotifyKey": "false",
             "mileIQKey": "0.545"
             ])
         
@@ -83,6 +84,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         
         /// MARK: - Background Fetch
         UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+    
 
         /// MARK: - Register login
         if (!(defaults.bool(forKey: "registerKey")) || defaults.bool(forKey: "loginKey")) {
@@ -112,12 +114,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         
         /// MARK: - Facebook Sign-in
         ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
-        /// MARK: - Google Sign-in
-        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()!.options.clientID
+        
+        if !(defaults.bool(forKey: "parsedataKey")) {
+            /// MARK: - Google Sign-in
+            GIDSignIn.sharedInstance()?.clientID = FirebaseApp.app()?.options.clientID
+        }
         
         customizeAppearance()
         registerCategories()
-        registerNotification()
+        registerLocalNotification()
         set3DTouch()
         
         // MileIQ
@@ -153,7 +158,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         
         let handled = ApplicationDelegate.shared.application(app, open: url, sourceApplication: options[.sourceApplication] as? String, annotation: options[.annotation])
         
-        GIDSignIn.sharedInstance().handle(url, sourceApplication: options[.sourceApplication] as? String, annotation: options[.annotation])
+        GIDSignIn.sharedInstance().handle(url,
+        sourceApplication:options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
+        annotation: [:])
         
         return handled
     }
@@ -223,6 +230,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     }
 
     /// MARK: - Background Fetch
+    //MARK: Regiater BackGround Tasks
+    private func registerBackgroundTaks() {
+        
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.SO.imagefetcher", using: nil) { task in
+            //This task is cast with processing request (BGProcessingTask)
+            //self.scheduleLocalNotification()
+            //self.handleImageFetcherTask(task: task as! BGProcessingTask)
+        }
+        
+    }
     
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
@@ -268,26 +285,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 }
 extension AppDelegate {
     
+    func cancelAllPandingBGTask() {
+        BGTaskScheduler.shared.cancelAllTaskRequests()
+    }
+    
     /// MARK: - App Theme Customization
     func customizeAppearance() {
         
         UINavigationBar.appearance().tintColor = .systemGray
-        UINavigationBar.appearance().barTintColor = .black
-        UINavigationBar.appearance().isTranslucent = false
+        
+        let app = UINavigationBarAppearance()
+        app .configureWithTransparentBackground()
+        app.backgroundColor = .systemBackground
+        
+        app.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.label]
+        app.largeTitleTextAttributes = [
+            NSAttributedString.Key.foregroundColor:UIColor.label,
+            NSAttributedString.Key.font:UIFont.boldSystemFont(ofSize: 24)]
+        
+        UINavigationBar.appearance().standardAppearance = app
+        UINavigationBar.appearance().scrollEdgeAppearance = app
+        UINavigationBar.appearance().isTranslucent = true
+        UINavigationBar.appearance().backgroundColor = UIColor.clear
+        UINavigationBar.appearance().tintColor = .systemGray //text color
         UINavigationBar.appearance().prefersLargeTitles = true
-        if #available(iOS 13.0, *) {
-            UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.label]
-        } else {
-            UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
-        }
-        if #available(iOS 13.0, *) {
-            UINavigationBar.appearance().largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.label]
-        } else {
-            UINavigationBar.appearance().largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
-        }
         
         let attrsNormal = [
-            NSAttributedString.Key.foregroundColor: UIColor.lightGray,
+            NSAttributedString.Key.foregroundColor: UIColor.label,
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12.0)
         ]
         let attrsSelected = [
@@ -306,22 +330,16 @@ extension AppDelegate {
         
         UIToolbar.appearance().barTintColor = Color.toolbarColor //Color.DGrayColor
         if #available(iOS 13.0, *) {
-            UIToolbar.appearance().tintColor = .systemBackground
+            UIToolbar.appearance().tintColor = .secondarySystemGroupedBackground
         } else {
             UIToolbar.appearance().tintColor = .white
         }
         UIToolbar.appearance().isTranslucent = false
-        
-        //UISearchBar.appearance().barTintColor = .white
-        //UISearchBar.appearance().tintColor = .white
-       // UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor.rawValue: UIColor.systemGray]
-        //UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).textColor = UIColor.systemGray
-
     }
     
     /// MARK: - Register Notifications
     
-    func registerNotification() {
+    func registerLocalNotification() {
         
         let options: UNAuthorizationOptions = [.badge, .sound, .alert]
         center.requestAuthorization(options: options) { success, error in
@@ -343,6 +361,34 @@ extension AppDelegate {
     }
     
     /// MARK: - 3D Touch
+    /*
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { suggestedActions in
+            
+            // Create an action for sharing
+            let Blog = UIAction(title: "Blog", image: UIImage(systemName: "square.and.arrow.up")) { action in
+                // Show system share sheet
+            }
+
+            // Create an action for renaming
+            let News = UIAction(title: "News", image: UIImage(systemName: "square.and.pencil")) { action in
+                // Perform renaming
+            }
+
+            // Here we specify the "destructive" attribute to show that it’s destructive in nature
+            let Web = UIAction(title: "Web", image: UIImage(systemName: "trash"), attributes: .destructive) { action in
+                // Perform delete
+            }
+            
+            // Here we specify the "destructive" attribute to show that it’s destructive in nature
+            let Settings = UIAction(title: "Settings", image: UIImage(systemName: "trash"), attributes: .destructive) { action in
+                // Perform delete
+            }
+
+            // Create and return a UIMenu with all of the actions as children
+            return UIMenu(title: "", children: [Blog, News, Web, Settings])
+        }
+    } */
     
     func set3DTouch() { //only 4 shortcuts allowed
 

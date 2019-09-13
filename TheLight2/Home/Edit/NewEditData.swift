@@ -10,7 +10,7 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
-class NewEditData: UIViewController, UITextFieldDelegate {
+final class NewEditData: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var tableView: UITableView?
     
@@ -66,6 +66,8 @@ class NewEditData: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view?.backgroundColor = .systemGray6
 
         setupTableView()
         setupImageView()
@@ -130,7 +132,7 @@ class NewEditData: UIViewController, UITextFieldDelegate {
         self.tableView!.dataSource = self
         self.tableView!.estimatedRowHeight = 110
         self.tableView!.rowHeight = UITableView.automaticDimension
-        self.tableView!.backgroundColor = .white
+        self.tableView!.backgroundColor = .secondarySystemGroupedBackground
         self.tableView!.tableFooterView = UIView(frame: .zero)
     }
     
@@ -653,16 +655,17 @@ extension NewEditData: UITableViewDataSource {
             theSwitch.addTarget(self, action: #selector(changeSwitch), for: .valueChanged)
             theSwitch.onTintColor = UIColor(red:0.0, green:122.0/255.0, blue:1.0, alpha: 1.0)
             theSwitch.tintColor = .lightGray
+            self.activeImage.image = UIImage(systemName: "star.fill")
             
             if self.frm11 == "Active" {
                 theSwitch.isOn = true
                 self.active = (self.frm11)!
-                self.activeImage.image = #imageLiteral(resourceName: "iosStar")
+                self.activeImage.tintColor = .systemYellow
                 cell.textLabel!.text = "Active"
             } else {
                 theSwitch.isOn = false
                 self.active = ""
-                self.activeImage.image = #imageLiteral(resourceName: "iosStarNA")
+                self.activeImage.tintColor = .systemGray
                 cell.textLabel!.text = "Inactive"
             }
             

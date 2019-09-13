@@ -85,14 +85,16 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
         slider.translatesAutoresizingMaskIntoConstraints = false
         slider.minimumTrackTintColor = .systemRed
         slider.maximumTrackTintColor = .white
-        slider.setThumbImage(UIImage(named: "thumb"), for: .normal)
+        let config = UIImage.SymbolConfiguration(pointSize: 50)
+        slider.setThumbImage(UIImage(systemName: "circle"), for: .normal)
         slider.addTarget(self, action: #selector(handleSliderChange), for: .valueChanged)
         return slider
     }()
     
     lazy var minimizeButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "minimize"), for: .normal)
+        let config = UIImage.SymbolConfiguration(pointSize: 50)
+        button.setImage(UIImage(systemName: "chevron.down", withConfiguration: config), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .white
         button.isHidden = false
@@ -102,7 +104,8 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
     
     lazy var pausePlayButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+        let config = UIImage.SymbolConfiguration(pointSize: 50)
+        button.setImage(UIImage(systemName: "pause.fill", withConfiguration: config), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .white
         button.isHidden = false
@@ -340,12 +343,13 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
     }
     
     @objc func handlePause() {
+        let config = UIImage.SymbolConfiguration(pointSize: 50)
         if isPlaying {
             player.pause()
-            pausePlayButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+            pausePlayButton.setImage(UIImage(systemName: "play.fill", withConfiguration: config), for: .normal)
         } else {
             player.play()
-            pausePlayButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+            pausePlayButton.setImage(UIImage(systemName: "pause.fill", withConfiguration: config), for: .normal)
         }
         isPlaying = !isPlaying
     }
@@ -925,7 +929,7 @@ class headerCell: UITableViewCell {
     let commentBtn: UIButton = {
         let button = UIButton(type: .system)
         button.tintColor = .lightGray
-        button.setImage(#imageLiteral(resourceName: "minimize"), for: .normal)
+        button.setImage(UIImage(systemName: "chevron.down"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -933,7 +937,7 @@ class headerCell: UITableViewCell {
     let thumbUp: UIButton = {
         let button = UIButton()
         button.tintColor = .lightGray
-        button.setImage(#imageLiteral(resourceName: "thumbUp").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -949,7 +953,7 @@ class headerCell: UITableViewCell {
     let thumbDown: UIButton = {
         let button = UIButton()
         button.tintColor = .lightGray
-        button.setImage(#imageLiteral(resourceName: "thumbDown").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setImage(UIImage(systemName: "hand.thumbsdown.fill"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -965,7 +969,7 @@ class headerCell: UITableViewCell {
     let shareView: UIButton = {
         let button = UIButton()
         button.tintColor = .lightGray
-        button.setImage(#imageLiteral(resourceName: "share").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setImage(UIImage(systemName: "arrowshape.turn.up.right.fill"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -1017,7 +1021,8 @@ class headerCell: UITableViewCell {
         let button = UIButton(type: .system)
         button.tintColor = Color.youtubeRed
         button.isUserInteractionEnabled = true
-        button.setImage(#imageLiteral(resourceName: "iosStar").withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        //button.setImage(#imageLiteral(resourceName: "iosStar").withRenderingMode(.alwaysTemplate), for: .normal)
         button.setTitle(" SUBSCRIBE", for: .normal)
         button.setTitleColor(Color.youtubeRed, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -1029,15 +1034,17 @@ class headerCell: UITableViewCell {
         subscribed.setTitle(" SUBSCRIBE", for: .normal)
         subscribed.setTitleColor(Color.youtubeRed, for: .normal)
         subscribed.tintColor = Color.youtubeRed
-        subscribed.setImage(#imageLiteral(resourceName: "iosStar").withRenderingMode(.alwaysTemplate), for: .normal)
+        subscribed.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        //subscribed.setImage(#imageLiteral(resourceName: "iosStar").withRenderingMode(.alwaysTemplate), for: .normal)
         //sender.addTarget(self, action: #selector(subscribedBtn), for: .touchUpInside)
     }
     
     func setupUnsubscribedStyle() {
         subscribed.setTitle(" UNSUBSCRIBE", for: .normal)
         subscribed.setTitleColor(Color.DGrayColor, for: .normal)
-        subscribed.tintColor = Color.DGrayColor
-        subscribed.setImage(#imageLiteral(resourceName: "iosStarNA").withRenderingMode(.alwaysTemplate), for: .normal)
+        subscribed.tintColor = .systemGray
+        subscribed.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        //subscribed.setImage(#imageLiteral(resourceName: "iosStarNA").withRenderingMode(.alwaysTemplate), for: .normal)
         //sender.addTarget(self, action: #selector(subscribedBtn), for: .touchUpInside)
     }
     

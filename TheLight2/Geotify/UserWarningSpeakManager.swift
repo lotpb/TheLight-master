@@ -3,7 +3,7 @@ import UIKit
 import AVFoundation
 import Speech
 
-class UserWarningSpeakManager: NSObject {
+final class UserWarningSpeakManager: NSObject {
   
   var speechSynthesizer = AVSpeechSynthesizer()
   static let warning = UserWarningSpeakManager()

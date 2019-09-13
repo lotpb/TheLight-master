@@ -12,7 +12,7 @@ protocol HandleMapSearch {
     func dropPinZoomIn(placemark:MKPlacemark)
 }
 
-class DetailedMapVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource {
+final class DetailedMapVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var detailedMapView: MKMapView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var restaurantsBtn: UIButton!
@@ -38,7 +38,7 @@ class DetailedMapVC: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.largeTitleDisplayMode = .never
+
         // Track user location
         detailedMapView.delegate = self
         detailedMapView.userTrackingMode = MKUserTrackingMode.follow
@@ -130,7 +130,7 @@ class DetailedMapVC: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
         pinView?.canShowCallout = true
         let smallSquare = CGSize(width: 30, height: 30)
         let button = UIButton(frame: .init(origin: .zero, size: smallSquare))
-        button.setBackgroundImage(UIImage(named: "car"), for: [])
+        button.setBackgroundImage(UIImage(systemName: "car.fill"), for: [])
         button.addTarget(self, action: #selector(MapsearchVC.getDirections), for: .touchUpInside)
         pinView?.leftCalloutAccessoryView = button
         return pinView

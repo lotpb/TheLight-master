@@ -19,7 +19,7 @@ import MapKit
 import GeoFire
 
 
-class LoginController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LoginButtonDelegate, GIDSignInUIDelegate, GIDSignInDelegate {
+final class LoginController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LoginButtonDelegate, GIDSignInUIDelegate, GIDSignInDelegate {
     
     let ipadtitle = UIFont.systemFont(ofSize: 20)
     let celltitle = UIFont.systemFont(ofSize: 18)

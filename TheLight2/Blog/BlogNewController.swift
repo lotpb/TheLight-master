@@ -13,7 +13,7 @@ import FirebaseAuth
 import UserNotifications
 import MessageUI
 
-class BlogNewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, MFMailComposeViewControllerDelegate {
+final class BlogNewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, MFMailComposeViewControllerDelegate {
     
     let CharacterLimit = 140
     
@@ -140,7 +140,7 @@ class BlogNewController: UIViewController, UITextFieldDelegate, UITextViewDelega
     }
     
     private func setupNavigation() {
-        let cameraButton = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(shootPhoto))
+        let cameraButton = UIBarButtonItem(image: UIImage(systemName: "camera"), style: .plain, target: self, action: #selector(shootPhoto))
         navigationItem.rightBarButtonItems = [cameraButton]
         self.navigationItem.titleView = self.titleButton
     }
@@ -166,7 +166,7 @@ class BlogNewController: UIViewController, UITextFieldDelegate, UITextViewDelega
         }
         self.tableView!.tableFooterView = UIView(frame: .zero)
         
-        self.Like!.setImage(#imageLiteral(resourceName: "Thumb Up").withRenderingMode(.alwaysTemplate), for: .normal)
+        self.Like!.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
         self.Like!.setTitleColor(.white, for: .normal)
         self.Like!.frame = .init(x: 0, y: 0, width: 90, height: 30)
         self.Share!.setTitleColor(Color.twitterBlue, for: .normal)
@@ -506,8 +506,9 @@ class BlogNewController: UIViewController, UITextFieldDelegate, UITextViewDelega
         content.sound = UNNotificationSound.default
         content.categoryIdentifier = "status"
         
-        let imageURL = Bundle.main.url(forResource: "comments", withExtension: "png")
-        let attachment = try! UNNotificationAttachment(identifier: "", url: imageURL!, options: nil)
+        let imageName = "applelogo"
+        guard let imageURL = Bundle.main.url(forResource: imageName, withExtension: "png") else { return }
+        let attachment = try! UNNotificationAttachment(identifier: imageName, url: imageURL, options: .none)
         content.attachments = [attachment]
         content.userInfo = ["link":""]
         
@@ -723,21 +724,19 @@ extension BlogNewController: UITableViewDataSource {
         if indexPath.row == 0 {
             
             self.activeImage.frame = .init(x: tableView.frame.width-35, y: 10, width: 18, height: 22)
-            if #available(iOS 13.0, *) {
-                self.activeImage.tintColor = .systemBlue
-            } else {
-                // Fallback on earlier versions
-            }
+            self.activeImage.image = UIImage(systemName: "star.fill")
             
             if (self.liked == nil || self.liked == 0) {
                 self.Like!.tintColor = .white
                 self.Like!.setTitle(" Like", for: .normal)
-                self.activeImage.image = #imageLiteral(resourceName: "iosStarNA")
+                self.activeImage.tintColor = .systemGray
+                //self.activeImage.image = #imageLiteral(resourceName: "iosStarNA")
                 
             } else {
                 self.Like!.tintColor = Color.Blog.buttonColor
                 self.Like!.setTitle(" Likes \(liked!)", for: .normal)
-                self.activeImage.image = #imageLiteral(resourceName: "iosStar")
+                self.activeImage.tintColor = .systemYellow
+                //self.activeImage.image = #imageLiteral(resourceName: "iosStar")
             }
             cell.contentView.addSubview(self.activeImage)
             cell.selectionStyle = .none

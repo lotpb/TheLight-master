@@ -12,7 +12,7 @@ import CoreBluetooth
 //import QuartzCore
 
 
-class SpotBeaconVC: UIViewController, CLLocationManagerDelegate, CBPeripheralManagerDelegate {
+final class SpotBeaconVC: UIViewController, CLLocationManagerDelegate, CBPeripheralManagerDelegate {
     
     @IBOutlet weak var btnSwitchSpotting: UIButton!
     @IBOutlet weak var lblBeaconReport: UILabel!
@@ -35,27 +35,25 @@ class SpotBeaconVC: UIViewController, CLLocationManagerDelegate, CBPeripheralMan
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
+        locationManager!.allowsBackgroundLocationUpdates = true
+        locationManager!.pausesLocationUpdatesAutomatically = false
         
         lblBeaconDetails.isHidden = false
         btnSwitchSpotting.layer.cornerRadius = 30.0
+        peripheralManager = CBPeripheralManager(delegate: self, queue: nil, options: nil)
+        self.navigationItem.largeTitleDisplayMode = .always
         
         if UIDevice.current.userInterfaceIdiom == .pad  {
-            //self.beaconspotLabel?.font = Font.Snapshot.celltitlePad
+            navigationItem.title = "TheLight - Spot Beacon"
             self.beaconlocateLabel?.font = Font.Snapshot.celltitlePad
             self.lblBeaconDetails?.font = Font.News.newstitlePad
             self.lblBeaconReport?.font = Font.Snapshot.celltitlePad
             self.lblBTStatus?.font = Font.celltitle18l
-        } else {
-    
-        }
-        
-        peripheralManager = CBPeripheralManager(delegate: self, queue: nil, options: nil)
-        if UIDevice.current.userInterfaceIdiom == .pad  {
-            navigationItem.title = "TheLight - Spot Beacon"
+            self.beaconlocateLabel.text = "iBeacon ipad"
         } else {
             navigationItem.title = "Spot Beacon"
+            self.beaconlocateLabel.text = "iBeacon iphone"
         }
-        self.navigationItem.largeTitleDisplayMode = .always
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -91,6 +89,7 @@ class SpotBeaconVC: UIViewController, CLLocationManagerDelegate, CBPeripheralMan
         if !isSearchingForBeacons {
             btnSwitchSpotting.setTitle("Stop Spotting", for: .normal)
             lblBeaconReport.text = "Spotting beacons..."
+            self.view.backgroundColor = .white
         }
         else {
             locationManager.stopMonitoring(for: beaconRegion)
@@ -100,7 +99,7 @@ class SpotBeaconVC: UIViewController, CLLocationManagerDelegate, CBPeripheralMan
             btnSwitchSpotting.setTitle("Start Spotting", for: .normal)
             lblBeaconReport.text = "Not running"
             lblBeaconDetails.isHidden = false
-            self.view.backgroundColor = UIColor.white
+            self.view.backgroundColor = .white
         }
         
         isSearchingForBeacons = !isSearchingForBeacons
@@ -142,7 +141,7 @@ class SpotBeaconVC: UIViewController, CLLocationManagerDelegate, CBPeripheralMan
                 self.beaconlocateLabel.textColor = .black
                 
             case .far:
-                proximityMessage = "Far"
+                proximityMessage = "within 20ft"
                 self.view.backgroundColor = .systemBlue
                 self.btnSwitchSpotting?.titleLabel?.textColor = .white
                 self.btnSwitchSpotting?.backgroundColor = .systemOrange
@@ -152,7 +151,7 @@ class SpotBeaconVC: UIViewController, CLLocationManagerDelegate, CBPeripheralMan
                 self.beaconlocateLabel.textColor = .white
                 
             case .near:
-                proximityMessage = "Near"
+                proximityMessage = "within 5ft"
                 self.view.backgroundColor = .systemOrange
                 self.btnSwitchSpotting?.titleLabel?.textColor = .systemOrange
                 self.btnSwitchSpotting?.backgroundColor = .white
@@ -162,7 +161,7 @@ class SpotBeaconVC: UIViewController, CLLocationManagerDelegate, CBPeripheralMan
                 self.beaconlocateLabel.textColor = .black
                 
             case .immediate:
-                proximityMessage = "Very close"
+                proximityMessage = "within 3ft"
                 self.view.backgroundColor = .systemRed
                 self.btnSwitchSpotting?.titleLabel?.textColor = .white
                 self.btnSwitchSpotting?.backgroundColor = .systemOrange
@@ -174,7 +173,7 @@ class SpotBeaconVC: UIViewController, CLLocationManagerDelegate, CBPeripheralMan
                 //<#fatalError()#>
             }
         }
-        lblBeaconDetails.text = "Beacon Details:\nDistance From iBeacon = " + proximityMessage
+        lblBeaconDetails.text = "Distance From iBeacon = " + proximityMessage
     }
     
     // MARK: CBPeripheralManagerDelegate //added bluetooth

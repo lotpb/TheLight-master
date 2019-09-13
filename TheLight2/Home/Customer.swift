@@ -10,7 +10,7 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
-class Customer: UIViewController {
+final class Customer: UIViewController {
 
     @IBOutlet weak var tableView: UITableView?
     // MARK: NavigationController Hidden
@@ -118,7 +118,9 @@ class Customer: UIViewController {
         self.tableView!.sizeToFit()
         self.tableView!.clipsToBounds = true
         if #available(iOS 13.0, *) {
-            self.tableView!.backgroundColor = .systemGray4
+            let bgView = UIView()
+            bgView.backgroundColor = .secondarySystemGroupedBackground
+            tableView!.backgroundView = bgView
         } else {
             // Fallback on earlier versions
             self.tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
@@ -593,21 +595,23 @@ extension Customer: UITableViewDataSource {
             cell.selectionStyle = .none
             if #available(iOS 13.0, *) {
                 cell.custtitleLabel.textColor = .label
+                cell.myLabel20.textColor = .label
+                cell.custsubtitleLabel!.textColor = .systemGray
             } else {
                 // Fallback on earlier versions
             }
-            cell.custsubtitleLabel!.textColor = .systemGray
-            cell.myLabel10.backgroundColor = Color.Cust.labelColor1
+            
+            cell.myLabel10.backgroundColor = .systemGray //Color.Cust.labelColor
             cell.custlikeButton.tintColor = .lightGray
-            cell.custlikeButton.setImage(#imageLiteral(resourceName: "Thumb Up").withRenderingMode(.alwaysTemplate), for: .normal)
+            cell.custlikeButton.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
             
             cell.custreplyButton.tintColor = .lightGray
-            cell.custreplyButton.setImage(#imageLiteral(resourceName: "Commentfilled").withRenderingMode(.alwaysTemplate), for: .normal)
+            cell.custreplyButton.setImage(UIImage(systemName: "bubble.left.fill"), for: .normal)
             
             cell.customImagelabel.text = "Cust"
             cell.customImagelabel.tag = indexPath.row
             cell.customImagelabel.frame = .init(x: 10, y: 10, width: 50, height: 50)
-            cell.customImagelabel.backgroundColor = Color.Cust.labelColor
+            cell.customImagelabel.backgroundColor = Color.Cust.labelColor1
             cell.customImagelabel.layer.cornerRadius = 25.0
             let tap = UITapGestureRecognizer(target: self, action: #selector(imgLoadSegue))
             cell.customImagelabel.addGestureRecognizer(tap)
@@ -710,10 +714,7 @@ extension Customer: UITableViewDelegate {
                     header.myLabel2.text = String(format: "%@%d", "Active\n", activeCount ?? 0)
                     header.myLabel3.text = String(format: "%@%d", "Events\n", 3)
                 }
-                header.separatorView1.backgroundColor = Color.Cust.buttonColor
-                header.separatorView2.backgroundColor = Color.Cust.buttonColor
-                header.separatorView3.backgroundColor = Color.Cust.buttonColor
-                header.contentView.backgroundColor = Color.Lead.navColor
+                header.contentView.backgroundColor = .systemBlue //Color.Cust.labelColor1
                 self.tableView!.tableHeaderView = nil //header.header
                 
                 return header.contentView

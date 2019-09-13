@@ -22,7 +22,7 @@ protocol LookupDataDelegate: class {
     func productNameFromController(_ passedData: String)
 }
 
-class LookupData: UIViewController {
+final class LookupData: UIViewController {
     
     weak var delegate:LookupDataDelegate?
     
@@ -93,14 +93,6 @@ class LookupData: UIViewController {
         searchController.searchBar.sizeToFit()
         searchController.obscuresBackgroundDuringPresentation = false
         
-        if let textfield = searchController.searchBar.value(forKey: "searchField") as? UITextField {
-            if let backgroundview = textfield.subviews.first {
-                backgroundview.backgroundColor = .white
-                backgroundview.layer.cornerRadius = 10
-                backgroundview.clipsToBounds = true
-            }
-        }
-        
         self.definesPresentationContext = true
     }
     
@@ -109,7 +101,7 @@ class LookupData: UIViewController {
         self.tableView!.dataSource = self
         self.tableView!.sizeToFit()
         self.tableView!.clipsToBounds = true
-        self.tableView!.backgroundColor = Color.LGrayColor
+        self.tableView!.backgroundColor = .secondarySystemGroupedBackground
         self.tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
@@ -469,6 +461,7 @@ extension LookupData: UITableViewDataSource {
         } else {
             cell.textLabel!.font = Font.celltitle20l
         }
+        cell.textLabel!.textColor = .label
         
         if (tableView == self.tableView) {
             if (lookupItem == "City") {
@@ -569,9 +562,6 @@ extension LookupData: UISearchResultsUpdating {
     }
     
     func filterContentForSearchText(_ searchText: String) {
-
-    
-
         /*
         if (lookupItem == "City") {
             

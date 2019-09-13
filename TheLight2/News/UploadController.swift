@@ -17,7 +17,7 @@ import AVFoundation
 import UserNotifications
 import MessageUI
 
-class UploadController: UIViewController, UITextViewDelegate, MFMailComposeViewControllerDelegate {
+final class UploadController: UIViewController, UITextViewDelegate, MFMailComposeViewControllerDelegate {
     
    fileprivate let addText = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."
     
@@ -31,12 +31,13 @@ class UploadController: UIViewController, UITextViewDelegate, MFMailComposeViewC
     var isPickImage = false
     var isEditImage = false
     
-    var formStat : String?
+    var formState : String?
     var objectId : String?
     var newstitle : String?
     var newsdetail : String?
     var newsStory : String?
     var imageDetailurl : String?
+    var videoDetailurl : String?
     var newsImage : UIImage!
     
     //firebase
@@ -153,7 +154,7 @@ class UploadController: UIViewController, UITextViewDelegate, MFMailComposeViewC
     }
     
     private func setupNavigationButtons() {
-        let cameraButton = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(shootPhoto))
+        let cameraButton = UIBarButtonItem(image: UIImage(systemName: "camera"), style: .plain, target: self, action: #selector(shootPhoto))
         let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(uploadImage))
         navigationItem.rightBarButtonItems = [saveButton, cameraButton]
     }
@@ -171,7 +172,7 @@ class UploadController: UIViewController, UITextViewDelegate, MFMailComposeViewC
         progressView.setProgress(0, animated: true)
         progressView.transform = self.progressView.transform.scaledBy(x: 1, y: 1.5)
         
-        if self.formStat == "Update" {
+        if self.formState == "Update" {
             // FIXME:
             if (newsImage != nil) {
                 isPickImage = true
@@ -282,27 +283,31 @@ class UploadController: UIViewController, UITextViewDelegate, MFMailComposeViewC
     // MARK: - Update Data
     @objc func uploadImage(_ sender: AnyObject) {
         
-        guard let text = self.commentTitle.text else { return }
+        guard let commentText = self.commentTitle.text else { return }
         
-        if text == "" {
+        if commentText == "" {
             self.simpleAlert(title: "Oops!", message: "No text entered.")
         } else {
+            
             self.navigationItem.rightBarButtonItem!.isEnabled = false
             self.progressView.isHidden = false
             
             self.activityIndicator.startAnimating()
             
             if (isPickImage == true) { //image
+                
                 if (defaults.bool(forKey: "parsedataKey")) {
                     uploadData = self.newsImageView.image?.jpegData(compressionQuality: 0.9)
                     file = PFFileObject(name: "img", data: uploadData!)
                 } else {
                     //Firebase
-                    uploadToFirebaseStorageUsingImage(image: newsImage, completion: { (imageUrl) in
+                    uploadToFirebaseStorageUsingImage(image: self.newsImageView.image!, completion: { (imageUrl) in
                         //self.sendMessageWithImageUrl(imageUrl: imageUrl, image: selectedImage)
                     })
                 }
+                
             } else { //video
+                
                 if (defaults.bool(forKey: "parsedataKey")) {
                     file = PFFileObject(name: "movie.mp4", data: FileManager.default.contents(atPath: videoURL!.path)!)
                 } else {
@@ -311,7 +316,7 @@ class UploadController: UIViewController, UITextViewDelegate, MFMailComposeViewC
                 }
             }
             
-            if (self.formStat == "Update") {
+            if (self.formState == "Update") {
                 
                 if (defaults.bool(forKey: "parsedataKey")) {
                     
@@ -408,8 +413,9 @@ class UploadController: UIViewController, UITextViewDelegate, MFMailComposeViewC
         content.sound = UNNotificationSound.default
         content.categoryIdentifier = "status"
         
-        let imageURL = Bundle.main.url(forResource: "news", withExtension: "png")
-        let attachment = try! UNNotificationAttachment(identifier: "", url: imageURL!, options: nil)
+        let imageName = "applelogo"
+        guard let imageURL = Bundle.main.url(forResource: imageName, withExtension: "png") else { return }
+        let attachment = try! UNNotificationAttachment(identifier: imageName, url: imageURL, options: .none)
         content.attachments = [attachment]
         content.userInfo = ["link":""]
         
@@ -442,25 +448,25 @@ class UploadController: UIViewController, UITextViewDelegate, MFMailComposeViewC
 }
 
 // Helper function inserted by Swift 4.2 migrator.
-private func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
+fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
     return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
 }
 
 // Helper function inserted by Swift 4.2 migrator.
-private func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
+fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
     return input.rawValue
 }
-/*
+
 // Helper function inserted by Swift 4.2 migrator.
-private func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
     guard let input = input else { return nil }
     return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
 }
 
 // Helper function inserted by Swift 4.2 migrator.
-private func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
     return input.rawValue
-} */
+}
 
 extension UploadController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -535,7 +541,7 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
         picImage = selectedImageFromPicker
     }
     
-    private func handleVideoSelectedForUrl(_ url: URL) {
+    fileprivate func handleVideoSelectedForUrl(_ url: URL) {
         
         let filename = UUID().uuidString + ".mov"
         
@@ -543,49 +549,85 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
         metadata.contentType = "video/quicktime"
         
         let ref = Storage.storage().reference().child("News_movies").child(filename)
-        let uploadTask = ref.putFile(from: url, metadata: metadata, completion: { ( _, err) in
-            if let err = err {
-                print("Failed to upload movie:", err)
+        
+        let uploadTask = ref.putFile(from: url, metadata: metadata, completion: { (_, error) in
+            
+            if error != nil {
+                print("CRAP Failed upload of video:", error!)
                 return
             }
             
-            ref.downloadURL(completion: { (forVideoUrl, error) in
-                guard let videoUrl = forVideoUrl?.absoluteString else {
-                    print(error!)
+            ref.downloadURL( completion: { (downloadUrl, error) in
+                if let err = error {
+                    print("CRAP Failed to get download url:", err)
                     return
                 }
                 
-                self.newsvideourl = videoUrl
+                guard let downloadURL = downloadUrl?.absoluteString else { return}
+                
+                 self.newsvideourl = downloadURL
                 
                 if let thumbnailImage = self.thumbnailImageForFileUrl(fileUrl: url) {
                     
                     self.uploadToFirebaseStorageUsingImage(image: thumbnailImage, completion: { (imageUrl) in
-                        let properties: [String: Any] = ["imageUrl": imageUrl,
-                                                         "imageWidth": thumbnailImage.size.width,
-                                                         "imageHeight": thumbnailImage.size.height,
-                                                         "videoUrl": videoUrl]
-                        self.sendMessageWithProperties(properties: properties as [String : AnyObject])
+                        let properties: [String: AnyObject] = ["imageUrl": imageUrl as AnyObject, "imageWidth": thumbnailImage.size.width as AnyObject, "imageHeight": thumbnailImage.size.height as AnyObject, "videoUrl": downloadURL as AnyObject]
+                        self.sendMessageWithProperties(properties: properties)
                     })
+                    
                 }
             })
         })
         
+        uploadTask.observe(.resume) { snapshot in
+          // Upload resumed, also fires when the upload starts
+        }
+
+        uploadTask.observe(.pause) { snapshot in
+          // Upload paused
+        }
+        
         uploadTask.observe(.progress) { (snapshot) in
             let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount)
                 / Double(snapshot.progress!.totalUnitCount)
-            self.progressView.progress = Float(percentComplete)
-            self.navigationItem.title = String(percentComplete)
+            self.progressView.setProgress(Float(percentComplete), animated: true)
         }
         
         uploadTask.observe(.success) { (snapshot) in
-            print("Complete")
-            //self.navigationItem.title = "Complete" //self.user?.name
+            self.progressView.isHidden = true
+            self.progressView.progress = 0.0
+        }
+        
+        uploadTask.observe(.failure) { snapshot in
+            if let error = snapshot.error as NSError? {
+                switch (StorageErrorCode(rawValue: error.code)!) {
+                case .objectNotFound:
+                    // File doesn't exist
+                    break
+                case .unauthorized:
+                    // User doesn't have permission to access file
+                    print("User doesn't have permission to access file")
+                    break
+                case .cancelled:
+                    // User canceled the upload
+                    break
+                    
+                    /* ... */
+                    
+                case .unknown:
+                    // Unknown error occurred, inspect the server response
+                    break
+                default:
+                    // A separate error occurred. This is a good place to retry the upload.
+                    break
+                }
+            }
         }
     }
     
     private func uploadToFirebaseStorageUsingImage(image: UIImage, completion: @escaping (_ imageUrl: String) -> ()) {
+        
         let filename: String
-        if !(self.formStat == "Update") { //New
+        if !(self.formState == "Update") { //New
             filename = NSUUID().uuidString
         } else {
             filename = (Auth.auth().currentUser?.uid)!
@@ -603,6 +645,7 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
                     self.navigationItem.rightBarButtonItem?.isEnabled = true
                     print("Failed to upload image:", error!)
                     return
+                    
                 } else {
                     
                     storageItem.downloadURL(completion: { (url, error) in
@@ -610,7 +653,7 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
                             print(error!)
                             return
                         }
-                        if !(self.formStat == "Update") { //New
+                        if !(self.formState == "Update") { //New
                             self.saveToDatabaseWithImageUrl(imageUrl: (url?.absoluteString)!)
                             
                         } else { //Update
@@ -618,8 +661,10 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
                             let userRef = FirebaseRef.databaseRoot.child("News").child(self.objectId!)
                             let values = ["newsTitle": self.commentTitle.text ?? "",
                                           "newsDetail": self.commentSorce.text ?? "",
-                                          "storyText": self.commentDetail.text ?? "",
-                                          "imageUrl": url?.absoluteString as Any] as [String: Any]
+                                          //"imageUrl": self.imageDetailurl ?? "",
+                                          //"videoUrl": self.videoDetailurl ?? "",
+                                          "storyText": self.commentDetail.text ?? ""
+                                          ] as [String: Any]
                             
                             userRef.updateChildValues(values) { (err, ref) in
                                 if let err = err {
@@ -647,15 +692,15 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
         
         let values = ["imageUrl": imageUrl,
                       "videoUrl": self.newsvideourl ?? "",
+                      "newsTitle": titleText,
+                      "newsDetail": self.commentSorce.text ?? "",
+                      "storyText": detailText,
+                      "liked": 0,
+                      "newsId": key!,
+                      "creationDate" : Date().timeIntervalSince1970,
                       //"imageWidth": postImage.size.width,
-                     //"imageHeight": postImage.size.height,
-                     "newsTitle": titleText,
-                     "newsDetail": self.commentSorce.text ?? "",
-                     "storyText": detailText,
-                     "liked": 0,
-                     "newsId": key!,
-                     "creationDate" : Date().timeIntervalSince1970,
-                     "uid": uid] as [String : Any]
+                      //"imageHeight": postImage.size.height,
+                      "uid": uid] as [String : Any]
         let childUpdates = ["/News/\(String(key!))": values]
         
         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in

@@ -11,12 +11,12 @@ import Parse
 import MobileCoreServices //kUTTypeImage
 
 
-class AccountCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+final class AccountCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
-    private var image = ["History", "My Videos", "notification", "Watch Later"]
-    private var items = ["History", "My Videos", "Notifications", "Watch Later"]
+    private var image = ["clock", "arrowtriangle.right.fill", "bell", "clock.fill"]
+    private var items = ["clock", "My Videos", "Notifications", "Watch Later"]
     
-    private var image1 = ["profile-rabbit-toy", "taylor_swift_profile", "thumbUp", "taylor_swift_profile"]
+    private var image1 = ["profile-rabbit-toy", "taylor_swift_profile", "profile-rabbit-toy", "taylor_swift_profile"]
     private var items1 = ["All Videos", "Favorites", "Liked videos", "My Top Videos"]
     private var itemsDetail1 = ["80 videos", "106 videos", "76 videos", "42 videos"]
     
@@ -81,7 +81,7 @@ class AccountCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSou
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
         button.tintColor = .white
-        button.setImage(#imageLiteral(resourceName: "minimize").withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(UIImage(systemName: "chevron.down"), for: .normal)
         return button
     }()
     
@@ -95,12 +95,13 @@ class AccountCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSou
         super.init(frame: frame)
         
         backgroundColor = .white
+        //self.userimageView?.tintColor = .black
         
         let floatingButton = UIButton(frame: .init(x: frame.size.width - 70, y: 65, width: 50, height: 50))
         floatingButton.layer.cornerRadius = floatingButton.frame.size.width / 2
         floatingButton.backgroundColor = Color.News.navColor
         floatingButton.tintColor = .white
-        floatingButton.setImage(#imageLiteral(resourceName: "Camcorder").withRenderingMode(.alwaysTemplate), for: .normal)
+        floatingButton.setImage(UIImage(systemName: "video.fill"), for: .normal)
         floatingButton.addTarget(self, action: #selector(selectCamera), for: .touchUpInside)
         
         registerCells()
@@ -197,7 +198,7 @@ class AccountCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSou
             cell.titleImage.frame = .init(x: 28, y: 12, width: 20, height: 20)
             cell.titleLabel.frame = .init(x: 75, y: 10, width: tableView.frame.width, height: 20.0)
             
-            cell.titleImage.image = UIImage.init(named: self.image[indexPath.row])
+            cell.titleImage.image = UIImage.init(systemName: self.image[indexPath.row])
             cell.titleLabel.text = self.items[indexPath.row]
             
             return cell
@@ -258,7 +259,7 @@ class AccountCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSou
             
             let sortButton = UIButton(frame: .init(x: 120, y: 18, width: 10, height: 7))
             sortButton.tintColor = .black
-            sortButton.setImage(#imageLiteral(resourceName: "minimize").withRenderingMode(.alwaysTemplate), for: .normal)
+            sortButton.setImage(UIImage(systemName: "chevron.down"), for: .normal)
             vw.addSubview(sortButton)
             
             return vw
@@ -299,7 +300,8 @@ class AccountViewCell: UITableViewCell {
     let titleImage: UIImageView = {
         let imageView = UIImageView(image: #imageLiteral(resourceName: "taylor_swift_profile"))
         imageView.contentMode = .scaleAspectFill
-        imageView.backgroundColor = .systemYellow
+        imageView.tintColor = .systemGray
+        imageView.backgroundColor = .clear
         imageView.clipsToBounds = true
         return imageView
     }()

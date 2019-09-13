@@ -24,12 +24,12 @@ extension MenuController {
 class MenuController: UITableViewController {
     
     let menuItems = [
-        MenuItem(icon: #imageLiteral(resourceName: "thumbUp"), title: "Unclassified"),
-        MenuItem(icon: #imageLiteral(resourceName: "car"), title: "All Drives"),
-        MenuItem(icon: #imageLiteral(resourceName: "display30copy"), title: "Monthly  Summaries"),
-        MenuItem(icon: #imageLiteral(resourceName: "settings"), title: "Account Settings"),
-        MenuItem(icon: #imageLiteral(resourceName: "feedback"), title: "Drive  Detection"),
-        MenuItem(icon: #imageLiteral(resourceName: "help"), title: "Help"),
+        MenuItem(icon: UIImage(systemName: "hand.thumbsup.fill")!, title: "Unclassified"),
+        MenuItem(icon: UIImage(systemName: "car.fill")!, title: "All Drives"),
+        MenuItem(icon: UIImage(systemName: "text.bubble.fill")!, title: "Monthly  Summaries"),
+        MenuItem(icon: UIImage(systemName: "gear")!, title: "Account Settings"),
+        MenuItem(icon: UIImage(systemName: "phone.fill")!, title: "Drive  Detection"),
+        MenuItem(icon: UIImage(systemName: "questionmark.circle.fill")!, title: "Help"),
         ]
     
     private let cellID = "cellId"

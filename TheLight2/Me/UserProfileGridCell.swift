@@ -8,7 +8,7 @@
 
 import UIKit
 
-class UserProfileGridCell: UICollectionViewCell {
+final class UserProfileGridCell: UICollectionViewCell {
     
     var post: NewsModel? {
         didSet {
@@ -36,7 +36,7 @@ class UserProfileGridCell: UICollectionViewCell {
         button.alpha = 0.9
         button.isUserInteractionEnabled = true
         button.tintColor = .white //lightGray
-        button.setImage(#imageLiteral(resourceName: "Camcorder"), for: .normal)
+        button.setImage(UIImage(systemName: "video.fill"), for: .normal)
         //let tap = UITapGestureRecognizer(target: self, action: #selector(playVideo))
         //button.addGestureRecognizer(tap)
         return button

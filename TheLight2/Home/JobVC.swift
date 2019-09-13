@@ -10,7 +10,7 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
-class JobVC: UIViewController {
+final class JobVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView?
     // MARK: NavigationController Hidden
@@ -116,7 +116,9 @@ class JobVC: UIViewController {
         self.tableView!.dataSource = self
         self.tableView!.sizeToFit()
         self.tableView!.clipsToBounds = true
-        self.tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
+        let bgView = UIView()
+        bgView.backgroundColor = .secondarySystemGroupedBackground
+        tableView!.backgroundView = bgView
         self.tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
@@ -378,6 +380,8 @@ extension JobVC: UITableViewDelegate {
             cell.accessoryType = .disclosureIndicator
             cell.customImagelabel.text = "Job's"
             cell.customImagelabel.tag = indexPath.row
+            cell.customImagelabel.adjustsFontSizeToFitWidth = true
+            cell.customImagelabel.backgroundColor = .systemIndigo
             
             if UIDevice.current.userInterfaceIdiom == .pad  {
                 cell.jobtitleLabel!.font = Font.celltitle22m
@@ -442,10 +446,7 @@ extension JobVC: UITableViewDataSource {
                     header.myLabel2.text = String(format: "%@%d", "Active\n", activeCount ?? 0)
                     header.myLabel3.text = String(format: "%@%d", "Event\n", 0)
                 }
-                header.separatorView1.backgroundColor = Color.Table.labelColor
-                header.separatorView2.backgroundColor = Color.Table.labelColor
-                header.separatorView3.backgroundColor = Color.Table.labelColor
-                header.contentView.backgroundColor = Color.Table.navColor
+                header.contentView.backgroundColor = .systemIndigo//Color.Table.labelColor
                 self.tableView!.tableHeaderView = nil
                 
                 return header.contentView

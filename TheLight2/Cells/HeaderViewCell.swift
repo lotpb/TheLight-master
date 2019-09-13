@@ -9,7 +9,7 @@
 import UIKit
 import SwiftUI
 
-class HeaderViewCell: UITableViewCell {
+final class HeaderViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -31,14 +31,15 @@ class HeaderViewCell: UITableViewCell {
         label.text = ""
         label.numberOfLines = 2
         label.backgroundColor = .white
-        label.textColor = Color.goldColor
+        label.textColor = .systemGray //Color.goldColor
         label.textAlignment = .center
         label.font = Font.celltitle14m
         label.layer.cornerRadius = 27.0
-        label.layer.borderColor = Color.Blog.borderColor.cgColor
+        label.layer.borderColor = UIColor.systemGray.cgColor //Color.Blog.borderColor.cgColor
         label.layer.borderWidth = 1
         label.layer.masksToBounds = true
         label.isUserInteractionEnabled = true
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -49,14 +50,15 @@ class HeaderViewCell: UITableViewCell {
         label.text = ""
         label.numberOfLines = 2
         label.backgroundColor = .white
-        label.textColor = Color.goldColor
+        label.textColor = .systemGray //Color.goldColor
         label.textAlignment = .center
         label.font = Font.celltitle14m
         label.layer.cornerRadius = 27.0
-        label.layer.borderColor = Color.Blog.borderColor.cgColor
+        label.layer.borderColor = UIColor.systemGray.cgColor//Color.Blog.borderColor.cgColor
         label.layer.borderWidth = 1
         label.layer.masksToBounds = true
         label.isUserInteractionEnabled = true
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -67,31 +69,35 @@ class HeaderViewCell: UITableViewCell {
         label.text = ""
         label.numberOfLines = 2
         label.backgroundColor = .white
-        label.textColor = Color.goldColor
+        label.textColor = .systemGray //Color.goldColor
         label.textAlignment = .center
         label.font = Font.celltitle14m
         label.layer.cornerRadius = 27.0
-        label.layer.borderColor = Color.Blog.borderColor.cgColor
+        label.layer.borderColor = UIColor.systemGray.cgColor //Color.Blog.borderColor.cgColor
         label.layer.borderWidth = 1
         label.layer.masksToBounds = true
         label.isUserInteractionEnabled = true
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
     lazy var separatorView1: UIView = {
         let view = UIView()
+        view.backgroundColor = .white
         view.frame = .init(x: 10, y: 70, width: 54, height: 2.5)
         return view
     }()
     
     lazy var separatorView2: UIView = {
         let view = UIView()
+        view.backgroundColor = .white
         view.frame = .init(x: 84, y: 70, width: 54, height: 2.5)
         return view
     }()
     
     lazy var separatorView3: UIView = {
         let view = UIView()
+        view.backgroundColor = .white
         view.frame = .init(x: 158, y: 70, width: 54, height: 2.5)
         return view
     }()

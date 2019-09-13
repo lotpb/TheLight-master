@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class NearbyCell: UITableViewCell {
+final class NearbyCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()

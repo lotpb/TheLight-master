@@ -9,7 +9,7 @@
 import UIKit
 import FirebaseDatabase
 
-class ReplyTableCell: UITableViewCell {
+final class ReplyTableCell: UITableViewCell {
     
     var postReply: BlogModel? {
         didSet {
@@ -86,7 +86,7 @@ class ReplyTableCell: UITableViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
         button.tintColor = .lightGray
-        button.setImage(#imageLiteral(resourceName: "Thumb Up").withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
         return button
     }()
     
@@ -94,7 +94,7 @@ class ReplyTableCell: UITableViewCell {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .lightGray
-        button.setImage(#imageLiteral(resourceName: "nav_more_icon").withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
         return button
     }()
     

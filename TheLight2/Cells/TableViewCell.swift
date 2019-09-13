@@ -11,9 +11,37 @@ import SwiftUI
 import FirebaseDatabase
 //import Parse
 
-class TableViewCell: UITableViewCell {
+final class TableViewCell: UITableViewCell {
     var defaults = UserDefaults.standard
-    var _feedItems = NSMutableArray()
+    //var _feedItems = NSMutableArray()
+
+    /*
+    var feedItems: Database! { //parse not working
+        didSet {
+
+            leadtitleLabel!.text = _feedItems.value(forKey: "LastName") as? String ?? ""
+            leadsubtitleLabel!.text = _feedItems.value(forKey: "City") as? String ?? ""
+            myLabel10.text = _feedItems.value(forKey: "Date") as? String ?? ""
+            myLabel20.text = _feedItems.value(forKey: "CallBack") as? String ?? ""
+
+            if (_feedItems.value(forKey: "Coments") as? String == nil) || (_feedItems.value(forKey: "Coments") as? String == "") {
+
+                leadreplyButton!.tintColor = .lightGray
+            } else {
+                leadreplyButton!.tintColor = Color.Lead.buttonColor
+            }
+
+            if (_feedItems.value(forKey: "Active") as? Int == 1 ) {
+                leadlikeButton!.tintColor = Color.Lead.buttonColor
+                leadlikeLabel.text! = "Active"
+                leadlikeLabel.adjustsFontSizeToFitWidth = true
+            } else {
+                leadlikeButton!.tintColor = .lightGray
+                leadlikeLabel.text! = ""
+            }
+
+        }
+    } */
     
     //firebase
     var blogpost: BlogModel? {
@@ -51,33 +79,6 @@ class TableViewCell: UITableViewCell {
         }
     }
     
-    var feedItems: Database! {
-        didSet {
-            
-            leadtitleLabel!.text = _feedItems.value(forKey: "LastName") as? String ?? ""
-            leadsubtitleLabel!.text = _feedItems.value(forKey: "City") as? String ?? ""
-            myLabel10.text = _feedItems.value(forKey: "Date") as? String ?? ""
-            myLabel20.text = _feedItems.value(forKey: "CallBack") as? String ?? ""
-            
-            if (_feedItems.value(forKey: "Coments") as? String == nil) || (_feedItems.value(forKey: "Coments") as? String == "") {
-                
-                leadreplyButton!.tintColor = .lightGray
-            } else {
-                leadreplyButton!.tintColor = Color.Lead.buttonColor
-            }
-            
-            if (_feedItems.value(forKey: "Active") as? Int == 1 ) {
-                leadlikeButton!.tintColor = Color.Lead.buttonColor
-                leadlikeLabel.text! = "Active"
-                leadlikeLabel.adjustsFontSizeToFitWidth = true
-            } else {
-                leadlikeButton!.tintColor = .lightGray
-                leadlikeLabel.text! = ""
-            }
-            
-        }
-    }
-    
     var leadpost: LeadModel? {
         didSet {
             
@@ -87,10 +88,10 @@ class TableViewCell: UITableViewCell {
                 
                 leadtitleLabel.text = leadpost?.lastname
                 
-                leadsubtitleLabel.text = String(format: "%@ %@ %@", (leadpost?.city)!,
+                leadsubtitleLabel.text = String(format: "%@ %@ %@",
+                                                (leadpost?.city)!,
                                                 (leadpost?.state)!,
                                                 (leadpost?.zip)!).removeWhiteSpace()
-                
                 let dateFormat = DateFormatter()
                 dateFormat.dateFormat = "MMM dd yy"
                 myLabel10.text = dateFormat.string(from: (leadpost?.creationDate)!) as String

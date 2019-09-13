@@ -11,7 +11,7 @@ import MapKit
 import CoreLocation
 
 
-class Geotification: NSObject, Codable, MKAnnotation {
+final class Geotification: NSObject, Codable, MKAnnotation {
     
     enum EventType: String {
         case onEntry = "On Entry"

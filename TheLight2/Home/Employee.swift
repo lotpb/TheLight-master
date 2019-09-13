@@ -11,7 +11,7 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
-class Employee: UIViewController {
+final class Employee: UIViewController {
 
     @IBOutlet weak var tableView: UITableView?
     // MARK: NavigationController Hidden
@@ -120,7 +120,9 @@ class Employee: UIViewController {
         self.tableView!.sizeToFit()
         self.tableView!.clipsToBounds = true
         if #available(iOS 13.0, *) {
-            self.tableView!.backgroundColor = .systemGray4
+            let bgView = UIView()
+            bgView.backgroundColor = .secondarySystemGroupedBackground
+            tableView!.backgroundView = bgView
         } else {
             // Fallback on earlier versions
             self.tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
@@ -518,17 +520,18 @@ extension Employee: UITableViewDataSource {
             }
             cell.employsubtitleLabel!.textColor = .systemGray
             cell.employreplyButton.tintColor = .lightGray
-            cell.employreplyButton.setImage(#imageLiteral(resourceName: "Commentfilled").withRenderingMode(.alwaysTemplate), for: .normal)
+            cell.employreplyButton.setImage(UIImage(systemName: "bubble.left.fill"), for: .normal)
             cell.employreplyLabel.text! = ""
             
             cell.employlikeButton.tintColor = .lightGray
-            cell.employlikeButton.setImage(#imageLiteral(resourceName: "Thumb Up").withRenderingMode(.alwaysTemplate), for: .normal)
+            cell.employlikeButton.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
             
             cell.customImagelabel.text = "Employ"
             cell.customImagelabel.tag = indexPath.row
             cell.customImagelabel.frame = .init(x: 10, y: 10, width: 50, height: 50)
             cell.customImagelabel.backgroundColor = Color.Employ.labelColor
             cell.customImagelabel.layer.cornerRadius = 25.0
+            cell.customImagelabel.adjustsFontSizeToFitWidth = true
             
             if (defaults.bool(forKey: "parsedataKey")) {
                 
@@ -606,10 +609,7 @@ extension Employee: UITableViewDelegate {
                 header.myLabel2.text = String(format: "%@%d", "Active\n", activeCount ?? 0)
                 header.myLabel3.text = String(format: "%@%d", "Events\n", 3)
             }
-            header.separatorView1.backgroundColor = Color.Employ.buttonColor
-            header.separatorView2.backgroundColor = Color.Employ.buttonColor
-            header.separatorView3.backgroundColor = Color.Employ.buttonColor
-            header.contentView.backgroundColor = Color.Lead.navColor
+            header.contentView.backgroundColor = Color.Employ.buttonColor //Color.Lead.navColor
             self.tableView!.tableHeaderView = nil //header.header
             
             return header.contentView

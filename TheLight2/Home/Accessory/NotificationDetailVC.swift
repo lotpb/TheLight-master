@@ -9,7 +9,7 @@
 import UIKit
 import  UserNotifications
 
-class NotificationDetailVC: UIViewController, UNUserNotificationCenterDelegate {
+final class NotificationDetailVC: UIViewController, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var tableView: UITableView?
     

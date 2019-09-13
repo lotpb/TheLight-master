@@ -14,7 +14,7 @@ protocol RegionsProtocol{
 }
 
 
-class RegionsListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
+final class RegionsListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var delegate:RegionsProtocol!
     @IBOutlet weak var tableView: UITableView!

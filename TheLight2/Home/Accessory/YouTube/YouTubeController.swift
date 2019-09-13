@@ -8,7 +8,7 @@
 
 import UIKit
 
-class YouTubeController: UIViewController {
+final class YouTubeController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segDisplayedContent: UISegmentedControl!

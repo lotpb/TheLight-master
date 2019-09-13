@@ -15,7 +15,7 @@
   import MobileCoreServices //added CoreSpotlight
   
   
-  class DetailViewVC: UIViewController, RPPreviewViewControllerDelegate, AVSpeechSynthesizerDelegate, CLLocationManagerDelegate, UIPickerViewDelegate, UIPickerViewDataSource, RPScreenRecorderDelegate {
+  final class DetailViewVC: UIViewController, RPPreviewViewControllerDelegate, AVSpeechSynthesizerDelegate, CLLocationManagerDelegate, UIPickerViewDelegate, UIPickerViewDataSource, RPScreenRecorderDelegate {
     
     // MARK: NavigationController Hidden
     private var lastContentOffset: CGFloat = 0.0

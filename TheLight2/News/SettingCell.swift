@@ -39,7 +39,7 @@ class SettingCell: CollectionViewCell {
     }()
     
     let iconImageView: UIImageView = {
-        let imageView = UIImageView(image: #imageLiteral(resourceName: "settings"))
+        let imageView = UIImageView(image: UIImage(systemName: "gear"))
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()

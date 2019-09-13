@@ -115,7 +115,7 @@ enum Color {
 
 struct Font {
     
-    static let celltitle60r = UIFont.systemFont(ofSize: 60)
+    static let celltitle40r = UIFont.systemFont(ofSize: 40)
     
     static let celltitle36r = UIFont.systemFont(ofSize: 36)
     
@@ -203,7 +203,7 @@ struct Font {
     
     struct Detail {
         static let ipadname = celltitle30l
-        static let ipadAmount = celltitle60r
+        static let ipadAmount = celltitle40r
         static let ipaddate = Font.celltitle18r
         static let ipadaddress = celltitle26l
         

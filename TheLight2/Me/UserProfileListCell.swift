@@ -9,10 +9,11 @@
 import UIKit
 import FirebaseDatabase
 
-class UserProfileListCell: UICollectionViewCell {
+final class UserProfileListCell: UICollectionViewCell {
     
     var post: NewsModel? {
         didSet{
+
             FirebaseRef.databaseRoot.child("users")
                 .queryOrdered(byChild: "uid")
                 .queryEqual(toValue: post?.uid)
@@ -45,7 +46,7 @@ class UserProfileListCell: UICollectionViewCell {
     
     let photoImageView: CustomImageView = {
         let iv = CustomImageView()
-        iv.backgroundColor = .lightGray
+        iv.backgroundColor = .secondarySystemGroupedBackground
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
@@ -72,7 +73,7 @@ class UserProfileListCell: UICollectionViewCell {
         button.alpha = 0.9
         button.isUserInteractionEnabled = true
         button.tintColor = .white //lightGray
-        button.setImage(#imageLiteral(resourceName: "Camcorder"), for: .normal)
+        button.setImage(UIImage(systemName: "video.fill"), for: .normal)
         //let tap = UITapGestureRecognizer(target: self, action: #selector(playVideo))
         //button.addGestureRecognizer(tap)
         return button
@@ -105,7 +106,7 @@ class UserProfileListCell: UICollectionViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
         button.tintColor = .lightGray
-        button.setImage(#imageLiteral(resourceName: "Thumb Up").withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
         return button
     }()
     
@@ -114,7 +115,7 @@ class UserProfileListCell: UICollectionViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
         button.tintColor = .black
-        button.setImage(#imageLiteral(resourceName: "nav_more_icon").withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
         button.addTarget(self, action: #selector(UserProfileVC.shareButton), for: .touchUpInside)
         return button
     }()
@@ -128,14 +129,14 @@ class UserProfileListCell: UICollectionViewCell {
     
     lazy var buttonView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
+        view.backgroundColor = .secondarySystemGroupedBackground //UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     override init(frame: CGRect){
         super.init(frame: frame)
-        
+        backgroundColor = .secondarySystemGroupedBackground
         addSubview(titleLabelnew)
         addSubview(profileImageView)
         addSubview(photoImageView)

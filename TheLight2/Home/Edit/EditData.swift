@@ -11,7 +11,7 @@ import Parse
 import FirebaseDatabase
 import FirebaseAuth
 
-class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
+final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
 
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var mainView: UIView!
@@ -106,7 +106,7 @@ class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, 
 
         if #available(iOS 13.0, *) {
             //view?.backgroundColor = .systemGray6
-            contentView?.backgroundColor = .systemGray6
+            contentView?.backgroundColor = .secondarySystemGroupedBackground
             mainView?.backgroundColor = .clear
             tableView?.backgroundColor = .clear
         } else {
@@ -172,16 +172,14 @@ class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, 
     }
     
     private func setupNavigation() {
-        
+        navigationController?.navigationBar.prefersLargeTitles = true
+        let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(updateData))
+        navigationItem.rightBarButtonItems = [saveButton]
         if UIDevice.current.userInterfaceIdiom == .pad  {
             navigationItem.title = String(format: "%@ %@", "TheLight Software - \(self.status!)", self.formController!)
         } else {
             navigationItem.title = String(format: "%@ %@", self.status!, self.formController!)
         }
-        
-        let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(updateData))
-        navigationItem.rightBarButtonItems = [saveButton]
-        self.navigationItem.largeTitleDisplayMode = .always
     }
     
     func setupTableView() {
@@ -1397,14 +1395,15 @@ extension EditData: UITableViewDataSource {
         if (indexPath.row == 0) {
             
             let theSwitch = UISwitch(frame: .zero)
+            self.activeImage.image = UIImage(systemName: "star.fill")
             
             if self.frm30 == "1" {
                 theSwitch.isOn = true
-                self.activeImage.image = #imageLiteral(resourceName: "iosStar")
+                self.activeImage.tintColor = .systemYellow
                 cell.textLabel!.text = "Active"
             } else {
                 theSwitch.isOn = false
-                self.activeImage.image = #imageLiteral(resourceName: "iosStarNA")
+                self.activeImage.tintColor = .systemGray
                 cell.textLabel!.text = "Inactive"
             }
             theSwitch.onTintColor = UIColor(red:0.0, green:122.0/255.0, blue:1.0, alpha: 1.0)

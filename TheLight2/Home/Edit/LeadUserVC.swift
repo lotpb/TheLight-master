@@ -9,7 +9,7 @@
 import UIKit
 import Parse
 
-class LeadUserVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+final class LeadUserVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView?
     
@@ -211,10 +211,10 @@ class LeadUserVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
         
         cell.actionBtn.tintColor = .lightGray
-        cell.actionBtn.setImage(#imageLiteral(resourceName: "Upload50").withRenderingMode(.alwaysTemplate), for: .normal)
+        cell.actionBtn.setImage(UIImage(systemName: "square and.arrowup.fill"), for: .normal)
         
         cell.replyButton.tintColor = .lightGray
-        cell.replyButton.setImage(#imageLiteral(resourceName: "Commentfilled").withRenderingMode(.alwaysTemplate), for: .normal)
+        cell.replyButton.setImage(UIImage(systemName: "bubble.left.fill"), for: .normal)
         
         if !(cell.commentLabel.text! == "0") {
             cell.commentLabel.textColor = .lightGray

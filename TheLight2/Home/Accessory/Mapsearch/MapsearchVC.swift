@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UISplitViewControllerDelegate {
+final class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UISplitViewControllerDelegate {
     
     //@IBOutlet weak var destinationSearchBarContainer: UIView!
     @IBOutlet weak var mapView: MKMapView!
@@ -28,7 +28,7 @@ class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegat
         button.backgroundColor = .white
         button.setTitle("+", for: .normal)
         button.setTitleColor(.lightGray, for: .normal)
-        button.titleEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 0)
+        button.titleEdgeInsets = .init(top: 0, left: 0, bottom: 5, right: 0)
         button.addTarget(self, action: #selector(maptype), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -37,7 +37,7 @@ class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegat
         let button = UIButton(type: .system)
         button.backgroundColor = .white
         button.tintColor = .lightGray
-        button.setImage(#imageLiteral(resourceName: "CurrentLocation").withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(UIImage(systemName: "location.fill"), for: .normal)
         button.addTarget(self, action: #selector(zoomToCurrentLocation), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -48,7 +48,7 @@ class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegat
         if UIDevice.current.userInterfaceIdiom == .pad  {
             buttonSize = 50
         } else {
-            buttonSize = 50
+            buttonSize = 40
         }
         floatingBtn.titleLabel?.font = UIFont(name: floatingBtn.titleLabel!.font.familyName , size: buttonSize)
         let btnLayer: CALayer = floatingBtn.layer
@@ -82,10 +82,6 @@ class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegat
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        /*
-        DispatchQueue.main.async {
-            self.resultSearchController?.searchBar.becomeFirstResponder()
-        } */
         
         self.tabBarController?.tabBar.isHidden = false
         locationAuthStatus()
@@ -137,8 +133,9 @@ class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegat
     func setupNavigation() {
 
         navigationController?.navigationBar.prefersLargeTitles = true
-        let backItem = UIBarButtonItem(title: "back", style: .plain, target: self, action: #selector(setbackButton))
+        //navigationController?.navigationBar.tintColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
+        let backItem =  UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(setbackButton))
         navigationItem.leftBarButtonItems = [backItem]
         navigationItem.title = "Places"
     }
@@ -229,7 +226,7 @@ class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegat
         pinView?.isDraggable = true
         let smallSquare = CGSize(width: 30, height: 30)
         let button = UIButton(frame: .init(origin: .zero, size: smallSquare))
-        button.setBackgroundImage(UIImage(named: "car"), for: [])
+        button.setBackgroundImage(UIImage(systemName: "car.fill"), for: [])
         button.addTarget(self, action: #selector(MapsearchVC.getDirections), for: .touchUpInside)
         pinView?.leftCalloutAccessoryView = button
         

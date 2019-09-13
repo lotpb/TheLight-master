@@ -9,7 +9,7 @@
 import UIKit
 import Social
 
-class SocialVC: UIViewController, UITextViewDelegate {
+final class SocialVC: UIViewController, UITextViewDelegate {
 
     @IBOutlet weak var noteTextview: UITextView!
 

@@ -32,7 +32,6 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        //layout.sectionInset = .init(top: 0, left: 0, bottom: 0, right: 0)
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.translatesAutoresizingMaskIntoConstraints = false
         if #available(iOS 13.0, *) {
@@ -58,7 +57,7 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         if #available(iOS 13.0, *) {
-            refreshControl.backgroundColor = .clear //.systemGroupedBackground
+            refreshControl.backgroundColor = .systemGroupedBackground
         } else {
             refreshControl.backgroundColor = .white //Color.News.navColor
         }
@@ -195,7 +194,6 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
         }
         let navigationController = UINavigationController(rootViewController: vc)
         UIApplication.shared.keyWindow?.rootViewController?.present(navigationController, animated: true)
-        
     }
     
     @objc func shareButton(sender: UIButton) {
@@ -246,16 +244,13 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
         if UIDevice.current.userInterfaceIdiom == .pad  {
             cell.titleLabelnew.font = Font.News.newstitlePad
             cell.subtitleLabel.font = Font.News.newssourcePad
-            cell.numberLabel.font = Font.News.newslabel1Pad
             cell.uploadbylabel.font = Font.News.newslabel2Pad
             cell.storyLabel.font = Font.News.newslabel2Pad
             
         } else {
             cell.titleLabelnew.font = Font.News.newstitle
             cell.subtitleLabel.font = Font.News.newssource
-            cell.numberLabel.font = Font.News.newslabel1
             cell.uploadbylabel.font = Font.News.newslabel2
-            //cell.storyLabel.font = Font.News.newslabel1
         }
         
         if #available(iOS 13.0, *) {
@@ -316,32 +311,52 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
                 dateFormatter.dateFormat = "EEEE"
             }
             let createString = dateFormatter.string(from: updated)
-            cell.uploadbylabel.text = String(format: "%@ %@", "Uploaded", createString)
             
             
+            
+            var Liked:Int? = (_feedItems[(indexPath).row] as AnyObject).value(forKey: "Liked")as? Int
+            if Liked == nil {
+                Liked = 0
+                cell.uploadbylabel.text = String(format: "%@ %@", " Uploaded", createString)
+            } else {
+                let numString : String
+                numString = String(format: "%@ %@ %@", "\(Liked!)", " Uploaded", createString)
+                let attributedString = NSMutableAttributedString(string: numString)
+                let firstAttributes: [NSAttributedString.Key: Any] = [
+                .foregroundColor: UIColor.systemBlue,
+                .font: UIFont.systemFont(ofSize: 18)]
+                attributedString.addAttributes(firstAttributes, range: NSRange(location: 0, length: 3))
+                cell.uploadbylabel.attributedText = attributedString
+            }
+
             let imageDetailurl = self.imageFile.url ?? ""
             let result1 = imageDetailurl.contains("movie.mp4")
             cell.playButton.isHidden = result1 == false
             cell.playButton.setTitle(imageDetailurl, for: .normal)
             cell.videoLengthLabel.isHidden = result1 == false
             
-            var Liked:Int? = (_feedItems[(indexPath).row] as AnyObject).value(forKey: "Liked")as? Int
-            if Liked == nil { Liked = 0 }
-            cell.numberLabel.text = "\(Liked!)"
-            
         } else {
             //firebase
             cell.news = newslist[indexPath.item]
+            
+            var Liked:Int? = cell.news?.liked as? Int
+            if Liked == 0 {
+                Liked = 0
+                cell.uploadbylabel.text = String(format: "%@ %@", " Uploaded", (cell.news?.creationDate.timeAgoDisplay())!)
+            } else {
+                let numString : String
+                numString = String(format: "%@ %@ %@", "\(Liked!)", " Uploaded", (cell.news?.creationDate.timeAgoDisplay())!)
+                let attributedString = NSMutableAttributedString(string: numString)
+                let firstAttributes: [NSAttributedString.Key: Any] = [
+                    .foregroundColor: UIColor.systemBlue,
+                    .font: UIFont.systemFont(ofSize: 18)]
+                attributedString.addAttributes(firstAttributes, range: NSRange(location: 0, length: 3))
+                cell.uploadbylabel.attributedText = attributedString
+            }
         }
         
         cell.actionButton.addTarget(self, action: #selector(shareButton), for: .touchUpInside)
         cell.likeBtn.addTarget(self, action: #selector(likeSetButton), for: .touchUpInside)
-        
-        if !(cell.numberLabel.text! == "0") {
-            cell.numberLabel.textColor = Color.News.buttonColor
-        } else {
-            cell.numberLabel.text! = ""
-        }
         
         if UIDevice.current.userInterfaceIdiom == .pad  {
             if (defaults.bool(forKey: "parsedataKey")) {

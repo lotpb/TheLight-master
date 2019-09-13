@@ -10,7 +10,7 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
-class AdVC: UIViewController {
+final class AdVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView?
     // MARK: NavigationController Hidden
@@ -117,7 +117,9 @@ class AdVC: UIViewController {
         self.tableView!.dataSource = self
         self.tableView!.sizeToFit()
         self.tableView!.clipsToBounds = true
-        self.tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
+        let bgView = UIView()
+        bgView.backgroundColor = .secondarySystemGroupedBackground
+        tableView!.backgroundView = bgView
         self.tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
@@ -371,6 +373,7 @@ extension AdVC: UITableViewDataSource {
             cell.accessoryType = .disclosureIndicator
             cell.customImagelabel.text = "Ad"
             cell.customImagelabel.tag = indexPath.row
+            cell.customImagelabel.adjustsFontSizeToFitWidth = true
             
             if UIDevice.current.userInterfaceIdiom == .pad  {
                 cell.adtitleLabel!.font = Font.celltitle22m
@@ -436,10 +439,7 @@ extension AdVC: UITableViewDelegate {
                     cell.myLabel2.text = String(format: "%@%d", "Active\n", activeCount ?? 0)
                     cell.myLabel3.text = String(format: "%@%d", "Event\n", 0)
                 }
-                cell.separatorView1.backgroundColor = Color.Table.labelColor
-                cell.separatorView2.backgroundColor = Color.Table.labelColor
-                cell.separatorView3.backgroundColor = Color.Table.labelColor
-                cell.contentView.backgroundColor = Color.Table.navColor
+                cell.contentView.backgroundColor = Color.Table.labelColor //Color.Lead.navColor
                 self.tableView!.tableHeaderView = nil //cell.header
                 
                 return cell.contentView
