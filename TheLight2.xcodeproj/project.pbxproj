@@ -142,6 +142,7 @@
 		AFE615221ED50A33002ADDD6 /* ReplyTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE615211ED50A33002ADDD6 /* ReplyTableCell.swift */; };
 		AFEAA7512119EC890049FB4A /* LocationsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFEAA7502119EC890049FB4A /* LocationsStorage.swift */; };
 		AFEAA7532119ECDB0049FB4A /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFEAA7522119ECDB0049FB4A /* Location.swift */; };
+		AFEC53B4232C03C200AA20F5 /* Images in Resources */ = {isa = PBXBuildFile; fileRef = AFEC53B3232C03C200AA20F5 /* Images */; };
 		AFF21E83216A3DE900927BDB /* MileIQ.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFF21E82216A3DE900927BDB /* MileIQ.storyboard */; };
 		AFF3A2751F4B11B600F1BC44 /* SalesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3A2681F4B11B300F1BC44 /* SalesModel.swift */; };
 		AFF3A2761F4B11B600F1BC44 /* VendModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3A2691F4B11B400F1BC44 /* VendModel.swift */; };
@@ -300,6 +301,7 @@
 		AFE615211ED50A33002ADDD6 /* ReplyTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReplyTableCell.swift; sourceTree = "<group>"; };
 		AFEAA7502119EC890049FB4A /* LocationsStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsStorage.swift; sourceTree = "<group>"; };
 		AFEAA7522119ECDB0049FB4A /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		AFEC53B3232C03C200AA20F5 /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Images; path = TheLight2/Images; sourceTree = "<group>"; };
 		AFF21E82216A3DE900927BDB /* MileIQ.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = MileIQ.storyboard; path = TheLight2/Layouts/MileIQ.storyboard; sourceTree = "<group>"; };
 		AFF3A2681F4B11B300F1BC44 /* SalesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SalesModel.swift; path = TheLight2/Model/SalesModel.swift; sourceTree = "<group>"; };
 		AFF3A2691F4B11B400F1BC44 /* VendModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VendModel.swift; path = TheLight2/Model/VendModel.swift; sourceTree = "<group>"; };
@@ -618,6 +620,7 @@
 			children = (
 				AFF3A2821F4B11ED00F1BC44 /* Default-568h@2x.png */,
 				AF79EE9E232159D300DCC8C2 /* applelogo.png */,
+				AFEC53B3232C03C200AA20F5 /* Images */,
 			);
 			name = images;
 			sourceTree = "<group>";
@@ -870,6 +873,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AFEC53B4232C03C200AA20F5 /* Images in Resources */,
 				AF0AEB2E1F4B1DF300F0CCD7 /* Tornado.caf in Resources */,
 				AFA6126E20DFC42200B34288 /* News.storyboard in Resources */,
 				AFD7CDD722899AE300AD0AC1 /* Assets.xcassets in Resources */,
