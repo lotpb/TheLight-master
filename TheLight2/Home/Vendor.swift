@@ -91,15 +91,6 @@ final class Vendor: UIViewController {
         searchController.searchBar.scopeButtonTitles = searchScope
         searchController.searchBar.sizeToFit()
         searchController.obscuresBackgroundDuringPresentation = false
-        
-        if let textfield = searchController.searchBar.value(forKey: "searchField") as? UITextField {
-            if let backgroundview = textfield.subviews.first {
-                backgroundview.backgroundColor = .white
-                backgroundview.layer.cornerRadius = 10
-                backgroundview.clipsToBounds = true
-            }
-        }
-        
         self.definesPresentationContext = true
     }
     

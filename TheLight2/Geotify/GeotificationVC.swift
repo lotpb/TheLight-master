@@ -124,7 +124,7 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        UIToolbar.appearance().barTintColor = .red 
         self.extendedLayoutIncludesOpaqueBars = true
         UIApplication.shared.isIdleTimerDisabled = true //added
         //fixed - remove bottom bar

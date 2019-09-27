@@ -96,15 +96,6 @@ final class JobVC: UIViewController {
         searchController.searchBar.scopeButtonTitles = searchScope
         searchController.searchBar.sizeToFit()
         searchController.obscuresBackgroundDuringPresentation = false
-        
-        if let textfield = searchController.searchBar.value(forKey: "searchField") as? UITextField {
-            if let backgroundview = textfield.subviews.first {
-                backgroundview.backgroundColor = .white
-                backgroundview.layer.cornerRadius = 10
-                backgroundview.clipsToBounds = true
-            }
-        }
-        
         self.definesPresentationContext = true
     }
     
@@ -380,17 +371,14 @@ extension JobVC: UITableViewDelegate {
             cell.accessoryType = .disclosureIndicator
             cell.customImagelabel.text = "Job's"
             cell.customImagelabel.tag = indexPath.row
-            cell.customImagelabel.adjustsFontSizeToFitWidth = true
             cell.customImagelabel.backgroundColor = .systemIndigo
             
             if UIDevice.current.userInterfaceIdiom == .pad  {
-                cell.jobtitleLabel!.font = Font.celltitle22m
-            } else {
-                cell.jobtitleLabel!.font = Font.celltitle20l
-            }
+                cell.customtitleLabel.font = Font.celltitle22m
+            } 
             
             if (defaults.bool(forKey: "parsedataKey")) {
-                cell.jobtitleLabel!.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "Description") as? String
+                cell.customtitleLabel.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "Description") as? String
             } else {
                 //firebase
                 cell.jobpost = joblist[indexPath.row]

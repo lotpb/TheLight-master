@@ -95,7 +95,6 @@ final class Lead: UIViewController {
         searchController.searchBar.scopeButtonTitles = searchScope
         searchController.searchBar.sizeToFit()
         searchController.obscuresBackgroundDuringPresentation = false
-        
         self.definesPresentationContext = true
     }
     
@@ -546,7 +545,7 @@ extension Lead: UITableViewDataSource {
             if (defaults.bool(forKey: "parsedataKey")) {
                 
                 //cell.feedItems = _feedItems[indexPath.row] as? Database
-                
+
                 cell.leadtitleLabel!.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "LastName") as? String ?? ""
                 cell.leadsubtitleLabel!.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "City") as? String ?? ""
                 cell.myLabel10.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "Date") as? String ?? ""

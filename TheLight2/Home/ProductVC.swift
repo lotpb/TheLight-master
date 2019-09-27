@@ -97,15 +97,6 @@ final class ProductVC: UIViewController {
         searchController.searchBar.scopeButtonTitles = searchScope
         searchController.searchBar.sizeToFit()
         searchController.obscuresBackgroundDuringPresentation = false
-        
-        if let textfield = searchController.searchBar.value(forKey: "searchField") as? UITextField {
-            if let backgroundview = textfield.subviews.first {
-                backgroundview.backgroundColor = .white
-                backgroundview.layer.cornerRadius = 10
-                backgroundview.clipsToBounds = true
-            }
-        }
-        
         self.definesPresentationContext = true
     }
     
@@ -381,19 +372,16 @@ extension ProductVC: UITableViewDataSource {
             
             cell.selectionStyle = .none
             cell.accessoryType = .disclosureIndicator
-            cell.customImagelabel.text = "Prod's"
+            cell.customImagelabel.text = "Prod"
             cell.customImagelabel.tag = indexPath.row
-            cell.customImagelabel.adjustsFontSizeToFitWidth = true
             cell.customImagelabel.backgroundColor = .systemTeal
             
             if UIDevice.current.userInterfaceIdiom == .pad  {
-                cell.prodtitleLabel!.font = Font.celltitle22m
-            } else {
-                cell.prodtitleLabel!.font = Font.celltitle20l
+                cell.customtitleLabel.font = Font.celltitle22m
             }
             
             if (defaults.bool(forKey: "parsedataKey")) {
-                cell.prodtitleLabel!.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "Products") as? String
+                cell.customtitleLabel.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "Products") as? String
             } else {
                 //firebase
                 cell.prodpost = prodlist[indexPath.row]

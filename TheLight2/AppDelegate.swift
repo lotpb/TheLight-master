@@ -96,7 +96,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControll
             window?.makeKeyAndVisible()
             
         } else {
-            //window?.rootViewController = BaseSlidingController()
+            //window?.rootViewController = testTable()
         }
 
         /// MARK: - TabBarController
@@ -142,13 +142,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControll
     
     /// MARK: - SplitView
     func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController:UIViewController, onto primaryViewController:UIViewController) -> Bool {
-        
-        guard let secondaryAsNavController = secondaryViewController as? UINavigationController else { return false }
-        guard let topAsDetailController = secondaryAsNavController.topViewController as? SnapshotVC else { return false }
-        if topAsDetailController.detailSnap == nil {
-            // Return true to indicate that we have handled the collapse by doing nothing; the secondary controller will be discarded.
-            return true
-        }
+
         return false
     }
     
@@ -204,7 +198,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControll
     }
     
     /// MARK: - Schedule Notification set in NotificationController
-    
     func scheduleNotification(at date: Date) {
         
         let content = UNMutableNotificationContent()

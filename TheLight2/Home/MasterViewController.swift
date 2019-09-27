@@ -264,7 +264,6 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
         searchController.searchResultsUpdater = self
         searchController.searchBar.sizeToFit()
         searchController.obscuresBackgroundDuringPresentation = false
-        
         self.definesPresentationContext = true
     }
     

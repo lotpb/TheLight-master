@@ -88,7 +88,6 @@ final class AdVC: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newData))
         navigationItem.title = "Advertisers"
-        //self.navigationItem.largeTitleDisplayMode = .always
         
         searchController = UISearchController(searchResultsController: resultsController)
         navigationItem.searchController = searchController
@@ -97,15 +96,6 @@ final class AdVC: UIViewController {
         searchController.searchBar.scopeButtonTitles = searchScope
         searchController.searchBar.sizeToFit()
         searchController.obscuresBackgroundDuringPresentation = false
-        
-        if let textfield = searchController.searchBar.value(forKey: "searchField") as? UITextField {
-            if let backgroundview = textfield.subviews.first {
-                backgroundview.backgroundColor = .white
-                backgroundview.layer.cornerRadius = 10
-                backgroundview.clipsToBounds = true
-            }
-        }
-        
         self.definesPresentationContext = true
     }
     
@@ -290,9 +280,7 @@ final class AdVC: UIViewController {
                     VC.frm11 = filteredTitles[indexPath].active
                     VC.frm12 = filteredTitles[indexPath].adNo
                     VC.frm13 = filteredTitles[indexPath].advertiser
-                    
                 } else {
-                    
                     let indexPath = self.tableView!.indexPathForSelectedRow!.row
                     if (defaults.bool(forKey: "parsedataKey")) {
                         VC.objectId = (_feedItems[indexPath] as AnyObject).value(forKey: "objectId") as? String
@@ -368,21 +356,19 @@ extension AdVC: UITableViewDataSource {
             
             cellIdentifier = "Cell"
             let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! TableViewCell
-            
+
             cell.selectionStyle = .none
             cell.accessoryType = .disclosureIndicator
             cell.customImagelabel.text = "Ad"
             cell.customImagelabel.tag = indexPath.row
-            cell.customImagelabel.adjustsFontSizeToFitWidth = true
+            cell.customImagelabel.backgroundColor = Color.Table.labelColor
             
             if UIDevice.current.userInterfaceIdiom == .pad  {
-                cell.adtitleLabel!.font = Font.celltitle22m
-            } else {
-                cell.adtitleLabel!.font = Font.celltitle20l
+                cell.customtitleLabel.font = Font.celltitle22m
             }
             
             if (defaults.bool(forKey: "parsedataKey")) {
-                cell.adtitleLabel!.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "Advertiser") as? String
+                cell.customtitleLabel.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "Advertiser") as? String
             } else {
                 //firebase
                 cell.adpost = adlist[indexPath.row]

@@ -1,13 +1,12 @@
-
-platform :ios, '12.0'
+platform :ios, '13.0'
 
 target 'TheLight2' do
     use_frameworks!
-    
+
     pod 'FBSDKCoreKit'
     pod 'FBSDKLoginKit'
     pod 'Firebase/Core'
-    
+
     pod 'Parse', '<1.17.3'
     pod 'Firebase'
     pod 'Firebase/Auth'
@@ -27,5 +26,6 @@ target 'TheLight2' do
     pod 'SwiftKeychainWrapper'
     pod 'YouTubePlayer'
     pod 'GeoFire', :git => 'https://github.com/firebase/geofire-objc.git'
-    
+
 end
+

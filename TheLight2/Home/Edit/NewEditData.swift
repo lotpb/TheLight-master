@@ -49,7 +49,7 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
     let customImageView: CustomImageView = { //firebase
         let imageView = CustomImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         return imageView
     }()

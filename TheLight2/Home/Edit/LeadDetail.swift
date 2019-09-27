@@ -411,17 +411,17 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
             labelamount.topAnchor.constraint(equalTo: mainView!.topAnchor, constant: 60),
             labelamount.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 15),
             labelamount.rightAnchor.constraint(equalTo: photoImage.leftAnchor, constant: 1),
-            labelamount.heightAnchor.constraint(equalToConstant: 30),
 
             labeladdress.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 15),
             labeladdress.rightAnchor.constraint(equalTo: photoImage.leftAnchor, constant: 1),
-            labeladdress.heightAnchor.constraint(equalToConstant: 20),
+            labeladdress.heightAnchor.constraint(equalToConstant: 30),
 
+            labelcity.topAnchor.constraint(equalTo: labeladdress.bottomAnchor, constant: 1),
             labelcity.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 15),
             labelcity.rightAnchor.constraint(equalTo: photoImage.leftAnchor, constant: 1),
-            labelcity.heightAnchor.constraint(equalToConstant: 20),
+            labelcity.heightAnchor.constraint(equalToConstant: 30),
 
-            labeldatetext.topAnchor.constraint(equalTo: labelcity.bottomAnchor, constant: 15),
+            labeldatetext.topAnchor.constraint(equalTo: labelcity.bottomAnchor, constant: 10),
             labeldatetext.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 15),
             labeldatetext.heightAnchor.constraint(equalToConstant: 20),
 
@@ -452,7 +452,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
                 photoImage.widthAnchor.constraint(equalToConstant: 150),
                 photoImage.heightAnchor.constraint(equalToConstant: 150),
                 labeladdress.topAnchor.constraint(equalTo: labelamount.bottomAnchor, constant: 25),
-                labelcity.topAnchor.constraint(equalTo: labeladdress.bottomAnchor, constant: 10),
+                labelamount.heightAnchor.constraint(equalToConstant: 40),
                 ])
         } else {
             let width = 110 //view.frame.width/2-25
@@ -461,7 +461,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
                 photoImage.widthAnchor.constraint(equalToConstant: CGFloat(width)),
                 photoImage.heightAnchor.constraint(equalToConstant: 110),
                 labeladdress.topAnchor.constraint(equalTo: labelamount.bottomAnchor, constant: 15),
-                labelcity.topAnchor.constraint(equalTo: labeladdress.bottomAnchor, constant: 5),
+                labelamount.heightAnchor.constraint(equalToConstant: 30),
                 ])
         }
     }

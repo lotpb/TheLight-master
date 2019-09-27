@@ -97,15 +97,6 @@ final class SalesmanVC: UIViewController {
         searchController.searchBar.scopeButtonTitles = searchScope
         searchController.searchBar.sizeToFit()
         searchController.obscuresBackgroundDuringPresentation = false
-        
-        if let textfield = searchController.searchBar.value(forKey: "searchField") as? UITextField {
-            if let backgroundview = textfield.subviews.first {
-                backgroundview.backgroundColor = .white
-                backgroundview.layer.cornerRadius = 10
-                backgroundview.clipsToBounds = true
-            }
-        }
-        
         self.definesPresentationContext = true
     }
     
@@ -381,18 +372,15 @@ extension SalesmanVC: UITableViewDataSource {
             cell.accessoryType = .disclosureIndicator
             cell.customImagelabel.text = "Sales"
             cell.customImagelabel.tag = indexPath.row
-            cell.customImagelabel.adjustsFontSizeToFitWidth = true
             cell.customImagelabel.backgroundColor = .systemPurple
             
             if UIDevice.current.userInterfaceIdiom == .pad  {
-                cell.salestitleLabel!.font = Font.celltitle22m
-            } else {
-                cell.salestitleLabel!.font = Font.celltitle20l
-            }
+                cell.customtitleLabel.font = Font.celltitle22m
+            } 
             
             if (defaults.bool(forKey: "parsedataKey")) {
                 
-                cell.salestitleLabel!.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "Salesman") as? String
+                cell.customtitleLabel.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "Salesman") as? String
                 let imageObject = _feedItems.object(at: indexPath.row) as! PFObject
                 let imageFile = imageObject.object(forKey: "imageFile") as? PFFileObject
                 imageFile!.getDataInBackground { imageData, error in

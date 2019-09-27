@@ -15,7 +15,7 @@ final class TableViewCell: UITableViewCell {
     var defaults = UserDefaults.standard
     //var _feedItems = NSMutableArray()
 
-    /*
+/*
     var feedItems: Database! { //parse not working
         didSet {
 
@@ -46,11 +46,9 @@ final class TableViewCell: UITableViewCell {
     //firebase
     var blogpost: BlogModel? {
         didSet {
-           
             blogtitleLabel.text = blogpost?.postBy
             blogsubtitleLabel.text = blogpost?.subject
             blogmsgDateLabel.text = blogpost?.creationDate.timeAgoDisplay()
-            //customImageView.frame = .init(x: 10, y: 10, width: 50, height: 50)
             
             var Liked:Int? = blogpost?.liked as? Int
             if Liked == nil { Liked = 0 }
@@ -81,13 +79,11 @@ final class TableViewCell: UITableViewCell {
     
     var leadpost: LeadModel? {
         didSet {
-            
             if (defaults.bool(forKey: "parsedataKey")) {
                
             } else {
                 
                 leadtitleLabel.text = leadpost?.lastname
-                
                 leadsubtitleLabel.text = String(format: "%@ %@ %@",
                                                 (leadpost?.city)!,
                                                 (leadpost?.state)!,
@@ -132,7 +128,6 @@ final class TableViewCell: UITableViewCell {
     
     var custpost: CustModel? {
         didSet {
-            
             if #available(iOS 13.0, *) {
                 custtitleLabel.textColor = .label
             } else {
@@ -217,12 +212,7 @@ final class TableViewCell: UITableViewCell {
     
     var employpost: EmployModel? {
         didSet {
-            
-            if #available(iOS 13.0, *) {
-                employtitleLabel.textColor = .label
-            } else {
-                // Fallback on earlier versions
-            }
+            employtitleLabel.textColor = .label
             employtitleLabel.text = String(format: "%@ %@ %@", (employpost?.first)!,
                                            (employpost?.lastname)!,
                                            (employpost?.company)!).removeWhiteSpace()
@@ -232,10 +222,6 @@ final class TableViewCell: UITableViewCell {
             } else {
                 employsubtitleLabel.text = employpost?.title
             }
-            /*
-             employsubtitleLabel.text = String(format: "%@ %@ %@", (employpost?.city)!,
-             (employpost?.state)!,
-             (employpost?.zip)!).removeWhiteSpace() */
             
             var Liked:Int? = leadpost?.active as? Int
             if Liked == nil { Liked = 0 }
@@ -260,7 +246,6 @@ final class TableViewCell: UITableViewCell {
     
     var userpost: UserModel? {
         didSet {
-            
             guard let postImageUrl = userpost?.profileImageUrl else {return}
             customImageView.loadImage(urlString: postImageUrl)
             
@@ -271,44 +256,41 @@ final class TableViewCell: UITableViewCell {
     
     var salespost: SalesModel? {
         didSet {
-            
-            //guard let postImageUrl = userpost?.profileImageUrl else {return}
-            //customImageView.loadImage(urlString: postImageUrl)
-            customImageView.frame = .init(x: 10, y: 10, width: 40, height: 40)
+            customImageView.frame = .init(x: 0, y: 0, width: 0, height: 0)
+            //customImageView.frame = .init(x: 10, y: 10, width: 40, height: 40)
             customImageView.layer.cornerRadius = (customImageView.frame.size.width) / 2
             customImageView.image = #imageLiteral(resourceName: "profile-rabbit-toy")
-            
-            salestitleLabel.text = salespost?.salesman
+            customtitleLabel.text = salespost?.salesman
         }
     }
     
     var prodpost: ProdModel? {
         didSet {
-            customImageView.frame = .init(x: 10, y: 10, width: 40, height: 40)
-            //customImageView.layer.cornerRadius = (customImageView.frame.size.width) / 2
+            customImageView.frame = .init(x: 0, y: 0, width: 0, height: 0)
+            //customImageView.frame = .init(x: 10, y: 10, width: 40, height: 40)
             customImageView.image = #imageLiteral(resourceName: "profile-rabbit-toy")
-            prodtitleLabel.text = prodpost?.products
+            customtitleLabel.text = prodpost?.products
         }
     }
     
     var jobpost: JobModel? {
         didSet {
             customImageView.frame = .init(x: 0, y: 0, width: 0, height: 0)
-            jobtitleLabel.text = jobpost?.description
+            customtitleLabel.text = jobpost?.description
         }
     }
     
     var adpost: AdModel? {
         didSet {
             customImageView.frame = .init(x: 0, y: 0, width: 0, height: 0)
-            adtitleLabel.text = adpost?.advertiser
+            customtitleLabel.text = adpost?.advertiser
         }
     }
     
     var zippost: ZipModel? {
         didSet {
             customImageView.frame = .init(x: 0, y: 0, width: 0, height: 0)
-            ziptitleLabel.text = String(format: "%@, %@", (zippost?.city)!, (zippost?.state)!).removeWhiteSpace()
+            customtitleLabel.text = String(format: "%@, %@", (zippost?.city)!, (zippost?.state)!).removeWhiteSpace()
         }
     }
     
@@ -327,13 +309,12 @@ final class TableViewCell: UITableViewCell {
     let customImagelabel: UILabel = {
         let label = UILabel()
         label.frame = .init(x: 10, y: 10, width: 40, height: 40)
-        label.backgroundColor = Color.Table.labelColor
         label.text = ""
-        label.font = Font.celltitle14m
         label.textColor = .white
         label.textAlignment = .center
         label.layer.cornerRadius = 20.0
         label.layer.masksToBounds = true
+        label.adjustsFontSizeToFitWidth = true
         label.isUserInteractionEnabled = true
         return label
     }()
@@ -344,7 +325,6 @@ final class TableViewCell: UITableViewCell {
         label.textColor = .white
         label.textAlignment = .center
         label.font = Font.celltitle14m
-        label.layer.masksToBounds = true
         return label
     }()
     
@@ -356,28 +336,43 @@ final class TableViewCell: UITableViewCell {
         label.textAlignment = .center
         label.font = Font.celltitle14m
         label.adjustsFontSizeToFitWidth = true
-        label.layer.masksToBounds = true
+        return label
+    }()
+
+    let customtitleLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = Font.celltitle20l
+        label.textColor = .black
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+
         setupViews()
-        
     }
     
     func setupViews() {
-        
+
         addSubview(customImageView)
         addSubview(customImagelabel)
         addSubview(myLabel10)
         addSubview(myLabel20)
-        
+        addSubview(customtitleLabel)
+
         NSLayoutConstraint.activate([
+            customtitleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 12),
+            customtitleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 65),
+            customtitleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -15),
+            customtitleLabel.heightAnchor.constraint(equalToConstant: 30),
+
             myLabel10.topAnchor.constraint(equalTo: self.topAnchor, constant: 0),
             myLabel10.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
             myLabel10.widthAnchor.constraint(equalToConstant: 100),
             myLabel10.heightAnchor.constraint(equalToConstant: 32),
+
             myLabel20.topAnchor.constraint(equalTo: myLabel10.bottomAnchor, constant: 0),
             myLabel20.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
             myLabel20.widthAnchor.constraint(equalToConstant: 100),
@@ -389,21 +384,6 @@ final class TableViewCell: UITableViewCell {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var snaptitleLabel: UILabel!
     @IBOutlet weak var snapdetailLabel: UILabel!
-    
-    // Ad Controller
-    @IBOutlet weak var adtitleLabel: UILabel!
-    
-    // Product Controller
-    @IBOutlet weak var prodtitleLabel: UILabel!
-    
-    // Job Controller
-    @IBOutlet weak var jobtitleLabel: UILabel!
-    
-    // salesman Controller
-    @IBOutlet weak var salestitleLabel: UILabel!
-    
-    // zip Controller
-    @IBOutlet weak var ziptitleLabel: UILabel!
     
     // BUser Controller
     @IBOutlet weak var usertitleLabel: UILabel!

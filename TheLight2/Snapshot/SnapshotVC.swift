@@ -16,12 +16,12 @@ import AVFoundation
 class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegateFlowLayout, UISplitViewControllerDelegate {
 
     @IBOutlet weak var tableView: UITableView!
-    
+    /* //AppDelegate
     var detailSnap: AnyObject? {
         didSet {
             //configureView()
         }
-    }
+    } */
     // MARK: NavigationController Hidden
     private var lastContentOffset: CGFloat = 0.0
 
@@ -115,11 +115,12 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         self.splitViewController?.delegate = self
         self.splitViewController?.preferredDisplayMode = .allVisible
         
-        loadEvents()
+
         loadData()
         setupTableView()
         setupNavigation()
         setupNewsNavigationItems()
+        loadEvents()
         self.tableView.addSubview(self.refreshControl)
     }
     
@@ -172,14 +173,9 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     func setupTableView() {
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        if #available(iOS 13.0, *) {
-            self.tableView.backgroundColor = .systemGroupedBackground //Color.Snap.tablebackColor
-        } else {
-            // Fallback on earlier versions
-        }
+        self.tableView.backgroundColor = .systemGroupedBackground //Color.Snap.tablebackColor
         self.tableView.separatorColor = Color.Snap.lineColor //.clear
         self.tableView.separatorInset = .init(top: 0, left: 5, bottom: 0, right: 5) // .zero
-        //self.tableView.estimatedRowHeight = 100
         self.tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")

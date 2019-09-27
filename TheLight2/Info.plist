@@ -104,7 +104,7 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>Can we use your calender?</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Can we use your camera?</string>
+	<string>This app wants to take pictures &amp;amp; videos</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Can we use to your contacts?</string>
 	<key>NSFaceIDUsageDescription</key>
@@ -118,9 +118,11 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>If you only allow access to your location while you are using the app, some features may not work in the background</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Can we use your microphone?</string>
+	<string>This app wants to record sound</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Can we save to your Photo library?</string>
+	<string>This app wants to use your picture &amp;amp; video library.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This app wants to save pictures &amp;amp; videos to your library.</string>
 	<key>NSRemindersUsageDescription</key>
 	<string>Can we use your reminder?</string>
 	<key>NSSiriUsageDescription</key>

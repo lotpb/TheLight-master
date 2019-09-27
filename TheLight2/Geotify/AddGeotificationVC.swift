@@ -26,11 +26,12 @@ final class AddGeotificationVC: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupNavigation()
     }
     
     private func setupNavigation() {
+        view.backgroundColor = .secondarySystemGroupedBackground
         navigationItem.rightBarButtonItems = [addButton, zoomButton]
         addButton.isEnabled = false
         if UIDevice.current.userInterfaceIdiom == .pad  {
