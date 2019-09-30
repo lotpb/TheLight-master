@@ -8,9 +8,10 @@
 
 import UIKit
 import Parse
+import Firebase
 import FirebaseDatabase
-import FirebaseAuth
-import FirebaseStorage
+//import FirebaseAuth
+//import FirebaseStorage
 import LocalAuthentication
 import FBSDKLoginKit
 import GoogleSignIn
@@ -19,7 +20,7 @@ import MapKit
 import GeoFire
 
 
-final class LoginController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LoginButtonDelegate, GIDSignInUIDelegate, GIDSignInDelegate {
+final class LoginController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LoginButtonDelegate, GIDSignInUIDelegate {
     
     let ipadtitle = UIFont.systemFont(ofSize: 20)
     let celltitle = UIFont.systemFont(ofSize: 18)
@@ -62,6 +63,13 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         
         plusPhotoButton.anchor(top: view.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 30, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 140, height: 140)
         plusPhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
+            PFUser.logOut()
+        }
+        LoginManager().logOut()
+        GIDSignIn.sharedInstance().signOut()
+        AccessToken.current = nil
         
         //Facebook
         fbButton.delegate = self
@@ -72,9 +80,8 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         }
         
         //Google
-        //GIDSignIn.sharedInstance().clientID = FirebaseApp.app()!.options.clientID
+        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()!.options.clientID
         GIDSignIn.sharedInstance().uiDelegate = self
-        GIDSignIn.sharedInstance().delegate = self
         GIDSignIn.sharedInstance().signInSilently() //.signIn()
         
         //Twitter
@@ -199,7 +206,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
     
     func setupDefaults() {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             self.usernameField!.text = "Peter Balsamo"
             
         } else {
@@ -210,7 +217,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
     
     @IBAction func LoginUser(_ sender:AnyObject) {
  
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             PFUser.logInWithUsername(inBackground: usernameField!.text!, password: passwordField!.text!) { user, error in
                 if user != nil {
@@ -318,7 +325,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
     
     func registerNewUser() {
         // MARK: - Parse
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             if (self.self.plusPhotoButton.imageView?.image == nil) {
                 self.self.plusPhotoButton.imageView?.image = UIImage(named:"profile-rabbit-toy.png")
@@ -596,7 +603,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         let email = self.emailField!.text
         let finalEmail = email!.removeWhiteSpace()
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             PFUser.requestPasswordResetForEmail(inBackground: finalEmail) { (success, error)  in
                 if success {
@@ -654,7 +661,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         self.emailField?.text = "eunited@optonline.net"
         self.phoneField?.text = "(516)241-4786"
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             self.usernameField!.text = "Peter Balsamo"
             self.passwordField!.text = "3911"
             
@@ -679,7 +686,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
     // MARK: - Map
     func refreshLocation() {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             PFGeoPoint.geoPointForCurrentLocation {(geoPoint: PFGeoPoint?, error: Error?) in
                 if error == nil {
                     PFUser.current()!.setValue(geoPoint, forKey: "currentLocation")
@@ -698,7 +705,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
     // MARK: - saveDefaults
     func saveDefaults() {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             self.defaults.set(self.usernameField!.text, forKey: "usernameKey")
             self.defaults.set(self.emailField!.text, forKey: "emailKey")
             self.defaults.set(self.passwordField!.text, forKey: "passwordKey")
@@ -725,7 +732,10 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
     // MARK: - RedirectToHome
     func redirectToHome() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
-            self.performSegue(withIdentifier: "MainSegue", sender: self)
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "MasterViewController")
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true)
         }
     }
     

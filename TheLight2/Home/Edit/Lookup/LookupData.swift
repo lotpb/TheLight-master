@@ -121,7 +121,7 @@ final class LookupData: UIViewController {
 
     // MARK: - Parse
     func loadData() {
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             let query = PFQuery(className:"Zip")
             query.limit = 1000
@@ -208,7 +208,7 @@ final class LookupData: UIViewController {
         
         if (lookupItem == "Product") {
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query3 = PFQuery(className:"Product")
                 query3.limit = 1000
@@ -241,7 +241,7 @@ final class LookupData: UIViewController {
             
         } else {
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query4 = PFQuery(className:"Advertising")
                 query4.limit = 1000
@@ -280,7 +280,7 @@ final class LookupData: UIViewController {
         if (!isFilltered) {
             if (lookupItem == "City") {
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     self.delegate? .cityFromController(((zipArray.object(at: indexPath) as AnyObject).value(forKey: "City") as? String)!)
                     self.delegate? .stateFromController(((zipArray[indexPath] as AnyObject).value(forKey: "State") as? String)!)
                     self.delegate? .zipFromController(((zipArray[indexPath] as AnyObject).value(forKey: "zipCode") as? String)!)
@@ -293,7 +293,7 @@ final class LookupData: UIViewController {
                 
             } else if (lookupItem == "Salesman") {
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     self.delegate? .salesFromController(((salesArray.object(at: indexPath) as AnyObject).value(forKey: "SalesNo") as? String)!)
                     self.delegate? .salesNameFromController(((salesArray[indexPath] as AnyObject).value(forKey: "Salesman") as? String)!)
                 } else {
@@ -304,7 +304,7 @@ final class LookupData: UIViewController {
                 
             } else if (lookupItem == "Job") {
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     self.delegate? .jobFromController(((jobArray[indexPath] as AnyObject).value(forKey: "JobNo") as? String)!)
                     self.delegate? .jobNameFromController(((jobArray.object(at: indexPath) as AnyObject).value(forKey: "Description") as? String)!)
                 } else {
@@ -315,7 +315,7 @@ final class LookupData: UIViewController {
                 
             } else if (lookupItem == "Product") {
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     self.delegate? .productFromController(((adproductArray[indexPath] as AnyObject).value(forKey: "ProductNo") as? String)!)
                     self.delegate? .productNameFromController(((adproductArray[indexPath] as AnyObject).value(forKey: "Products") as? String)!)
                 } else {
@@ -325,7 +325,7 @@ final class LookupData: UIViewController {
                 }
             } else {
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     self.delegate? .productFromController(((adproductArray[indexPath] as AnyObject).value(forKey: "AdNo") as? String)!)
                     self.delegate? .productNameFromController(((adproductArray[indexPath] as AnyObject).value(forKey: "Advertiser") as? String)!)
                 } else {
@@ -367,32 +367,32 @@ extension LookupData: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (!isFilltered) {
             if (lookupItem == "City") {
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     zipArray.object(at: indexPath.row)
                 } else {
                     //firebase
                     //ziplist(indexPath.row)
                 }
             } else if (lookupItem == "Salesman") {
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     salesArray.object(at: indexPath.row)
                 } else {
                     //firebase
                 }
             } else if (lookupItem == "Job") {
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     jobArray.object(at: indexPath.row)
                 } else {
                     //firebase
                 }
             } else if (lookupItem == "Product") {
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     adproductArray.object(at: indexPath.row)
                 } else {
                     //firebase
                 }
             } else if (lookupItem == "Advertiser") {
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     adproductArray.object(at: indexPath.row)
                 } else {
                     //firebase
@@ -412,28 +412,28 @@ extension LookupData: UITableViewDataSource {
         
         if tableView == self.tableView {
             if (lookupItem == "City") {
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     return zipArray.count
                 } else {
                     //firebase
                     return ziplist.count
                 }
             } else if (lookupItem == "Salesman") {
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     return salesArray.count
                 } else {
                     //firebase
                     return saleslist.count
                 }
             } else if (lookupItem == "Job") {
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     return jobArray.count
                 } else {
                     //firebase
                     return joblist.count
                 }
             } else if (lookupItem == "Product") || (lookupItem == "Advertiser") {
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     return adproductArray.count
                 } else {
                     //firebase
@@ -465,35 +465,35 @@ extension LookupData: UITableViewDataSource {
         
         if (tableView == self.tableView) {
             if (lookupItem == "City") {
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     cell.textLabel!.text = ((zipArray[indexPath.row] as AnyObject).value(forKey: "City") as? String)!
                 } else {
                     //firebase
                     cell.textLabel!.text = ziplist[indexPath.row].city
                 }
             } else if (lookupItem == "Salesman") {
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     cell.textLabel!.text = ((salesArray[indexPath.row] as AnyObject).value(forKey: "Salesman") as? String)!
                 } else {
                     //firebase
                     cell.textLabel!.text = saleslist[indexPath.row].salesman
                 }
             } else if (lookupItem == "Job") {
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     cell.textLabel!.text = ((jobArray[indexPath.row] as AnyObject).value(forKey: "Description") as? String)!
                 } else {
                     //firebase
                     cell.textLabel!.text = joblist[indexPath.row].description
                 }
             } else if (lookupItem == "Product") {
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     cell.textLabel!.text = ((adproductArray[indexPath.row] as AnyObject).value(forKey: "Products") as? String)!
                 } else {
                     //firebase
                     cell.textLabel!.text = prodlist[indexPath.row].products
                 }
             } else if (lookupItem == "Advertiser") {
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     cell.textLabel!.text = ((adproductArray[indexPath.row] as AnyObject).value(forKey: "Advertiser") as? String)!
                 } else {
                     //firebase
@@ -505,7 +505,7 @@ extension LookupData: UITableViewDataSource {
             cellIdentifier = "UserFoundCell"
             //let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 if (lookupItem == "City") {
                     //cell.textLabel!.text = foundUsers[indexPath.row]
                     cell.textLabel!.text = ((filteredTitles[indexPath.row] as AnyObject).value(forKey: "City") as? String)!

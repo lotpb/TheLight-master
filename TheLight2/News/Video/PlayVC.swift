@@ -456,7 +456,7 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
         sender.isSelected = true
         sender.tintColor = Color.BlueColor
         
-        if (defaults.bool(forKey: "parsedataKey"))  {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
         let query = PFQuery(className:"Newsios")
         query.whereKey("objectId", equalTo:(self.idLookup!))
@@ -486,7 +486,7 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
         sender.isSelected = true
         sender.tintColor = Color.BlueColor
         
-        if (defaults.bool(forKey: "parsedataKey"))  {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
         let query = PFQuery(className:"Newsios")
         query.whereKey("objectId", equalTo:(self.idLookup!))
@@ -530,7 +530,7 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
     //MARK: - TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             return self._feedItems.count + 1
         } else {
             return self.newslist.count + 1
@@ -564,7 +564,7 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
             cell.thumbDown.tag = indexPath.row
             cell.thumbDown .addTarget(self, action: #selector(setthumbDown), for: .touchUpInside)
             
-            if defaults.bool(forKey: "parsedataKey") {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query:PFQuery = PFUser.query()!
                 query.whereKey("username",  equalTo: self.imageLookup ?? PFUser.current()?.username as Any)
@@ -603,7 +603,7 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! videoCell
             
-            if defaults.bool(forKey: "parsedataKey") {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 // fix added - 1 to (indexPath).row - 1
                 cell.title.text = (self._feedItems[(indexPath).row - 1] as AnyObject).value(forKey: "newsTitle") as? String
                 
@@ -652,7 +652,7 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if (defaults.bool(forKey: "parsedataKey"))  {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             // fix added - 1 to (indexPath).row - 1
             self.idLookup = (self._feedItems[(indexPath).row - 1] as AnyObject).value(forKey: "objectId") as? String
             
@@ -718,7 +718,7 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
     
     private func fetchPlayVCVideos() {
         
-        if (defaults.bool(forKey: "parsedataKey"))  {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             let query = PFQuery(className:"Newsios")
             //query.whereKey("imageFile", equalTo:"movie.mp4")
             query.cachePolicy = .cacheThenNetwork
@@ -758,7 +758,7 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
     
     func setupViewCounter(_ sender: UITableView) {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             //update View Count
             let query = PFQuery(className:"Newsios")
             query.whereKey("objectId", equalTo:(self.idLookup!))

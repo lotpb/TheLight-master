@@ -296,7 +296,7 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
             
             if (isPickImage == true) { //image
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     uploadData = self.newsImageView.image?.jpegData(compressionQuality: 0.9)
                     file = PFFileObject(name: "img", data: uploadData!)
                 } else {
@@ -308,7 +308,7 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
                 
             } else { //video
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     file = PFFileObject(name: "movie.mp4", data: FileManager.default.contents(atPath: videoURL!.path)!)
                 } else {
                     //Firebase
@@ -318,7 +318,7 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
             
             if (self.formState == "Update") {
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     
                     let query = PFQuery(className:"Newsios")
                     query.whereKey("objectId", equalTo:self.objectId!)
@@ -355,7 +355,7 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
                 
             } else { //save
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     file!.saveInBackground { (success: Bool, error: Error?) in
                         if success {
                             let saveNews:PFObject = PFObject(className:"Newsios")

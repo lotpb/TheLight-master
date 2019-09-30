@@ -417,12 +417,13 @@ extension NSRange {
 }
 
 //------------------------------------
+
 extension UISplitViewController: UISplitViewControllerDelegate {
     
     open override func viewDidLoad() { // FIX - remove bottom bar
         self.extendedLayoutIncludesOpaqueBars = true
     }
-}
+} 
 
 extension UITabBarController {
     /*

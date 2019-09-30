@@ -109,7 +109,7 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
         
         if (formController == "Product") || (formController == "Jobs") || (formController == "Salesman") {
         UIView.transition(with: self.customImageView, duration: 0.5, options: .transitionCrossDissolve, animations: {
-            if (self.defaults.bool(forKey: "parsedataKey")) {
+            if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
 
             } else {
                 //firebase
@@ -170,7 +170,7 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                 
                 if (self.formStatus == "Edit") { //Edit Salesman
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         let query = PFQuery(className:"Salesman")
                         query.whereKey("objectId", equalTo:self.objectId!)
@@ -209,7 +209,7 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                     
                 } else { //Save Salesman
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         let saveblog:PFObject = PFObject(className:"Salesman")
                         saveblog.setObject("-1" , forKey:"SalesNo")
@@ -250,7 +250,7 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                 
                 if (self.formStatus == "Edit") { //Edit Job
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         let query = PFQuery(className:"Job")
                         query.whereKey("objectId", equalTo:self.objectId!)
@@ -290,7 +290,7 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                     
                 } else { //Save Job
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         let saveblog:PFObject = PFObject(className:"Job")
                         saveblog.setObject("-1" , forKey:"JobNo")
@@ -334,7 +334,7 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                 
                 if (self.formStatus == "Edit") { //Edit Products
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         let query = PFQuery(className:"Product")
                         query.whereKey("objectId", equalTo:self.objectId!)
@@ -375,7 +375,7 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                     
                 } else { //Save Products
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         let saveblog:PFObject = PFObject(className:"Product")
                         saveblog.setObject(myPrice , forKey:"Price")
@@ -417,7 +417,7 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
             } else if (self.formController == "Advertiser") {
                 
                 if (self.formStatus == "Edit") { //Edit Advertising
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         let query = PFQuery(className:"Advertising")
                         query.whereKey("objectId", equalTo:self.objectId!)
                         query.getFirstObjectInBackground {(updateblog: PFObject?, error: Error?) in
@@ -455,7 +455,7 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                     
                 } else { //Save Advertising
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         let saveblog:PFObject = PFObject(className:"Advertising")
                         saveblog.setObject("-1" , forKey:"AdNo")
@@ -495,7 +495,7 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
             } else if (self.formController == "Zip") {
                 
                 if (self.formStatus == "Edit") { //Edit Zip
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         let query = PFQuery(className:"Zip")
                         query.whereKey("objectId", equalTo:self.objectId!)
                         query.getFirstObjectInBackground {(updateblog: PFObject?, error: Error?) in
@@ -536,7 +536,7 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                     
                 } else { //Save Zip
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         let saveblog:PFObject = PFObject(className:"Advertising")
                         saveblog.setObject("-1" , forKey:"AdNo")

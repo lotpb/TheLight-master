@@ -146,7 +146,7 @@ final class NotificationVC: UIViewController {
         notifications.alertBody = customMessage.text
         notifications.alertAction = "Hey you! Yeah you! Swipe to unlock!"
         notifications.category = "status"
-        notifications.userInfo = [ "cause": "inactiveMembership"]
+        notifications.userInfo = [ "value": "inactiveMembership"]
         notifications.applicationIconBadgeNumber = UIApplication.shared.applicationIconBadgeNumber + 1
         notifications.soundName = "Tornado.caf"
         UIApplication.shared.scheduleLocalNotification(notifications)
@@ -187,7 +187,7 @@ final class NotificationVC: UIViewController {
             localNotification.fireDate = Date(timeIntervalSinceNow: 15)
             localNotification.timeZone = .current
             localNotification.category = "status"
-            localNotification.userInfo = ["cause": "inactiveMembership"]
+            localNotification.userInfo = ["value": "inactiveMembership"]
             localNotification.applicationIconBadgeNumber = UIApplication.shared.applicationIconBadgeNumber + 1
             localNotification.soundName = "Tornado.caf"
             UIApplication.shared.scheduleLocalNotification(localNotification)
@@ -262,7 +262,7 @@ final class NotificationVC: UIViewController {
         localNotification.alertBody = "Hey you! Yeah you! Swipe to unlock!"
         localNotification.fireDate = Date(timeIntervalSinceNow: 15)
         localNotification.timeZone = .current
-        localNotification.userInfo = ["CustomField1": "w00t"]
+        localNotification.userInfo = ["value": "w00t"]
         localNotification.applicationIconBadgeNumber = UIApplication.shared.applicationIconBadgeNumber + 1
         localNotification.soundName = "Tornado.caf"
         UIApplication.shared.scheduleLocalNotification(localNotification)
@@ -283,7 +283,7 @@ final class NotificationVC: UIViewController {
             let imageURL = Bundle.main.url(forResource: "calendar", withExtension: "png")
             let attachment = try! UNNotificationAttachment(identifier: "", url: imageURL!, options: nil)
             content.attachments = [attachment]
-            content.userInfo = ["message":"Hello there!", "date": NSDate()]
+            content.userInfo = ["value":"Hello there!", "date": NSDate()]
             
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
             let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
@@ -296,7 +296,7 @@ final class NotificationVC: UIViewController {
         localNotification.alertBody = "Forget Something? Come back and SAVE 15% with Promo Code MYCART"
         localNotification.fireDate = Date(timeIntervalSinceNow: 15)
         localNotification.timeZone = .current
-        localNotification.userInfo = ["CustomField1": "w00t"]
+        localNotification.userInfo = ["value": "w00t"]
         localNotification.applicationIconBadgeNumber = UIApplication.shared.applicationIconBadgeNumber + 1
         localNotification.soundName = "Tornado.caf"
         UIApplication.shared.scheduleLocalNotification(localNotification)

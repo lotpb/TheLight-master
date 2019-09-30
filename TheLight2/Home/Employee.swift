@@ -167,7 +167,7 @@ final class Employee: UIViewController {
     // MARK: - Parse
     func loadData() {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             let query = PFQuery(className:"Employee")
             query.limit = 100
@@ -294,7 +294,7 @@ final class Employee: UIViewController {
             } else {
                 
                 indexPath = self.tableView?.indexPathForSelectedRow?.row
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     
                     dateUpdated = (_feedItems[indexPath!] as AnyObject).value(forKey: "updatedAt") as! Date
                     LeadNo = (_feedItems[indexPath!] as AnyObject).value(forKey: "EmployeeNo") as? Int
@@ -355,7 +355,7 @@ final class Employee: UIViewController {
                 
             } else {
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     
                     controller.leadNo =  formatter.string(from: LeadNo! as NSNumber)
                     controller.active = formatter.string(from: Active! as NSNumber)
@@ -470,7 +470,7 @@ extension Employee: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == self.tableView {
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 return _feedItems.count
             } else {
                 //firebase
@@ -524,7 +524,7 @@ extension Employee: UITableViewDataSource {
             cell.customImagelabel.layer.cornerRadius = 25.0
             cell.customImagelabel.adjustsFontSizeToFitWidth = true
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 cell.employtitleLabel!.text = String(format: "%@ %@ %@", ((_feedItems[indexPath.row] as AnyObject).value(forKey: "First") as? String)!,
                                                      ((_feedItems[indexPath.row] as AnyObject).value(forKey: "Last") as? String)!,
@@ -557,7 +557,7 @@ extension Employee: UITableViewDataSource {
             cellIdentifier = "UserFoundCell"
             let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 //parse
                 cell.textLabel!.text = String(format: "%@ %@ %@", ((filteredTitles[indexPath.row] as AnyObject).value(forKey: "First") as? String)!, ((filteredTitles[indexPath.row] as AnyObject).value(forKey: "Last") as? String)!, ((filteredTitles[indexPath.row] as AnyObject).value(forKey: "Company") as? String)!).removeWhiteSpace()
                 
@@ -591,7 +591,7 @@ extension Employee: UITableViewDelegate {
         if (tableView == self.tableView) {
             guard let header = tableView.dequeueReusableCell(withIdentifier: "Header") as? HeaderViewCell else { fatalError("Unexpected Index Path") }
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 header.myLabel1.text = String(format: "%@%d", "Employ\n", _feedItems.count)
                 header.myLabel2.text = String(format: "%@%d", "Active\n", _feedheadItems.count)
                 header.myLabel3.text = String(format: "%@%d", "Events\n", 3)
@@ -618,7 +618,7 @@ extension Employee: UITableViewDelegate {
         if editingStyle == .delete {
             
             var deleteStr : String?
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 deleteStr = ((self._feedItems.object(at: indexPath.row) as AnyObject).value(forKey: "objectId") as? String)!
                 _feedItems.removeObject(at: indexPath.row)
             } else {

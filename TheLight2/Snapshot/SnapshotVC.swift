@@ -15,6 +15,7 @@ import AVFoundation
 
 class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegateFlowLayout, UISplitViewControllerDelegate {
 
+    fileprivate var collapseDetailViewController = true
     @IBOutlet weak var tableView: UITableView!
     /* //AppDelegate
     var detailSnap: AnyObject? {
@@ -223,7 +224,7 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         
         guard ProcessInfo.processInfo.isLowPowerModeEnabled == false else { return }
             
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             let query = PFQuery(className:"Newsios")
             query.limit = 1000
@@ -626,7 +627,7 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                 cell.collectionView.backgroundColor = .systemGroupedBackground
                 cell.backgroundColor = .systemGroupedBackground
                 cell.accessoryType = .disclosureIndicator
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     cell.textLabel!.text = String(format: "%@%d", "Top News ", _feedNews.count)
                 } else {
                     //firebase
@@ -661,7 +662,7 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
             if (indexPath.row  == 0) {
                 cell.collectionView.backgroundColor = .systemGroupedBackground
                 cell.backgroundColor = .systemGroupedBackground
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     cell.textLabel!.text = String(format: "%@%d", "Top Jobs ", _feedJob.count)
                 } else {
                     //firebase
@@ -709,7 +710,7 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                 let date1 : Date?
                 let blogString : String?
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     
                     date1 = (_feedItems6.firstObject as AnyObject).value(forKey: "createdAt") as? Date
                     blogString = (_feedItems6.firstObject as AnyObject).value(forKey: "PostBy") as? String
@@ -752,7 +753,7 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                 let date1 : Date?
                 let newsString : String?
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     
                     date1 = (_feedNews.firstObject as AnyObject).value(forKey: "createdAt") as? Date
                     newsString = (_feedNews.firstObject as AnyObject).value(forKey: "newsDetail") as? String
@@ -783,7 +784,7 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         } else if (indexPath.section == 4) {
             
             if (indexPath.row == 0) {
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     cell.textLabel!.text = String(format: "%@%d", "Top Users ", _feedUser.count)
                 } else {
                     //firebase
@@ -809,7 +810,7 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
             
             if (indexPath.row == 0) {
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     cell.textLabel!.text = String(format: "%@%d", "Top Salesman ", _feedSales.count)
                 } else {
                     //firebase
@@ -834,7 +835,7 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         } else if (indexPath.section == 6) {
             
             if (indexPath.row == 0) {
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     cell.textLabel!.text = String(format: "%@%d", "Top Employee ", _feedItems5.count)
                 } else {
                     //firebase
@@ -981,35 +982,35 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section:Int)->Int
     {
         if (collectionView.tag == 0) {
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 return _feedNews.count
             } else {
                 //firebase
                 return newslist.count
             }
         } else if (collectionView.tag == 1) {
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 return _feedJob.count
             } else {
                 //firebase
                 return joblist.count
             }
         } else if (collectionView.tag == 2) {
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 return _feedUser.count
             } else {
                 //firebase
                 return userlist.count
             }
         } else if (collectionView.tag == 3) {
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 return _feedSales.count
             } else {
                 //firebase
                 return saleslist.count
             }
         } else if (collectionView.tag == 4) {
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 return _feedItems5.count
             } else {
                 //firebase
@@ -1053,7 +1054,7 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
             cell.activityIndicator.isHidden = false
             cell.activityIndicator.startAnimating()
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 imageObject = _feedNews.object(at: indexPath.row) as? PFObject
                 imageFile = imageObject.object(forKey: "imageFile") as? PFFileObject
@@ -1110,7 +1111,7 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
             cell.activityIndicator.isHidden = false
             cell.activityIndicator.startAnimating()
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 imageObject = _feedJob.object(at: indexPath.row) as? PFObject
                 imageFile = imageObject.object(forKey: "imageFile") as? PFFileObject
@@ -1139,7 +1140,7 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
             cell.activityIndicator.isHidden = false
             cell.activityIndicator.startAnimating()
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 imageObject = _feedUser.object(at: indexPath.row) as? PFObject
                 imageFile = imageObject.object(forKey: "imageFile") as? PFFileObject
@@ -1167,7 +1168,7 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
             
             cell.activityIndicator.isHidden = false
             cell.activityIndicator.startAnimating()
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 imageObject = _feedSales.object(at: indexPath.row) as? PFObject
                 imageFile = imageObject.object(forKey: "imageFile") as? PFFileObject
@@ -1196,7 +1197,7 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
             cell.activityIndicator.isHidden = false
             cell.activityIndicator.startAnimating()
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 imageObject = _feedItems5.object(at: indexPath.row) as? PFObject
                 imageFile = imageObject.object(forKey: "imageFile") as? PFFileObject
@@ -1244,7 +1245,7 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
     {
         if (collectionView.tag == 0) {
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 imageObject = _feedNews.object(at: indexPath.row) as? PFObject
                 imageFile = imageObject.object(forKey: "imageFile") as? PFFileObject
@@ -1280,7 +1281,7 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
             }
         } else if (collectionView.tag == 1) {
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 imageObject = _feedJob.object(at: indexPath.row) as? PFObject
                 imageFile = imageObject.object(forKey: "imageFile") as? PFFileObject
@@ -1296,7 +1297,7 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
             
         } else if (collectionView.tag == 2) {
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 imageObject = _feedUser.object(at: indexPath.row) as? PFObject
                 imageFile = imageObject.object(forKey: "imageFile") as? PFFileObject
@@ -1321,7 +1322,7 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
             }
         } else if (collectionView.tag == 3) {
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 imageObject = _feedSales.object(at: indexPath.row) as? PFObject
                 imageFile = imageObject.object(forKey: "imageFile") as? PFFileObject
@@ -1340,7 +1341,7 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
             }
         } else if (collectionView.tag == 4) {
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 imageObject = _feedItems5.object(at: indexPath.row) as? PFObject
                 imageFile = imageObject.object(forKey: "imageFile") as? PFFileObject

@@ -58,7 +58,7 @@ final class TableViewCell: UITableViewCell {
             if CommentCount == nil { CommentCount = 0 }
             commentLabel?.text = "\(CommentCount!)"
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
             } else {
                 //firebase
@@ -79,7 +79,7 @@ final class TableViewCell: UITableViewCell {
     
     var leadpost: LeadModel? {
         didSet {
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                
             } else {
                 

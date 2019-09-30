@@ -86,7 +86,7 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
     // MARK: - Parse
     func fetchVideos() {
         
-        if (self.defaults.bool(forKey: "parsedataKey"))  {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             let query = PFQuery(className:"Newsios")
             query.limit = 1000
@@ -155,7 +155,7 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
         let hitPoint = sender.convert(CGPoint.zero, to: self.collectionView)
         let indexPath = self.collectionView.indexPathForItem(at: hitPoint)
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             let query = PFQuery(className:"Newsios")
             query.whereKey("objectId", equalTo:((_feedItems.object(at: ((indexPath! as NSIndexPath).row)) as AnyObject).value(forKey: "objectId") as! String))
             query.getFirstObjectInBackground { object, error in
@@ -186,7 +186,7 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
         let storyboard = UIStoryboard(name:"Me", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "userProfileVC") as! UserProfileVC
         vc.isFormMe = false
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             vc.uidProfileStr = ((_feedItems.object(at: (sender.view!.tag)) as AnyObject).value(forKey: "objectId") as? String)!
         } else {
             //firebase
@@ -201,7 +201,7 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
         let point : CGPoint = sender.convert(.zero, to: self.collectionView)
         let indexPath = self.collectionView.indexPathForItem(at: point)
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             socialText = ((_feedItems.object(at: (indexPath! as NSIndexPath).row) as AnyObject).value(forKey: "newsTitle") as? String)!
             
             imageObject = _feedItems.object(at: ((indexPath as NSIndexPath?)?.row)!) as? PFObject
@@ -230,7 +230,7 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
     // MARK: - CollectionView
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             return self._feedItems.count
         } else {
             return self.newslist.count
@@ -261,7 +261,7 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
         cell.subtitleLabel.textColor = .systemGray //Color.DGrayColor
         cell.uploadbylabel.textColor = .systemGray //Color.DGrayColor
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             imageObject = _feedItems.object(at: (indexPath).row) as? PFObject
             imageFile = imageObject.object(forKey: "imageFile") as? PFFileObject
             imageFile.getDataInBackground { data, error in
@@ -359,7 +359,7 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
         cell.likeBtn.addTarget(self, action: #selector(likeSetButton), for: .touchUpInside)
         
         if UIDevice.current.userInterfaceIdiom == .pad  {
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 cell.storyLabel.text = (self._feedItems[(indexPath).row] as AnyObject).value(forKey: "storyText") as? String
             } else {
                 //firebase
@@ -406,7 +406,7 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
         let storyboard = UIStoryboard(name:"News", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "NewsDetailController") as! NewsDetailVC
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             let query = PFQuery(className:"Newsios")
             query.whereKey("objectId", equalTo:((_feedItems.object(at: ((indexPath as NSIndexPath?)?.row)!) as AnyObject).value(forKey: "objectId") as? String?)!!)

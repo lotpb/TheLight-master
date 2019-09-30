@@ -156,7 +156,7 @@ final class ZipcodeVC: UIViewController {
     // MARK: - Parse
     func loadData() {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             let query = PFQuery(className:"Zip")
             query.limit = 1000
@@ -216,7 +216,7 @@ final class ZipcodeVC: UIViewController {
         let alertController = UIAlertController(title: "Delete", message: "Confirm Delete", preferredStyle: .alert)
         let destroyAction = UIAlertAction(title: "Delete!", style: .destructive) { (action) in
             
-            if (self.defaults.bool(forKey: "parsedataKey")) {
+            if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query = PFQuery(className:"Zip")
                 query.whereKey("objectId", equalTo: name)
@@ -283,7 +283,7 @@ final class ZipcodeVC: UIViewController {
                 } else {
                     
                     let indexPath = self.tableView!.indexPathForSelectedRow!.row
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         let numberFormatter = NumberFormatter()
                         numberFormatter.numberStyle = .none
@@ -349,7 +349,7 @@ extension ZipcodeVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if tableView == self.tableView {
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 return _feedItems.count
             } else {
                 //firebase
@@ -378,7 +378,7 @@ extension ZipcodeVC: UITableViewDataSource {
                 cell.customtitleLabel.font = Font.celltitle22m
             }
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 cell.customtitleLabel.text = String(format: "%@, %@", ((_feedItems[indexPath.row] as AnyObject).value(forKey: "City") as? String)!, ((_feedItems[indexPath.row] as AnyObject).value(forKey: "State") as? String)!).removeWhiteSpace()
             } else {
@@ -392,7 +392,7 @@ extension ZipcodeVC: UITableViewDataSource {
             cellIdentifier = "UserFoundCell"
             let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 //parse
                 cell.textLabel!.text = (filteredTitles[indexPath.row] as AnyObject).value(forKey: "City") as? String
                 
@@ -428,7 +428,7 @@ extension ZipcodeVC: UITableViewDelegate {
                 
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "Header") as? HeaderViewCell else { fatalError("Unexpected Index Path") }
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     cell.myLabel1.text = String(format: "%@%d", "Zip's\n", _feedItems.count)
                     cell.myLabel2.text = String(format: "%@%d", "Active\n", _feedheadItems.count)
                     cell.myLabel3.text = String(format: "%@%d", "Event\n", 0)
@@ -469,7 +469,7 @@ extension ZipcodeVC: UITableViewDelegate {
         if editingStyle == .delete {
             
             var deleteStr : String?
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 deleteStr = ((self._feedItems.object(at: indexPath.row) as AnyObject).value(forKey: "objectId") as? String)!
                 _feedItems.removeObject(at: indexPath.row)
             } else {

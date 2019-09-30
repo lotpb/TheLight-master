@@ -143,7 +143,7 @@ class testTable: UIViewController {
     // MARK: - Parse
        func loadData() {
 
-           if (defaults.bool(forKey: "parsedataKey")) {
+           if ((defaults.string(forKey: "backendKey")) == "Parse") {
 
            let query = PFQuery(className:"Product")
            query.limit = 1000
@@ -203,7 +203,7 @@ class testTable: UIViewController {
         let alertController = UIAlertController(title: "Delete", message: "Confirm Delete", preferredStyle: .alert)
         let destroyAction = UIAlertAction(title: "Delete!", style: .destructive) { (action) in
 
-            if (self.defaults.bool(forKey: "parsedataKey")) {
+            if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
 
                 let query = PFQuery(className:"Product")
                 query.whereKey("objectId", equalTo: name)
@@ -264,7 +264,7 @@ class testTable: UIViewController {
                 } else {
                     let indexPath = self.tableView.indexPathForSelectedRow!.row
 
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         VC.objectId = (_feedItems[indexPath] as AnyObject).value(forKey: "objectId") as? String
                         VC.frm11 = (_feedItems[indexPath] as AnyObject).value(forKey: "Active") as? String
                         VC.frm12 = (_feedItems[indexPath] as AnyObject).value(forKey: "ProductNo") as? String
@@ -314,7 +314,7 @@ extension testTable: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //self.selectedImage = nil
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
 
             let imageObject = _feedItems.object(at: indexPath.row) as? PFObject
             if let imageFile = imageObject!.object(forKey: "imageFile") as? PFFileObject {
@@ -335,7 +335,7 @@ extension testTable: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
         if tableView == self.tableView {
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 return _feedItems.count
             } else {
                 return prodlist.count
@@ -368,7 +368,7 @@ extension testTable: UITableViewDataSource {
                 cell.customtitleLabel.font = Font.celltitle20l
             }
 
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 cell.customtitleLabel.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "Products") as? String
             } else {
                 //firebase
@@ -382,7 +382,7 @@ extension testTable: UITableViewDataSource {
             cellIdentifier = "UserFoundCell"
             let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
 
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 //parse
                 cell.textLabel!.text = (filteredTitles[indexPath.row] as AnyObject).value(forKey: "Products") as? String
 
@@ -405,7 +405,7 @@ extension testTable: UITableViewDelegate {
             if (tableView == self.tableView) {
                 guard let header = tableView.dequeueReusableCell(withIdentifier: "Header") as? HeaderViewCell else { fatalError("Unexpected Index Path") }
 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     header.myLabel1.text = String(format: "%@%d", "Prod's\n", _feedItems.count)
                     header.myLabel2.text = String(format: "%@%d", "Active\n", _feedheadItems.count)
                     header.myLabel3.text = String(format: "%@%d", "Event\n", 0)
@@ -446,7 +446,7 @@ extension testTable: UITableViewDelegate {
         if editingStyle == .delete {
 
             var deleteStr : String?
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 deleteStr = ((self._feedItems.object(at: indexPath.row) as AnyObject).value(forKey: "objectId") as? String)!
                 _feedItems.removeObject(at: indexPath.row)
             } else {

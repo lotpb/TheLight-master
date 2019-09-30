@@ -26,14 +26,34 @@
 		</dict>
 		<dict>
 			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
+			<string>PSMultiValueSpecifier</string>
 			<key>Title</key>
-			<string>Parse Data</string>
+			<string>Backend Data</string>
+			<key>Titles</key>
+			<array>
+				<string>Firebase</string>
+				<string>Parse</string>
+			</array>
+			<key>Values</key>
+			<array>
+				<string>Firebase</string>
+				<string>Parse</string>
+			</array>
 			<key>Key</key>
-			<string>parsedataKey</string>
+			<string>backendKey</string>
 			<key>DefaultValue</key>
-			<false/>
+			<string>Firebase</string>
 		</dict>
+        <dict>
+            <key>Type</key>
+            <string>PSToggleSwitchSpecifier</string>
+            <key>Title</key>
+            <string>Background Fetch</string>
+            <key>Key</key>
+            <string>AllowBackgroundFetch</string>
+            <key>DefaultValue</key>
+            <false/>
+        </dict>
 		<dict>
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
@@ -61,16 +81,6 @@
 			<string>Speech</string>
 			<key>Key</key>
 			<string>speechKey</string>
-			<key>DefaultValue</key>
-			<false/>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>Background Fetch</string>
-			<key>Key</key>
-			<string>AllowBackgroundFetch</string>
 			<key>DefaultValue</key>
 			<false/>
 		</dict>

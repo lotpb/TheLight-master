@@ -165,7 +165,7 @@ final class Lead: UIViewController {
     // MARK: - Parse
     func loadData() {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             let query = PFQuery(className:"Leads")
             query.limit = 1000
@@ -229,7 +229,7 @@ final class Lead: UIViewController {
         let alertController = UIAlertController(title: "Delete", message: "Confirm Delete", preferredStyle: .alert)
         let destroyAction = UIAlertAction(title: "Delete!", style: .destructive) { (action) in
             
-            if (self.defaults.bool(forKey: "parsedataKey")) {
+            if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query = PFQuery(className:"Leads")
                 query.whereKey("objectId", equalTo: name)
@@ -267,7 +267,7 @@ final class Lead: UIViewController {
     // MARK: - imgLoadSegue
     @objc func imgLoadSegue(_ sender: UITapGestureRecognizer) {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             objectIdLabel = ((_feedItems.object(at: (sender.view!.tag)) as AnyObject).value(forKey: "objectId") as? String)!
             dateLabel = ((_feedItems.object(at: (sender.view!.tag)) as AnyObject).value(forKey: "Date") as? String)!
             titleLabel = ((_feedItems.object(at: (sender.view!.tag)) as AnyObject).value(forKey: "LastName") as? String)!
@@ -318,7 +318,7 @@ final class Lead: UIViewController {
             } else {
                 
                 indexPath = self.tableView?.indexPathForSelectedRow?.row
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     dateUpdated = (_feedItems[indexPath!] as AnyObject).value(forKey: "updatedAt") as! Date
                     LeadNo = (_feedItems[indexPath!] as AnyObject).value(forKey: "LeadNo") as? Int
                     Zip = (_feedItems[indexPath!] as AnyObject).value(forKey: "Zip")as? Int
@@ -393,7 +393,7 @@ final class Lead: UIViewController {
                 
             } else {
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     controller.leadNo = formatter.string(from: LeadNo! as NSNumber)
                     controller.zip = formatter.string(from: Zip! as NSNumber)
                     controller.amount = formatter.string(from: Amount! as NSNumber)
@@ -489,7 +489,7 @@ extension Lead: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if (tableView == self.tableView) {
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 return _feedItems.count
             } else {
                 //firebase
@@ -542,7 +542,7 @@ extension Lead: UITableViewDataSource {
             cell.customImagelabel.addGestureRecognizer(tap)
             cell.addSubview(cell.customImagelabel)
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 //cell.feedItems = _feedItems[indexPath.row] as? Database
 
@@ -580,7 +580,7 @@ extension Lead: UITableViewDataSource {
             cellIdentifier = "UserFoundCell"
             let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 //parse
                 cell.textLabel!.text = (filteredTitles[indexPath.row] as AnyObject).value(forKey: "LastName") as? String
                 
@@ -619,7 +619,7 @@ extension Lead: UITableViewDelegate {
             if (section == 0) {
                 guard let header = tableView.dequeueReusableCell(withIdentifier: "Header") as? HeaderViewCell else { fatalError("Unexpected Index Path") }
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     header.myLabel1.text = String(format: "%@%d", "Leads\n", _feedItems.count)
                     header.myLabel2.text = String(format: "%@%d", "Active\n", _feedheadItems.count)
                     header.myLabel3.text = String(format: "%@%d", "Events\n", 3)
@@ -648,7 +648,7 @@ extension Lead: UITableViewDelegate {
             
             var deleteStr : String?
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 deleteStr = ((self._feedItems.object(at: indexPath.row) as AnyObject).value(forKey: "objectId") as? String)!
                 _feedItems.removeObject(at: indexPath.row)
             } else {

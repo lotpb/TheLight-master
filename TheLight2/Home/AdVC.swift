@@ -160,7 +160,7 @@ final class AdVC: UIViewController {
     // MARK: - Parse
     func loadData() {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             let query = PFQuery(className:"Advertising")
             query.limit = 1000
@@ -220,7 +220,7 @@ final class AdVC: UIViewController {
         let alertController = UIAlertController(title: "Delete", message: "Confirm Delete", preferredStyle: .alert)
         let destroyAction = UIAlertAction(title: "Delete!", style: .destructive) { (action) in
             
-            if (self.defaults.bool(forKey: "parsedataKey")) {
+            if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query = PFQuery(className:"Advertising")
                 query.whereKey("objectId", equalTo: name)
@@ -282,7 +282,7 @@ final class AdVC: UIViewController {
                     VC.frm13 = filteredTitles[indexPath].advertiser
                 } else {
                     let indexPath = self.tableView!.indexPathForSelectedRow!.row
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         VC.objectId = (_feedItems[indexPath] as AnyObject).value(forKey: "objectId") as? String
                         VC.frm11 = (_feedItems[indexPath] as AnyObject).value(forKey: "Active") as? String
                         VC.frm12 = (_feedItems[indexPath] as AnyObject).value(forKey: "AdNo") as? String
@@ -338,7 +338,7 @@ extension AdVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if tableView == self.tableView {
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 return _feedItems.count
             } else {
                 //firebase
@@ -367,7 +367,7 @@ extension AdVC: UITableViewDataSource {
                 cell.customtitleLabel.font = Font.celltitle22m
             }
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 cell.customtitleLabel.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "Advertiser") as? String
             } else {
                 //firebase
@@ -381,7 +381,7 @@ extension AdVC: UITableViewDataSource {
             cellIdentifier = "UserFoundCell"
             let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 //parse
                 cell.textLabel!.text = (filteredTitles[indexPath.row] as AnyObject).value(forKey: "Advertiser") as? String
                 
@@ -416,7 +416,7 @@ extension AdVC: UITableViewDelegate {
             if (tableView == self.tableView) {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "Header") as? HeaderViewCell else { fatalError("Unexpected Index Path") }
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     cell.myLabel1.text = String(format: "%@%d", "Ad's\n", _feedItems.count)
                     cell.myLabel2.text = String(format: "%@%d", "Active\n", _feedheadItems.count)
                     cell.myLabel3.text = String(format: "%@%d", "Event\n", 0)
@@ -457,7 +457,7 @@ extension AdVC: UITableViewDelegate {
         if editingStyle == .delete {
             
             var deleteStr : String?
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 deleteStr = ((self._feedItems.object(at: indexPath.row) as AnyObject).value(forKey: "objectId") as? String)!
                 _feedItems.removeObject(at: indexPath.row)
             } else {

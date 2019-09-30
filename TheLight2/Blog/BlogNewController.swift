@@ -464,7 +464,7 @@ final class BlogNewController: UIViewController, UITextFieldDelegate, UITextView
     // MARK: - Load Data
     func loadImageProfile() {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             let query:PFQuery = PFUser.query()!
             query.whereKey("username",  equalTo: self.textcontentpostby!)
             query.cachePolicy = .cacheThenNetwork
@@ -549,7 +549,7 @@ final class BlogNewController: UIViewController, UITextFieldDelegate, UITextView
         } else {
             if (self.formStatus == "None") {
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     let query = PFQuery(className:"Blog")
                     query.whereKey("objectId", equalTo:self.objectId!)
                     query.getFirstObjectInBackground {(updateblog: PFObject?, error: Error?) in
@@ -591,7 +591,7 @@ final class BlogNewController: UIViewController, UITextFieldDelegate, UITextView
                 
             } else if (self.formStatus == "New" || self.formStatus == "Reply") {
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     
                     let saveblog: PFObject = PFObject(className:"Blog")
                     saveblog.setObject(self.msgDate ?? NSNull(), forKey:"MsgDate")

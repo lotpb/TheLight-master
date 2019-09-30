@@ -7,19 +7,16 @@
 //
 
 import UIKit
-import SwiftUI
-import FirebaseDatabase
 import FirebaseAuth
 import Parse
 import AVFoundation
-import FBSDKLoginKit
-import GoogleSignIn
 import FirebaseAnalytics
 //import SwiftKeychainWrapper
 
 
 final class MasterViewController: UITableViewController, UISplitViewControllerDelegate {
 
+    var collapseDetailViewController: Bool = true
     let defaults = UserDefaults.standard
     
     //firebase
@@ -145,7 +142,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.extendedLayoutIncludesOpaqueBars = false
+        self.extendedLayoutIncludesOpaqueBars = true
         self.splitViewController?.delegate = self
         self.splitViewController?.preferredDisplayMode = .allVisible
         self.splitViewController?.maximumPrimaryColumnWidth = 350
@@ -190,6 +187,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
         setMainNavItems()
     }
     
@@ -201,6 +199,19 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+
+
+    func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController,
+             onto primaryViewController: UIViewController) -> Bool {
+
+        guard let navigationController = primaryViewController as? UINavigationController,
+            let controller = navigationController.topViewController as? MasterViewController
+        else {
+            return true
+        }
+
+        return controller.collapseDetailViewController
     }
     
     private func fetchUserIds() {
@@ -221,7 +232,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
         } */
         
         // MARK: - Parse
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             PFUser.logInWithUsername(inBackground: userId, password:userpassword) { (user, error) in
                 if error != nil {
@@ -243,12 +254,8 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
         }
     }
     
-    // MARK: - Splitview
-    //added makes MainController opens on startup instead of DetailViewController
-    func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
-        
-        return true
-    }
+    
+    
     
     func setupNavigation() {
 
@@ -365,7 +372,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     // MARK: - VersionCheck
     //fix
     func versionCheck() {
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             /*
             let query = PFQuery(className:"Version")
             query.cachePolicy = .cacheThenNetwork
@@ -427,15 +434,15 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     
     // MARK: - Logout
     @objc func handleLogout(_ sender: Any) {
-        do {
-            try Auth.auth().signOut()
-            PFUser.logOut()
-            LoginManager().logOut()
-            GIDSignIn.sharedInstance().signOut()
-            AccessToken.current = nil
-        } catch let error as NSError {
-            print(error.localizedDescription)
-        }
+        //if ((defaults.string(forKey: "backendKey")) == "Firebase") {
+            do {
+                try
+                    Auth.auth().signOut()
+            } catch let error as NSError {
+                print(error.localizedDescription)
+            }
+        //}
+
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "loginIDController")
         self.present(vc, animated: true)
@@ -589,7 +596,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
                     myLabel1.text = String(format: "%@%d", "COUNT\n", menuItems.count )
                     vw.addSubview(myLabel1)
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         myLabel15.text = "Parse"
                     } else {
                         myLabel15.text = "Firebase"

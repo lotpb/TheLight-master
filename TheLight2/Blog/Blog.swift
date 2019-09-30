@@ -195,7 +195,7 @@ final class Blog: UIViewController {
         let hitPoint = sender.convert(CGPoint.zero, to: self.tableView)
         let indexPath = self.tableView!.indexPathForRow(at: hitPoint)
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             let query = PFQuery(className:"Blog")
             query.whereKey("objectId", equalTo:((_feedItems.object(at: (indexPath?.row)!) as AnyObject).value(forKey: "objectId") as? String)!)
@@ -226,7 +226,7 @@ final class Blog: UIViewController {
         let hitPoint = sender.convert(CGPoint.zero, to: self.tableView)
         let indexPath = self.tableView!.indexPathForRow(at: hitPoint)
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             posttoIndex = (_feedItems.object(at: (indexPath?.row)!) as AnyObject).value(forKey: "PostBy") as? String
             userIndex = (_feedItems.object(at: (indexPath?.row)!) as AnyObject).value(forKey: "objectId") as? String
         } else {
@@ -244,7 +244,7 @@ final class Blog: UIViewController {
     // MARK: - Parse/Firebase
     private func loadData() {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             let query = PFQuery(className:"Blog")
             query.limit = 1000
@@ -379,7 +379,7 @@ final class Blog: UIViewController {
         let hitPoint = sender.convert(CGPoint.zero, to: self.tableView)
         let indexPath = self.tableView!.indexPathForRow(at: hitPoint)
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             socialText = (self._feedItems[indexPath!.row] as AnyObject).value(forKey: "Subject") as? String
         } else {
             //firebase
@@ -395,7 +395,7 @@ final class Blog: UIViewController {
     // MARK: - imgLoadSegue
     @objc func imgLoadSegue(sender: UITapGestureRecognizer) {
     //@objc func imgLoadSegue(_ sender: UITapGestureRecognizer) {
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             titleLabel = ((_feedItems.object(at: (sender.view!.tag)) as AnyObject).value(forKey: "PostBy") as? String)!
         } else {
             titleLabel = bloglist[(sender.view!.tag)].postBy
@@ -428,7 +428,7 @@ final class Blog: UIViewController {
             } else {
                 
                 let indexPath = self.tableView!.indexPathForSelectedRow!.row
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     
                     VC.objectId = (_feedItems[indexPath] as AnyObject).value(forKey: "objectId") as? String
                     VC.msgNo = (_feedItems[indexPath] as AnyObject).value(forKey: "MsgNo") as? String
@@ -456,7 +456,7 @@ final class Blog: UIViewController {
         }
         if segue.identifier == "blognewSegue" {
             guard let VC = segue.destination as? BlogNewController else { return }
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 print("No Parse")
             } else {
                 guard let uid = Auth.auth().currentUser?.uid else {return}
@@ -495,7 +495,7 @@ extension Blog: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if tableView == self.tableView {
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 return self._feedItems.count
             } else {
                 return self.bloglist.count
@@ -543,7 +543,7 @@ extension Blog: UITableViewDataSource {
                 cell.commentLabel.font = Font.Blog.cellLabel
             }
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query:PFQuery = PFUser.query()!
                 query.whereKey("username",  equalTo: (self._feedItems[indexPath.row] as AnyObject).value(forKey:"PostBy") as! String)
@@ -662,7 +662,7 @@ extension Blog: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
             
             cell.textLabel!.numberOfLines = 3
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 //parse
                 cell.textLabel!.text = (filteredTitles[indexPath.row] as AnyObject).value(forKey:"Subject") as? String
 
@@ -700,7 +700,7 @@ extension Blog: UITableViewDelegate {
                 if UIDevice.current.userInterfaceIdiom == .phone  {
                     guard let header = tableView.dequeueReusableCell(withIdentifier: "Header") as? HeaderViewCell else { fatalError("Unexpected Index Path") }
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         header.myLabel1.text = String(format: "%@%d", "posts\n", _feedItems.count)
                         header.myLabel2.text = String(format: "%@%d", "likes\n", _feedheadItems2.count)
                         header.myLabel3.text = String(format: "%@%d", "users\n", _feedheadItems3.count)
@@ -747,7 +747,7 @@ extension Blog: UITableViewDelegate {
             let commentNum : Int?
             let deleteStr : String?
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 commentNum = (self._feedItems.object(at: indexPath.row) as AnyObject).value(forKey: "CommentCount") as? Int
             } else {
                 //firebase
@@ -756,7 +756,7 @@ extension Blog: UITableViewDelegate {
             
             if (commentNum == nil || commentNum == 0) {
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     deleteStr = ((self._feedItems.object(at: indexPath.row) as AnyObject).value(forKey: "objectId") as? String)!
                     _feedItems.removeObject(at: indexPath.row)
                 } else {

@@ -34,7 +34,7 @@ final class TabBarController: UITabBarController {
     
     func setupViewControllers() {
 
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        //let storyboard = UIStoryboard(name: "Home", bundle: nil)
         
         /*
         let splitViewController = UISplitViewController()
@@ -52,11 +52,14 @@ final class TabBarController: UITabBarController {
         let layout3 = UICollectionViewFlowLayout()
         let layout4 = UICollectionViewFlowLayout()
 
+        let storyboard = UIStoryboard(name: "Home", bundle: nil)
         let myTab1 = storyboard.instantiateViewController(withIdentifier: "homeId") as! MasterViewController
-        let myTab2 = storyboard.instantiateViewController(withIdentifier: "blogId") as UIViewController
+        let storyboard1 = UIStoryboard(name: "Blog", bundle: nil)
+        let myTab2 = storyboard1.instantiateViewController(withIdentifier: "blogId") as UIViewController
         let myTab3 = UserProfileVC(collectionViewLayout: layout3)
         let myTab4 = News(collectionViewLayout: layout4)
-        let myTab5 = storyboard.instantiateViewController(withIdentifier: "webId") as! Web
+        let storyboard3 = UIStoryboard(name: "Web", bundle: nil)
+        let myTab5 = storyboard3.instantiateViewController(withIdentifier: "webId") 
         
         let navController1 = UINavigationController(rootViewController: myTab1)
         navController1.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 0)

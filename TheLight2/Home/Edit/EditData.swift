@@ -400,7 +400,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
 
         if (self.formController == "Leads") {
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query = PFQuery(className:"Advertising")
                 query.whereKey("AdNo", equalTo: self.frm23!)
@@ -425,7 +425,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             }
         } else if (self.formController == "Customer") {
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query = PFQuery(className:"Product")
                 query.whereKey("ProductNo", equalTo: self.frm23!)
@@ -452,7 +452,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         
         if (self.formController == "Leads" || self.formController == "Customer") {
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query1 = PFQuery(className:"Salesman")
                 query1.whereKey("SalesNo", equalTo:self.frm21!)
@@ -633,7 +633,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                 
                 if (self.status == "Edit") { //Edit Lead
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         let query = PFQuery(className:"Leads")
                         query.whereKey("objectId", equalTo:self.objectId!)
@@ -704,7 +704,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                     
                 } else { //Save Lead
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         let saveLead:PFObject = PFObject(className:"Leads")
                         saveLead.setObject(self.leadNo ?? NSNumber(value:-1), forKey:"LeadNo")
@@ -785,7 +785,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                 
                 if (self.status == "Edit") { //Edit Customer
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         let query = PFQuery(className:"Customer")
                         query.whereKey("objectId", equalTo:self.objectId!)
@@ -867,7 +867,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                     }
                 } else { //Save Customer
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         let saveCust:PFObject = PFObject(className:"Customer")
                         saveCust.setObject(myCust ?? NSNumber(value:-1), forKey:"CustNo")
@@ -959,7 +959,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                 
                 if (self.status == "Edit") { //Edit Vendor
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         let query = PFQuery(className:"Vendors")
                         query.whereKey("objectId", equalTo:self.objectId!)
@@ -1028,7 +1028,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                     }
                 } else { //Save Vendor
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         let saveVend:PFObject = PFObject(className:"Vendors")
                         saveVend.setObject(myLead!, forKey:"VendorNo")
@@ -1110,7 +1110,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                 
                 if (self.status == "Edit") { //Edit Employee
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         let query = PFQuery(className:"Employee")
                         query.whereKey("objectId", equalTo:self.objectId!)
@@ -1181,7 +1181,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                     }
                 } else { //Save Employee
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         let saveEmploy:PFObject = PFObject(className:"Employee")
                         saveEmploy.setObject(NSNumber(value:-1), forKey:"EmployeeNo")
@@ -1327,7 +1327,7 @@ extension EditData: UITableViewDataSource {
         
         let dateFormatter = DateFormatter()
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             dateFormatter.dateFormat = "yyyy-MM-dd"
         } else {
             //firebase

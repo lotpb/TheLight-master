@@ -8,52 +8,163 @@
 
 import UIKit
 import SwiftUI
+import Parse
+import FirebaseDatabase
+//import FirebaseAuth
+import FirebaseCore
+import GoogleSignIn
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
-    
+    var defaults = UserDefaults.standard
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        
-        // Use a UIHostingController as window root view controller
-        if let windowScene = scene as? UIWindowScene {
-            let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: ContentView())
-            self.window = window
-            window.makeKeyAndVisible()
+
+        /// MARK: - Register Settings
+        defaults.register(defaults: [
+            "AllowBackgroundFetch": false,
+            "speechKey": false,
+            "soundKey": false,
+            "backendKey": "Firebase",
+            "autolockKey": false,
+            "pushnotifyKey": false,
+            "geotifyKey": false,
+            "weatherNotifyKey": false,
+            "weatherKey": "2446726",
+            "usernameKey": "Peter Balsamo",
+            "passwordKey": "3911",
+            "emailKey": "eunited@optonline.net",
+            "websiteKey": "http://",
+            "phoneKey": "(516)241-4786",
+            "versionKey": "1",
+            "emailtitleKey": "TheLight Support",
+            "emailmessageKey": "<h3>Programming in Swift</h3>",
+            "mileIQKey": "0.545"
+        ])
+
+        FirebaseApp.configure()
+        customizeAppearance()
+
+        /// MARK: - prevent Autolock
+        if (defaults.bool(forKey: "autolockKey"))  {
+            UIApplication.shared.isIdleTimerDisabled = true
         }
+
+        /// MARK: - Parse
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
+
+            let configuration = ParseClientConfiguration {
+                $0.applicationId = "lMUWcnNfBE2HcaGb2zhgfcTgDLKifbyi6dgmEK3M"
+                $0.clientKey = "UVyAQYRpcfZdkCa5Jzoza5fTIPdELFChJ7TVbSeX"
+                $0.server = "https://parseapi.back4app.com"
+                //$0.isLocalDatastoreEnabled = true
+            }
+            Parse.initialize(with: configuration)
+        } else {
+            /// MARK: - Firebase
+            Database.database().isPersistenceEnabled = true
+            FirebaseRef.databaseRoot.keepSynced(true)
+        }
+
+        /// MARK: - Register login
+        if (!(defaults.bool(forKey: "registerKey")) || defaults.bool(forKey: "loginKey")) {
+            window = UIWindow(frame: UIScreen.main.bounds)
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let initialViewController : UIViewController = storyboard.instantiateViewController(withIdentifier: "loginIDController") as UIViewController
+            window?.rootViewController = initialViewController
+            window?.makeKeyAndVisible()
+
+        } else {
+            //window?.rootViewController = TabBarController()
+            //window?.makeKeyAndVisible()
+
+            /// MARK: - TabBarController
+            if self.window!.rootViewController as? UITabBarController != nil {
+                let tababarController = self.window!.rootViewController as! UITabBarController
+
+                let items = tababarController.tabBar.items
+                for item in items!{
+                    item.imageInsets = .init(top: 0, left: 0, bottom: 0, right: 0)
+                }
+            } 
+        }
+
+        /*
+         if let windowScene = scene as? UIWindowScene {
+         let window = UIWindow(windowScene: windowScene)
+         window.rootViewController = UIHostingController(rootView: ContentView())
+         self.window = window
+         window.makeKeyAndVisible()
+         } */
+    }
+
+    /// MARK: - App Theme Customization
+    func customizeAppearance() {
+
+        UINavigationBar.appearance().tintColor = .systemGray
+
+        let app = UINavigationBarAppearance()
+        app .configureWithTransparentBackground()
+        app.backgroundColor = .systemBackground
+
+        app.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.label]
+        app.largeTitleTextAttributes = [
+            NSAttributedString.Key.foregroundColor:UIColor.label,
+            NSAttributedString.Key.font:UIFont.boldSystemFont(ofSize: 24)]
+
+        UINavigationBar.appearance().standardAppearance = app
+        UINavigationBar.appearance().scrollEdgeAppearance = app
+        UINavigationBar.appearance().isTranslucent = true
+        UINavigationBar.appearance().backgroundColor = UIColor.clear
+        UINavigationBar.appearance().tintColor = .systemGray //text color
+        UINavigationBar.appearance().prefersLargeTitles = true
+
+        let attrsNormal = [
+            NSAttributedString.Key.foregroundColor: UIColor.label,
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12.0)
+        ]
+        let attrsSelected = [
+            NSAttributedString.Key.foregroundColor: Color.twitterBlue,
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12.0)
+        ]
+        UITabBarItem.appearance().setTitleTextAttributes(attrsNormal, for: .normal)
+        UITabBarItem.appearance().setTitleTextAttributes(attrsSelected, for: .selected)
+        if #available(iOS 13.0, *) {
+            UITabBar.appearance().barTintColor = .systemBackground
+        } else {
+            UITabBar.appearance().barTintColor = .white
+        }
+        UITabBar.appearance().tintColor = Color.twitterBlue
+        UITabBar.appearance().isTranslucent = false
+
+        UIToolbar.appearance().barTintColor = Color.toolbarColor //Color.DGrayColor
+        if #available(iOS 13.0, *) {
+            UIToolbar.appearance().tintColor = .secondarySystemGroupedBackground
+        } else {
+            UIToolbar.appearance().tintColor = .white
+        }
+        UIToolbar.appearance().isTranslucent = false
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {
-        // Called as the scene is being released by the system.
-        // This occurs shortly after the scene enters the background, or when its session is discarded.
-        // Release any resources associated with this scene that can be re-created the next time the scene connects.
-        // The scene may re-connect later, as its session was not neccessarily discarded (see `application:didDiscardSceneSessions` instead).
+
     }
     
     func sceneDidBecomeActive(_ scene: UIScene) {
-        // Called when the scene has moved from an inactive state to an active state.
-        // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+
     }
     
     func sceneWillResignActive(_ scene: UIScene) {
-        // Called when the scene will move from an active state to an inactive state.
-        // This may occur due to temporary interruptions (ex. an incoming phone call).
+
     }
     
     func sceneWillEnterForeground(_ scene: UIScene) {
-        // Called as the scene transitions from the background to the foreground.
-        // Use this method to undo the changes made on entering the background.
+
     }
     
     func sceneDidEnterBackground(_ scene: UIScene) {
-        // Called as the scene transitions from the foreground to the background.
-        // Use this method to save data, release shared resources, and store enough scene-specific state information
-        // to restore the scene back to its current state.
+
     }
     
     

@@ -695,7 +695,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
 
         if (formController == "Leads" || formController == "Customer") {
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query1 = PFQuery(className:"Salesman")
                 query1.whereKey("SalesNo", equalTo:self.tbl22!)
@@ -742,7 +742,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
         
         if (self.formController == "Customer") {
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query = PFQuery(className:"Product")
                 query.whereKey("ProductNo", equalTo:self.tbl24!)
@@ -769,7 +769,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
         
         if (self.formController == "Leads") {
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query = PFQuery(className:"Advertising")
                 query.whereKey("AdNo", equalTo:self.tbl24!)
@@ -1445,7 +1445,7 @@ extension LeadDetail: UITableViewDataSource {
                 let dateStr = self.date
                 let dateFormatter = DateFormatter()
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     dateFormatter.dateFormat = "yyyy-MM-dd"
                 } else {
                     //firebase

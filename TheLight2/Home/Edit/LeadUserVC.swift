@@ -158,7 +158,7 @@ final class LeadUserVC: UIViewController, UITableViewDelegate, UITableViewDataSo
         let dateFormatter = DateFormatter()
         
         if (self.formController == "Blog") {
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 dateStr = ((_feedItems[indexPath.row] as AnyObject).value(forKey: "MsgDate") as? String)!
                 dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             } else {
@@ -166,7 +166,7 @@ final class LeadUserVC: UIViewController, UITableViewDelegate, UITableViewDataSo
                 dateStr = ""
             }
         } else {
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 dateStr = ((_feedItems[indexPath.row] as AnyObject).value(forKey: "Date") as? String)!
                 dateFormatter.dateFormat = "yyyy-MM-dd"
             } else {
@@ -180,7 +180,7 @@ final class LeadUserVC: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         if (self.formController == "Blog") {
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 cell.blogtitleLabel!.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "PostBy") as? String
                 cell.blogsubtitleLabel!.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "Subject") as? String
                 cell.blogmsgDateLabel!.text = dateFormatter.string(from: date)as String?
@@ -197,7 +197,7 @@ final class LeadUserVC: UIViewController, UITableViewDelegate, UITableViewDataSo
             let formatter = NumberFormatter()
             formatter.numberStyle = .currency
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 cell.blogtitleLabel!.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "LastName") as? String
                 cell.blogsubtitleLabel!.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "City") as? String
                 cell.blogmsgDateLabel!.text = (dateFormatter.string(from: date)as String??)!
@@ -345,7 +345,7 @@ final class LeadUserVC: UIViewController, UITableViewDelegate, UITableViewDataSo
             var dateStr = self.leadDate
             let dateFormatter = DateFormatter()
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 dateFormatter.dateFormat = "yyyy-MM-dd"
             } else {
                 //firebase
@@ -424,7 +424,7 @@ final class LeadUserVC: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         if (self.formController == "Leads") {
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query = PFQuery(className:"Customer")
                 query.limit = 1000
@@ -468,7 +468,7 @@ final class LeadUserVC: UIViewController, UITableViewDelegate, UITableViewDataSo
             }
         } else if (self.formController == "Customer") {
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query = PFQuery(className:"Leads")
                 query.limit = 1000
@@ -512,7 +512,7 @@ final class LeadUserVC: UIViewController, UITableViewDelegate, UITableViewDataSo
             }
         } else if (self.formController == "Blog") {
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query = PFQuery(className:"Blog")
                 query.limit = 1000

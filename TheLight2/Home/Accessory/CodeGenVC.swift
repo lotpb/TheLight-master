@@ -53,7 +53,7 @@ final class CodeGenVC: UIViewController {
             // Fallback on earlier versions
         }
 
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             let query:PFQuery = PFUser.query()!
             query.whereKey("username",  equalTo:defaults.string(forKey: "usernameKey")!)
             query.limit = 1

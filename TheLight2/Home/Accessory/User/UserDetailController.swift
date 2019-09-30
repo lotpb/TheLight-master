@@ -210,7 +210,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
     
     func setupMapData() {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             let query = PFUser.query()
             do {
                 userquery = try query!.getObjectWithId(self.objectId!)
@@ -414,7 +414,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         self.activityIndicator.startAnimating()
         self.view.addSubview(activityIndicator)
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             self.user = PFUser.current()
             if self.usernameField!.text! == self.user?.username {

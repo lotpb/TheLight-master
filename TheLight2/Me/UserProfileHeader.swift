@@ -24,7 +24,7 @@ final class UserProfileHeader: UICollectionViewCell {
     var user: UserModel? {
         didSet {
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 //fetchUserImage
                 let query:PFQuery = PFUser.query()!
                 query.whereKey("username",  equalTo: PFUser.current()?.username ?? "")

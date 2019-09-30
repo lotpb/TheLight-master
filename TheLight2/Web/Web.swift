@@ -21,13 +21,7 @@ final class Web: UIViewController, UISplitViewControllerDelegate, SFSafariViewCo
     @IBOutlet weak var recentPostsButton: UIBarButtonItem!
     @IBOutlet weak var safari: UIBarButtonItem!
 
-    var url: URL?
-    
-    var detailItem: AnyObject? {
-        didSet {
-            self.configureWeb()
-        }
-    }
+
     
     private let siteNames = ["CNN", "Drudge", "cnet", "Appcoda", "Cult of Mac"]
     private let siteAddresses = ["http://www.cnn.com",
@@ -35,13 +29,6 @@ final class Web: UIViewController, UISplitViewControllerDelegate, SFSafariViewCo
                       "http://www.cnet.com",
                       "http://www.appcoda.com/tutorials/",
                       "http://www.cultofmac.com/category/news/"]
-    /*
-    let segmentedControl: UISegmentedControl = {
-        let sc = UISegmentedControl(items: ["Games", "TV Shows", "Devices"])
-        sc.selectedSegmentIndex = 0
-        //sc.addTarget(self, action: #selector(handleSegmentChange), for: .valueChanged)
-        return sc
-    }() */
     
     lazy var webView: WKWebView = {
         let config = WKWebViewConfiguration()
@@ -51,6 +38,14 @@ final class Web: UIViewController, UISplitViewControllerDelegate, SFSafariViewCo
         
         return webView
     }()
+
+    var url: URL?
+
+       var detailItem: AnyObject? {
+           didSet {
+               self.configureWeb()
+           }
+       }
     
     override func viewDidLoad() {
         super.viewDidLoad()

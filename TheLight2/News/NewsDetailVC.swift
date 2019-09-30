@@ -173,7 +173,7 @@ final class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDele
         //self.scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         UIView.transition(with: self.newsImageview, duration: 0.5, options: .transitionCrossDissolve, animations: {
-            if (self.defaults.bool(forKey: "parsedataKey")) {
+            if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
                 self.newsImageview.image = self.image
                 
                 let imageDetailurl = self.imageUrl ?? ""

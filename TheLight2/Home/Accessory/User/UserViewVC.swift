@@ -109,7 +109,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
         mapView!.layer.borderColor = UIColor.lightGray.cgColor
         mapView!.layer.borderWidth = 0.5
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             PFGeoPoint.geoPointForCurrentLocation {(geoPoint: PFGeoPoint?, error: Error?) in
                 let span:MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 0.40, longitudeDelta: 0.40)
@@ -187,7 +187,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
     // MARK: - RefreshMap
     func retrieveMapPins() {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             let geoPoint = PFGeoPoint(latitude: self.mapView!.centerCoordinate.latitude, longitude:self.mapView!.centerCoordinate.longitude)
             
@@ -211,7 +211,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
     // MARK: - LoadData
     func loadData() {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             let query = PFUser.query()
             query!.order(byDescending: "createdAt")
@@ -278,7 +278,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             return self._feedItems.count
         } else {
             return self.userlist.count
@@ -295,7 +295,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
             // Fallback on earlier versions
         }
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             cell.usertitleLabel.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "username") as? String
             
@@ -327,7 +327,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
         self.formController = "CollectionView"
         isFormStat = false
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             let imageObject = _feedItems.object(at: indexPath.row) as! PFObject
             let imageFile = imageObject.object(forKey: "imageFile") as? PFFileObject
             
@@ -366,7 +366,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
                     VC.status = "Edit"
                     let indexPath = (self.tableView!.indexPathForSelectedRow! as NSIndexPath).row
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         updated = ((self._feedItems[indexPath] as AnyObject).value(forKey: "createdAt") as? Date)!
                         VC.objectId = (self._feedItems[indexPath] as AnyObject).value(forKey: "objectId") as? String
@@ -396,7 +396,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
                     let indexPaths = self.collectionView!.indexPathsForSelectedItems!
                     let indexPath = indexPaths[0] as IndexPath
                     
-                    if (defaults.bool(forKey: "parsedataKey")) {
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
                         updated = ((self._feedItems[(indexPath.row)] as AnyObject).value(forKey: "createdAt") as? Date)!
                         VC.objectId = (self._feedItems[(indexPath.row)] as AnyObject).value(forKey: "objectId") as? String
@@ -426,7 +426,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
         self.formController = "TableView"
         isFormStat = false
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             let imageObject = _feedItems.object(at: indexPath.row) as! PFObject
             let imageFile = imageObject.object(forKey: "imageFile") as? PFFileObject
             imageFile!.getDataInBackground { imageData, error in
@@ -447,7 +447,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             return self._feedItems.count
         } else {
             return self.userlist.count
@@ -477,7 +477,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
             cell.usersubtitleLabel!.font = Font.celltitle12r
         }
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             cell.customImageView.frame = .init(x: 0, y: 0, width: 0, height: 0) //fix
             let imageObject = _feedItems.object(at: indexPath.row) as! PFObject
@@ -530,7 +530,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
         myLabel1.font = Font.celltitle18m
         vw.addSubview(myLabel1)
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             myLabel1.text = String(format: "%@%d", "Users ", _feedItems.count)
         } else {
             //firebase

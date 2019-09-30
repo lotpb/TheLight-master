@@ -206,7 +206,7 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
     // MARK: - LoadData
     private func fetchUserImage() {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
 
             self.navigationItem.title =  PFUser.current()?.username ?? "Error"
             DispatchQueue.main.async(execute: {
@@ -227,7 +227,7 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
     
     private func fetchPhotoImages() { 
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             //fetchPhotoImages
             let query1 = PFQuery(className:"Newsios")
             query1.limit = 1000
@@ -310,7 +310,7 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             return self._feedItems.count
         } else {
             return posts.count
@@ -323,7 +323,7 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
             
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserProfileGridCell
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 imageObject = _feedItems.object(at: indexPath.row) as? PFObject
                 imageFile = imageObject.object(forKey: "imageFile") as? PFFileObject
@@ -348,7 +348,7 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
             
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: mapId, for: indexPath) as! UserProfileListCell
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 imageObject = _feedItems.object(at: indexPath.row) as? PFObject
                 imageFile = imageObject.object(forKey: "imageFile") as? PFFileObject
@@ -390,7 +390,7 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
         let followNum = followNumber ?? 0
         let followingNum = followingNumber ?? 0
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             header.updateValues(posts: _feedItems.count , follower: followNum, following: followingNum)
         } else {
             //firebase
@@ -430,7 +430,7 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
         let point : CGPoint = sender.convert(.zero, to: self.collectionView)
         let indexPath = self.collectionView?.indexPathForItem(at: point)
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             socialText = ((_feedItems.object(at: (indexPath! as NSIndexPath).row) as AnyObject).value(forKey: "newsTitle") as? String)!
             
@@ -528,7 +528,7 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
         let storyboard = UIStoryboard(name:"News", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "NewsDetailController") as! NewsDetailVC
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             let query = PFQuery(className:"Newsios")
             query.whereKey("objectId", equalTo:((_feedItems.object(at: ((indexPath as NSIndexPath?)?.row)!) as AnyObject).value(forKey: "objectId") as? String?)!!)
             query.getFirstObjectInBackground {(object: PFObject?, error: Error?) in
@@ -579,7 +579,7 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
   
                 VC.status = "Edit"
                 
-                if (defaults.bool(forKey: "parsedataKey")) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     updated = PFUser.current()!.createdAt
                     VC.objectId = PFUser.current()!.objectId
                     VC.username = PFUser.current()!.username

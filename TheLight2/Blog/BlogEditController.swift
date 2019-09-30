@@ -180,7 +180,7 @@ final class BlogEditController: UIViewController {
         let hitPoint = sender.convert(CGPoint.zero, to: self.listTableView)
         let indexPath = self.listTableView!.indexPathForRow(at: hitPoint)
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             let query = PFQuery(className:"Blog")
             query.whereKey("objectId", equalTo: ((_feedItems1.object(at: (indexPath?.row)!) as AnyObject).value(forKey: "objectId") as? String)!)
             query.getFirstObjectInBackground {(object: PFObject?, error: Error?) in
@@ -230,7 +230,7 @@ final class BlogEditController: UIViewController {
         let alertController = UIAlertController(title: "Delete", message: "Confirm Delete", preferredStyle: .alert)
         let destroyAction = UIAlertAction(title: "Delete!", style: .destructive) { (action) in
             
-            if (self.defaults.bool(forKey: "parsedataKey"))  {
+            if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
                 let query = PFQuery(className:"Blog")
                 query.whereKey("objectId", equalTo: name)
                 query.findObjectsInBackground(block: { objects, error in
@@ -279,7 +279,7 @@ final class BlogEditController: UIViewController {
         let replyAction = UIAlertAction(title: "Reply", style: .default) { (alert: UIAlertAction!) in
             
             self.isReplyClicked = true
-            if (self.defaults.bool(forKey: "parsedataKey"))  {
+            if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
                 self.posttoIndex = (self._feedItems1.object(at: (indexPath?.row)!) as AnyObject).value(forKey: "PostBy") as? String
             } else {
                 //firebase
@@ -293,7 +293,7 @@ final class BlogEditController: UIViewController {
         let editAction = UIAlertAction(title: "Edit", style: .default) { (alert: UIAlertAction!) in
         
             self.isReplyClicked = false
-            if (self.defaults.bool(forKey: "parsedataKey"))  {
+            if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
                 self.objectId = (self._feedItems1.object(at: (indexPath?.row)!) as AnyObject).value(forKey: "objectId") as? String
                 self.msgNo = (self._feedItems1.object(at: (indexPath?.row)!) as AnyObject).value(forKey: "MsgNo") as? String
                 self.postby = (self._feedItems1.object(at: (indexPath?.row)!) as AnyObject).value(forKey: "PostBy") as? String
@@ -319,7 +319,7 @@ final class BlogEditController: UIViewController {
         
         let copyAction = UIAlertAction(title: "Copy", style: .default) { (alert: UIAlertAction!) in
             
-            if (self.defaults.bool(forKey: "parsedataKey"))  {
+            if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
                 self.pasteBoard.string = (self._feedItems1.object(at: (indexPath?.row)!) as AnyObject).value(forKey: "Subject") as? String
             } else {
                 //firebase
@@ -329,7 +329,7 @@ final class BlogEditController: UIViewController {
         
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (alert: UIAlertAction!) in
             
-            if (self.defaults.bool(forKey: "parsedataKey"))  {
+            if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
                 self.deleteBlog(name: ((self._feedItems1.object(at: (indexPath?.row)!) as AnyObject).value(forKey: "objectId") as? String)!)
             } else {
                 //firebase
@@ -356,7 +356,7 @@ final class BlogEditController: UIViewController {
     // MARK: - Load Data
     func loadData() {
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             let query1 = PFQuery(className:"Blog")
             query1.whereKey("ReplyId", equalTo:self.objectId!)
@@ -394,7 +394,7 @@ final class BlogEditController: UIViewController {
         
         if (commentNum == nil || commentNum == 0) { return }
         
-        if (defaults.bool(forKey: "parsedataKey")) {
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
             let query = PFQuery(className:"Blog")
             query.whereKey("objectId", equalTo: self.objectId!)
             query.getFirstObjectInBackground {(object: PFObject?, error: Error?) in
@@ -454,7 +454,7 @@ extension BlogEditController: UITableViewDataSource {
         if (tableView == self.tableView) {
             return 1
         } else if (tableView == self.listTableView) {
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 return _feedItems1.count
             } else {
                 //firebase
@@ -498,7 +498,7 @@ extension BlogEditController: UITableViewDataSource {
             
             let dateFormatter = DateFormatter()
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query:PFQuery = PFUser.query()!
                 query.whereKey("username",  equalTo:self.postby!)
@@ -599,7 +599,7 @@ extension BlogEditController: UITableViewDataSource {
             cell.replylikeBtn.addTarget(self, action: #selector(likeButton), for: .touchUpInside)
             cell.replyactionBtn.addTarget(self, action: #selector(replyShare), for: .touchUpInside)
             
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query:PFQuery = PFUser.query()!
                 query.whereKey("username",  equalTo: (self._feedItems1[indexPath.row] as AnyObject).value(forKey: "PostBy") as! String)
@@ -641,7 +641,7 @@ extension BlogEditController: UITableViewDataSource {
             
             //---------------------NSDataDetector 2 of 2-----------------------------
 
-            if (defaults.bool(forKey: "parsedataKey")) {
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 myText = (_feedItems1[indexPath.row] as AnyObject).value(forKey: "Subject") as! NSString
                 myInput = ((_feedItems1[indexPath.row] as AnyObject).value(forKey: "Subject") as? String)!
             } else {
