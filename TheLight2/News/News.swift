@@ -93,8 +93,8 @@ final class News: UICollectionViewController, SearchDelegate {
         
         //added below
         self.view.addSubview(collectionView!)
-        collectionView?.contentInset = .init(top: 50,left: 0,bottom: 0,right: 0)
-        collectionView?.scrollIndicatorInsets = .init(top: 50,left: 0,bottom: 0,right: 0)
+        collectionView?.contentInset = .init(top: 100,left: 0,bottom: 0,right: 0)
+        collectionView?.scrollIndicatorInsets = .init(top: 100,left: 0,bottom: 0,right: 0)
         collectionView?.isPagingEnabled = true
         collectionView?.isDirectionalLockEnabled = true
         collectionView?.bounces = false
@@ -171,11 +171,7 @@ final class News: UICollectionViewController, SearchDelegate {
         if UIDevice.current.userInterfaceIdiom == .pad  {
             redView.backgroundColor = .black
         } else {
-            if #available(iOS 13.0, *) {
-                redView.backgroundColor = .systemRed //.systemGroupedBackground
-            } else {
-                redView.backgroundColor = UIColor.rgb(red: 230, green: 32, blue: 31)
-            }
+            redView.backgroundColor = .systemRed //.systemGroupedBackground
         }
         
         view.addSubview(redView)

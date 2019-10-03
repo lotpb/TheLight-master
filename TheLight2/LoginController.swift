@@ -91,7 +91,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         setupView()
         setupFont()
         setupConstraints()
-        self.mapView!.showsUserLocation = true
+        self.mapView?.showsUserLocation = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -130,17 +130,17 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
     // MARK: - LoginUser
     func setupFont() {
         if UIDevice.current.userInterfaceIdiom == .pad  {
-            self.usernameField!.font = ipadtitle
-            self.passwordField!.font = ipadtitle
-            self.reEnterPasswordField!.font = ipadtitle
-            self.emailField!.font = ipadtitle
-            self.phoneField!.font = ipadtitle
+            self.usernameField?.font = ipadtitle
+            self.passwordField?.font = ipadtitle
+            self.reEnterPasswordField?.font = ipadtitle
+            self.emailField?.font = ipadtitle
+            self.phoneField?.font = ipadtitle
         } else {
-            self.usernameField!.font = celltitle
-            self.passwordField!.font = celltitle
-            self.reEnterPasswordField!.font = celltitle
-            self.emailField!.font = celltitle
-            self.phoneField!.font = celltitle
+            self.usernameField?.font = celltitle
+            self.passwordField?.font = celltitle
+            self.reEnterPasswordField?.font = celltitle
+            self.emailField?.font = celltitle
+            self.phoneField?.font = celltitle
         }
     }
     
@@ -155,47 +155,47 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         }
         
         if ((defaults.string(forKey: "registerKey") == nil)) {
-            self.registerBtn!.setTitle("Register", for: .normal)
-            self.loginBtn!.isHidden = true //hide login button no user is regsitered
-            self.forgotPassword!.isHidden = true
-            self.authentButton!.isHidden = true
+            self.registerBtn?.setTitle("Register", for: .normal)
+            self.loginBtn?.isHidden = true //hide login button no user is regsitered
+            self.forgotPassword?.isHidden = true
+            self.authentButton?.isHidden = true
             self.fbButton.isHidden = true
             self.googleButton.isHidden = true
             //self.twitterButton.isHidden = true
-            self.emailField!.isHidden = false
-            self.phoneField!.isHidden = false
+            self.emailField?.isHidden = false
+            self.phoneField?.isHidden = false
             self.plusPhotoButton.isHidden = false
         } else {
             //Keychain
             //self.usernameField!.text = KeychainWrapper.standard.string(forKey: "usernameKey")
             //self.passwordField!.text = KeychainWrapper.standard.string(forKey: "passwordKey")
-            self.reEnterPasswordField!.isHidden = true
-            self.registerBtn!.isHidden = false
-            self.forgotPassword!.isHidden = false
+            self.reEnterPasswordField?.isHidden = true
+            self.registerBtn?.isHidden = false
+            self.forgotPassword?.isHidden = false
             self.fbButton.isHidden = false
             self.googleButton.isHidden = false
             //self.twitterButton.isHidden = false
-            self.emailField!.isHidden = true
-            self.phoneField!.isHidden = true
-            self.backloginBtn!.isHidden = true
+            self.emailField?.isHidden = true
+            self.phoneField?.isHidden = true
+            self.backloginBtn?.isHidden = true
             self.plusPhotoButton.isHidden = true
         }
 
-        self.registerBtn!.setTitleColor(.white, for: .normal)
-        self.loginBtn!.setTitleColor(.white, for: .normal)
-        self.backloginBtn!.setTitleColor(.white, for: .normal)
-        self.usernameField!.keyboardType = .emailAddress
-        self.emailField!.keyboardType = .emailAddress
-        self.phoneField!.keyboardType = .numbersAndPunctuation
+        self.registerBtn?.setTitleColor(.white, for: .normal)
+        self.loginBtn?.setTitleColor(.white, for: .normal)
+        self.backloginBtn?.setTitleColor(.white, for: .normal)
+        self.usernameField?.keyboardType = .emailAddress
+        self.emailField?.keyboardType = .emailAddress
+        self.phoneField?.keyboardType = .numbersAndPunctuation
         
-        self.passwordField!.text = ""
+        self.passwordField?.text = ""
         //self.userimage = nil
     }
     
     func setupConstraints() {
         
-        self.mainView.addSubview(fbButton)
-        self.mainView.addSubview(googleButton)
+        self.mainView?.addSubview(fbButton)
+        self.mainView?.addSubview(googleButton)
         
         mapView?.translatesAutoresizingMaskIntoConstraints = false
         if UIDevice.current.userInterfaceIdiom == .pad  {            mapView?.heightAnchor.constraint(equalToConstant: 380).isActive = true
@@ -207,11 +207,11 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
     func setupDefaults() {
         
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
-            self.usernameField!.text = "Peter Balsamo"
+            self.usernameField?.text = "Peter Balsamo"
             
         } else {
             //firebase
-            self.usernameField!.text = "eunited@optonline.net"
+            self.usernameField?.text = "eunited@optonline.net"
         }
     }
     
@@ -263,17 +263,17 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
 
         self.view.endEditing(true)
         keyboardHide()
-        self.registerBtn!.setTitle("Create an Account", for: .normal)
-        self.usernameField!.text = defaults.string(forKey: "usernameKey")
-        self.passwordField!.isHidden = false 
-        self.loginBtn!.isHidden = false
-        self.registerBtn!.isHidden = false
-        self.forgotPassword!.isHidden = false
-        self.authentButton!.isHidden = false
-        self.backloginBtn!.isHidden = true
-        self.reEnterPasswordField!.isHidden = true
-        self.emailField!.isHidden = true
-        self.phoneField!.isHidden = true
+        self.registerBtn?.setTitle("Create an Account", for: .normal)
+        self.usernameField?.text = defaults.string(forKey: "usernameKey")
+        self.passwordField?.isHidden = false
+        self.loginBtn?.isHidden = false
+        self.registerBtn?.isHidden = false
+        self.forgotPassword?.isHidden = false
+        self.authentButton?.isHidden = false
+        self.backloginBtn?.isHidden = true
+        self.reEnterPasswordField?.isHidden = true
+        self.emailField?.isHidden = true
+        self.phoneField?.isHidden = true
         self.fbButton.isHidden = false
         self.googleButton.isHidden = false
         //self.twitterButton.isHidden = false
@@ -286,15 +286,15 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         
         if (self.registerBtn!.titleLabel!.text == "Create an Account") {
             
-            self.registerBtn!.setTitle("Register", for: .normal)
-            self.usernameField!.text = ""
-            self.loginBtn!.isHidden = true
-            self.forgotPassword!.isHidden = true
-            self.authentButton!.isHidden = true
-            self.backloginBtn!.isHidden = false
-            self.reEnterPasswordField!.isHidden = false
-            self.emailField!.isHidden = false
-            self.phoneField!.isHidden = false
+            self.registerBtn?.setTitle("Register", for: .normal)
+            self.usernameField?.text = ""
+            self.loginBtn?.isHidden = true
+            self.forgotPassword?.isHidden = true
+            self.authentButton?.isHidden = true
+            self.backloginBtn?.isHidden = false
+            self.reEnterPasswordField?.isHidden = false
+            self.emailField?.isHidden = false
+            self.phoneField?.isHidden = false
             self.fbButton.isHidden = true
             self.googleButton.isHidden = true
             //self.twitterButton.isHidden = true
@@ -732,10 +732,19 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
     // MARK: - RedirectToHome
     func redirectToHome() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc = storyboard.instantiateViewController(withIdentifier: "MasterViewController")
-            vc.modalPresentationStyle = .fullScreen
-            self.present(vc, animated: true)
+
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let vc = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
+            } else {
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let vc = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
+            }
+
         }
     }
     

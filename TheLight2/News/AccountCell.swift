@@ -32,6 +32,7 @@ final class AccountCell: UICollectionViewCell, UITableViewDelegate, UITableViewD
         overlay.backgroundColor = UIColor(white: 0, alpha: 0.1)
         imageView.addSubview(overlay)
         imageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
@@ -72,7 +73,7 @@ final class AccountCell: UICollectionViewCell, UITableViewDelegate, UITableViewD
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = defaults.object(forKey: "usernameKey") as! String?
         label.sizeToFit()
-        label.textColor = .white
+        label.textColor = .red
         return label
     }()
     
@@ -80,21 +81,21 @@ final class AccountCell: UICollectionViewCell, UITableViewDelegate, UITableViewD
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
-        button.tintColor = .white
+        button.tintColor = .red
         button.setImage(UIImage(systemName: "chevron.down"), for: .normal)
         return button
     }()
     
     private lazy var tableView : UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = .clear
+        tableView.backgroundColor = .secondarySystemGroupedBackground
         return tableView
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .white
+        backgroundColor = .secondarySystemGroupedBackground
         //self.userimageView?.tintColor = .black
         
         let floatingButton = UIButton(frame: .init(x: frame.size.width - 70, y: 65, width: 50, height: 50))
@@ -117,14 +118,21 @@ final class AccountCell: UICollectionViewCell, UITableViewDelegate, UITableViewD
         addSubview(tableView)
         addSubview(floatingButton)
 
+        NSLayoutConstraint.activate([
+        headerImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 0),
+        headerImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 0),
+        headerImageView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0),
+        headerImageView.heightAnchor.constraint(equalToConstant: 90),
+        ])
+
         //horizontal constraints
-        addConstraintsWithFormat(format: "H:|-0-[v0]-0-|", views: headerImageView)
+        //addConstraintsWithFormat(format: "H:|-0-[v0]-0-|", views: headerImageView)
         addConstraintsWithFormat(format: "H:|-16-[v0(44)]", views: userProfileImageView)
         addConstraintsWithFormat(format: "H:|-16-[v0]-10-[v1(15)]", views: usertitleLabel, nameButton)
         addConstraintsWithFormat(format: "H:|-0-[v0]-0-|", views: tableView)
         
         //vertical constraints
-        addConstraintsWithFormat(format: "V:|-0-[v0(90)]", views: headerImageView)
+        //addConstraintsWithFormat(format: "V:|-0-[v0(90)]", views: headerImageView)
         addConstraintsWithFormat(format: "V:|-15-[v0(44)]", views: userProfileImageView)
         addConstraintsWithFormat(format: "V:|-60-[v0(30)]-60-[v1(6)]", views: usertitleLabel, nameButton)
         addConstraintsWithFormat(format: "V:|-91-[v0]-0-|", views: tableView)
@@ -178,7 +186,7 @@ final class AccountCell: UICollectionViewCell, UITableViewDelegate, UITableViewD
         let cell = tableView.dequeueReusableCell(withIdentifier: "accountcell", for: indexPath) as! AccountViewCell
         
         cell.selectionStyle = .none
-        cell.detailLabel.textColor = UIColor(white: 0.5, alpha: 1)
+        cell.detailLabel.textColor = .systemGray //UIColor(white: 0.5, alpha: 1)
         self.tableView.separatorStyle = .none
         
         if UIDevice.current.userInterfaceIdiom == .pad  {
@@ -234,7 +242,7 @@ final class AccountCell: UICollectionViewCell, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let vw = UIView()
-        vw.backgroundColor = .white
+        vw.backgroundColor = .secondarySystemGroupedBackground
         
         if (section == 1) {
             
@@ -247,11 +255,7 @@ final class AccountCell: UICollectionViewCell, UITableViewDelegate, UITableViewD
             vw.layer.masksToBounds = true
             
             let myLabel1:UILabel = UILabel(frame: .init(x: 16, y: 12, width: 10, height: 20))
-            if #available(iOS 13.0, *) {
-                myLabel1.textColor = .label
-            } else {
-                myLabel1.textColor = .black
-            }
+            myLabel1.textColor = .label
             myLabel1.text = "Library (A-Z)"
             myLabel1.sizeToFit()
             //myLabel1.font = Font.headtitle

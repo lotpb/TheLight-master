@@ -121,6 +121,7 @@ struct Font {
     
     static let celltitle30r = UIFont.systemFont(ofSize: 30)
     static let celltitle30l = UIFont.systemFont(ofSize: 30, weight: .light)
+    static let celltitle30b = UIFont.systemFont(ofSize: 30, weight: .bold)
     
     static let navlabel = UIFont(name: "HelveticaNeue-Thin", size: 25.0)
     

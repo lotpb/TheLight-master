@@ -295,7 +295,7 @@ extension MusicController: URLSessionDownloadDelegate {
 
 // MARK: - NSURLSessionDelegate
 extension MusicController: URLSessionDelegate {
-    
+    /*
     func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
             if let completionHandler = appDelegate.backgroundSessionCompletionHandler {
@@ -305,7 +305,7 @@ extension MusicController: URLSessionDelegate {
                 }
             }
         }
-    }
+    } */
 }
 
 // MARK: - UISearchBarDelegate

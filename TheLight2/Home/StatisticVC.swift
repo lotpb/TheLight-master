@@ -94,7 +94,7 @@ final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewContr
         self.extendedLayoutIncludesOpaqueBars = true
         // FIXME: - remove bottom bar'
         self.splitViewController?.delegate = self
-        self.splitViewController!.preferredDisplayMode = .allVisible
+        self.splitViewController?.preferredDisplayMode = .allVisible
         //view.backgroundColor = .red
         if #available(iOS 13.0, *) {
             self.contentView.backgroundColor = .systemGroupedBackground

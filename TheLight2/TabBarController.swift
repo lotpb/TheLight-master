@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FirebaseDatabase
 import FirebaseAuth
 
 final class TabBarController: UITabBarController {
@@ -23,73 +22,75 @@ final class TabBarController: UITabBarController {
                 self.present(navController, animated: true)
             }
         }
-        
-        tabBar.barTintColor = .black
-        tabBar.tintColor = .white
-        //tabBar.shadowImage = UIImage() //remove border
-        //tabBar.backgroundImage = UIImage() //remove border
 
-        setupViewControllers()
+        setupSplitViewController()
+        setupTabBar()
     }
-    
-    func setupViewControllers() {
 
-        //let storyboard = UIStoryboard(name: "Home", bundle: nil)
-        
-        /*
-        let splitViewController = UISplitViewController()
-        let rootViewController = storyboard.instantiateViewController(withIdentifier: "homeId") as! MasterViewController
-        let detailViewController = storyboard.instantiateViewController(withIdentifier: "snapshotId") as! SnapshotController
-        splitViewController.viewControllers = [rootViewController,detailViewController]
-        splitViewController.preferredDisplayMode = .primaryHidden
-  
-        let splitViewController1 = UISplitViewController()
-        let rootViewController1 = storyboard.instantiateViewController(withIdentifier: "favoriteId") as UIViewController
-        let detailViewController1 = storyboard.instantiateViewController(withIdentifier: "webId") as UIViewController
-        splitViewController1.viewControllers = [rootViewController1, detailViewController1]
-        //splitViewController1.preferredDisplayMode = .allVisible */
- 
-        let layout3 = UICollectionViewFlowLayout()
-        let layout4 = UICollectionViewFlowLayout()
+    func setupSplitViewController() {
 
-        let storyboard = UIStoryboard(name: "Home", bundle: nil)
-        let myTab1 = storyboard.instantiateViewController(withIdentifier: "homeId") as! MasterViewController
-        let storyboard1 = UIStoryboard(name: "Blog", bundle: nil)
-        let myTab2 = storyboard1.instantiateViewController(withIdentifier: "blogId") as UIViewController
-        let myTab3 = UserProfileVC(collectionViewLayout: layout3)
-        let myTab4 = News(collectionViewLayout: layout4)
-        let storyboard3 = UIStoryboard(name: "Web", bundle: nil)
-        let myTab5 = storyboard3.instantiateViewController(withIdentifier: "webId") 
-        
-        let navController1 = UINavigationController(rootViewController: myTab1)
-        navController1.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 0)
-        //navController1.tabBarItem.selectedImage = #imageLiteral(resourceName: "home30sel")
-        
-        let navController2 = UINavigationController(rootViewController: myTab2)
-        navController2.tabBarItem = UITabBarItem(title: "Blog", image: UIImage(systemName: "square and.pencil"), tag: 1)
-        //navController2.tabBarItem.selectedImage = #imageLiteral(resourceName: "note30copy")
-        
-        let navController3 = UINavigationController(rootViewController: myTab3)
-        navController3.tabBarItem = UITabBarItem(title: "Me", image: UIImage(systemName: "bookmark"), tag: 2)
-        //navController3.tabBarItem.selectedImage = #imageLiteral(resourceName: "ribbon")
+        if UIDevice.current.userInterfaceIdiom == .pad {
 
-        let navController4 = UINavigationController(rootViewController: myTab4)
-        navController4.tabBarItem = UITabBarItem(title: "News", image: UIImage(systemName: "text.bubble.fill"), tag: 3)
-        //navController4.tabBarItem.selectedImage = #imageLiteral(resourceName: "display30copy")
-        
-        let navController5 = UINavigationController(rootViewController: myTab5)
-        navController5.tabBarItem = UITabBarItem(title: "Web", image: UIImage(systemName: "cloud.fill"), tag: 4)
-        //navController5.tabBarItem.selectedImage = #imageLiteral(resourceName: "cloud30copy")
-        
-        viewControllers = [navController1, navController2, navController3, navController4, navController5]
-        
-        tabBarController?.viewControllers = viewControllers
+            let splitViewController = UISplitViewController()
+            let rootViewController = MasterViewController()
+            let detailViewController = SnapshotVC()
 
-        guard let items = tabBar.items else {return}
-        for item in items{
-            item.imageInsets = .init(top: 2, left: 0, bottom: 1, right: 0)
+            let homeNavigationController = UINavigationController(rootViewController: rootViewController)
+            let secondNavigationController = UINavigationController(rootViewController: detailViewController)
+
+            splitViewController.viewControllers = [homeNavigationController, secondNavigationController]
+            //splitViewController.preferredDisplayMode = .allVisible
         }
     }
     
+    func setupTabBar() {
+
+        let storyboard1 = UIStoryboard(name: "Home", bundle: nil)
+        let myTab1 = storyboard1.instantiateViewController(withIdentifier: "homeId")
+
+        let storyboard2 = UIStoryboard(name: "Blog", bundle: nil)
+        let myTab2 = storyboard2.instantiateViewController(withIdentifier: "blogId")
+        let layout3 = UICollectionViewFlowLayout()
+        let myTab3 = News(collectionViewLayout: layout3)
+
+        let storyboard4 = UIStoryboard(name: "Web", bundle: nil)
+        let myTab4 = storyboard4.instantiateViewController(withIdentifier: "webId")
+
+        let layout5 = UICollectionViewFlowLayout()
+        let myTab5 = PlacesCollectionView(collectionViewLayout: layout5)
+
+        let layout6 = UICollectionViewFlowLayout()
+        let myTab6 = UserProfileVC(collectionViewLayout: layout6)
+
+        
+        let navController1 = UINavigationController(rootViewController: myTab1)
+        navController1.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 1)
+        //navController1.tabBarItem.selectedImage = #imageLiteral(resourceName: "home30sel")
+        
+        let navController2 = UINavigationController(rootViewController: myTab2)
+        navController2.tabBarItem = UITabBarItem(title: "Blog", image: UIImage(systemName: "square.and.pencil"), tag: 2)
+
+        let navController3 = UINavigationController(rootViewController: myTab3)
+        navController3.tabBarItem = UITabBarItem(title: "News", image: UIImage(systemName: "text.bubble.fill"), tag: 3)
+        
+        let navController4 = UINavigationController(rootViewController: myTab4)
+        navController4.tabBarItem = UITabBarItem(title: "Web", image: UIImage(systemName: "cloud.fill"), tag: 4)
+
+        let navController5 = UINavigationController(rootViewController: myTab5)
+        navController5.tabBarItem = UITabBarItem(title: "Places", image: UIImage(systemName: "location.fill"), tag: 5)
+
+        let navController6 = UINavigationController(rootViewController: myTab6)
+        navController6.tabBarItem = UITabBarItem(title: "Me", image: UIImage(systemName: "person.fill"), tag: 6)
+        
+        viewControllers = [navController1, navController2, navController3, navController4, navController5, navController6]
+        
+        tabBarController?.viewControllers = viewControllers
+
+        /*
+         guard let items = tabBar.items else {return}
+         for item in items{
+         item.imageInsets = .init(top: 2, left: 0, bottom: 1, right: 0)
+         } */
+    }
 }
 

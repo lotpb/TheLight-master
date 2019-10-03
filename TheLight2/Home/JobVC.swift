@@ -369,7 +369,7 @@ extension JobVC: UITableViewDelegate {
             
             cell.selectionStyle = .none
             cell.accessoryType = .disclosureIndicator
-            cell.customImagelabel.text = "Job's"
+            cell.customImagelabel.text = "Job"
             cell.customImagelabel.tag = indexPath.row
             cell.customImagelabel.backgroundColor = .systemIndigo
             
@@ -449,9 +449,9 @@ extension JobVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if (tableView == self.tableView) {
             if indexPath.row % 2 == 0 {
-                cell.backgroundColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0) // very light gray
+                cell.backgroundColor = .systemGroupedBackground
             } else {
-                cell.backgroundColor = UIColor.white
+                cell.backgroundColor = .secondarySystemGroupedBackground
             }
         }
     }

@@ -300,7 +300,7 @@ final class TableViewCell: UITableViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = (imageView.frame.size.width) / 2
         imageView.layer.borderColor = UIColor.lightGray.cgColor
-        imageView.layer.borderWidth = 0.5
+        imageView.layer.borderWidth = 0.0
         imageView.layer.masksToBounds = true
         imageView.isUserInteractionEnabled = true
         return imageView
@@ -343,7 +343,7 @@ final class TableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = Font.celltitle20l
-        label.textColor = .black
+        label.textColor = .label
         label.adjustsFontSizeToFitWidth = true
         return label
     }()

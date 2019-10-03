@@ -452,9 +452,9 @@ extension ProductVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if (tableView == self.tableView) {
             if indexPath.row % 2 == 0 {
-                cell.backgroundColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0) // very light gray
+                cell.backgroundColor = .systemGroupedBackground
             } else {
-                cell.backgroundColor = UIColor.white
+                cell.backgroundColor = .secondarySystemGroupedBackground
             }
         }
     }

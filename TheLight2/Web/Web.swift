@@ -21,9 +21,7 @@ final class Web: UIViewController, UISplitViewControllerDelegate, SFSafariViewCo
     @IBOutlet weak var recentPostsButton: UIBarButtonItem!
     @IBOutlet weak var safari: UIBarButtonItem!
 
-
-    
-    private let siteNames = ["CNN", "Drudge", "cnet", "Appcoda", "Cult of Mac"]
+    private let siteNames = ["CNN", "Drudge", "cnet", "Appcoda", "Cult of Mac"] //no work only in storyboard
     private let siteAddresses = ["http://www.cnn.com",
                       "http://www.Drudgereport.com",
                       "http://www.cnet.com",
@@ -47,6 +45,7 @@ final class Web: UIViewController, UISplitViewControllerDelegate, SFSafariViewCo
            }
        }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // MARK: - SplitView
@@ -56,7 +55,7 @@ final class Web: UIViewController, UISplitViewControllerDelegate, SFSafariViewCo
         self.splitViewController?.maximumPrimaryColumnWidth = 300
         //fixed - remove bottom bar
         self.splitViewController?.delegate = self
-        self.splitViewController!.preferredDisplayMode = .primaryHidden
+        self.splitViewController?.preferredDisplayMode = .primaryHidden
         
         self.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
         self.navigationItem.leftItemsSupplementBackButton = true
@@ -106,8 +105,9 @@ final class Web: UIViewController, UISplitViewControllerDelegate, SFSafariViewCo
     }
 
     private func setupNavigationButtons() {
+        /*
         let actionButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(backButtonPressed))
-        navigationItem.rightBarButtonItems = [actionButton]
+        navigationItem.rightBarButtonItems = [actionButton] */
     }
     
     func configureWeb() {

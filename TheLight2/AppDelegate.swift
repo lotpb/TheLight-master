@@ -14,15 +14,14 @@ import UserNotifications
 import CoreLocation
 import BackgroundTasks
 
+fileprivate let backgroundTaskIdentifier = "com.nshipster.example.task.refresh"
 
 @UIApplicationMain
 final class AppDelegate: UIResponder, UIApplicationDelegate {
-    
     var window: UIWindow?
+
     let center = UNUserNotificationCenter.current()
     var defaults = UserDefaults.standard
-    var backgroundSessionCompletionHandler: (() -> Void)? //music app
-    //var backgroundTask: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
     
     let locationManager = CLLocationManager() //geotify
     //mileIQ
@@ -31,7 +30,15 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     let dateFormatter = DateFormatter()
     //journal
     static let geoCoder = CLGeocoder()
-    
+
+    lazy var backgroundURLSession = {
+        /*
+        let configuration = URLSessionConfiguration.background(withIdentifier: "com.nshipster.url-session.background")
+        configuration.discretionary = true
+        configuration.timeoutIntervalForRequest = 30
+
+        return URLSession(configuration: configuration, delegate: ..., delegateQueue: ...) */
+    }
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
 
@@ -40,7 +47,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         if UserDefaults.standard.bool(forKey: "AllowBackgroundFetch") {
             registerBackgroundTaks()
             print("Background task called...")
-            //print("\(Date()): notification posted, running background if available")
+            print("\(Date()): notification posted, running background if available")
         } else {
             print("Background task disabled")
         }
@@ -95,18 +102,13 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         cancelAllPandingBGTask()
-        self.getBackgroundData()
+        getBackgroundData()
+        scheduleAppRefresh()
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
 
     }
-
-    // MARK: - Music Controller
-    /*
-    internal func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
-        backgroundSessionCompletionHandler = completionHandler
-    } */
     
     /// MARK: - Schedule Notification set in NotificationController
     func scheduleNotification(at date: Date) {
@@ -132,7 +134,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         center.delegate = self
         center.add(request)
     }
-
+//----------------------------------------------------------------------------------------------------------
     /// MARK: - Register BackGround Tasks
     private func registerBackgroundTaks() {
 
@@ -140,12 +142,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             task.setTaskCompleted(success: true)
         }
 
-        /*
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.PeterBalsamo.imagefetcher", using: nil) { task in
-            self.getBackgroundData()
-            print("Background fetch called...")
-            print("\(Date()): notification posted, running background if available")
-        } */
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: backgroundTaskIdentifier, using: nil) { task in
+            self.handleAppRefresh(task: task as! BGAppRefreshTask)
+        }
     }
 
     func getBackgroundData() {
@@ -160,37 +159,37 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         center.delegate = self
         center.add(request)
-        //self.registerBackgroundTask()
     }
 
-/*
-    func registerBackgroundTask() {
-        backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
-            self?.endBackgroundTask()
+    func scheduleAppRefresh() {
+        getBackgroundData()
+        let request = BGAppRefreshTaskRequest(identifier: backgroundTaskIdentifier)
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 60 * 10)
+
+        do {
+            try BGTaskScheduler.shared.submit(request)
+        } catch {
+            print("Couldn't schedule app refresh: \(error)")
         }
-        assert(backgroundTask != UIBackgroundTaskIdentifier.invalid)
-    } */
+    }
 
-    /*
-    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+    func handleAppRefresh(task: BGAppRefreshTask) {
+        /*
+        scheduleAppRefresh()
 
-        if UserDefaults.standard.bool(forKey: "AllowBackgroundFetch") {
-            getBackgroundData()
-            completionHandler(.newData)
-            print("Background fetch called...")
-            print("\(Date()): notification posted, running background if available")
-        } else {
-            print("Background fetch disabled")
+        let url: URL = ""
+        var dataTask = backgroundURLSession.dataTask(with: url) { (data, response, error) in
+
+            let success = (200..<300).contains(response?.statusCode)
+            task.setTaskCompleted(success: success)
         }
-    } */
 
-    /*
-    func endBackgroundTask() {
-        print("Background task ended.")
-        print("Background time remaining = \(UIApplication.shared.backgroundTimeRemaining) seconds") //dont work
-        UIApplication.shared.endBackgroundTask(backgroundTask)
-        backgroundTask = UIBackgroundTaskIdentifier.invalid
-    } */
+        task.expirationHandler = {
+            dataTask.cancel()
+        }
+
+        dataTask.resume() */
+    }
 }
 extension AppDelegate {
     
@@ -200,7 +199,6 @@ extension AppDelegate {
 
     /// MARK: - Register Notifications
     func registerLocalNotification() {
-        
         let options: UNAuthorizationOptions = [.badge, .sound, .alert]
         center.requestAuthorization(options: options) { success, error in
             if let error = error {
@@ -371,17 +369,6 @@ extension AppDelegate: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didVisit visit: CLVisit) {
 
   //mileIQ------------------------------------------------------------------------------
-        /*
-        let visitInfo = """
-        ----Visit----
-        latitude: \(visit.coordinate.latitude)
-        longitude: \(visit.coordinate.longitude)
-        arrival date: \(visit.arrivalDate)
-        departure date: \(visit.departureDate)
-        horizontal accuracy: \(visit.horizontalAccuracy)
-        """
-        //showTextLabel.text = visitInfo
-        print("Crap", visitInfo) */
 
         let recordVisitReference = FirebaseRef.databaseVisits.child("test")
 
@@ -432,41 +419,7 @@ extension AppDelegate: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        /*
-        //mileIQ
-        guard let location = locations.last else { return }
-        var level = "N/A"
-        if let floor = location.floor {
-            level = "\(floor.level)"
-        }
-        
-        if let previousLocation = self.previousLocation {
-            distance = location.distance(from: previousLocation)
-        }
-        
-        self.previousLocation = location
-        print("distance", distance)
-        print("previousLocation", self.previousLocation!)
-        
-        let locationInfo = """
-        ----User's Location----
-        latitude: \(location.coordinate.latitude)
-        longitude: \(location.coordinate.longitude)
-        distance with previous location: \(distance) meters
-        altitude: \(location.altitude) meters
-        floor: \(level)
-        timestamp: \(location.timestamp)
-        speed: \(location.speed)
-        course: \(location.course)
-        """
-        print(locationInfo)
-        
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        FirebaseRef.saveLocationInfoWith(
-            location: location,
-            databaseRef: FirebaseRef.databaseUpdatingLocations,
-            dateFormatter: dateFormatter
-        )  */
+
     }
 }
 

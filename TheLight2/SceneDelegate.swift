@@ -40,7 +40,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             "versionKey": "1",
             "emailtitleKey": "TheLight Support",
             "emailmessageKey": "<h3>Programming in Swift</h3>",
-            "mileIQKey": "0.545"
+            "mileIQKey": "0.545",
         ])
 
         FirebaseApp.configure()
@@ -76,27 +76,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window?.makeKeyAndVisible()
 
         } else {
-            //window?.rootViewController = TabBarController()
-            //window?.makeKeyAndVisible()
 
             /// MARK: - TabBarController
-            if self.window!.rootViewController as? UITabBarController != nil {
-                let tababarController = self.window!.rootViewController as! UITabBarController
+            guard let windowScene = (scene as? UIWindowScene) else { return }
 
-                let items = tababarController.tabBar.items
-                for item in items!{
-                    item.imageInsets = .init(top: 0, left: 0, bottom: 0, right: 0)
-                }
-            } 
+            window = UIWindow(frame: UIScreen.main.bounds)
+            window!.rootViewController = TabBarController()
+            window!.makeKeyAndVisible()
+            window?.windowScene = windowScene
+            
+            /*
+            if let windowScene = scene as? UIWindowScene {
+            let window = UIWindow(windowScene: windowScene)
+            window.rootViewController = UIHostingController(rootView: ContentView())
+            self.window = window
+            window.makeKeyAndVisible()
+            } */
         }
-
-        /*
-         if let windowScene = scene as? UIWindowScene {
-         let window = UIWindow(windowScene: windowScene)
-         window.rootViewController = UIHostingController(rootView: ContentView())
-         self.window = window
-         window.makeKeyAndVisible()
-         } */
     }
 
     /// MARK: - App Theme Customization
@@ -130,20 +126,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         ]
         UITabBarItem.appearance().setTitleTextAttributes(attrsNormal, for: .normal)
         UITabBarItem.appearance().setTitleTextAttributes(attrsSelected, for: .selected)
-        if #available(iOS 13.0, *) {
-            UITabBar.appearance().barTintColor = .systemBackground
-        } else {
-            UITabBar.appearance().barTintColor = .white
-        }
+        UITabBar.appearance().barTintColor = .systemBackground
         UITabBar.appearance().tintColor = Color.twitterBlue
         UITabBar.appearance().isTranslucent = false
 
         UIToolbar.appearance().barTintColor = Color.toolbarColor //Color.DGrayColor
-        if #available(iOS 13.0, *) {
-            UIToolbar.appearance().tintColor = .secondarySystemGroupedBackground
-        } else {
-            UIToolbar.appearance().tintColor = .white
-        }
+        UIToolbar.appearance().tintColor = .secondarySystemGroupedBackground
         UIToolbar.appearance().isTranslucent = false
     }
     

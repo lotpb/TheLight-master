@@ -28,7 +28,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     private var resultsController = UITableViewController()
     private var filteredMenu = [String]()
     
-    var currentItem = "Snapshot"
+    var currentItem = "" //Snapshot"
     var player : AVAudioPlayer! = nil
     var objects = [AnyObject]()
 
@@ -40,62 +40,43 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     var textYQL: String!
     
     let myLabel1: UILabel = {
-        let label = UILabel(frame: .init(x: 10, y: 10, width: 74, height: 74))
+        let label = UILabel(frame: .init(x: 10, y: 0, width: 74, height: 45))
         label.numberOfLines = 2
-        label.backgroundColor = .white
+        label.backgroundColor = .clear
         label.textColor = UIColor.systemBlue//Color.goldColor
         label.textAlignment = .center
         label.font = Font.celltitle14m
-        label.layer.cornerRadius = 37.0
-        label.layer.borderColor = UIColor.lightText.cgColor //Color.Header.headtextColor.cgColor
-        label.layer.borderWidth = 1
-        label.layer.masksToBounds = true
         label.isUserInteractionEnabled = true
-        label.adjustsFontSizeToFitWidth = true
+        //label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
     let myLabel2: UILabel = {
-        let label = UILabel(frame: .init(x: 110, y: 10, width: 74, height: 74))
+        let label = UILabel(frame: .init(x: 110, y: 0, width: 74, height: 45))
         label.numberOfLines = 2
-        label.backgroundColor = .white
+        label.backgroundColor = .clear
         label.textColor = UIColor.systemBlue
         label.textAlignment = .center
         label.font = Font.celltitle14m
-        label.layer.cornerRadius = 37.0
-        label.layer.borderColor = UIColor.lightText.cgColor
-        label.layer.borderWidth = 1
-        label.layer.masksToBounds = true
         label.isUserInteractionEnabled = true
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
     let myLabel3: UILabel = {
-        let label = UILabel(frame: .init(x: 210, y: 10, width: 74, height: 74))
+        let label = UILabel(frame: .init(x: 210, y: 0, width: 74, height: 45))
         label.numberOfLines = 2
-        label.backgroundColor = .white
+        label.backgroundColor = .clear
         label.textColor = UIColor.systemBlue
         label.textAlignment = .center
         label.font = Font.celltitle14m
-        label.layer.cornerRadius = 37.0
-        label.layer.borderColor = UIColor.lightText.cgColor
-        label.layer.borderWidth = 1
-        label.layer.masksToBounds = true
         label.isUserInteractionEnabled = true
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
-    let myLabel4: UILabel = {
-        let label = UILabel(frame: .init(x: 10, y: 115, width: 280, height: 20))
-        label.font = Font.celltitle16l
-        label.isUserInteractionEnabled = true
-        return label
-    }()
-    
     let myLabel15: UILabel = {
-        let label = UILabel(frame: .init(x: 10, y: 85, width: 74, height: 20))
+        let label = UILabel(frame: .init(x: 10, y: 40, width: 74, height: 20))
         label.numberOfLines = 1
         label.textAlignment = .center
         label.textColor = .systemGreen
@@ -105,7 +86,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     }()
     
     let myLabel25: UILabel = {
-        let label = UILabel(frame: .init(x: 110, y: 85, width: 74, height: 20))
+        let label = UILabel(frame: .init(x: 112, y: 40, width: 74, height: 20))
         label.numberOfLines = 1
         label.textAlignment = .center
         label.font = Font.celltitle14m
@@ -114,7 +95,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     }()
     
     let myLabel35: UILabel = {
-        let label = UILabel(frame: .init(x: 210, y: 85, width: 74, height: 20))
+        let label = UILabel(frame: .init(x: 212, y: 40, width: 74, height: 20))
         label.numberOfLines = 1
         label.textAlignment = .center
         label.font = Font.celltitle14m
@@ -123,19 +104,72 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     }()
     
     lazy var separatorLine1: UIView = {
-        let view = UIView(frame: .init(x: 10, y: 105, width: 74, height: 3.5))
+        let view = UIView(frame: .init(x: 10, y: 65, width: 74, height: 3.5))
         view.backgroundColor = .systemGreen
         return view
     }()
     
     lazy var separatorLine2: UIView = {
-        let view = UIView(frame: .init(x: 110, y: 105, width: 74, height: 3.5))
+        let view = UIView(frame: .init(x: 110, y: 65, width: 74, height: 3.5))
         return view
     }()
     
     lazy var separatorLine3: UIView = {
-        let view = UIView(frame: .init(x: 210, y: 105, width: 74, height: 3.5))
+        let view = UIView(frame: .init(x: 210, y: 65, width: 74, height: 3.5))
         return view
+    }()
+
+    let titleLabel: UILabel = {
+        let label = UILabel(frame: .init(x: 20, y: 15, width: 200, height: 40))
+        label.text = "Main Menu"
+        label.textColor = .label
+        label.font = Font.celltitle30b
+        return label
+    }()
+
+    let titleLabel1: UILabel = {
+        let label = UILabel(frame: .init(x: 20, y: 65, width: 150, height: 20))
+        label.text = "Backend Data"
+        label.textColor = .label
+        label.font = Font.celltitle16l
+        return label
+    }()
+
+    let titleLabel2: UILabel = {
+        let label = UILabel(frame: .init(x: 20, y: 90, width: 150, height: 20))
+        label.text = "Weather"
+        label.textColor = .label
+        label.font = Font.celltitle16l
+        return label
+    }()
+
+    let titleLabeltxt1: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .right
+        label.textColor = .systemRed
+        label.text = "My Lists"
+        label.font = Font.celltitle18r
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    let titleLabeltxt2: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .right
+        label.textColor = .systemRed
+        label.text = "My Lists"
+        label.font = Font.celltitle18r
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    let myListLbl: UILabel = {
+        let label = UILabel()
+        label.text = "My Lists"
+        label.textColor = .label
+        label.font = Font.celltitle14r
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     
@@ -187,7 +221,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
+        //clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
         setMainNavItems()
     }
     
@@ -253,21 +287,18 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             })
         }
     }
-    
-    
-    
-    
+
     func setupNavigation() {
 
-        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.prefersLargeTitles = false
         let addBtn = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(self.actionButton))
         navigationItem.rightBarButtonItems = [addBtn]
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Sign Out", style: .plain, target: self, action: #selector(self.handleLogout))
-        navigationItem.title = "Main Menu"
+        navigationItem.title = ""
         
         searchController = UISearchController(searchResultsController: resultsController)
         navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
+        navigationItem.hidesSearchBarWhenScrolling = true
         searchController.searchResultsUpdater = self
         searchController.searchBar.sizeToFit()
         searchController.obscuresBackgroundDuringPresentation = false
@@ -275,24 +306,16 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     }
     
     func setupTableView() {
-        if #available(iOS 13.0, *) {
-            let bgView = UIView()
-            bgView.backgroundColor = .secondarySystemGroupedBackground
-            tableView!.backgroundView = bgView
-            self.tableView!.backgroundColor = .systemGroupedBackground
-            resultsController.tableView.backgroundColor = .systemGroupedBackground
-        } else {
-            self.tableView!.backgroundColor = Color.LGrayColor //.black
-            resultsController.tableView.backgroundColor = Color.LGrayColor
-        }
-        
+
         self.tableView!.delegate = self
         self.tableView!.dataSource = self
-        self.tableView!.sizeToFit()
-        self.tableView!.clipsToBounds = true
+        self.tableView!.backgroundColor = .systemGroupedBackground
+        //self.tableView!.sizeToFit()
+        //self.tableView!.clipsToBounds = true
         self.tableView!.tableFooterView = UIView(frame: .zero)
 
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
+        resultsController.tableView.backgroundColor = .systemGroupedBackground
         resultsController.tableView.sizeToFit()
         resultsController.tableView.clipsToBounds = true
         resultsController.tableView.dataSource = self
@@ -485,13 +508,9 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
             
             cell.selectionStyle = .none
-            if #available(iOS 13.0, *) {
-                cell.backgroundColor = .secondarySystemGroupedBackground //.systemGroupedBackground
-                cell.textLabel?.textColor = .label
-            } else {
-                cell.backgroundColor = .white
-            }
-            
+            cell.backgroundColor = .secondarySystemGroupedBackground //.systemGroupedBackground
+            cell.textLabel?.textColor = .label
+
             if UIDevice.current.userInterfaceIdiom == .pad {
                 cell.textLabel!.font = Font.celltitle22m
             } else {
@@ -568,7 +587,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
         if (tableView == self.tableView) {
             if (section == 0) {
                 if UIDevice.current.userInterfaceIdiom == .phone {
-                    return 145.0
+                    return 275
                 } else {
                     return CGFloat.leastNormalMagnitude
                 }
@@ -587,21 +606,26 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         if (tableView == self.tableView) {
+            let vw = UIView()
+            vw.backgroundColor = .systemGroupedBackground
             if (section == 0) {
                 if UIDevice.current.userInterfaceIdiom == .phone {
-                    let vw = UIView()
-                    vw.backgroundColor = .systemGroupedBackground
+
                     //tableView.tableHeaderView = vw
+
+                    let headView = UIView()
+                    headView.backgroundColor = .secondarySystemGroupedBackground
+                    headView.layer.cornerRadius = 10.0
 
                     myLabel1.text = String(format: "%@%d", "COUNT\n", menuItems.count )
                     vw.addSubview(myLabel1)
                     
                     if ((defaults.string(forKey: "backendKey")) == "Parse") {
-                        myLabel15.text = "Parse"
+                        titleLabeltxt1.text = "Parse"
                     } else {
-                        myLabel15.text = "Firebase"
+                        titleLabeltxt1.text = "Firebase"
                     }
-                    vw.addSubview(myLabel15)
+                    headView.addSubview(titleLabeltxt1)
 
                     myLabel2.text = "NASDAQ \n \(tradeYQL?[0] ?? "0")"
                     vw.addSubview(myLabel2)
@@ -630,25 +654,55 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
                         separatorLine3.backgroundColor = .systemGreen
                         myLabel35.textColor = .systemGreen
                     }
+
+                    vw.addSubview(headView)
                     vw.addSubview(separatorLine1)
                     vw.addSubview(separatorLine2)
                     vw.addSubview(separatorLine3)
+                    vw.addSubview(myListLbl)
+                    headView.addSubview(titleLabel)
+                    headView.addSubview(titleLabel1)
+                    headView.addSubview(titleLabel2)
+                    headView.addSubview(titleLabeltxt1)
+                    headView.addSubview(titleLabeltxt2)
+
+                    headView.translatesAutoresizingMaskIntoConstraints = false
+                    NSLayoutConstraint.activate([
+
+                    headView.topAnchor.constraint(equalTo: vw.topAnchor, constant: 85),
+                    headView.leadingAnchor.constraint(equalTo: vw.leadingAnchor, constant: 15),
+                    headView.trailingAnchor.constraint(equalTo: vw.trailingAnchor, constant: -15),
+                    headView.bottomAnchor.constraint(equalTo: vw.bottomAnchor, constant: -55),
+
+                    titleLabeltxt1.topAnchor.constraint(equalTo: headView.topAnchor, constant: 65),
+                    titleLabeltxt1.trailingAnchor.constraint(equalTo: headView.trailingAnchor, constant: -15),
+                    titleLabeltxt1.heightAnchor.constraint(equalToConstant: 20),
+
+                    titleLabeltxt2.topAnchor.constraint(equalTo: headView.topAnchor, constant: 90),
+                    titleLabeltxt2.trailingAnchor.constraint(equalTo: headView.trailingAnchor, constant: -15),
+                    titleLabeltxt2.heightAnchor.constraint(equalToConstant: 20),
+
+                    myListLbl.leadingAnchor.constraint(equalTo: vw.leadingAnchor, constant: 20),
+                    myListLbl.trailingAnchor.constraint(equalTo: vw.trailingAnchor, constant: -15),
+                    myListLbl.bottomAnchor.constraint(equalTo: vw.bottomAnchor, constant: -10),
+
+                    ])
                     
                     if (tempYQL != nil) && (textYQL != nil) {
-                        myLabel4.text = String(format: "%@ %@ %@", "Weather:", "\(tempYQL!)°", "\(textYQL!)")
+                        titleLabeltxt2.text = String(format: "%@ %@ %@", "Weather:", "\(tempYQL!)°", "\(textYQL!)")
                         if (textYQL!.contains("Rain") ||
                             textYQL!.contains("Snow") ||
                             textYQL!.contains("Thunderstorms") ||
                             textYQL!.contains("Showers")) {
-                            myLabel4.textColor = .systemRed
+                            titleLabeltxt2.textColor = .systemRed
                         } else {
-                            myLabel4.textColor = .systemGreen
+                            titleLabeltxt2.textColor = .systemGreen
                         }
                     } else {
-                        myLabel4.text = "Weather not available"
-                        myLabel4.textColor = .systemRed
+                        titleLabeltxt2.text = "not available"
+                        titleLabeltxt2.textColor = .systemRed
                     }
-                    vw.addSubview(myLabel4)
+                    headView.addSubview(titleLabeltxt2)
                     
                     /*
                      photoImage.frame = .init(x: 0, y: 0, width: tableView..frame.size.width, height: 145)
