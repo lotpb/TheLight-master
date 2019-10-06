@@ -20,7 +20,7 @@ import MapKit
 import GeoFire
 
 
-final class LoginController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LoginButtonDelegate, GIDSignInUIDelegate {
+final class LoginController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LoginButtonDelegate {
     
     let ipadtitle = UIFont.systemFont(ofSize: 20)
     let celltitle = UIFont.systemFont(ofSize: 18)
@@ -81,8 +81,8 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         
         //Google
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()!.options.clientID
-        GIDSignIn.sharedInstance().uiDelegate = self
-        GIDSignIn.sharedInstance().signInSilently() //.signIn()
+        //GIDSignIn.sharedInstance().uiDelegate = self
+        //GIDSignIn.sharedInstance().signInSilently() //.signIn()
         
         //Twitter
         setupTwitterButton()

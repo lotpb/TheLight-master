@@ -10,7 +10,7 @@
         <!--Home-->
         <scene sceneID="Fn9-hL-Dpo">
             <objects>
-                <splitViewController id="Izl-5v-Je2" sceneMemberID="viewController">
+                <splitViewController storyboardIdentifier="SplitViewController" id="Izl-5v-Je2" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Home" image="house.fill" catalog="system" id="2YI-CO-C5U"/>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="3PL-tl-pRi"/>
@@ -449,6 +449,6 @@
         <image name="house.fill" catalog="system" width="64" height="52"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="sbv-Zu-c8W"/>
+        <segue reference="bIW-hz-cwH"/>
     </inferredMetricsTieBreakers>
 </document>

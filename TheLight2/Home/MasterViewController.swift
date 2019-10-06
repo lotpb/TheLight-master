@@ -38,141 +38,8 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
 
     var tempYQL: String!
     var textYQL: String!
-    
-    let myLabel1: UILabel = {
-        let label = UILabel(frame: .init(x: 10, y: 0, width: 74, height: 45))
-        label.numberOfLines = 2
-        label.backgroundColor = .clear
-        label.textColor = UIColor.systemBlue//Color.goldColor
-        label.textAlignment = .center
-        label.font = Font.celltitle14m
-        label.isUserInteractionEnabled = true
-        //label.adjustsFontSizeToFitWidth = true
-        return label
-    }()
-    
-    let myLabel2: UILabel = {
-        let label = UILabel(frame: .init(x: 110, y: 0, width: 74, height: 45))
-        label.numberOfLines = 2
-        label.backgroundColor = .clear
-        label.textColor = UIColor.systemBlue
-        label.textAlignment = .center
-        label.font = Font.celltitle14m
-        label.isUserInteractionEnabled = true
-        label.adjustsFontSizeToFitWidth = true
-        return label
-    }()
-    
-    let myLabel3: UILabel = {
-        let label = UILabel(frame: .init(x: 210, y: 0, width: 74, height: 45))
-        label.numberOfLines = 2
-        label.backgroundColor = .clear
-        label.textColor = UIColor.systemBlue
-        label.textAlignment = .center
-        label.font = Font.celltitle14m
-        label.isUserInteractionEnabled = true
-        label.adjustsFontSizeToFitWidth = true
-        return label
-    }()
-    
-    let myLabel15: UILabel = {
-        let label = UILabel(frame: .init(x: 10, y: 40, width: 74, height: 20))
-        label.numberOfLines = 1
-        label.textAlignment = .center
-        label.textColor = .systemGreen
-        label.font = Font.celltitle14m
-        label.isUserInteractionEnabled = true
-        return label
-    }()
-    
-    let myLabel25: UILabel = {
-        let label = UILabel(frame: .init(x: 112, y: 40, width: 74, height: 20))
-        label.numberOfLines = 1
-        label.textAlignment = .center
-        label.font = Font.celltitle14m
-        label.isUserInteractionEnabled = true
-        return label
-    }()
-    
-    let myLabel35: UILabel = {
-        let label = UILabel(frame: .init(x: 212, y: 40, width: 74, height: 20))
-        label.numberOfLines = 1
-        label.textAlignment = .center
-        label.font = Font.celltitle14m
-        label.isUserInteractionEnabled = true
-        return label
-    }()
-    
-    lazy var separatorLine1: UIView = {
-        let view = UIView(frame: .init(x: 10, y: 65, width: 74, height: 3.5))
-        view.backgroundColor = .systemGreen
-        return view
-    }()
-    
-    lazy var separatorLine2: UIView = {
-        let view = UIView(frame: .init(x: 110, y: 65, width: 74, height: 3.5))
-        return view
-    }()
-    
-    lazy var separatorLine3: UIView = {
-        let view = UIView(frame: .init(x: 210, y: 65, width: 74, height: 3.5))
-        return view
-    }()
 
-    let titleLabel: UILabel = {
-        let label = UILabel(frame: .init(x: 20, y: 15, width: 200, height: 40))
-        label.text = "Main Menu"
-        label.textColor = .label
-        label.font = Font.celltitle30b
-        return label
-    }()
 
-    let titleLabel1: UILabel = {
-        let label = UILabel(frame: .init(x: 20, y: 65, width: 150, height: 20))
-        label.text = "Backend Data"
-        label.textColor = .label
-        label.font = Font.celltitle16l
-        return label
-    }()
-
-    let titleLabel2: UILabel = {
-        let label = UILabel(frame: .init(x: 20, y: 90, width: 150, height: 20))
-        label.text = "Weather"
-        label.textColor = .label
-        label.font = Font.celltitle16l
-        return label
-    }()
-
-    let titleLabeltxt1: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .right
-        label.textColor = .systemRed
-        label.text = "My Lists"
-        label.font = Font.celltitle18r
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
-    let titleLabeltxt2: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .right
-        label.textColor = .systemRed
-        label.text = "My Lists"
-        label.font = Font.celltitle18r
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
-    let myListLbl: UILabel = {
-        let label = UILabel()
-        label.text = "My Lists"
-        label.textColor = .label
-        label.font = Font.celltitle14r
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -307,11 +174,12 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     
     func setupTableView() {
 
+        // MARK: - TableHeader
+        self.tableView?.register(MainHeaderViewCell.self, forCellReuseIdentifier: "Header")
+
         self.tableView!.delegate = self
         self.tableView!.dataSource = self
         self.tableView!.backgroundColor = .systemGroupedBackground
-        //self.tableView!.sizeToFit()
-        //self.tableView!.clipsToBounds = true
         self.tableView!.tableFooterView = UIView(frame: .zero)
 
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
@@ -508,6 +376,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
             
             cell.selectionStyle = .none
+            cell.accessoryType = .disclosureIndicator
             cell.backgroundColor = .secondarySystemGroupedBackground //.systemGroupedBackground
             cell.textLabel?.textColor = .label
 
@@ -606,104 +475,67 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         if (tableView == self.tableView) {
-            let vw = UIView()
-            vw.backgroundColor = .systemGroupedBackground
+
             if (section == 0) {
                 if UIDevice.current.userInterfaceIdiom == .phone {
 
+                    guard let header = tableView.dequeueReusableCell(withIdentifier: "Header") as? MainHeaderViewCell else { fatalError("Unexpected Index Path") }
+
                     //tableView.tableHeaderView = vw
+                    header.myLabel1.text = String(format: "%@%d", "COUNT\n", menuItems.count)
+                    header.myLabel2.text = "NASDAQ \n \(tradeYQL?[0] ?? "00")"
+                    header.myLabel15.text = "\(changeYQL?[0] ?? "0")"
+                    header.myLabel25.text = "\(changeYQL?[0] ?? "0")"
+                    header.myLabel3.text = "S&P 500 \n \(tradeYQL?[1] ?? "00")"
+                    header.myLabel35.text = "\(changeYQL?[1] ?? "0")"
 
-                    let headView = UIView()
-                    headView.backgroundColor = .secondarySystemGroupedBackground
-                    headView.layer.cornerRadius = 10.0
-
-                    myLabel1.text = String(format: "%@%d", "COUNT\n", menuItems.count )
-                    vw.addSubview(myLabel1)
+                    if (header.myLabel15.text?.contains("-"))! {
+                        header.separatorLine3.backgroundColor = .systemRed
+                        header.myLabel15.backgroundColor = .systemRed
+                    } else {
+                        header.separatorLine3.backgroundColor = .systemGreen
+                        header.myLabel15.backgroundColor = .systemGreen
+                    }
                     
+                    if (header.myLabel25.text?.contains("-"))! {
+                        header.separatorLine2.backgroundColor = .systemRed
+                        header.myLabel25.backgroundColor = .systemRed
+                    } else {
+                        header.separatorLine2.backgroundColor = .systemGreen
+                        header.myLabel25.backgroundColor = .systemGreen
+                    }
+                    
+                    if (header.myLabel35.text?.contains("-"))! {
+                        header.separatorLine3.backgroundColor = .systemRed
+                        header.myLabel35.backgroundColor = .systemRed
+                    } else {
+                        header.separatorLine3.backgroundColor = .systemGreen
+                        header.myLabel35.backgroundColor = .systemGreen
+                    }
+
                     if ((defaults.string(forKey: "backendKey")) == "Parse") {
-                        titleLabeltxt1.text = "Parse"
+                        header.titleLabeltxt1.text = "Parse"
                     } else {
-                        titleLabeltxt1.text = "Firebase"
-                    }
-                    headView.addSubview(titleLabeltxt1)
-
-                    myLabel2.text = "NASDAQ \n \(tradeYQL?[0] ?? "0")"
-                    vw.addSubview(myLabel2)
-                    
-                    myLabel25.text = "\(changeYQL?[0] ?? "0")"
-                    vw.addSubview(myLabel25)
-                    
-                    myLabel3.text = "S&P 500 \n \(tradeYQL?[1] ?? "0")"
-                    vw.addSubview(myLabel3)
-                    
-                    myLabel35.text = "\(changeYQL?[1] ?? "0")"
-                    vw.addSubview(myLabel35)
-                    
-                    if (myLabel25.text?.contains("-"))! {
-                        separatorLine2.backgroundColor = .systemRed
-                        myLabel25.textColor = .systemRed
-                    } else {
-                        separatorLine2.backgroundColor = .systemGreen
-                        myLabel25.textColor = .systemGreen
-                    }
-                    
-                    if (myLabel35.text?.contains("-"))! {
-                        separatorLine3.backgroundColor = .systemRed
-                        myLabel35.textColor = .systemRed
-                    } else {
-                        separatorLine3.backgroundColor = .systemGreen
-                        myLabel35.textColor = .systemGreen
+                        header.titleLabeltxt1.text = "Firebase"
                     }
 
-                    vw.addSubview(headView)
-                    vw.addSubview(separatorLine1)
-                    vw.addSubview(separatorLine2)
-                    vw.addSubview(separatorLine3)
-                    vw.addSubview(myListLbl)
-                    headView.addSubview(titleLabel)
-                    headView.addSubview(titleLabel1)
-                    headView.addSubview(titleLabel2)
-                    headView.addSubview(titleLabeltxt1)
-                    headView.addSubview(titleLabeltxt2)
-
-                    headView.translatesAutoresizingMaskIntoConstraints = false
-                    NSLayoutConstraint.activate([
-
-                    headView.topAnchor.constraint(equalTo: vw.topAnchor, constant: 85),
-                    headView.leadingAnchor.constraint(equalTo: vw.leadingAnchor, constant: 15),
-                    headView.trailingAnchor.constraint(equalTo: vw.trailingAnchor, constant: -15),
-                    headView.bottomAnchor.constraint(equalTo: vw.bottomAnchor, constant: -55),
-
-                    titleLabeltxt1.topAnchor.constraint(equalTo: headView.topAnchor, constant: 65),
-                    titleLabeltxt1.trailingAnchor.constraint(equalTo: headView.trailingAnchor, constant: -15),
-                    titleLabeltxt1.heightAnchor.constraint(equalToConstant: 20),
-
-                    titleLabeltxt2.topAnchor.constraint(equalTo: headView.topAnchor, constant: 90),
-                    titleLabeltxt2.trailingAnchor.constraint(equalTo: headView.trailingAnchor, constant: -15),
-                    titleLabeltxt2.heightAnchor.constraint(equalToConstant: 20),
-
-                    myListLbl.leadingAnchor.constraint(equalTo: vw.leadingAnchor, constant: 20),
-                    myListLbl.trailingAnchor.constraint(equalTo: vw.trailingAnchor, constant: -15),
-                    myListLbl.bottomAnchor.constraint(equalTo: vw.bottomAnchor, constant: -10),
-
-                    ])
-                    
                     if (tempYQL != nil) && (textYQL != nil) {
-                        titleLabeltxt2.text = String(format: "%@ %@ %@", "Weather:", "\(tempYQL!)°", "\(textYQL!)")
+                        header.titleLabeltxt2.text = String(format: "%@ %@ %@", "Weather:", "\(tempYQL!)°", "\(textYQL!)")
                         if (textYQL!.contains("Rain") ||
                             textYQL!.contains("Snow") ||
                             textYQL!.contains("Thunderstorms") ||
                             textYQL!.contains("Showers")) {
-                            titleLabeltxt2.textColor = .systemRed
+                            header.titleLabeltxt2.textColor = .systemRed
                         } else {
-                            titleLabeltxt2.textColor = .systemGreen
+                            header.titleLabeltxt2.textColor = .systemGreen
                         }
                     } else {
-                        titleLabeltxt2.text = "not available"
-                        titleLabeltxt2.textColor = .systemRed
+                        header.titleLabeltxt2.text = "not available"
+                        header.titleLabeltxt2.textColor = .systemRed
                     }
-                    headView.addSubview(titleLabeltxt2)
-                    
+
+                    header.myListLbl.text = String(format: "%@%d", "MyList ", menuItems.count)
+
                     /*
                      photoImage.frame = .init(x: 0, y: 0, width: tableView..frame.size.width, height: 145)
                      vw.addSubview(photoImage)
@@ -712,17 +544,14 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
                      visualEffectView.frame = photoImage.bounds
                      photoImage.addSubview(visualEffectView) */
                     
-                    return vw
+                    return header
                 }
-                //return nil
             }
-            //return nil
         }
         return nil
     }
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
         return true
     }
     
@@ -823,30 +652,14 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             controller.navigationItem.leftItemsSupplementBackButton = true
         }
         if segue.identifier == "spotbeaconSegue" {
-            /*
- 
-            if #available(iOS 13.0, *) {
-                let detailsView = DetailView()
-                let host = UIHostingController(rootView: detailsView)
-                navigationController?.pushViewController(host, animated: true)
-            } else { */
             guard let controller = segue.destination as? SpotBeaconVC else { return }
             controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
             controller.navigationItem.leftItemsSupplementBackButton = true
-           // }
         }
         if segue.identifier == "transmitbeaconSegue" {
-            /*
- 
-            if #available(iOS 13.0, *) {
-                let detailsView = LabelView()
-                let host = UIHostingController(rootView: detailsView)
-                navigationController?.pushViewController(host, animated: true)
-            } else { */
-                guard let controller = segue.destination as? TransmitBeaconVC else { return }
-                controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-                controller.navigationItem.leftItemsSupplementBackButton = true
-           // }
+            guard let controller = segue.destination as? TransmitBeaconVC else { return }
+            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            controller.navigationItem.leftItemsSupplementBackButton = true
         }
         if segue.identifier == "contactSegue" {
             guard let controller = segue.destination as? ContactVC else { return }
@@ -854,19 +667,12 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
             controller.navigationItem.leftItemsSupplementBackButton = true
         }
-
     }
 }
 //-----------------------end------------------------------
 extension MasterViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
-        /*
-        guard let searchText = searchController.searchBar.text, searchText.count > 0 else { return }
-        filteredMenu = menuItems.filter { $0.range(of: searchText) != nil }
-        print("update search results for \(searchText) - items are now: \(filteredMenu)")
-        self.resultsController.tableView.reloadData() */
-
         self.filteredMenu.removeAll(keepingCapacity: false)
         let searchPredicate = NSPredicate(format: "SELF CONTAINS[c] %@", searchController.searchBar.text!)
         let array = (self.menuItems as NSArray).filtered(using: searchPredicate)

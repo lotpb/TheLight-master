@@ -29,6 +29,7 @@ final class TabBarController: UITabBarController {
 
     func setupSplitViewController() {
 
+        /*
         if UIDevice.current.userInterfaceIdiom == .pad {
 
             let splitViewController = UISplitViewController()
@@ -40,7 +41,7 @@ final class TabBarController: UITabBarController {
 
             splitViewController.viewControllers = [homeNavigationController, secondNavigationController]
             //splitViewController.preferredDisplayMode = .allVisible
-        }
+        } */
     }
     
     func setupTabBar() {
