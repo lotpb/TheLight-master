@@ -1,14 +1,15 @@
 //
-//  MainHeaderViewCell.swift
+//  StatHeaderViewCell.swift
 //  TheLight2
 //
-//  Created by Peter Balsamo on 10/5/19.
+//  Created by Peter Balsamo on 10/6/19.
 //  Copyright © 2019 Peter Balsamo. All rights reserved.
 //
+
 import UIKit
 
 
-final class MainHeaderViewCell: UITableViewCell {
+final class StatHeaderViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -122,7 +123,7 @@ final class MainHeaderViewCell: UITableViewCell {
 
     let titleLabel: UILabel = {
         let label = UILabel(frame: .init(x: 20, y: 15, width: 200, height: 40))
-        label.text = "Main Menu"
+        label.text = "Statistics"
         label.textColor = .label
         label.font = Font.celltitle30b
         return label
@@ -147,7 +148,7 @@ final class MainHeaderViewCell: UITableViewCell {
     let titleLabeltxt1: UILabel = {
         let label = UILabel()
         label.textAlignment = .right
-        label.textColor = .systemRed
+        label.textColor = .systemBlue
         label.font = Font.celltitle16r
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -156,7 +157,7 @@ final class MainHeaderViewCell: UITableViewCell {
     let titleLabeltxt2: UILabel = {
         let label = UILabel()
         label.textAlignment = .right
-        label.textColor = .systemRed
+        label.textColor = .systemBlue
         label.font = Font.celltitle16r
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -165,7 +166,7 @@ final class MainHeaderViewCell: UITableViewCell {
     let myListLbl: UILabel = {
         let label = UILabel()
         label.textColor = .label
-        label.font = Font.celltitle14r
+        label.font = Font.celltitle18r
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -173,54 +174,50 @@ final class MainHeaderViewCell: UITableViewCell {
 
     func setupViews() {
 
-        if UIDevice.current.userInterfaceIdiom == .phone  {
+        self.contentView.addSubview(vw)
 
-            self.contentView.addSubview(vw)
+        addSubview(myLabel1)
+        addSubview(myLabel2)
+        addSubview(myLabel3)
 
-            addSubview(myLabel1)
-            addSubview(myLabel2)
-            addSubview(myLabel3)
+        addSubview(myLabel15)
+        addSubview(myLabel25)
+        addSubview(myLabel35)
 
-            addSubview(myLabel15)
-            addSubview(myLabel25)
-            addSubview(myLabel35)
+        addSubview(separatorLine1)
+        addSubview(separatorLine2)
+        addSubview(separatorLine3)
+        addSubview(myListLbl)
 
-            addSubview(separatorLine1)
-            addSubview(separatorLine2)
-            addSubview(separatorLine3)
-            addSubview(myListLbl)
+        vw.addSubview(headView)
+        headView.addSubview(titleLabel)
+        headView.addSubview(titleLabel1)
+        headView.addSubview(titleLabel2)
+        headView.addSubview(titleLabeltxt1)
+        headView.addSubview(titleLabeltxt2)
 
-            vw.addSubview(headView)
-            headView.addSubview(titleLabel)
-            headView.addSubview(titleLabel1)
-            headView.addSubview(titleLabel2)
-            headView.addSubview(titleLabeltxt1)
-            headView.addSubview(titleLabeltxt2)
+        NSLayoutConstraint.activate([
+            vw.topAnchor.constraint(equalTo: self.topAnchor, constant: 0),
+            vw.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
+            vw.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
+            vw.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0),
 
-            NSLayoutConstraint.activate([
-                vw.topAnchor.constraint(equalTo: self.topAnchor, constant: 0),
-                vw.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
-                vw.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
-                vw.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0),
+            headView.topAnchor.constraint(equalTo: vw.topAnchor, constant: 85),
+            headView.leadingAnchor.constraint(equalTo: vw.leadingAnchor, constant: 15),
+            headView.trailingAnchor.constraint(equalTo: vw.trailingAnchor, constant: -15),
+            headView.heightAnchor.constraint(equalToConstant: 130),
 
-                headView.topAnchor.constraint(equalTo: vw.topAnchor, constant: 85),
-                headView.leadingAnchor.constraint(equalTo: vw.leadingAnchor, constant: 15),
-                headView.trailingAnchor.constraint(equalTo: vw.trailingAnchor, constant: -15),
-                headView.heightAnchor.constraint(equalToConstant: 130),
+            titleLabeltxt1.topAnchor.constraint(equalTo: titleLabel1.topAnchor, constant: 2),
+            titleLabeltxt1.trailingAnchor.constraint(equalTo: headView.trailingAnchor, constant: -20),
+            titleLabeltxt1.heightAnchor.constraint(equalToConstant: 20),
 
-                titleLabeltxt1.topAnchor.constraint(equalTo: titleLabel1.topAnchor, constant: 2),
-                titleLabeltxt1.trailingAnchor.constraint(equalTo: headView.trailingAnchor, constant: -20),
-                titleLabeltxt1.heightAnchor.constraint(equalToConstant: 20),
+            titleLabeltxt2.topAnchor.constraint(equalTo: titleLabel2.topAnchor, constant: 2),
+            titleLabeltxt2.trailingAnchor.constraint(equalTo: headView.trailingAnchor, constant: -20),
+            titleLabeltxt2.heightAnchor.constraint(equalToConstant: 20),
 
-                titleLabeltxt2.topAnchor.constraint(equalTo: titleLabel2.topAnchor, constant: 2),
-                titleLabeltxt2.trailingAnchor.constraint(equalTo: headView.trailingAnchor, constant: -20),
-                titleLabeltxt2.heightAnchor.constraint(equalToConstant: 20),
-
-                myListLbl.leadingAnchor.constraint(equalTo: vw.leadingAnchor, constant: 20),
-                myListLbl.trailingAnchor.constraint(equalTo: vw.trailingAnchor, constant: -15),
-                myListLbl.bottomAnchor.constraint(equalTo: vw.bottomAnchor, constant: -5),
-            ])
-        }
+            myListLbl.leadingAnchor.constraint(equalTo: vw.leadingAnchor, constant: 20),
+            myListLbl.trailingAnchor.constraint(equalTo: vw.trailingAnchor, constant: -15),
+            myListLbl.bottomAnchor.constraint(equalTo: vw.bottomAnchor, constant: -10),
+        ])
     }
-
 }

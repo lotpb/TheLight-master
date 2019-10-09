@@ -7,7 +7,6 @@
 //
 
 import UIKit
-//import SwiftUI
 import Parse
 
 final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewControllerDelegate {
@@ -43,7 +42,7 @@ final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewContr
     var humYQL: String!
     var cityYQL: String!
     var updateYQL: String!
-    
+
     var label1: UILabel = {
         let label = UILabel()
         label.textColor = .black
@@ -60,24 +59,6 @@ final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewContr
         return label
     }()
     
-    var myLabel2: UILabel = {
-        let label = UILabel()
-        label.textColor = .systemGreen
-        label.textAlignment = .center
-        label.text = "SALES"
-        label.font = UIFont (name: "Avenir-Black", size: 16)
-        return label
-    }()
-    
-    var myLabel3: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.textAlignment = .center
-        label.text = "$200,000"
-        label.font = UIFont (name: "Avenir-Black", size: 30)
-        return label
-    }()
-    
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = .clear //Color.Stat.navColor
@@ -87,6 +68,7 @@ final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewContr
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         return refreshControl
     }()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,15 +77,9 @@ final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewContr
         // FIXME: - remove bottom bar'
         self.splitViewController?.delegate = self
         self.splitViewController?.preferredDisplayMode = .allVisible
-        //view.backgroundColor = .red
-        if #available(iOS 13.0, *) {
-            self.contentView.backgroundColor = .systemGroupedBackground
-        } else {
-            // Fallback on earlier versions
-        }
-        
+
         setupTableView()
-        setupNavBar()
+        setupNavigation()
         //setupSearch() //dont work
         self.scrollWall!.addSubview(self.refreshControl)
     }
@@ -111,7 +87,6 @@ final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewContr
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
-        //refreshData(self)
     }
  
     override func viewWillAppear(_ animated: Bool) {
@@ -142,35 +117,32 @@ final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewContr
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
-        
-        if #available(iOS 11.0, *) {
-            self.navigationItem.searchController = searchController
-            navigationItem.hidesSearchBarWhenScrolling = false
-        } else {
-            tableView?.tableHeaderView = searchController.searchBar
-        }
+
+        self.navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
         self.definesPresentationContext = true
     }
  
-    private func setupNavBar() {
+    private func setupNavigation() {
+        navigationController?.navigationBar.prefersLargeTitles = false
+        view.backgroundColor = .secondarySystemGroupedBackground
+        self.contentView.backgroundColor = .systemGroupedBackground
         if UIDevice.current.userInterfaceIdiom == .pad  {
             navigationItem.title = "TheLight Software - Statistics"
         } else {
             navigationItem.title = "Statistics"
         }
-        self.navigationItem.largeTitleDisplayMode = .always
     }
     
     func setupTableView() {
+        // MARK: - TableHeader
+        self.tableView?.register(StatHeaderViewCell.self, forCellReuseIdentifier: "Header")
+
         self.tableView!.delegate = self
         self.tableView!.dataSource = self
         self.tableView!.sizeToFit()
         self.tableView!.clipsToBounds = true
-        if #available(iOS 13.0, *) {
-            self.tableView!.backgroundColor = .systemGroupedBackground
-        } else {
-            self.tableView!.backgroundColor = Color.LGrayColor
-        }
+        self.tableView!.backgroundColor = .systemGroupedBackground
         self.tableView!.tableFooterView = UIView(frame: .zero)
     }
     
@@ -288,17 +260,10 @@ extension StatisticVC: UITableViewDataSource {
         let CellIdentifier: String = "Cell"
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier, for: indexPath) as UITableViewCell? else { fatalError("Unexpected Index Path") }
-        
-        
-        
-        if #available(iOS 13.0, *) {
-            cell.backgroundColor = .systemGray6
-            cell.textLabel!.textColor = .systemBlue
-            cell.detailTextLabel!.textColor = .label
-        } else {
-            cell.textLabel!.textColor = .black
-            cell.detailTextLabel!.textColor = .black
-        }
+
+        cell.backgroundColor = .secondarySystemGroupedBackground
+        cell.textLabel!.textColor = .systemBlue
+        cell.detailTextLabel!.textColor = .label
         
         if UIDevice.current.userInterfaceIdiom == .pad {
             cell.textLabel!.font = Font.Stat.celltitlePad
@@ -705,53 +670,108 @@ extension StatisticVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         if (section == 0) {
-            return 0 //135 makes header
+            return 275
         } else if (section == 1) {
-            return 5
+            return 44
         } else if (section == 2) {
-            return 5
+            return 44
         } else if (section == 3) {
-            return 5
+            return 44
         } else if (section == 4) {
-            return 5
+            return 44
         }
         return 0
     }
-    /*
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
+
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if (section == 0) {
-            let vw = UIView()
-            //vw.frame = .initMake(0 , 0, tableView.frame.width, 175)
-            if UI_USER_INTERFACE_IDIOM() == .pad {
-                vw.backgroundColor = .black
-            } else {
-                vw.backgroundColor = Color.Stat.navColor
-            }
-            //tableView.tableHeaderView = vw
-     
-            segmentedControl = UISegmentedControl (items: ["WEEKLY", "MONTHLY", "YEARLY"])
-            segmentedControl.frame = .init(x: tableView.frame.width/2-125, y: 15, width: 250, height: 30)
-            segmentedControl.backgroundColor = Color.Stat.navColor //.red
-            segmentedControl.tintColor = .white
-            segmentedControl.selectedSegmentIndex = 1
-            segmentedControl.addTarget(self, action: #selector(segmentedControlAction), for: .valueChanged)
-            vw.addSubview(segmentedControl) 
-            
-            myLabel2 = UILabel(frame: .init(x: tableView.frame.width/2-25, y: 45, width: 50, height: 45))
-            vw.addSubview(myLabel2)
-            
-            let separatorLineView1 = UIView(frame: .init(x: tableView.frame.width/2-30, y: 80, width: 60, height: 1.9))
-            separatorLineView1.backgroundColor = .white
-            vw.addSubview(separatorLineView1)
-            
-            myLabel3 = UILabel(frame: .init(x: tableView.frame.width/2-70, y: 85, width: 140, height: 45))
-            vw.addSubview(myLabel3)
-            
-            return vw
+            return nil
+        } else if (section == 1) {
+            return "Weather Forecast"
+        } else if (section == 2) {
+            return "Stocks"
+        } else if (section == 3) {
+            return "Leads"
+        } else if (section == 4) {
+            return "Customer"
         }
         return nil
-    } */
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+
+        if (tableView == self.tableView) {
+
+             guard let header = tableView.dequeueReusableCell(withIdentifier: "Header") as? StatHeaderViewCell else { fatalError("Unexpected Index Path") }
+            if (section == 0) {
+
+
+                //tableView.tableHeaderView = header
+                header.myLabel1.text = String(format: "%@%d", "COUNT\n", (_feedLeadItems.count + _feedCustItems.count))
+                header.myLabel2.text = "NASDAQ \n \(tradeYQL?[0] ?? "00")"
+                header.myLabel15.text = "\(changeYQL?[0] ?? "0")"
+                header.myLabel25.text = "\(changeYQL?[0] ?? "0")"
+                header.myLabel3.text = "S&P 500 \n \(tradeYQL?[1] ?? "00")"
+                header.myLabel35.text = "\(changeYQL?[1] ?? "0")"
+
+                if (header.myLabel15.text?.contains("-"))! {
+                    header.separatorLine3.backgroundColor = .systemRed
+                    header.myLabel15.backgroundColor = .systemRed
+                } else {
+                    header.separatorLine3.backgroundColor = .systemGreen
+                    header.myLabel15.backgroundColor = .systemGreen
+                }
+
+                if (header.myLabel25.text?.contains("-"))! {
+                    header.separatorLine2.backgroundColor = .systemRed
+                    header.myLabel25.backgroundColor = .systemRed
+                } else {
+                    header.separatorLine2.backgroundColor = .systemGreen
+                    header.myLabel25.backgroundColor = .systemGreen
+                }
+
+                if (header.myLabel35.text?.contains("-"))! {
+                    header.separatorLine3.backgroundColor = .systemRed
+                    header.myLabel35.backgroundColor = .systemRed
+                } else {
+                    header.separatorLine3.backgroundColor = .systemGreen
+                    header.myLabel35.backgroundColor = .systemGreen
+                }
+
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
+                    header.titleLabeltxt1.text = "Parse"
+                } else {
+                    header.titleLabeltxt1.text = "Firebase"
+                }
+
+                if (tempYQL != nil) && (textYQL != nil) {
+                    header.titleLabeltxt2.text = String(format: "%@ %@ %@", "Weather:", "\(tempYQL!)°", "\(textYQL!)")
+                    if (textYQL!.contains("Rain") ||
+                        textYQL!.contains("Snow") ||
+                        textYQL!.contains("Thunderstorms") ||
+                        textYQL!.contains("Showers")) {
+                        header.titleLabeltxt2.textColor = .systemRed
+                    } else {
+                        header.titleLabeltxt2.textColor = .systemGreen
+                    }
+                } else {
+                    header.titleLabeltxt2.text = "not available"
+                    header.titleLabeltxt2.textColor = .systemBlue
+                }
+
+                header.myListLbl.text = String(format: "%@ %@", "Weather ", "")
+
+                return header
+            }
+        } else if (section == 2) {
+
+            let vw = UIView()
+            vw.backgroundColor = UIColor.red
+
+            return vw
+        }
+        return nil 
+    }
 }
 extension StatisticVC: UISearchResultsUpdating {
     

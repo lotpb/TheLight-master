@@ -9,7 +9,7 @@
 import UIKit
 import FirebaseAuth
 
-final class TabBarController: UITabBarController {
+final class TabBarController: UITabBarController, UISplitViewControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,26 +22,27 @@ final class TabBarController: UITabBarController {
                 self.present(navController, animated: true)
             }
         }
-
         setupSplitViewController()
         setupTabBar()
     }
 
     func setupSplitViewController() {
+        //if UIDevice.current.userInterfaceIdiom == .pad {
+        let splitViewController = UISplitViewController()
+        splitViewController.delegate = self
+        //let rootViewController = MasterViewController()
+        //let detailViewController = SnapshotVC()
 
-        /*
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        let storyboard1 = UIStoryboard(name: "Home", bundle: nil)
+        let rootViewController = storyboard1.instantiateViewController(withIdentifier: "homeId")
+        let detailViewController = storyboard1.instantiateViewController(withIdentifier: "snapshotId")
 
-            let splitViewController = UISplitViewController()
-            let rootViewController = MasterViewController()
-            let detailViewController = SnapshotVC()
+        let homeNavigationController = UINavigationController(rootViewController: rootViewController)
+        let secondNavigationController = UINavigationController(rootViewController: detailViewController)
 
-            let homeNavigationController = UINavigationController(rootViewController: rootViewController)
-            let secondNavigationController = UINavigationController(rootViewController: detailViewController)
-
-            splitViewController.viewControllers = [homeNavigationController, secondNavigationController]
-            //splitViewController.preferredDisplayMode = .allVisible
-        } */
+        splitViewController.viewControllers = [homeNavigationController, secondNavigationController]
+        //splitViewController.preferredDisplayMode = .allVisible
+        //}
     }
     
     func setupTabBar() {
@@ -63,7 +64,6 @@ final class TabBarController: UITabBarController {
         let layout6 = UICollectionViewFlowLayout()
         let myTab6 = UserProfileVC(collectionViewLayout: layout6)
 
-        
         let navController1 = UINavigationController(rootViewController: myTab1)
         navController1.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 1)
         //navController1.tabBarItem.selectedImage = #imageLiteral(resourceName: "home30sel")

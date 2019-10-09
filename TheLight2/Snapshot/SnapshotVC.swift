@@ -97,6 +97,22 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     
     var calendar: EKCalendar!
     var events: [EKEvent]?
+
+    weak var dayYQL: NSArray!
+    weak var textYQL: NSArray!
+
+    weak var symYQL: NSArray!
+    weak var tradeYQL: NSArray!
+    weak var changeYQL: NSArray!
+
+    var tempYQL: String!
+    var weathYQL: String!
+    var riseYQL: String!
+    var setYQL: String!
+    var humYQL: String!
+    var cityYQL: String!
+    var updateYQL: String!
+
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -161,7 +177,7 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     }
     
     func setupNavigation() {
-        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.prefersLargeTitles = false
         self.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
         self.navigationItem.leftItemsSupplementBackButton = true
         if UIDevice.current.userInterfaceIdiom == .pad  {
@@ -172,6 +188,8 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     }
     
     func setupTableView() {
+        // MARK: - TableHeader
+        self.tableView?.register(SnapHeaderviewCell.self, forCellReuseIdentifier: "Header")
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.backgroundColor = .systemGroupedBackground //Color.Snap.tablebackColor
@@ -447,7 +465,7 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                     return result
                 }
             case 2:
-                return 44
+                return 0
             default:
                 return result
             }
@@ -458,7 +476,7 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
             case 0:
                 return 44
             case 2:
-                return 44
+                return 0
             default:
                 return result
             }
@@ -548,13 +566,52 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         }
         return 0
     }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+
+        if (section == 0) {
+            return 185
+        }
+        return 0
+    }
     
     // create a seperator on bottom of tableview
-    internal func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {/*
-        if section == 0 {
-            return 0 // return height as per your requirement
-        } */
-        return 0 //CGFloat.leastNormalMagnitude
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+
+        if (tableView == self.tableView) {
+
+            if (section == 0) {
+                    guard let header = tableView.dequeueReusableCell(withIdentifier: "Header") as? SnapHeaderviewCell else { fatalError("Unexpected Index Path") }
+
+                    //tableView.tableHeaderView = vw
+
+                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
+                        header.titleLabeltxt1.text = "Parse"
+                    } else {
+                        header.titleLabeltxt1.text = "Firebase"
+                    }
+
+                    if (tempYQL != nil) && (textYQL != nil) {
+                        header.titleLabeltxt2.text = String(format: "%@ %@ %@", "Weather:", "\(tempYQL!)°", "\(textYQL!)")
+                        if (textYQL!.contains("Rain") ||
+                            textYQL!.contains("Snow") ||
+                            textYQL!.contains("Thunderstorms") ||
+                            textYQL!.contains("Showers")) {
+                            header.titleLabeltxt2.textColor = .systemRed
+                        } else {
+                            header.titleLabeltxt2.textColor = .systemGreen
+                        }
+                    } else {
+                        header.titleLabeltxt2.text = "not available"
+                        header.titleLabeltxt2.textColor = .systemRed
+                    }
+
+                   header.myListLbl.text = String(format: "%@%@", "MyGroups ", "9")
+
+                    return header
+                }
+        }
+        return nil
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -140,6 +140,7 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
             locationManager.activityType = .automotiveNavigation
             locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
             locationManager.allowsBackgroundLocationUpdates = true //added
+            locationManager.pausesLocationUpdatesAutomatically = false
         }
         //journal
         let annotations = LocationsStorage.shared.locations.map { annotationForLocation($0) }

@@ -66,8 +66,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             locationManager.requestAlwaysAuthorization()
             locationManager.startMonitoringVisits()
             locationManager.delegate = self
-            locationManager.pausesLocationUpdatesAutomatically = true
             locationManager.allowsBackgroundLocationUpdates = true
+            locationManager.pausesLocationUpdatesAutomatically = false
             locationManager.startUpdatingLocation()  // 2
         }
         
@@ -102,7 +102,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         cancelAllPandingBGTask()
-        getBackgroundData()
+        fireBackgrounfNotification()
         scheduleAppRefresh()
     }
     
@@ -147,24 +147,18 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    func getBackgroundData() {
-        let content = UNMutableNotificationContent()
-        content.title = "Background transfer! 🏈"
-        content.body = "Background transfer service: Download complete!"
-        content.badge = (UIApplication.shared.applicationIconBadgeNumber + 1) as NSNumber
-        content.sound = UNNotificationSound.default
-        content.categoryIdentifier = "myCategory"
-        
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval:60, repeats: false)
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-        center.delegate = self
-        center.add(request)
+    func handleAppRefresh(task: BGAppRefreshTask) {
+        scheduleAppRefresh()
+
+        task.expirationHandler = {}
+        fireBackgrounfNotification()
+        task.setTaskCompleted(success: true)
     }
 
     func scheduleAppRefresh() {
-        getBackgroundData()
+        fireBackgrounfNotification()
         let request = BGAppRefreshTaskRequest(identifier: backgroundTaskIdentifier)
-        request.earliestBeginDate = Date(timeIntervalSinceNow: 60 * 10)
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 2 * 60) // App Refresh after 2 minute.
 
         do {
             try BGTaskScheduler.shared.submit(request)
@@ -173,22 +167,18 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    func handleAppRefresh(task: BGAppRefreshTask) {
-        /*
-        scheduleAppRefresh()
+    func fireBackgrounfNotification() {
+        let content = UNMutableNotificationContent()
+        content.title = "Background transfer! 🏈"
+        content.body = "Background transfer service: Download complete!"
+        content.badge = (UIApplication.shared.applicationIconBadgeNumber + 1) as NSNumber
+        content.sound = UNNotificationSound.default
+        content.categoryIdentifier = "myCategory"
 
-        let url: URL = ""
-        var dataTask = backgroundURLSession.dataTask(with: url) { (data, response, error) in
-
-            let success = (200..<300).contains(response?.statusCode)
-            task.setTaskCompleted(success: success)
-        }
-
-        task.expirationHandler = {
-            dataTask.cancel()
-        }
-
-        dataTask.resume() */
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval:60, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        center.delegate = self
+        center.add(request)
     }
 }
 extension AppDelegate {

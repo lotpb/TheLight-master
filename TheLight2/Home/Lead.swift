@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwiftUI
 import Parse
 import FirebaseDatabase
 
@@ -106,14 +105,9 @@ final class Lead: UIViewController {
         self.tableView!.dataSource = self
         self.tableView!.sizeToFit()
         self.tableView!.clipsToBounds = true
-        if #available(iOS 13.0, *) {
-            //self.tableView!.backgroundColor = .systemGray4
-            let bgView = UIView()
-            bgView.backgroundColor = .secondarySystemGroupedBackground
-            tableView!.backgroundView = bgView
-        } else {
-            self.tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
-        }
+        let bgView = UIView()
+        bgView.backgroundColor = .secondarySystemGroupedBackground
+        tableView!.backgroundView = bgView
         self.tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
@@ -535,7 +529,7 @@ extension Lead: UITableViewDataSource {
             cell.customImagelabel.text = "Lead"
             cell.customImagelabel.tag = indexPath.row
             cell.customImagelabel.frame = .init(x: 10, y: 10, width: 50, height: 50)
-            cell.customImagelabel.backgroundColor = Color.Lead.buttonColor //Color.Cust.labelColor
+            cell.customImagelabel.backgroundColor = .systemRed //Color.Lead.buttonColor
             cell.customImagelabel.layer.cornerRadius = 25.0
             
             let tap = UITapGestureRecognizer(target: self, action: #selector(imgLoadSegue))

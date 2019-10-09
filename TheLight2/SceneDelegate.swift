@@ -67,6 +67,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             FirebaseRef.databaseRoot.keepSynced(true)
         }
 
+        /*
         /// MARK: - splitViewController
         let splitViewController = UISplitViewController()
         let rootViewController = MasterViewController()
@@ -76,7 +77,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let secondNavigationController = UINavigationController(rootViewController: detailViewController)
 
         splitViewController.viewControllers = [homeNavigationController, secondNavigationController]
-        //splitViewController.preferredDisplayMode = .allVisible
+        //splitViewController.preferredDisplayMode = .allVisible */
 
         /// MARK: - Register login
         if (!(defaults.bool(forKey: "registerKey")) || defaults.bool(forKey: "loginKey")) {

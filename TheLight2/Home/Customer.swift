@@ -108,14 +108,9 @@ final class Customer: UIViewController {
         self.tableView!.dataSource = self
         self.tableView!.sizeToFit()
         self.tableView!.clipsToBounds = true
-        if #available(iOS 13.0, *) {
-            let bgView = UIView()
-            bgView.backgroundColor = .secondarySystemGroupedBackground
-            tableView!.backgroundView = bgView
-        } else {
-            // Fallback on earlier versions
-            self.tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
-        }
+        let bgView = UIView()
+        bgView.backgroundColor = .secondarySystemGroupedBackground
+        tableView!.backgroundView = bgView
         self.tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
@@ -602,7 +597,7 @@ extension Customer: UITableViewDataSource {
             cell.customImagelabel.text = "Cust"
             cell.customImagelabel.tag = indexPath.row
             cell.customImagelabel.frame = .init(x: 10, y: 10, width: 50, height: 50)
-            cell.customImagelabel.backgroundColor = Color.Cust.labelColor1
+            cell.customImagelabel.backgroundColor = .systemBlue //Color.Cust.labelColor1
             cell.customImagelabel.layer.cornerRadius = 25.0
             let tap = UITapGestureRecognizer(target: self, action: #selector(imgLoadSegue))
             cell.customImagelabel.addGestureRecognizer(tap)

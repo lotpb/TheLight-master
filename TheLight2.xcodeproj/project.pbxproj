@@ -17,6 +17,7 @@
 		AF0AEB2E1F4B1DF300F0CCD7 /* Tornado.caf in Resources */ = {isa = PBXBuildFile; fileRef = AFF3A2911F4B124A00F1BC44 /* Tornado.caf */; };
 		AF0AEB301F4B220200F0CCD7 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF0AEB2F1F4B220200F0CCD7 /* CoreLocation.framework */; };
 		AF0C5DC6216CE630008862EE /* AccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0C5DC5216CE630008862EE /* AccountCell.swift */; };
+		AF12AABF234CFBE7008793B3 /* SplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12AABE234CFBE7008793B3 /* SplitViewController.swift */; };
 		AF142AC623303AAC00D39110 /* testTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF142AC523303AAC00D39110 /* testTable.swift */; };
 		AF144BD321694B890025E081 /* VisitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF144BD221694B890025E081 /* VisitModel.swift */; };
 		AF24556422BC3A4900E36583 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF24556022BC3A4900E36583 /* SceneDelegate.swift */; };
@@ -116,6 +117,8 @@
 		AFA6127020DFC43700B34288 /* Me.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFA6126F20DFC43700B34288 /* Me.storyboard */; };
 		AFA6127220DFCAF400B34288 /* Geotify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFA6127120DFCAF400B34288 /* Geotify.storyboard */; };
 		AFA6127420DFCC9E00B34288 /* Mapsearch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFA6127320DFCC9E00B34288 /* Mapsearch.storyboard */; };
+		AFB5A489234A15FD0061149D /* StatHeaderViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB5A488234A15FD0061149D /* StatHeaderViewCell.swift */; };
+		AFB5A48B234A28270061149D /* SnapHeadviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB5A48A234A28270061149D /* SnapHeadviewCell.swift */; };
 		AFBA4C3D21CBDFE000F70CBE /* SubTable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFBA4C3C21CBDFE000F70CBE /* SubTable.storyboard */; };
 		AFBA4C3F21CBE81100F70CBE /* SubApps.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFBA4C3E21CBE81100F70CBE /* SubApps.storyboard */; };
 		AFBA4C4121CC462100F70CBE /* Supporting.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFBA4C4021CC462100F70CBE /* Supporting.storyboard */; };
@@ -172,6 +175,7 @@
 		AF0AEB2F1F4B220200F0CCD7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		AF0C5DC5216CE630008862EE /* AccountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountCell.swift; sourceTree = "<group>"; };
 		AF0E15F41EE5D37B0061681C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreLocation.framework; sourceTree = "<group>"; };
+		AF12AABE234CFBE7008793B3 /* SplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewController.swift; sourceTree = "<group>"; };
 		AF142AC523303AAC00D39110 /* testTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testTable.swift; sourceTree = "<group>"; };
 		AF144BD221694B890025E081 /* VisitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VisitModel.swift; path = TheLight2/Model/VisitModel.swift; sourceTree = "<group>"; };
 		AF24556022BC3A4900E36583 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = TheLight2/SceneDelegate.swift; sourceTree = "<group>"; };
@@ -278,6 +282,8 @@
 		AFA6126F20DFC43700B34288 /* Me.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Me.storyboard; path = TheLight2/Layouts/Me.storyboard; sourceTree = "<group>"; };
 		AFA6127120DFCAF400B34288 /* Geotify.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Geotify.storyboard; path = TheLight2/Layouts/Geotify.storyboard; sourceTree = "<group>"; };
 		AFA6127320DFCC9E00B34288 /* Mapsearch.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Mapsearch.storyboard; path = TheLight2/Layouts/Mapsearch.storyboard; sourceTree = "<group>"; };
+		AFB5A488234A15FD0061149D /* StatHeaderViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatHeaderViewCell.swift; sourceTree = "<group>"; };
+		AFB5A48A234A28270061149D /* SnapHeadviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapHeadviewCell.swift; sourceTree = "<group>"; };
 		AFBA4C3C21CBDFE000F70CBE /* SubTable.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = SubTable.storyboard; path = TheLight2/Layouts/SubTable.storyboard; sourceTree = "<group>"; };
 		AFBA4C3E21CBE81100F70CBE /* SubApps.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = SubApps.storyboard; path = TheLight2/Layouts/SubApps.storyboard; sourceTree = "<group>"; };
 		AFBA4C4021CC462100F70CBE /* Supporting.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Supporting.storyboard; path = TheLight2/Layouts/Supporting.storyboard; sourceTree = "<group>"; };
@@ -429,6 +435,7 @@
 				AF4FA53E1ED2308200EDEFEA /* TheLight+navbar.swift */,
 				AF9897591ED216B900D14D7D /* LoginController.swift */,
 				AFC68ABE1EE5AA63006A7549 /* TabBarController.swift */,
+				AF12AABE234CFBE7008793B3 /* SplitViewController.swift */,
 				AF29BC2422D21E9500CFC3B8 /* ContentView.swift */,
 				AF9897731ED2172F00D14D7D /* Home */,
 				AF5C9E9622BEC922003D4A75 /* Preview Content */,
@@ -571,8 +578,10 @@
 			children = (
 				AF4FA53C1ED2307400EDEFEA /* CollectionViewCell.swift */,
 				AF4FA53A1ED2306900EDEFEA /* TableViewCell.swift */,
-				AF4FA5421ED2309600EDEFEA /* HeaderViewCell.swift */,
 				AF6E85122348D3DE00AAA468 /* MainHeaderViewCell.swift */,
+				AF4FA5421ED2309600EDEFEA /* HeaderViewCell.swift */,
+				AFB5A488234A15FD0061149D /* StatHeaderViewCell.swift */,
+				AFB5A48A234A28270061149D /* SnapHeadviewCell.swift */,
 			);
 			name = Cells;
 			path = TheLight2/Cells;
@@ -1003,6 +1012,7 @@
 				AFF3A27C1F4B11B600F1BC44 /* CustModel.swift in Sources */,
 				AF8AFBE71ED22F6900D383E3 /* Search.swift in Sources */,
 				AF86497420767FB90025AB93 /* SnapshotVC.swift in Sources */,
+				AFB5A48B234A28270061149D /* SnapHeadviewCell.swift in Sources */,
 				AF8AFB8B1ED22CE900D383E3 /* Customer.swift in Sources */,
 				AFD0BDE91FA0D8270030DA30 /* UserProfileListCell.swift in Sources */,
 				AF8AFBAE1ED22DB200D383E3 /* ContactVC.swift in Sources */,
@@ -1044,6 +1054,7 @@
 				AFD0BDEC1FA0D8270030DA30 /* UserProfileVC.swift in Sources */,
 				AF4FA53B1ED2306900EDEFEA /* TableViewCell.swift in Sources */,
 				AF0C5DC6216CE630008862EE /* AccountCell.swift in Sources */,
+				AF12AABF234CFBE7008793B3 /* SplitViewController.swift in Sources */,
 				AF8AFBC51ED22E5200D383E3 /* TrackCell.swift in Sources */,
 				AF8AFB8D1ED22CF000D383E3 /* Vendor.swift in Sources */,
 				AF8AFBDF1ED22F1D00D383E3 /* UserViewVC.swift in Sources */,
@@ -1053,6 +1064,7 @@
 				AF98975A1ED216B900D14D7D /* LoginController.swift in Sources */,
 				AF98974F1ED215BD00D14D7D /* AppDelegate.swift in Sources */,
 				AF36594F224ADE2300B1B09B /* PlaceFooterCell.swift in Sources */,
+				AFB5A489234A15FD0061149D /* StatHeaderViewCell.swift in Sources */,
 				AF8AFBE31ED22F3E00D383E3 /* BlogEditController.swift in Sources */,
 				AF8AFB9D1ED22D6700D383E3 /* NewEditData.swift in Sources */,
 				AFF3A2771F4B11B600F1BC44 /* AdModel.swift in Sources */,
