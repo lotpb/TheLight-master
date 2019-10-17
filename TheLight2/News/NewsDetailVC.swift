@@ -11,7 +11,7 @@ import Parse
 import FirebaseDatabase
 import AVFoundation
 
-
+@available(iOS 13.0, *)
 final class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDelegate, UISplitViewControllerDelegate {
     
     
@@ -195,14 +195,9 @@ final class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDele
     }
     
     func setupForm() {
-        
-        if #available(iOS 13.0, *) {
-            contentView.backgroundColor = .systemBackground
-            self.titleLabel.textColor = .label
-        } else {
-            contentView.backgroundColor = .white
-            self.titleLabel.textColor = .black
-        }
+
+        contentView.backgroundColor = .systemBackground
+        self.titleLabel.textColor = .label
         self.titleLabel.text = self.newsTitle
         self.titleLabel.numberOfLines = 2
         

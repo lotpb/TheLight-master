@@ -10,6 +10,8 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
+
+@available(iOS 13.0, *)
 final class NewEditData: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var tableView: UITableView?
@@ -586,6 +588,7 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
     }
 }
 //-----------------------end------------------------------
+@available(iOS 13.0, *)
 extension NewEditData: UITableViewDataSource {
     
     // MARK: - Table View
@@ -825,6 +828,7 @@ extension NewEditData: UITableViewDataSource {
         return cell
     }
 }
+@available(iOS 13.0, *)
 extension NewEditData: UITableViewDelegate {
   
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -865,6 +869,7 @@ extension NewEditData: UITableViewDelegate {
     }
 }
 // MARK: - UISearchBar Delegate
+@available(iOS 13.0, *)
 extension NewEditData: UISearchBarDelegate {
     /*
     func searchButton(_ sender: AnyObject) {
@@ -878,7 +883,7 @@ extension NewEditData: UISearchBarDelegate {
         self.present(searchController, animated: true)
     } */
 }
-
+@available(iOS 13.0, *)
 extension NewEditData: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {

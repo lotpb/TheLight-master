@@ -11,6 +11,8 @@ import Parse
 import FirebaseDatabase
 import FirebaseAuth
 
+
+@available(iOS 13.0, *)
 final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
 
     @IBOutlet weak var contentView: UIView!
@@ -103,15 +105,10 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         self.extendedLayoutIncludesOpaqueBars = true
-
-        if #available(iOS 13.0, *) {
-            //view?.backgroundColor = .systemGray6
-            contentView?.backgroundColor = .secondarySystemGroupedBackground
-            mainView?.backgroundColor = .clear
-            tableView?.backgroundColor = .clear
-        } else {
-            // Fallback on earlier versions
-        }
+        //view?.backgroundColor = .systemGray6
+        contentView?.backgroundColor = .secondarySystemGroupedBackground
+        mainView?.backgroundColor = .clear
+        tableView?.backgroundColor = .clear
         passFieldData()
         setupTableView()
         setupNavigation()
@@ -188,11 +185,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         self.tableView!.dataSource = self
         self.tableView!.estimatedRowHeight = 44
         self.tableView!.rowHeight = UITableView.automaticDimension
-        if #available(iOS 13.0, *) {
-            self.tableView!.backgroundColor = .secondarySystemGroupedBackground
-        } else {
-            // Fallback on earlier versions
-        }
+        self.tableView!.backgroundColor = .secondarySystemGroupedBackground
         self.tableView!.tableFooterView = UIView(frame: .zero)
     }
     
@@ -211,11 +204,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         NotificationCenter.default.addObserver(self, selector: (#selector(EditData.updatePicker)), name: UITextField.textDidBeginEditingNotification, object: nil)
         
         profileImageView!.layer.cornerRadius = 32.0
-        if #available(iOS 13.0, *) {
-            profileImageView!.layer.borderColor = UIColor.systemBackground.cgColor
-        } else {
-            profileImageView!.layer.borderColor = UIColor.white.cgColor
-        }
+        profileImageView!.layer.borderColor = UIColor.systemBackground.cgColor
         profileImageView!.layer.borderWidth = 2.0
         profileImageView!.layer.masksToBounds = true
     }
@@ -1271,6 +1260,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
     }
 }
+@available(iOS 13.0, *)
 extension EditData: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -1360,11 +1350,7 @@ extension EditData: UITableViewDataSource {
         textframe!.autocorrectionType = .no
         textframe!.clearButtonMode = .whileEditing
         textframe!.autocapitalizationType = .words
-        if #available(iOS 13.0, *) {
-            textframe!.textColor = .label
-        } else {
-            textframe!.textColor = .black
-        }
+        textframe!.textColor = .label
         
         self.comment?.autocorrectionType = .default
         self.callback?.clearButtonMode = .never
@@ -1777,6 +1763,7 @@ extension EditData: UITableViewDataSource {
         return cell
     }
 }
+@available(iOS 13.0, *)
 extension EditData: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -1808,7 +1795,7 @@ extension EditData: UITableViewDelegate {
     }
 
 }
-
+@available(iOS 13.0, *)
 extension EditData: LookupDataDelegate {
     func cityFromController(_ passedData: String) {
         self.city.text = passedData as String

@@ -9,6 +9,8 @@
 import UIKit
 import MapKit
 
+
+@available(iOS 13.0, *)
 final class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UISplitViewControllerDelegate {
     
     //@IBOutlet weak var destinationSearchBarContainer: UIView!
@@ -267,6 +269,7 @@ final class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
 }
 //Drops Cutsom Pin Annotation In the mapView
+@available(iOS 13.0, *)
 extension MapsearchVC: HandleMapSearch {
     
     func dropPinZoomIn(placemark:MKPlacemark){

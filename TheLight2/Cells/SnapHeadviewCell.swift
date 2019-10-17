@@ -8,7 +8,7 @@
 
 import UIKit
 
-
+@available(iOS 13.0, *)
 final class SnapHeaderviewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?){

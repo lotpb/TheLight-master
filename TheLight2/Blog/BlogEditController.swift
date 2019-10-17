@@ -10,6 +10,8 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
+
+@available(iOS 13.0, *)
 final class BlogEditController: UIViewController {
     
     var replylist = [BlogModel]()
@@ -96,20 +98,12 @@ final class BlogEditController: UIViewController {
     func setupForm() {
         
         self.view.backgroundColor = .lightGray
-        if #available(iOS 13.0, *) {
-            self.toolBar!.barTintColor = .systemGray
-        } else {
-            self.toolBar!.barTintColor = .white
-        }
+        self.toolBar!.barTintColor = .systemGray
         //self.toolBar!.isTranslucent = false set in AppDelegate
         self.toolBar!.layer.masksToBounds = true
         
         self.Like!.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
-        if #available(iOS 13.0, *) {
-            self.Like!.setTitleColor(.label, for: .normal)
-        } else {
-            self.Like!.setTitleColor(.systemGray, for: .normal)
-        }
+        self.Like!.setTitleColor(.label, for: .normal)
         self.Like?.frame = .init(x: 0, y: 0, width: 90, height: 30)
         if (self.liked == nil) || (self.liked == 0)  {
             self.Like!.tintColor = .lightGray
@@ -152,14 +146,9 @@ final class BlogEditController: UIViewController {
         self.listTableView!.estimatedRowHeight = 75
         self.listTableView!.rowHeight = UITableView.automaticDimension
         self.listTableView!.tableFooterView = UIView(frame: .zero)
-        
-        if #available(iOS 13.0, *) {
-            self.tableView!.backgroundColor = .systemGray4
-            self.listTableView!.backgroundColor = .systemGray4
-        } else {
-            self.tableView!.backgroundColor = .white
-            self.listTableView!.backgroundColor = .white
-        }
+
+        self.tableView!.backgroundColor = .systemGray4
+        self.listTableView!.backgroundColor = .systemGray4
     }
     
     @objc func refreshData(sender:AnyObject) {
@@ -443,6 +432,7 @@ final class BlogEditController: UIViewController {
         }
     }
 }
+@available(iOS 13.0, *)
 extension BlogEditController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -472,11 +462,7 @@ extension BlogEditController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? TableViewCell else { fatalError("Unexpected Index Path") }
             
             cell.selectionStyle = .none
-            if #available(iOS 13.0, *) {
-                cell.titleLabel?.textColor = .label
-            } else {
-                // Fallback on earlier versions
-            }
+            cell.titleLabel?.textColor = .label
             cell.subtitleLabel?.textColor = Color.twitterText
             cell.customImageView.frame = .init(x: 15, y: 11, width: 50, height: 50)
             cell.customImageView.layer.cornerRadius = 0
@@ -672,7 +658,7 @@ extension BlogEditController: UITableViewDataSource {
         return UITableViewCell()
     }
 }
-
+@available(iOS 13.0, *)
 extension BlogEditController: UITableViewDelegate {
     // MARK: - Content Menu
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

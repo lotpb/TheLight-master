@@ -27,6 +27,8 @@ enum SettingName: String {
     case SwitchAccount = "Switch Account"
 }
 
+
+@available(iOS 13.0, *)
 final class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     lazy var blackView = UIView()
@@ -53,14 +55,10 @@ final class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollection
     func showSettings() {
         //show menu
         
-        if let window = UIApplication.shared.keyWindow {
-            
+        if let window = UIApplication.shared.windows.first {
             blackView.backgroundColor = UIColor(white: 0, alpha: 0.5)
-            
             blackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
-            
             window.addSubview(blackView)
-            
             window.addSubview(collectionView)
             
             let height: CGFloat = CGFloat(settings.count) * cellHeight
@@ -71,11 +69,8 @@ final class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollection
             blackView.alpha = 0
             
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                
                 self.blackView.alpha = 1
-                
                 self.collectionView.frame = .init(x: 0, y: y, width: self.collectionView.frame.width, height: self.collectionView.frame.height)
-                
                 }, completion: nil)
         }
     }
@@ -85,7 +80,7 @@ final class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollection
             
             self.blackView.alpha = 0
             
-            if let window = UIApplication.shared.keyWindow {
+            if let window = UIApplication.shared.windows.first {
                 self.collectionView.frame = .init(x: 0, y: window.frame.height, width: self.collectionView.frame.width, height: self.collectionView.frame.height)
             }
             

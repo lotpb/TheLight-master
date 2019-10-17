@@ -10,6 +10,7 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
+@available(iOS 13.0, *)
 final class ZipcodeVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
@@ -335,6 +336,7 @@ final class ZipcodeVC: UIViewController {
     }
 }
 //-----------------------end------------------------------
+@available(iOS 13.0, *)
 extension ZipcodeVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -407,6 +409,7 @@ extension ZipcodeVC: UITableViewDataSource {
         }
     }
 }
+@available(iOS 13.0, *)
 extension ZipcodeVC: UITableViewDelegate {
    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -506,6 +509,7 @@ extension ZipcodeVC: UITableViewDelegate {
         pasteBoard.string = cell!.textLabel?.text
     }
 }
+@available(iOS 13.0, *)
 extension ZipcodeVC: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {

@@ -9,6 +9,8 @@
 import UIKit
 import FirebaseDatabase
 
+
+@available(iOS 13.0, *)
 final class ReplyTableCell: UITableViewCell {
     
     var postReply: BlogModel? {

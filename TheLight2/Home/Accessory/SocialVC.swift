@@ -9,6 +9,8 @@
 import UIKit
 import Social
 
+
+@available(iOS 13.0, *)
 final class SocialVC: UIViewController, UITextViewDelegate {
 
     @IBOutlet weak var noteTextview: UITextView!
@@ -17,13 +19,8 @@ final class SocialVC: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.extendedLayoutIncludesOpaqueBars = true
-        
-        if #available(iOS 13.0, *) {
-            self.view.backgroundColor = .secondarySystemGroupedBackground
-            self.noteTextview.backgroundColor = .systemBackground
-        } else {
-            // Fallback on earlier versions
-        }
+        self.view.backgroundColor = .secondarySystemGroupedBackground
+        self.noteTextview.backgroundColor = .systemBackground
         configureNoteTextView()
         noteTextview.delegate = self
         

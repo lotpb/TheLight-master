@@ -12,6 +12,8 @@ import FirebaseDatabase
 import FirebaseAuth
 import Social
 
+
+@available(iOS 13.0, *)
 final class Blog: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
@@ -111,13 +113,9 @@ final class Blog: UIViewController {
         
         searchController.obscuresBackgroundDuringPresentation = false
         self.navigationController?.navigationBar.topItem?.searchController = searchController
-        
-        if #available(iOS 11.0, *) {
-            self.navigationItem.searchController = searchController
-            navigationItem.hidesSearchBarWhenScrolling = true
-        } else {
-            tableView?.tableHeaderView = searchController.searchBar
-        }
+
+        self.navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = true
         self.definesPresentationContext = true
     }
     
@@ -136,11 +134,7 @@ final class Blog: UIViewController {
         self.tableView!.rowHeight = UITableView.automaticDimension
         self.tableView!.sizeToFit()
         self.tableView!.clipsToBounds = true
-        if #available(iOS 13.0, *) {
-            self.tableView!.backgroundColor = .systemGray4
-        } else {
-            self.tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
-        }
+        self.tableView!.backgroundColor = .systemGray4
         self.tableView!.tableFooterView = UIView(frame: .zero)
 
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
@@ -482,6 +476,7 @@ final class Blog: UIViewController {
         }
     }
 }
+@available(iOS 13.0, *)
 extension Blog: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -515,13 +510,8 @@ extension Blog: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? TableViewCell else { fatalError("Unexpected Index Path") }
             
             cell.selectionStyle = .none
-            
-            if #available(iOS 13.0, *) {
-                cell.backgroundColor = .secondarySystemGroupedBackground
-                cell.blogtitleLabel.textColor = .label
-            } else {
-                // Fallback on earlier versions
-            }
+            cell.backgroundColor = .secondarySystemGroupedBackground
+            cell.blogtitleLabel.textColor = .label
             cell.blogmsgDateLabel?.textColor = .systemGray
             cell.blogsubtitleLabel?.textColor = Color.twitterText
             cell.customImagelabel.backgroundColor = .clear //fix
@@ -677,7 +667,7 @@ extension Blog: UITableViewDataSource {
         }
     }
 }
-
+@available(iOS 13.0, *)
 extension Blog: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -802,7 +792,7 @@ extension Blog: UITableViewDelegate {
         }
     }
 }
-
+@available(iOS 13.0, *)
 extension Blog: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {

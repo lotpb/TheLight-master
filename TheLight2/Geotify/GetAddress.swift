@@ -9,8 +9,9 @@
 import UIKit
 import MapKit
 
+
+@available(iOS 13.0, *)
 final class GetAddress: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
     
     @IBOutlet weak var tableView: UITableView?
     // MARK: NavigationController Hidden

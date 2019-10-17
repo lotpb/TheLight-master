@@ -8,7 +8,7 @@
 
 import UIKit
 
-
+@available(iOS 13.0, *)
 class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
     
     fileprivate let cellId = "cellId"
@@ -20,11 +20,7 @@ class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.translatesAutoresizingMaskIntoConstraints = false
-        if #available(iOS 13.0, *) {
-            cv.backgroundColor = .systemFill
-        } else {
-            cv.backgroundColor = Color.Mile.collectColor
-        }
+        cv.backgroundColor = .systemFill
         cv.dataSource = self
         cv.delegate = self
         return cv
@@ -39,7 +35,7 @@ class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         return refreshControl
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -84,6 +80,7 @@ class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
     }
     
 }
+@available(iOS 13.0, *)
 extension PlaceFeedCell: UICollectionViewDataSource {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -96,28 +93,16 @@ extension PlaceFeedCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! PlaceCell
-        
-        if #available(iOS 13.0, *) {
-            cell.backgroundColor = .systemBackground
-        } else {
-            cell.backgroundColor = Color.Mile.cellColor
-        } 
+
+        cell.backgroundColor = .systemBackground
         cell.layer.cornerRadius = 8.0
         cell.layer.borderWidth = 1.0
         cell.layer.borderColor = Color.Mile.cellborderColor.cgColor
-        
-        
-        if #available(iOS 13.0, *) {
-            cell.miletextLabel.textColor = .systemGray
-            cell.costTextLabel.textColor = .systemGray
-            cell.titleTimeLabel.textColor = .systemGray
-            cell.subtitleTimeLabel.textColor = .systemGray
-        } else {
-            cell.miletextLabel.textColor = .darkGray
-            cell.costTextLabel.textColor = .darkGray
-            cell.titleTimeLabel.textColor = .darkGray
-            cell.subtitleTimeLabel.textColor = .darkGray
-        }
+
+        cell.miletextLabel.textColor = .systemGray
+        cell.costTextLabel.textColor = .systemGray
+        cell.titleTimeLabel.textColor = .systemGray
+        cell.subtitleTimeLabel.textColor = .systemGray
         
         cell.mileLabel.font = Font.celltitle22b
         cell.miletextLabel.font = Font.celltitle12r
@@ -179,7 +164,8 @@ extension PlaceFeedCell: UICollectionViewDataSource {
         vc.startCoordinates = cell.startCoordinates
         vc.endCoordinates = cell.endCoordinates
         let controller = UINavigationController(rootViewController: vc)
-        UIApplication.shared.keyWindow?.rootViewController?.present(controller, animated: true)
+        let windows = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+        windows?.rootViewController?.present(controller, animated: true)
     }
     /*
     func setEditing(_ editing: Bool, animated: Bool) {

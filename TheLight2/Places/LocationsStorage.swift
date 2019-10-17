@@ -29,6 +29,8 @@
 import Foundation
 import CoreLocation
 
+
+@available(iOS 13.0, *)
 class LocationsStorage {
     static let shared = LocationsStorage()
     

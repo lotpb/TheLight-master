@@ -14,6 +14,7 @@ import FirebaseAnalytics
 //import SwiftKeychainWrapper
 
 
+@available(iOS 13.0, *)
 final class MasterViewController: UITableViewController, UISplitViewControllerDelegate {
 
     var collapseDetailViewController: Bool = true
@@ -53,7 +54,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
         versionCheck()
         speech()
         updateYahoo()
-        fetchUserIds()
+        //fetchUserIds()
         edgesForExtendedLayout = []  // FIXME: header space
 
         // Sound
@@ -82,12 +83,12 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         refreshData()
+        fetchUserIds()
         self.tabBarController?.tabBar.isHidden = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
         //clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
         setMainNavItems()
     }
@@ -113,46 +114,6 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
         }
 
         return controller.collapseDetailViewController
-    }
-    
-    private func fetchUserIds() {
-        
-        // MARK: - Login
-        let userId: String = (defaults.object(forKey: "usernameKey") as! String?)!
-        let userpassword: String = (defaults.object(forKey: "passwordKey") as! String?)!
-        let useremail: String = (defaults.object(forKey: "emailKey") as! String?)!
-        /*
-        let userSuccessful: Bool = KeychainWrapper.standard.set(userId, forKey: "usernameKey")
-        let passSuccessful: Bool = KeychainWrapper.standard.set(userpassword, forKey: "passwordKey")
-        
-        // MARK: - Keychain
-        if (userSuccessful == true), (passSuccessful == true) {
-            print("Keychain successful")
-        } else {
-            print("Keychain failed")
-        } */
-        
-        // MARK: - Parse
-        if ((defaults.string(forKey: "backendKey")) == "Parse") {
-            
-            PFUser.logInWithUsername(inBackground: userId, password:userpassword) { (user, error) in
-                if error != nil {
-                    print("Error: \(String(describing: error)) \(String(describing: error!._userInfo))")
-                    return
-                }
-            }
-            
-        } else {
-            //firebase
-            Auth.auth().signIn(withEmail: useremail, password: userpassword, completion: { (user, err) in
-                if let err = err{
-                    self.simpleAlert(title: "Oooops", message: "Your username and password does not match")
-                    print("Failed to login:", err)
-                    return
-                }
-                print("Succesfully logged back in with user:", user?.user.uid ?? "")
-            })
-        }
     }
 
     func setupNavigation() {
@@ -324,7 +285,54 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     }
     
     // MARK: - Logout
-    @objc func handleLogout(_ sender: Any) {
+    func fetchUserIds() {
+
+        // MARK: - Login
+        let userId: String = (defaults.object(forKey: "usernameKey") as! String?)!
+        let userpassword: String = (defaults.object(forKey: "passwordKey") as! String?)!
+        let useremail: String = (defaults.object(forKey: "emailKey") as! String?)!
+        /*
+        let userSuccessful: Bool = KeychainWrapper.standard.set(userId, forKey: "usernameKey")
+        let passSuccessful: Bool = KeychainWrapper.standard.set(userpassword, forKey: "passwordKey")
+
+        // MARK: - Keychain
+        if (userSuccessful == true), (passSuccessful == true) {
+            print("Keychain successful")
+        } else {
+            print("Keychain failed")
+        } */
+
+        // MARK: - Parse
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
+
+            PFUser.logInWithUsername(inBackground: userId, password:userpassword) { (user, error) in
+                if error != nil {
+                    print("Error: \(String(describing: error)) \(String(describing: error!._userInfo))")
+                    return
+                }
+            }
+
+        } else {
+            //firebase
+            Auth.auth().signIn(withEmail: useremail, password: userpassword, completion: { (user, err) in
+                if let err = err {
+                    print("Failed to login:", err)
+                    self.simpleAlert(title: "Oooops", message: "Your username and password does not match")
+                    //self.handleLogout()
+                    /*
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let vc = storyboard.instantiateViewController(withIdentifier: "loginIDController")
+                        vc.modalPresentationStyle = .fullScreen
+                        self.present(vc, animated: true) */
+
+                    return
+                }
+                print("Succesfully logged back in with user:", user?.user.uid ?? "")
+            })
+        }
+    }
+    
+    @objc func handleLogout() {
         //if ((defaults.string(forKey: "backendKey")) == "Firebase") {
             do {
                 try
@@ -336,6 +344,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
 
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "loginIDController")
+        vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
     }
     
@@ -669,7 +678,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
         }
     }
 }
-//-----------------------end------------------------------
+@available(iOS 13.0, *)
 extension MasterViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {

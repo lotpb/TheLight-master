@@ -7,7 +7,7 @@
 //
 import UIKit
 
-
+@available(iOS 13.0, *)
 final class MainHeaderViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?){

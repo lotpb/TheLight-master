@@ -9,6 +9,7 @@
 import UIKit
 import FirebaseAuth
 
+@available(iOS 13.0, *)
 final class TabBarController: UITabBarController, UISplitViewControllerDelegate {
     
     override func viewDidLoad() {

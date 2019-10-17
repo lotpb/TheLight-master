@@ -10,6 +10,8 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
+
+@available(iOS 13.0, *)
 final class SalesmanVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView?
@@ -323,7 +325,7 @@ final class SalesmanVC: UIViewController {
         }
     }
 }
-//-----------------------end------------------------------
+@available(iOS 13.0, *)
 extension SalesmanVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -456,6 +458,7 @@ extension SalesmanVC: UITableViewDataSource {
         // }
     }
 }
+@available(iOS 13.0, *)
 extension SalesmanVC: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -512,6 +515,7 @@ extension SalesmanVC: UITableViewDelegate {
         pasteBoard.string = cell!.textLabel?.text
     }
 }
+@available(iOS 13.0, *)
 extension SalesmanVC: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {

@@ -5,10 +5,11 @@
 //  Created by Peter Balsamo on 12/20/15.
 //  Copyright © 2015 Peter Balsamo. All rights reserved.
 //
-
+/*
 import UIKit
 import UserNotifications
 
+@available(iOS 13.0, *)
 final class NotificationVC: UIViewController {
     
     @IBOutlet weak var contentView: UIView!
@@ -24,12 +25,7 @@ final class NotificationVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.extendedLayoutIncludesOpaqueBars = true
-        
-        if #available(iOS 13.0, *) {
-            self.contentView.backgroundColor = .secondarySystemGroupedBackground
-        } else {
-            // Fallback on earlier versions
-        }
+        self.contentView.backgroundColor = .secondarySystemGroupedBackground
         
         self.customMessage.clearButtonMode = .always
         self.customMessage!.font = celltitle
@@ -78,6 +74,7 @@ final class NotificationVC: UIViewController {
     
     // MARK: - localNotification
     
+    @available(iOS 13.0, *)
     @IBAction func datePickerDidSelectNewDate(_ sender: UIDatePicker) {
         let selectedDate = sender.date
         print("Selected date: \(selectedDate)")
@@ -156,152 +153,74 @@ final class NotificationVC: UIViewController {
     
     
     func memberNotification() {
-      
-        if #available(iOS 10.0, *) {
 
-            let content = UNMutableNotificationContent()
-            content.title = "Membership Status 🏀"
-            content.body = "Our system has detected that your membership is inactive."
-            content.badge = (UIApplication.shared.applicationIconBadgeNumber + 1) as NSNumber
-            content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "Tornado.caf"))
-            content.categoryIdentifier = "myCategory"
-            
-            let imageName = "applelogo"
-            guard let imageURL = Bundle.main.url(forResource: imageName, withExtension: "png") else { return }
-            let attachment = try! UNNotificationAttachment(identifier: imageName, url: imageURL, options: .none)
-            content.attachments = [attachment]
-            
-          //content.userInfo = ["customNumber": 100]
-            content.userInfo = ["link":"https://www.facebook.com/himinihana/photos/a.104501733005072.5463.100117360110176/981809495274287"]
-            
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
-            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        let content = UNMutableNotificationContent()
+        content.title = "Membership Status 🏀"
+        content.body = "Our system has detected that your membership is inactive."
+        content.badge = (UIApplication.shared.applicationIconBadgeNumber + 1) as NSNumber
+        content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "Tornado.caf"))
+        content.categoryIdentifier = "myCategory"
 
-            center.add(request, withCompletionHandler: nil)
-            
-        } else {
-            
-            let localNotification: UILocalNotification = UILocalNotification()
-            localNotification.alertAction = "Membership Status"
-            localNotification.alertBody = "Our system has detected that your membership is inactive."
-            localNotification.fireDate = Date(timeIntervalSinceNow: 15)
-            localNotification.timeZone = .current
-            localNotification.category = "status"
-            localNotification.userInfo = ["value": "inactiveMembership"]
-            localNotification.applicationIconBadgeNumber = UIApplication.shared.applicationIconBadgeNumber + 1
-            localNotification.soundName = "Tornado.caf"
-            UIApplication.shared.scheduleLocalNotification(localNotification)
-        }
+        let imageName = "applelogo"
+        guard let imageURL = Bundle.main.url(forResource: imageName, withExtension: "png") else { return }
+        let attachment = try! UNNotificationAttachment(identifier: imageName, url: imageURL, options: .none)
+        content.attachments = [attachment]
+
+        //content.userInfo = ["customNumber": 100]
+        content.userInfo = ["link":"https://www.facebook.com/himinihana/photos/a.104501733005072.5463.100117360110176/981809495274287"]
+
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+
+        center.add(request, withCompletionHandler: nil)
         
     }
     
     
     func blogNotification() {
-        
-        if #available(iOS 10.0, *) {
-            let content = UNMutableNotificationContent()
-            content.title = "Blog Post 🏀"
-            content.subtitle = "New message posted"
-            content.body = "TheLight just posted a new message"
-            content.badge = (UIApplication.shared.applicationIconBadgeNumber + 1) as NSNumber
-            content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "Tornado.caf"))
-            content.categoryIdentifier = "myCategory"
-            
-            let imageURL = Bundle.main.url(forResource: "comments", withExtension: "png")
-            let attachment = try! UNNotificationAttachment(identifier: "", url: imageURL!, options: nil)
-            content.attachments = [attachment]
-            content.userInfo = ["link":"https://www.facebook.com/himinihana/photos/a.104501733005072.5463.100117360110176/981809495274287"]
-            
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
-            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-            
-            center.add(request, withCompletionHandler: nil)
-            
-        } else {
-            
-        let localNotification: UILocalNotification = UILocalNotification()
-        localNotification.alertAction = "Blog Post"
-        localNotification.alertBody = "New Blog Posted at TheLight"
-        localNotification.fireDate = Date(timeIntervalSinceNow: 15)
-        localNotification.timeZone = .current
-        localNotification.applicationIconBadgeNumber = UIApplication.shared.applicationIconBadgeNumber + 1
-        localNotification.soundName = UILocalNotificationDefaultSoundName
-        UIApplication.shared.scheduleLocalNotification(localNotification)
-        }
+
+        let content = UNMutableNotificationContent()
+        content.title = "Blog Post 🏀"
+        content.subtitle = "New message posted"
+        content.body = "TheLight just posted a new message"
+        content.badge = (UIApplication.shared.applicationIconBadgeNumber + 1) as NSNumber
+        content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "Tornado.caf"))
+        content.categoryIdentifier = "myCategory"
+
+        let imageURL = Bundle.main.url(forResource: "comments", withExtension: "png")
+        let attachment = try! UNNotificationAttachment(identifier: "", url: imageURL!, options: nil)
+        content.attachments = [attachment]
+        content.userInfo = ["link":"https://www.facebook.com/himinihana/photos/a.104501733005072.5463.100117360110176/981809495274287"]
+
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+
+        center.add(request, withCompletionHandler: nil)
     }
     
     func HeyYouNotification() {
         //setup for 2:30PM
-        if #available(iOS 10.0, *) {
-            let content = UNMutableNotificationContent()
-            content.title = "Work-Out and be awesome! 🏀"
-            content.body = "Hey you! Yeah you! Time to Workout!"
-            content.badge = (UIApplication.shared.applicationIconBadgeNumber + 1) as NSNumber
-            content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "Tornado.caf"))
-            content.categoryIdentifier = "myCategory"
-            
-            let imageName = "applelogo"
-            guard let imageURL = Bundle.main.url(forResource: imageName, withExtension: "png") else { return }
-            let attachment = try! UNNotificationAttachment(identifier: imageName, url: imageURL, options: .none)
-            content.attachments = [attachment]
-            content.userInfo = ["link":"https://www.facebook.com/himinihana/photos/a.104501733005072.5463.100117360110176/981809495274287"]
-            
-            var dateComponents = DateComponents()
-            dateComponents.hour = 14
-            dateComponents.minute = 30
-            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-          //let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
-            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-            
-            center.add(request, withCompletionHandler: nil)
-            
-        } else {
-        
-        let localNotification: UILocalNotification = UILocalNotification()
-        localNotification.alertAction = "be awesome!"
-        localNotification.alertBody = "Hey you! Yeah you! Swipe to unlock!"
-        localNotification.fireDate = Date(timeIntervalSinceNow: 15)
-        localNotification.timeZone = .current
-        localNotification.userInfo = ["value": "w00t"]
-        localNotification.applicationIconBadgeNumber = UIApplication.shared.applicationIconBadgeNumber + 1
-        localNotification.soundName = "Tornado.caf"
-        UIApplication.shared.scheduleLocalNotification(localNotification)
-        }
-        
-    }
-    
-    func promoNotification() {
-        
-        if #available(iOS 10.0, *) {
-            let content = UNMutableNotificationContent()
-            content.title = "Promo Sale 🏀"
-            content.body = "Forget Something? Come back and SAVE 15% with Promo Code MYCART"
-            content.badge = (UIApplication.shared.applicationIconBadgeNumber + 1) as NSNumber
-            content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "Tornado"))
-            content.categoryIdentifier = "myCategory"
-            
-            let imageURL = Bundle.main.url(forResource: "calendar", withExtension: "png")
-            let attachment = try! UNNotificationAttachment(identifier: "", url: imageURL!, options: nil)
-            content.attachments = [attachment]
-            content.userInfo = ["value":"Hello there!", "date": NSDate()]
-            
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
-            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-            center.add(request, withCompletionHandler: nil)
-            
-        } else {
-        
-        let localNotification: UILocalNotification = UILocalNotification()
-        localNotification.alertAction = "TheLight!"
-        localNotification.alertBody = "Forget Something? Come back and SAVE 15% with Promo Code MYCART"
-        localNotification.fireDate = Date(timeIntervalSinceNow: 15)
-        localNotification.timeZone = .current
-        localNotification.userInfo = ["value": "w00t"]
-        localNotification.applicationIconBadgeNumber = UIApplication.shared.applicationIconBadgeNumber + 1
-        localNotification.soundName = "Tornado.caf"
-        UIApplication.shared.scheduleLocalNotification(localNotification)
-        }
-        
+        let content = UNMutableNotificationContent()
+        content.title = "Work-Out and be awesome! 🏀"
+        content.body = "Hey you! Yeah you! Time to Workout!"
+        content.badge = (UIApplication.shared.applicationIconBadgeNumber + 1) as NSNumber
+        content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "Tornado.caf"))
+        content.categoryIdentifier = "myCategory"
+
+        let imageName = "applelogo"
+        guard let imageURL = Bundle.main.url(forResource: imageName, withExtension: "png") else { return }
+        let attachment = try! UNNotificationAttachment(identifier: imageName, url: imageURL, options: .none)
+        content.attachments = [attachment]
+        content.userInfo = ["link":"https://www.facebook.com/himinihana/photos/a.104501733005072.5463.100117360110176/981809495274287"]
+
+        var dateComponents = DateComponents()
+        dateComponents.hour = 14
+        dateComponents.minute = 30
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        //let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+
+        center.add(request, withCompletionHandler: nil)
     }
     
     
@@ -358,5 +277,5 @@ final class NotificationVC: UIViewController {
         self.performSegue(withIdentifier: "notificationdetailsegue", sender: self)
     }
     
-}
+} */
 

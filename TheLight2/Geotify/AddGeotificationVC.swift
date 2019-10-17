@@ -9,10 +9,13 @@
 import UIKit
 import MapKit
 
+@available(iOS 13.0, *)
 protocol AddGeotificationsViewControllerDelegate {
     func addGeotificationViewController(controller: AddGeotificationVC, didAddCoordinate coordinate: CLLocationCoordinate2D, radius: Double, identifier: String, note: String, eventType: Geotification.EventType)
 }
 
+
+@available(iOS 13.0, *)
 final class AddGeotificationVC: UITableViewController {
     
     @IBOutlet var addButton: UIBarButtonItem!

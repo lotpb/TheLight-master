@@ -12,6 +12,8 @@ protocol HandleMapSearch {
     func dropPinZoomIn(placemark:MKPlacemark)
 }
 
+
+@available(iOS 13.0, *)
 final class DetailedMapVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var detailedMapView: MKMapView!
     @IBOutlet weak var tableView: UITableView!
@@ -145,6 +147,7 @@ final class DetailedMapVC: UIViewController, MKMapViewDelegate, CLLocationManage
     }
 }
 //Drops Cutsom Pin Annotation In the mapView
+@available(iOS 13.0, *)
 extension DetailedMapVC: HandleMapSearch {
     func dropPinZoomIn(placemark:MKPlacemark){
         // cache the pin

@@ -18,6 +18,8 @@ import Parse
 import FirebaseDatabase
 import FirebaseAuth
 
+
+@available(iOS 13.0, *)
 class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
 
     @IBOutlet private weak var playerView: UIView!
@@ -873,6 +875,7 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
     }
 }
 
+@available(iOS 13.0, *)
 class headerCell: UITableViewCell {
     
     var defaults = UserDefaults.standard

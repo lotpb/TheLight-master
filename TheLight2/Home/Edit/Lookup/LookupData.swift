@@ -22,6 +22,8 @@ protocol LookupDataDelegate: class {
     func productNameFromController(_ passedData: String)
 }
 
+
+@available(iOS 13.0, *)
 final class LookupData: UIViewController {
     
     weak var delegate:LookupDataDelegate?
@@ -361,7 +363,7 @@ final class LookupData: UIViewController {
         let _ = navigationController?.popViewController(animated: true)
     }
 }
-//-----------------------end------------------------------
+@available(iOS 13.0, *)
 extension LookupData: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -550,11 +552,11 @@ extension LookupData: UITableViewDataSource {
         return cell
     }
 }
-
+@available(iOS 13.0, *)
 extension LookupData: UITableViewDelegate {
     
 }
-
+@available(iOS 13.0, *)
 extension LookupData: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {

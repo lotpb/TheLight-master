@@ -9,6 +9,7 @@
 import UIKit
 
 
+@available(iOS 13.0, *)
 final class News: UICollectionViewController, SearchDelegate {
     
     private let cellId = "cellId"
@@ -26,11 +27,7 @@ final class News: UICollectionViewController, SearchDelegate {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "  Home"
-        if #available(iOS 13.0, *) {
-            label.textColor = .systemGray
-        } else {
-            label.textColor = .black
-        }
+        label.textColor = .systemGray
         label.font = UIFont.systemFont(ofSize: 20)
         return label
     }()
@@ -187,13 +184,9 @@ final class News: UICollectionViewController, SearchDelegate {
             menuBar.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0),
             menuBar.heightAnchor.constraint(equalToConstant: 50)
             ])
-        
-        if #available(iOS 11, *) {
+
             let guide = view.safeAreaLayoutGuide
             menuBar.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
-        } else {
-            menuBar.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
-        }
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -226,7 +219,7 @@ final class News: UICollectionViewController, SearchDelegate {
     }
     
     @objc func handleSearch() {
-        if let window = UIApplication.shared.keyWindow {
+        if let window = UIApplication.shared.windows.first {
             window.addSubview(self.search)
             self.search.animate()
         }
@@ -237,16 +230,13 @@ final class News: UICollectionViewController, SearchDelegate {
             self.search.removeFromSuperview()
         }
     }
-}
 
-extension News: UICollectionViewDelegateFlowLayout {
-    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 4
     }
-    
+
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
+
         let identifier: String
         if indexPath.item == 1 {
             identifier = trendingCellId
@@ -258,19 +248,28 @@ extension News: UICollectionViewDelegateFlowLayout {
             identifier = cellId
         }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
-        
+
         return cell
     }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+           super.viewWillTransition(to: size, with: coordinator)
+
+           collectionView?.collectionViewLayout.invalidateLayout()
+       }
+
+
+
+}
+@available(iOS 13.0, *)
+extension News: UICollectionViewDelegateFlowLayout {
     
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return .init(width: view.frame.width, height: view.frame.height - 50)
     }
     
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        
-        collectionView?.collectionViewLayout.invalidateLayout()
-    }
+
 
 }
 

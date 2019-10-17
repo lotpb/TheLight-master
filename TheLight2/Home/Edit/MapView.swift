@@ -11,6 +11,8 @@ import MapKit
 import CoreLocation
 import AVFoundation
 
+
+@available(iOS 13.0, *)
 final class MapView: UIViewController {
     
     //@IBOutlet weak var mapView: MKMapView!
@@ -741,14 +743,14 @@ final class MapView: UIViewController {
         self.present(alertController, animated: true)
     }
 }
-
+@available(iOS 13.0, *)
 extension MapView: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         checkLocationAuthorization()
     }
 }
-
+@available(iOS 13.0, *)
 extension MapView: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {

@@ -17,6 +17,8 @@ import AVFoundation
 import UserNotifications
 import MessageUI
 
+
+@available(iOS 13.0, *)
 final class UploadController: UIViewController, UITextViewDelegate, MFMailComposeViewControllerDelegate {
     
    fileprivate let addText = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."
@@ -72,11 +74,7 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
     let commentDetail: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
-        if #available(iOS 13.0, *) {
-            textView.backgroundColor = .systemBackground
-        } else {
-            textView.backgroundColor = .white
-        }
+        textView.backgroundColor = .systemBackground
         textView.autocorrectionType = .yes
         textView.dataDetectorTypes = .all
         return textView
@@ -160,12 +158,8 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
     }
     
     func setupForm() {
-        
-        if #available(iOS 13.0, *) {
-            self.mainView.backgroundColor = .secondarySystemGroupedBackground
-        } else {
-            self.mainView.backgroundColor = Color.LGrayColor
-        }
+
+        self.mainView.backgroundColor = .secondarySystemGroupedBackground
         //self.activityIndicator.isHidden = true
         self.commentDetail.delegate = self
         progressView.isHidden = true
@@ -467,7 +461,7 @@ fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [Stri
 fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
     return input.rawValue
 }
-
+@available(iOS 13.0, *)
 extension UploadController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     // MARK: Camera

@@ -9,6 +9,7 @@
 import UIKit
 import FirebaseDatabase
 
+@available(iOS 13.0, *)
 final class UserProfileListCell: UICollectionViewCell {
     
     var post: NewsModel? {

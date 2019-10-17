@@ -8,6 +8,7 @@
 
 import UIKit
 
+@available(iOS 13.0, *)
 extension Blog {
     
     func setupBlogNavigationBar() {
@@ -33,7 +34,7 @@ extension Blog {
         navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: composeBtn)]
     }
 }
-
+@available(iOS 13.0, *)
 public extension UIViewController {
     
     func setupTwitterNavigationBarItems() {
@@ -62,28 +63,21 @@ public extension UIViewController {
     }
     
     private func setupNewsNavigationBarItems() {
-
-        if #available(iOS 13.0, *) {
-            
-            let app = UINavigationBarAppearance()
-            app .configureWithTransparentBackground()
-            app.backgroundColor = .systemBackground
-            
-            app.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.systemRed]
-            app.largeTitleTextAttributes = [
-                NSAttributedString.Key.foregroundColor:UIColor.systemRed,
-                NSAttributedString.Key.font:UIFont.boldSystemFont(ofSize: 24)]
-            
-            navigationController?.navigationBar.standardAppearance = app
-            navigationController?.navigationBar.scrollEdgeAppearance = app
-            navigationController?.navigationBar.isTranslucent = true
-            navigationController?.navigationBar.backgroundColor = UIColor.clear
-            navigationController?.navigationBar.tintColor = .systemGray //text color
-            
-        } else {
-            navigationController?.navigationBar.backgroundColor = .white
-            navigationController?.navigationBar.tintColor = .white
-        }
+        
+        let app = UINavigationBarAppearance()
+        app .configureWithTransparentBackground()
+        app.backgroundColor = .systemBackground
+        
+        app.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.systemRed]
+        app.largeTitleTextAttributes = [
+            NSAttributedString.Key.foregroundColor:UIColor.systemRed,
+            NSAttributedString.Key.font:UIFont.boldSystemFont(ofSize: 24)]
+        
+        navigationController?.navigationBar.standardAppearance = app
+        navigationController?.navigationBar.scrollEdgeAppearance = app
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.backgroundColor = UIColor.clear
+        navigationController?.navigationBar.tintColor = .systemGray //text color
         
         //remove navbar line
         navigationController?.navigationBar.shadowImage = UIImage()

@@ -11,7 +11,7 @@ import AVFoundation
 import FirebaseDatabase
 import MapKit
 
-
+@available(iOS 13.0, *)
 class CollectionViewCell: UICollectionViewCell {
     
     // News
@@ -120,7 +120,7 @@ class CollectionViewCell: UICollectionViewCell {
         ])
     }
 }
-
+@available(iOS 13.0, *)
 class VideoCell: CollectionViewCell {
     
     var news: NewsModel? {
@@ -156,11 +156,7 @@ class VideoCell: CollectionViewCell {
     let customImageView: CustomImageView = {
         let imageView = CustomImageView()
         imageView.isUserInteractionEnabled = true
-        if #available(iOS 13.0, *) {
-            imageView.backgroundColor = .systemGray6
-        } else {
-            imageView.backgroundColor = .black
-        }
+        imageView.backgroundColor = .systemGray6
         imageView.image = UIImage(named: "")
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true

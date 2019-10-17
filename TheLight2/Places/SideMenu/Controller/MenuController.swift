@@ -13,14 +13,13 @@ struct MenuItem {
     let title: String
 }
 
+@available(iOS 13.0, *)
 extension MenuController {
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let slidingController = UIApplication.shared.keyWindow?.rootViewController as? BaseSlidingController
-        slidingController?.didSelectMenuItem(indexPath: indexPath)
-    }
+
 }
 
+
+@available(iOS 13.0, *)
 class MenuController: UITableViewController {
     
     let menuItems = [
@@ -38,6 +37,12 @@ class MenuController: UITableViewController {
         super.viewDidLoad()
         
         tableView.separatorStyle = .none
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+        let slidingController = window?.rootViewController as? BaseSlidingController
+        slidingController?.didSelectMenuItem(indexPath: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

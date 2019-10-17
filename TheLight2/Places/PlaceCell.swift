@@ -11,6 +11,7 @@ import MapKit
 import CoreLocation
 
 
+@available(iOS 13.0, *)
 class PlaceCell: UICollectionViewCell {
     
     let geoCoder = CLGeocoder()
@@ -239,13 +240,8 @@ class PlaceCell: UICollectionViewCell {
     
     lazy var titleView: UIView = {
         let view = UIView()
-        if #available(iOS 13.0, *) {
-            view.backgroundColor = .systemGray6
-            view.layer.borderColor = UIColor.systemGray6.cgColor
-        } else {
-            view.backgroundColor = .white
-            view.layer.borderColor = Color.Mile.borderColor.cgColor
-        }
+        view.backgroundColor = .systemGray6
+        view.layer.borderColor = UIColor.systemGray6.cgColor
         view.layer.borderWidth = 0.5
         view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -254,13 +250,8 @@ class PlaceCell: UICollectionViewCell {
     
     lazy var subtitleView: UIView = {
         let view = UIView()
-        if #available(iOS 13.0, *) {
-            view.backgroundColor = .systemGray6
-            view.layer.borderColor = UIColor.systemGray6.cgColor
-        } else {
-            view.backgroundColor = .white
-            view.layer.borderColor = Color.Mile.borderColor.cgColor
-        }
+        view.backgroundColor = .systemGray6
+        view.layer.borderColor = UIColor.systemGray6.cgColor
         view.layer.borderWidth = 0.5
         view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -493,6 +484,7 @@ class PlaceCell: UICollectionViewCell {
     }
 }
 
+@available(iOS 13.0, *)
 extension PlaceCell: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -505,9 +497,9 @@ extension PlaceCell: MKMapViewDelegate {
         
         let smallSquare = CGSize(width: 20, height: 20)
         let button = UIButton(frame: .init(origin: .zero, size: smallSquare))
-        button.setBackgroundImage(UIImage(systemName: "car.fill"), for: [])
+            button.setBackgroundImage(UIImage(systemName: "car.fill"), for: [])
         
-        button.addTarget(self, action: #selector(PlaceCell.getAppleMaps), for: .touchUpInside)
+            button.addTarget(self, action: #selector(PlaceCell.getAppleMaps), for: .touchUpInside)
         pinView.leftCalloutAccessoryView = button
         
         if annotation.title == "Start"  {

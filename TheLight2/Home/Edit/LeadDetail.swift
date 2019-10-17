@@ -13,6 +13,7 @@ import ContactsUI
 import EventKit
 import MessageUI
 
+@available(iOS 13.0, *)
 final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     
     // MARK: NavigationController Hidden
@@ -315,17 +316,12 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     }
     
     func setupForm() {
-
-        if #available(iOS 13.0, *) {
-            mainView?.backgroundColor = .secondarySystemGroupedBackground
-            contentView?.backgroundColor = .secondarySystemGroupedBackground
-            tableView?.backgroundColor = .secondarySystemGroupedBackground
-            listTableView?.backgroundColor = .secondarySystemGroupedBackground
-            listTableView2?.backgroundColor = .secondarySystemGroupedBackground
-            newsTableView?.backgroundColor = .secondarySystemGroupedBackground
-        } else {
-            view.backgroundColor = .white
-        }
+        mainView?.backgroundColor = .secondarySystemGroupedBackground
+        contentView?.backgroundColor = .secondarySystemGroupedBackground
+        tableView?.backgroundColor = .secondarySystemGroupedBackground
+        listTableView?.backgroundColor = .secondarySystemGroupedBackground
+        listTableView2?.backgroundColor = .secondarySystemGroupedBackground
+        newsTableView?.backgroundColor = .secondarySystemGroupedBackground
         
         emailTitle = defaults.string(forKey: "emailtitleKey")
         messageBody = defaults.string(forKey: "emailmessageKey")
@@ -879,17 +875,13 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     func openurl() {
         
         if (self.tbl26 != NSNull() && self.tbl26 != "0") {
-
+            
             let Hooks = "http://\(self.tbl26!)"
             let Url = URL(string: Hooks)
             
             if UIApplication.shared.canOpenURL(Url!)
             {
-                if #available(iOS 10.0, *) {
-                    UIApplication.shared.open(Url!)
-                } else {
-                    // Fallback on earlier versions
-                }
+                UIApplication.shared.open(Url!)
                 
             } else {
                 
@@ -1351,6 +1343,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
         }
     }
 }
+@available(iOS 13.0, *)
 extension LeadDetail: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -1379,17 +1372,11 @@ extension LeadDetail: UITableViewDataSource {
             cell.textLabel?.font = Font.Detail.celltitle
             cell.detailTextLabel?.font = Font.Detail.cellsubtitle
         }
-        
-        if #available(iOS 13.0, *) {
+
             cell.backgroundColor = .clear
             cell.textLabel?.textColor = .systemBlue
             cell.detailTextLabel?.textColor = .label
-        } else {
-            cell.textLabel?.textColor = .black
-            cell.detailTextLabel?.textColor = .black
-        }
-        
-        
+
         if (tableView == self.listTableView) {
             
             cell.textLabel?.text = tableData4.object(at: indexPath.row) as? String
@@ -1432,7 +1419,7 @@ extension LeadDetail: UITableViewDataSource {
             cell.customImagelabel.backgroundColor = .clear
             cell.leadtitleDetail!.text = "\(self.formController!) News: \(self.lnewsTitle!)"
             cell.leadtitleDetail!.numberOfLines = 0
-                        cell.leadsubtitleDetail!.text = "Comments"
+            cell.leadsubtitleDetail!.text = "Comments"
             
             //--------------------------------------------------------------
             
@@ -1467,15 +1454,11 @@ extension LeadDetail: UITableViewDataSource {
             cell.leadreadDetail.text = "Read more"
             cell.leadnewsDetail.text = self.comments
             cell.leadnewsDetail.numberOfLines = 0
-            
-            if #available(iOS 13.0, *) {
-                cell.leadtitleDetail!.textColor = .label
-                cell.leadsubtitleDetail.textColor = .systemBlue
-                cell.leadreadDetail.textColor = .systemGray
-                cell.leadnewsDetail.textColor = .label
-            } else {
-   
-            }
+
+            cell.leadtitleDetail!.textColor = .label
+            cell.leadsubtitleDetail.textColor = .systemBlue
+            cell.leadreadDetail.textColor = .systemGray
+            cell.leadnewsDetail.textColor = .label
             
             return cell
             

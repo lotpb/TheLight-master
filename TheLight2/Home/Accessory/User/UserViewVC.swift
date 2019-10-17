@@ -15,6 +15,7 @@ import CoreLocation
 import GeoFire
  
 
+@available(iOS 13.0, *)
 final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, MKMapViewDelegate {
 
     @IBOutlet weak var scrollView: UIScrollView!
@@ -160,21 +161,13 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
         self.tableView!.dataSource = self
         self.tableView!.estimatedRowHeight = 110
         self.tableView!.rowHeight = UITableView.automaticDimension
-        if #available(iOS 13.0, *) {
-            self.tableView!.backgroundColor = .systemGroupedBackground
-        } else {
-            // Fallback on earlier versions
-        }
+        self.tableView!.backgroundColor = .systemGroupedBackground
         self.tableView!.tableFooterView = UIView(frame: .zero)
         
         self.collectionView.register(UserViewCell.self, forCellWithReuseIdentifier: cellId)
         self.collectionView!.dataSource = self
         self.collectionView!.delegate = self
-        if #available(iOS 13.0, *) {
-            self.collectionView!.backgroundColor = .systemGroupedBackground
-        } else {
-            // Fallback on earlier versions
-        }
+        self.collectionView!.backgroundColor = .systemGroupedBackground
     }
     
     // MARK: - Refresh
@@ -288,12 +281,8 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserViewCell
-        
-        if #available(iOS 13.0, *) {
-            cell.backgroundColor = .label
-        } else {
-            // Fallback on earlier versions
-        }
+
+        cell.backgroundColor = .label
         
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
@@ -420,6 +409,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
         }
     }
 }
+ @available(iOS 13.0, *)
  extension UserViewVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -459,12 +449,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! TableViewCell
         
         cell.selectionStyle = .none
-        
-        if #available(iOS 13.0, *) {
-            cell.usertitleLabel!.textColor = .label
-        } else {
-            // Fallback on earlier versions
-        }
+        cell.usertitleLabel!.textColor = .label
         
         cell.usersubtitleLabel!.textColor = .systemGray
         cell.customImagelabel.backgroundColor = .clear //fix
@@ -503,6 +488,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
         return cell
     }
  }
+ @available(iOS 13.0, *)
  extension UserViewVC: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -512,21 +498,13 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let vw = UIView()
-        if #available(iOS 13.0, *) {
-            vw.backgroundColor = .systemGray6
-        } else {
-            // Fallback on earlier versions
-        }
+        vw.backgroundColor = .systemGray6
         //tableView.tableHeaderView = vw
         
         let myLabel1:UILabel = UILabel(frame: .init(x: 10, y: 5, width: tableView.frame.width-10, height: 20))
         myLabel1.numberOfLines = 1
         myLabel1.backgroundColor = .clear
-        if #available(iOS 13.0, *) {
-            myLabel1.textColor = .label
-        } else {
-            // Fallback on earlier versions
-        }
+        myLabel1.textColor = .label
         myLabel1.font = Font.celltitle18m
         vw.addSubview(myLabel1)
         

@@ -10,6 +10,8 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
+
+@available(iOS 13.0, *)
 class SubscriptionCell: FeedCell {
     
     override func fetchVideos() {

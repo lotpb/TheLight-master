@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qNY-nO-erE">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qNY-nO-erE">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15508"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -90,7 +90,7 @@
                     <navigationItem key="navigationItem" id="gpi-zS-fZZ">
                         <nil key="title"/>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" segmentControlStyle="plain" selectedSegmentIndex="0" id="bry-ek-Spt">
-                            <rect key="frame" x="12" y="6" width="390" height="33"/>
+                            <rect key="frame" x="12" y="5.6666666666666679" width="390" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
                                 <segment title="CNN"/>
@@ -139,7 +139,7 @@
         <scene sceneID="kpH-rO-dwo">
             <objects>
                 <splitViewController storyboardIdentifier="webSplit" title="SplitViewController1" id="qNY-nO-erE" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Web" image="cloud.fill" catalog="system" id="WBd-tT-0R3"/>
+                    <tabBarItem key="tabBarItem" title="Web" id="WBd-tT-0R3"/>
                     <connections>
                         <segue destination="bhR-vJ-EmU" kind="relationship" relationship="masterViewController" id="t8t-aY-w5e"/>
                         <segue destination="5b2-6Y-uTV" kind="relationship" relationship="detailViewController" id="7Oz-e3-ffd"/>
@@ -197,9 +197,6 @@
             <point key="canvasLocation" x="2039" y="5586"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="cloud.fill" catalog="system" width="64" height="42"/>
-    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="7Oz-e3-ffd"/>
     </inferredMetricsTieBreakers>

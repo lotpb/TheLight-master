@@ -13,16 +13,12 @@ import EventKit
 import MobileCoreServices
 import AVFoundation
 
-class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegateFlowLayout, UISplitViewControllerDelegate {
+@available(iOS 13.0, *)
+class SnapshotVC: UIViewController, UISplitViewControllerDelegate {
 
     fileprivate var collapseDetailViewController = true
     @IBOutlet weak var tableView: UITableView!
-    /* //AppDelegate
-    var detailSnap: AnyObject? {
-        didSet {
-            //configureView()
-        }
-    } */
+
     // MARK: NavigationController Hidden
     private var lastContentOffset: CGFloat = 0.0
 
@@ -113,7 +109,6 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     var cityYQL: String!
     var updateYQL: String!
 
-    
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = .clear
@@ -131,7 +126,6 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         //fixed - remove bottom bar
         self.splitViewController?.delegate = self
         self.splitViewController?.preferredDisplayMode = .allVisible
-        
 
         loadData()
         setupTableView()
@@ -160,7 +154,6 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                 con.preferredDisplayMode = .allVisible
             }
         }
-        
         setupNewsNavigationItems()
     }
     
@@ -241,7 +234,7 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     func loadData() {
         
         guard ProcessInfo.processInfo.isLowPowerModeEnabled == false else { return }
-            
+
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
             let query = PFQuery(className:"Newsios")
@@ -448,517 +441,6 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         }
     }
     
-    // MARK: - Table View
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
-    {
-        let result:CGFloat = 140
-        if (indexPath.section == 0) {
-            
-            switch (indexPath.row % 4)
-            {
-            case 0:
-                return 44
-            case 1:
-                if UIDevice.current.userInterfaceIdiom == .pad  {
-                    return 190
-                } else {
-                    return result
-                }
-            case 2:
-                return 0
-            default:
-                return result
-            }
-        } else if (indexPath.section == 1) {
-            
-            switch (indexPath.row % 4)
-            {
-            case 0:
-                return 44
-            case 2:
-                return 0
-            default:
-                return result
-            }
-
-        } else if (indexPath.section == 2) {
-            let result:CGFloat = 80
-            switch (indexPath.row % 4)
-            {
-            case 0:
-                return 44
-            default:
-                return result
-            }
-        } else if (indexPath.section == 3) {
-            
-            let result:CGFloat = 80
-            switch (indexPath.row % 4)
-            {
-            case 0:
-                return 44
-            default:
-                return result
-            }
- 
-        } else if (indexPath.section == 4) {
-            
-            switch (indexPath.row % 4)
-            {
-            case 0:
-                return 44
-            default:
-                return result
-            }
-        } else if (indexPath.section == 5) {
-            
-            switch (indexPath.row % 4)
-            {
-            case 0:
-                return 44
-            default:
-                return result
-            }
-        } else if (indexPath.section == 6) {
-            
-            switch (indexPath.row % 4)
-            {
-            case 0:
-                return 44
-            default:
-                return result
-            }
-        } else if (indexPath.section == 7) {
-            let result:CGFloat = 110
-            switch (indexPath.row % 4)
-            {
-            case 0:
-                return 44
-            default:
-                return result
-            }
-        } else if (indexPath.section == 8) {
-            let result:CGFloat = 110
-            switch (indexPath.row % 4)
-            {
-            case 0:
-                return 44
-            default:
-                return result
-            }
-        }
-        return 0
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 9
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        if tableView == self.tableView {
-            if (section == 0) {
-                return 3
-            } else if (section == 1) {
-                return 3
-            }
-            return 2
-        }
-        return 0
-    }
-
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-
-        if (section == 0) {
-            return 185
-        }
-        return 0
-    }
-    
-    // create a seperator on bottom of tableview
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-
-        if (tableView == self.tableView) {
-
-            if (section == 0) {
-                    guard let header = tableView.dequeueReusableCell(withIdentifier: "Header") as? SnapHeaderviewCell else { fatalError("Unexpected Index Path") }
-
-                    //tableView.tableHeaderView = vw
-
-                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
-                        header.titleLabeltxt1.text = "Parse"
-                    } else {
-                        header.titleLabeltxt1.text = "Firebase"
-                    }
-
-                    if (tempYQL != nil) && (textYQL != nil) {
-                        header.titleLabeltxt2.text = String(format: "%@ %@ %@", "Weather:", "\(tempYQL!)°", "\(textYQL!)")
-                        if (textYQL!.contains("Rain") ||
-                            textYQL!.contains("Snow") ||
-                            textYQL!.contains("Thunderstorms") ||
-                            textYQL!.contains("Showers")) {
-                            header.titleLabeltxt2.textColor = .systemRed
-                        } else {
-                            header.titleLabeltxt2.textColor = .systemGreen
-                        }
-                    } else {
-                        header.titleLabeltxt2.text = "not available"
-                        header.titleLabeltxt2.textColor = .systemRed
-                    }
-
-                   header.myListLbl.text = String(format: "%@%@", "MyGroups ", "9")
-
-                    return header
-                }
-        }
-        return nil
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        var cellIdentifier: String!
-        
-        if tableView == self.tableView {
-            cellIdentifier = "Cell"
-        } else {
-            cellIdentifier = "UserFoundCell"
-        }
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! TableViewCell
-        
-        cell.collectionView.delegate =  nil
-        cell.collectionView.dataSource = nil
-        if #available(iOS 13.0, *) {
-            cell.collectionView.backgroundColor = .secondarySystemGroupedBackground
-        } else {
-            cell.collectionView.backgroundColor = Color.Snap.collectbackColor
-        }
-        
-        cell.customImagelabel.backgroundColor = .clear //fixed
-        cell.customImageView.layer.borderColor = UIColor.clear.cgColor //fixed
-        
-        if #available(iOS 13.0, *) {
-            cell.backgroundColor =  .secondarySystemGroupedBackground
-        } else {
-            cell.backgroundColor = Color.Snap.collectbackColor
-        }
-        cell.accessoryType = .none
-        
-        if UIDevice.current.userInterfaceIdiom == .pad  {
-            cell.textLabel!.font = Font.celltitle26r
-            cell.snaptitleLabel.font = Font.celltitle20r
-            cell.snapdetailLabel.font = Font.celltitle20r
-            
-        } else {
-            cell.textLabel!.font = Font.celltitle18r
-            cell.snaptitleLabel.font = Font.celltitle16r
-            cell.snapdetailLabel.font = Font.celltitle18r
-        }
-        
-        if #available(iOS 13.0, *) {
-            cell.textLabel!.textColor = .systemRed
-            cell.snapdetailLabel?.textColor = .label
-            cell.snaptitleLabel?.textColor = .systemGray //Color.Snap.textColor1
-        } else {
-            cell.textLabel!.textColor = Color.Snap.textColor
-            cell.snapdetailLabel?.textColor = Color.Snap.textColor
-            cell.snaptitleLabel?.textColor = Color.Snap.textColor1
-        }
-        
-        cell.textLabel?.text = ""
-
-        cell.snaptitleLabel?.frame = .init(x: 24, y: 11, width: view.frame.width-20, height: 21)
-        cell.snaptitleLabel?.numberOfLines = 1
-        cell.snaptitleLabel?.text = ""
-
-        cell.snapdetailLabel?.frame = .init(x: 24, y: 38, width: view.frame.width-20, height: 21)
-        cell.snapdetailLabel?.numberOfLines = 2
-        cell.snapdetailLabel?.text = ""
-        
-        let date2 = Date()
-        let calendar = Calendar.current
-        
-        if (indexPath.section == 0) {
-            
-            if (indexPath.row == 0) {
-                cell.collectionView.backgroundColor = .systemGroupedBackground
-                cell.backgroundColor = .systemGroupedBackground
-                cell.accessoryType = .disclosureIndicator
-                if ((defaults.string(forKey: "backendKey")) == "Parse") {
-                    cell.textLabel!.text = String(format: "%@%d", "Top News ", _feedNews.count)
-                } else {
-                    //firebase
-                    cell.textLabel!.text = String(format: "%@%d", "Top News ", newslist.count)
-                }
-                cell.collectionView.reloadData()
-                return cell
-                
-            } else if (indexPath.row == 1) {
-                
-                cell.collectionView.tag = 0
-                cell.collectionView.delegate = self
-                cell.collectionView.dataSource = self
-                cell.collectionView.reloadData()
-                return cell
-                
-            } else if (indexPath.row == 2) {
-                cell.accessoryType = .disclosureIndicator
-                cell.textLabel!.font = Font.Snapshot.cellgallery
-                if #available(iOS 13.0, *) {
-                    cell.textLabel!.textColor = .systemGray
-                } else {
-                    // Fallback on earlier versions
-                }
-                cell.textLabel!.text = "See the full gallery"
-                cell.collectionView.reloadData()
-                return cell
-            }
-            
-        } else if (indexPath.section == 1) {
-            
-            if (indexPath.row  == 0) {
-                cell.collectionView.backgroundColor = .systemGroupedBackground
-                cell.backgroundColor = .systemGroupedBackground
-                if ((defaults.string(forKey: "backendKey")) == "Parse") {
-                    cell.textLabel!.text = String(format: "%@%d", "Top Jobs ", _feedJob.count)
-                } else {
-                    //firebase
-                    cell.textLabel!.text = String(format: "%@%d", "Top Jobs ", joblist.count)
-                }
-                
-                //cell.selectionStyle = .systemGray
-                cell.accessoryType = .disclosureIndicator
-                cell.collectionView.reloadData()
-                return cell
-                
-            } else if (indexPath.row == 1) {
-                
-                cell.collectionView.delegate = self
-                cell.collectionView.dataSource = self
-                cell.collectionView.tag = 1
-                cell.collectionView.reloadData()
-                return cell
-                
-            } else if (indexPath.row == 2) {
-                
-                cell.accessoryType = .disclosureIndicator
-                cell.textLabel!.font = Font.Snapshot.cellgallery
-                if #available(iOS 13.0, *) {
-                    cell.textLabel!.textColor = .systemGray
-                } else {
-                    // Fallback on earlier versions
-                }
-                cell.textLabel!.text = "See the full gallery"
-                cell.collectionView.reloadData()
-                return cell
-            }
-            
-        }  else if (indexPath.section == 2) {
-            
-            if (indexPath.row == 0) {
-                cell.collectionView.backgroundColor = .systemGroupedBackground
-                cell.backgroundColor = .systemGroupedBackground
-                cell.textLabel!.text = "Latest Blog"
-                cell.collectionView.reloadData()
-                return cell
-                
-            } else if (indexPath.row == 1) {
-                
-                let date1 : Date?
-                let blogString : String?
-                
-                if ((defaults.string(forKey: "backendKey")) == "Parse") {
-                    
-                    date1 = (_feedItems6.firstObject as AnyObject).value(forKey: "createdAt") as? Date
-                    blogString = (_feedItems6.firstObject as AnyObject).value(forKey: "PostBy") as? String
-                    cell.snapdetailLabel?.text = (_feedItems6.firstObject as AnyObject).value(forKey: "Subject") as? String
-                    
-                } else {
-                    //firebase
-                    date1 = blogdateStr
-                    blogString = blogpostStr
-                    cell.snapdetailLabel?.text = blogStr
-                }
-                
-                if date1 != nil {
-                    let diffDateComponents = calendar.dateComponents([.day], from: date1!, to: date2)
-                    let daysCount1 = diffDateComponents.day
-                    
-                    if blogString != nil {
-                        cell.snaptitleLabel?.text = "\(blogString!), \(daysCount1!) days ago"
-                    } else {
-                        cell.snaptitleLabel?.text = "none"
-                    }
-                }
-                
-                cell.collectionView.backgroundColor = .clear
-                cell.collectionView.reloadData()
-                return cell
-            }
-            
-        } else if (indexPath.section == 3) {
-            
-            if (indexPath.row == 0) {
-                cell.collectionView.backgroundColor = .systemGroupedBackground
-                cell.backgroundColor = .systemGroupedBackground
-                cell.textLabel!.text = "Latest News"
-                cell.collectionView.reloadData()
-                return cell
-                
-            } else if (indexPath.row == 1) {
-                
-                let date1 : Date?
-                let newsString : String?
-                
-                if ((defaults.string(forKey: "backendKey")) == "Parse") {
-                    
-                    date1 = (_feedNews.firstObject as AnyObject).value(forKey: "createdAt") as? Date
-                    newsString = (_feedNews.firstObject as AnyObject).value(forKey: "newsDetail") as? String
-                    cell.snapdetailLabel?.text = (_feedNews.firstObject as AnyObject).value(forKey: "newsTitle") as? String
-                } else {
-                    //firebase
-                    date1 = newsdateStr
-                    newsString = newsdetailStr
-                    cell.snapdetailLabel?.text = newsStr
-                }
-                
-                if date1 != nil {
-                    let diffDateComponents = calendar.dateComponents([.day], from: date1!, to: date2)
-                    let daysCount = diffDateComponents.day
-                    
-                    if newsString != nil {
-                        cell.snaptitleLabel?.text = "\(newsString!), \(daysCount!) days ago"
-                    } else {
-                        cell.snaptitleLabel?.text = "none"
-                    }
-                }
-                
-                cell.collectionView.backgroundColor = .clear
-                cell.collectionView.reloadData()
-                return cell
-            }
-            
-        } else if (indexPath.section == 4) {
-            
-            if (indexPath.row == 0) {
-                if ((defaults.string(forKey: "backendKey")) == "Parse") {
-                    cell.textLabel!.text = String(format: "%@%d", "Top Users ", _feedUser.count)
-                } else {
-                    //firebase
-                    cell.textLabel!.text = String(format: "%@%d", "Top Users ", userlist.count)
-                }
-                cell.collectionView.backgroundColor = .systemGroupedBackground
-                cell.backgroundColor = .systemGroupedBackground
-                cell.selectionStyle = .gray
-                cell.accessoryType = .disclosureIndicator
-                cell.collectionView.reloadData()
-                return cell
-                
-            } else if (indexPath.row == 1) {
-                
-                cell.collectionView.delegate = self
-                cell.collectionView.dataSource = self
-                cell.collectionView.tag = 2
-                cell.collectionView.reloadData()
-                return cell
-            }
-            
-        } else if (indexPath.section == 5) {
-            
-            if (indexPath.row == 0) {
-                
-                if ((defaults.string(forKey: "backendKey")) == "Parse") {
-                    cell.textLabel!.text = String(format: "%@%d", "Top Salesman ", _feedSales.count)
-                } else {
-                    //firebase
-                    cell.textLabel!.text = String(format: "%@%d", "Top Salesman ", saleslist.count)
-                }
-                cell.collectionView.backgroundColor = .systemGroupedBackground
-                cell.backgroundColor = .systemGroupedBackground
-                cell.selectionStyle = .gray
-                cell.accessoryType = .disclosureIndicator
-                cell.collectionView.reloadData()
-                return cell
-                
-            } else if (indexPath.row == 1) {
-                
-                cell.collectionView.delegate = self
-                cell.collectionView.dataSource = self
-                cell.collectionView.tag = 3
-                cell.collectionView.reloadData()
-                return cell
-            }
-            
-        } else if (indexPath.section == 6) {
-            
-            if (indexPath.row == 0) {
-                if ((defaults.string(forKey: "backendKey")) == "Parse") {
-                    cell.textLabel!.text = String(format: "%@%d", "Top Employee ", _feedItems5.count)
-                } else {
-                    //firebase
-                    cell.textLabel!.text = String(format: "%@%d", "Top Employee ", employlist.count)
-                }
-                cell.collectionView.backgroundColor = .systemGroupedBackground
-                cell.backgroundColor = .systemGroupedBackground
-                cell.selectionStyle = .gray
-                cell.accessoryType = .disclosureIndicator
-                cell.collectionView.reloadData()
-                return cell
-                
-            } else if (indexPath.row == 1) {
-                
-                cell.collectionView.delegate = self
-                cell.collectionView.dataSource = self
-                cell.collectionView.tag = 4
-                cell.collectionView.reloadData()
-                return cell
-            }
-            
-        } else if (indexPath.section == 7) {
-            
-            if (indexPath.row == 0) {
-                cell.collectionView.backgroundColor = .systemGroupedBackground
-                cell.backgroundColor = .systemGroupedBackground
-                cell.textLabel!.text = "Top Notification"
-                cell.selectionStyle = .gray
-                cell.accessoryType = .disclosureIndicator
-                cell.collectionView.reloadData()
-                return cell
-            } else if (indexPath.row == 1) {
-                
-                cell.collectionView.backgroundColor = .clear
-                cell.snapdetailLabel?.text = "You have no pending notifications :)"
-                //cell.snaptitleLabel?.text = localNotification.fireDate?.description
-                //cell.snapdetailLabel?.text = localNotification.alertBody
-                cell.collectionView.reloadData()
-                return cell
-            }
-            
-        }  else if (indexPath.section == 8) {
-            
-            if (indexPath.row == 0) {
-                cell.collectionView.backgroundColor = .systemGroupedBackground
-                cell.backgroundColor = .systemGroupedBackground
-                cell.textLabel!.text = String(format: "%@%d", "Top Event ", (events?.count)!)
-                cell.selectionStyle = .gray
-                cell.accessoryType = .disclosureIndicator
-                cell.collectionView.reloadData()
-                return cell
-            } else if (indexPath.row == 1) {
-                
-                cell.collectionView.backgroundColor = .clear
-                if (events!.isEmpty) {
-                    cell.snapdetailLabel?.text = "You have no pending events :)"
-                } else {
-                    cell.snapdetailLabel?.text = events?[0].title
-                }
-                cell.collectionView.reloadData()
-                return cell
-            }
-        }
-        return cell
-    }
-    
     // MARK: - Segues
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -1029,9 +511,9 @@ class SnapshotVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     }
 }
 //-----------------------end------------------------------
+@available(iOS 13.0, *)
 extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
-    
-    // MARK: - UICollectionView
+
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -1079,13 +561,8 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath:IndexPath)->UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CollectionViewCell   
-        
-        if #available(iOS 13.0, *) {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CollectionViewCell
             cell.backgroundColor = .systemGray
-        } else {
-            cell.backgroundColor = .black //Color.Snap.collectbackColor
-        }
 
         if (UIDevice.current.userInterfaceIdiom == .pad) && (collectionView.tag == 0) {
             myLabel1 = UILabel(frame: .init(x: 0, y: 160, width: cell.bounds.size.width, height: 20))
@@ -1093,14 +570,8 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
             myLabel1 = UILabel(frame: .init(x: 0, y: 110, width: cell.bounds.size.width, height: 20))
         }
         myLabel1.font = Font.Snapshot.cellLabel
-        if #available(iOS 13.0, *) {
-            myLabel1.backgroundColor = .systemBackground
-            myLabel1.textColor = .label
-        } else {
-            myLabel1.backgroundColor = Color.Snap.collectbackColor
-            myLabel1.textColor = Color.Snap.textColor
-        }
-        
+        myLabel1.backgroundColor = .systemBackground
+        myLabel1.textColor = .label
         myLabel1.textAlignment = .center
         myLabel1.clipsToBounds = true
 
@@ -1298,8 +769,7 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
         return .init(width: 95, height: 130)
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
-    {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if (collectionView.tag == 0) {
             
             if ((defaults.string(forKey: "backendKey")) == "Parse") {
@@ -1444,6 +914,7 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
     }
 }
 // MARK: - UISearchBar Delegate
+@available(iOS 13.0, *)
 extension SnapshotVC: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
@@ -1455,6 +926,498 @@ extension SnapshotVC: UISearchResultsUpdating {
         //self.resultsController = self.filteredMenu
         self.resultsController.tableView.reloadData()
     }
+}
+@available(iOS 13.0, *)
+extension SnapshotVC: UITableViewDataSource {
+
+       // MARK: - Table View
+       func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+       {
+           let result:CGFloat = 140
+           if (indexPath.section == 0) {
+
+               switch (indexPath.row % 4)
+               {
+               case 0:
+                   return 44
+               case 1:
+                   if UIDevice.current.userInterfaceIdiom == .pad  {
+                       return 190
+                   } else {
+                       return result
+                   }
+               case 2:
+                   return 0
+               default:
+                   return result
+               }
+           } else if (indexPath.section == 1) {
+
+               switch (indexPath.row % 4)
+               {
+               case 0:
+                   return 44
+               case 2:
+                   return 0
+               default:
+                   return result
+               }
+
+           } else if (indexPath.section == 2) {
+               let result:CGFloat = 80
+               switch (indexPath.row % 4)
+               {
+               case 0:
+                   return 44
+               default:
+                   return result
+               }
+           } else if (indexPath.section == 3) {
+
+               let result:CGFloat = 80
+               switch (indexPath.row % 4)
+               {
+               case 0:
+                   return 44
+               default:
+                   return result
+               }
+
+           } else if (indexPath.section == 4) {
+
+               switch (indexPath.row % 4)
+               {
+               case 0:
+                   return 44
+               default:
+                   return result
+               }
+           } else if (indexPath.section == 5) {
+
+               switch (indexPath.row % 4)
+               {
+               case 0:
+                   return 44
+               default:
+                   return result
+               }
+           } else if (indexPath.section == 6) {
+
+               switch (indexPath.row % 4)
+               {
+               case 0:
+                   return 44
+               default:
+                   return result
+               }
+           } else if (indexPath.section == 7) {
+               let result:CGFloat = 110
+               switch (indexPath.row % 4)
+               {
+               case 0:
+                   return 44
+               default:
+                   return result
+               }
+           } else if (indexPath.section == 8) {
+               let result:CGFloat = 110
+               switch (indexPath.row % 4)
+               {
+               case 0:
+                   return 44
+               default:
+                   return result
+               }
+           }
+           return 0
+       }
+
+       func numberOfSections(in tableView: UITableView) -> Int {
+           return 9
+       }
+
+       func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
+           if tableView == self.tableView {
+               if (section == 0) {
+                   return 3
+               } else if (section == 1) {
+                   return 3
+               }
+               return 2
+           }
+           return 0
+       }
+
+       func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+
+           if (section == 0) {
+               return 185
+           }
+           return 0
+       }
+
+       // create a seperator on bottom of tableview
+       func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+
+           if (tableView == self.tableView) {
+
+               if (section == 0) {
+                       guard let header = tableView.dequeueReusableCell(withIdentifier: "Header") as? SnapHeaderviewCell else { fatalError("Unexpected Index Path") }
+
+                       //tableView.tableHeaderView = vw
+
+                       if ((defaults.string(forKey: "backendKey")) == "Parse") {
+                           header.titleLabeltxt1.text = "Parse"
+                       } else {
+                           header.titleLabeltxt1.text = "Firebase"
+                       }
+
+                       if (tempYQL != nil) && (textYQL != nil) {
+                           header.titleLabeltxt2.text = String(format: "%@ %@ %@", "Weather:", "\(tempYQL!)°", "\(textYQL!)")
+                           if (textYQL!.contains("Rain") ||
+                               textYQL!.contains("Snow") ||
+                               textYQL!.contains("Thunderstorms") ||
+                               textYQL!.contains("Showers")) {
+                               header.titleLabeltxt2.textColor = .systemRed
+                           } else {
+                               header.titleLabeltxt2.textColor = .systemGreen
+                           }
+                       } else {
+                           header.titleLabeltxt2.text = "not available"
+                           header.titleLabeltxt2.textColor = .systemRed
+                       }
+
+                      header.myListLbl.text = String(format: "%@%@", "MyGroups ", "9")
+
+                       return header
+                   }
+           }
+           return nil
+       }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        var cellIdentifier: String!
+
+        if tableView == self.tableView {
+            cellIdentifier = "Cell"
+        } else {
+            cellIdentifier = "UserFoundCell"
+        }
+
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! TableViewCell
+
+        cell.collectionView.delegate =  nil
+        cell.collectionView.dataSource = nil
+        cell.collectionView.backgroundColor = .secondarySystemGroupedBackground
+        cell.customImagelabel.backgroundColor = .clear //fixed
+        cell.customImageView.layer.borderColor = UIColor.clear.cgColor //fixed
+        cell.backgroundColor =  .secondarySystemGroupedBackground
+        cell.accessoryType = .none
+
+        if UIDevice.current.userInterfaceIdiom == .pad  {
+            cell.textLabel!.font = Font.celltitle26r
+            cell.snaptitleLabel.font = Font.celltitle20r
+            cell.snapdetailLabel.font = Font.celltitle20r
+
+        } else {
+            cell.textLabel!.font = Font.celltitle18r
+            cell.snaptitleLabel.font = Font.celltitle16r
+            cell.snapdetailLabel.font = Font.celltitle18r
+        }
+
+        cell.textLabel!.textColor = .systemRed
+        cell.snapdetailLabel?.textColor = .label
+        cell.snaptitleLabel?.textColor = .systemGray //Color.Snap.textColor1
+
+        cell.textLabel?.text = ""
+
+        cell.snaptitleLabel?.frame = .init(x: 24, y: 11, width: view.frame.width-20, height: 21)
+        cell.snaptitleLabel?.numberOfLines = 1
+        cell.snaptitleLabel?.text = ""
+
+        cell.snapdetailLabel?.frame = .init(x: 24, y: 38, width: view.frame.width-20, height: 21)
+        cell.snapdetailLabel?.numberOfLines = 2
+        cell.snapdetailLabel?.text = ""
+
+        let date2 = Date()
+        let calendar = Calendar.current
+
+        if (indexPath.section == 0) {
+
+            if (indexPath.row == 0) {
+                cell.collectionView.backgroundColor = .systemGroupedBackground
+                cell.backgroundColor = .systemGroupedBackground
+                cell.accessoryType = .disclosureIndicator
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
+                    cell.textLabel!.text = String(format: "%@%d", "Top News ", _feedNews.count)
+                } else {
+                    //firebase
+                    cell.textLabel!.text = String(format: "%@%d", "Top News ", newslist.count)
+                }
+                cell.collectionView.reloadData()
+                return cell
+
+            } else if (indexPath.row == 1) {
+
+                cell.collectionView.tag = 0
+                cell.collectionView.delegate = self
+                cell.collectionView.dataSource = self
+                cell.collectionView.reloadData()
+                return cell
+
+            } else if (indexPath.row == 2) {
+                cell.accessoryType = .disclosureIndicator
+                cell.textLabel!.font = Font.Snapshot.cellgallery
+                cell.textLabel!.textColor = .systemGray
+                cell.textLabel!.text = "See the full gallery"
+                cell.collectionView.reloadData()
+                return cell
+            }
+
+        } else if (indexPath.section == 1) {
+
+            if (indexPath.row  == 0) {
+                cell.collectionView.backgroundColor = .systemGroupedBackground
+                cell.backgroundColor = .systemGroupedBackground
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
+                    cell.textLabel!.text = String(format: "%@%d", "Top Jobs ", _feedJob.count)
+                } else {
+                    //firebase
+                    cell.textLabel!.text = String(format: "%@%d", "Top Jobs ", joblist.count)
+                }
+                cell.accessoryType = .disclosureIndicator
+                cell.collectionView.reloadData()
+                return cell
+
+            } else if (indexPath.row == 1) {
+
+                cell.collectionView.delegate = self
+                cell.collectionView.dataSource = self
+                cell.collectionView.tag = 1
+                cell.collectionView.reloadData()
+                return cell
+
+            } else if (indexPath.row == 2) {
+
+                cell.accessoryType = .disclosureIndicator
+                cell.textLabel!.font = Font.Snapshot.cellgallery
+                cell.textLabel!.textColor = .systemGray
+                cell.textLabel!.text = "See the full gallery"
+                cell.collectionView.reloadData()
+                return cell
+            }
+
+        }  else if (indexPath.section == 2) {
+
+            if (indexPath.row == 0) {
+                cell.collectionView.backgroundColor = .systemGroupedBackground
+                cell.backgroundColor = .systemGroupedBackground
+                cell.textLabel!.text = "Latest Blog"
+                cell.collectionView.reloadData()
+                return cell
+
+            } else if (indexPath.row == 1) {
+
+                let date1 : Date?
+                let blogString : String?
+
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
+
+                    date1 = (_feedItems6.firstObject as AnyObject).value(forKey: "createdAt") as? Date
+                    blogString = (_feedItems6.firstObject as AnyObject).value(forKey: "PostBy") as? String
+                    cell.snapdetailLabel?.text = (_feedItems6.firstObject as AnyObject).value(forKey: "Subject") as? String
+
+                } else {
+                    //firebase
+                    date1 = blogdateStr
+                    blogString = blogpostStr
+                    cell.snapdetailLabel?.text = blogStr
+                }
+
+                if date1 != nil {
+                    let diffDateComponents = calendar.dateComponents([.day], from: date1!, to: date2)
+                    let daysCount1 = diffDateComponents.day
+
+                    if blogString != nil {
+                        cell.snaptitleLabel?.text = "\(blogString!), \(daysCount1!) days ago"
+                    } else {
+                        cell.snaptitleLabel?.text = "none"
+                    }
+                }
+
+                cell.collectionView.backgroundColor = .clear
+                cell.collectionView.reloadData()
+                return cell
+            }
+
+        } else if (indexPath.section == 3) {
+
+            if (indexPath.row == 0) {
+                cell.collectionView.backgroundColor = .systemGroupedBackground
+                cell.backgroundColor = .systemGroupedBackground
+                cell.textLabel!.text = "Latest News"
+                cell.collectionView.reloadData()
+                return cell
+
+            } else if (indexPath.row == 1) {
+
+                let date1 : Date?
+                let newsString : String?
+
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
+
+                    date1 = (_feedNews.firstObject as AnyObject).value(forKey: "createdAt") as? Date
+                    newsString = (_feedNews.firstObject as AnyObject).value(forKey: "newsDetail") as? String
+                    cell.snapdetailLabel?.text = (_feedNews.firstObject as AnyObject).value(forKey: "newsTitle") as? String
+                } else {
+                    //firebase
+                    date1 = newsdateStr
+                    newsString = newsdetailStr
+                    cell.snapdetailLabel?.text = newsStr
+                }
+
+                if date1 != nil {
+                    let diffDateComponents = calendar.dateComponents([.day], from: date1!, to: date2)
+                    let daysCount = diffDateComponents.day
+
+                    if newsString != nil {
+                        cell.snaptitleLabel?.text = "\(newsString!), \(daysCount!) days ago"
+                    } else {
+                        cell.snaptitleLabel?.text = "none"
+                    }
+                }
+
+                cell.collectionView.backgroundColor = .clear
+                cell.collectionView.reloadData()
+                return cell
+            }
+
+        } else if (indexPath.section == 4) {
+
+            if (indexPath.row == 0) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
+                    cell.textLabel!.text = String(format: "%@%d", "Top Users ", _feedUser.count)
+                } else {
+                    //firebase
+                    cell.textLabel!.text = String(format: "%@%d", "Top Users ", userlist.count)
+                }
+                cell.collectionView.backgroundColor = .systemGroupedBackground
+                cell.backgroundColor = .systemGroupedBackground
+                cell.selectionStyle = .gray
+                cell.accessoryType = .disclosureIndicator
+                cell.collectionView.reloadData()
+                return cell
+
+            } else if (indexPath.row == 1) {
+
+                cell.collectionView.delegate = self
+                cell.collectionView.dataSource = self
+                cell.collectionView.tag = 2
+                cell.collectionView.reloadData()
+                return cell
+            }
+
+        } else if (indexPath.section == 5) {
+
+            if (indexPath.row == 0) {
+
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
+                    cell.textLabel!.text = String(format: "%@%d", "Top Salesman ", _feedSales.count)
+                } else {
+                    //firebase
+                    cell.textLabel!.text = String(format: "%@%d", "Top Salesman ", saleslist.count)
+                }
+                cell.collectionView.backgroundColor = .systemGroupedBackground
+                cell.backgroundColor = .systemGroupedBackground
+                cell.selectionStyle = .gray
+                cell.accessoryType = .disclosureIndicator
+                cell.collectionView.reloadData()
+                return cell
+
+            } else if (indexPath.row == 1) {
+
+                cell.collectionView.delegate = self
+                cell.collectionView.dataSource = self
+                cell.collectionView.tag = 3
+                cell.collectionView.reloadData()
+                return cell
+            }
+
+        } else if (indexPath.section == 6) {
+
+            if (indexPath.row == 0) {
+                if ((defaults.string(forKey: "backendKey")) == "Parse") {
+                    cell.textLabel!.text = String(format: "%@%d", "Top Employee ", _feedItems5.count)
+                } else {
+                    //firebase
+                    cell.textLabel!.text = String(format: "%@%d", "Top Employee ", employlist.count)
+                }
+                cell.collectionView.backgroundColor = .systemGroupedBackground
+                cell.backgroundColor = .systemGroupedBackground
+                cell.selectionStyle = .gray
+                cell.accessoryType = .disclosureIndicator
+                cell.collectionView.reloadData()
+                return cell
+
+            } else if (indexPath.row == 1) {
+
+                cell.collectionView.delegate = self
+                cell.collectionView.dataSource = self
+                cell.collectionView.tag = 4
+                cell.collectionView.reloadData()
+                return cell
+            }
+
+        } else if (indexPath.section == 7) {
+
+            if (indexPath.row == 0) {
+                cell.collectionView.backgroundColor = .systemGroupedBackground
+                cell.backgroundColor = .systemGroupedBackground
+                cell.textLabel!.text = "Top Notification"
+                cell.selectionStyle = .gray
+                cell.accessoryType = .disclosureIndicator
+                cell.collectionView.reloadData()
+                return cell
+            } else if (indexPath.row == 1) {
+
+                cell.collectionView.backgroundColor = .clear
+                cell.snapdetailLabel?.text = "You have no pending notifications :)"
+                //cell.snaptitleLabel?.text = localNotification.fireDate?.description
+                //cell.snapdetailLabel?.text = localNotification.alertBody
+                cell.collectionView.reloadData()
+                return cell
+            }
+
+        }  else if (indexPath.section == 8) {
+
+            if (indexPath.row == 0) {
+                cell.collectionView.backgroundColor = .systemGroupedBackground
+                cell.backgroundColor = .systemGroupedBackground
+                cell.textLabel!.text = String(format: "%@%d", "Top Event ", (events?.count)!)
+                cell.selectionStyle = .gray
+                cell.accessoryType = .disclosureIndicator
+                cell.collectionView.reloadData()
+                return cell
+            } else if (indexPath.row == 1) {
+
+                cell.collectionView.backgroundColor = .clear
+                if (events!.isEmpty) {
+                    cell.snapdetailLabel?.text = "You have no pending events :)"
+                } else {
+                    cell.snapdetailLabel?.text = events?[0].title
+                }
+                cell.collectionView.reloadData()
+                return cell
+            }
+        }
+        return cell
+    }
+}
+@available(iOS 13.0, *)
+extension SnapshotVC: UITableViewDelegate {
+
 }
 
 

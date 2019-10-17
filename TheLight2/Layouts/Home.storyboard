@@ -11,7 +11,7 @@
         <scene sceneID="Fn9-hL-Dpo">
             <objects>
                 <splitViewController storyboardIdentifier="SplitViewController" id="Izl-5v-Je2" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Home" image="house.fill" catalog="system" id="2YI-CO-C5U"/>
+                    <tabBarItem key="tabBarItem" title="Home" id="2YI-CO-C5U"/>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="3PL-tl-pRi"/>
                     <connections>
@@ -397,7 +397,7 @@
         <scene sceneID="HK5-Av-cJC">
             <objects>
                 <navigationController storyboardIdentifier="MainNavigationViewController" title="Home" id="YHA-Rw-dpi" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Home" image="house.fill" catalog="system" id="4wj-ZF-bbn"/>
+                    <tabBarItem key="tabBarItem" title="Home" id="4wj-ZF-bbn"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="hHr-46-8gG">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -445,10 +445,7 @@
             <point key="canvasLocation" x="-4498" y="2199"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="house.fill" catalog="system" width="64" height="52"/>
-    </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="sbv-Zu-c8W"/>
+        <segue reference="bIW-hz-cwH"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -9,6 +9,8 @@
 import UIKit
 import Parse
 
+
+@available(iOS 13.0, *)
 final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewControllerDelegate {
 
     @IBOutlet weak var scrollWall: UIScrollView!
@@ -226,7 +228,7 @@ final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewContr
         }
     }
 }
-//-----------------------end------------------------------
+@available(iOS 13.0, *)
 extension StatisticVC: UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -665,6 +667,7 @@ extension StatisticVC: UITableViewDataSource {
         return cell
     }
 }
+@available(iOS 13.0, *)
 extension StatisticVC: UITableViewDelegate {
   
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -702,11 +705,10 @@ extension StatisticVC: UITableViewDelegate {
 
         if (tableView == self.tableView) {
 
-             guard let header = tableView.dequeueReusableCell(withIdentifier: "Header") as? StatHeaderViewCell else { fatalError("Unexpected Index Path") }
             if (section == 0) {
-
-
                 //tableView.tableHeaderView = header
+                guard let header = tableView.dequeueReusableCell(withIdentifier: "Header") as? StatHeaderViewCell else { fatalError("Unexpected Index Path") }
+
                 header.myLabel1.text = String(format: "%@%d", "COUNT\n", (_feedLeadItems.count + _feedCustItems.count))
                 header.myLabel2.text = "NASDAQ \n \(tradeYQL?[0] ?? "00")"
                 header.myLabel15.text = "\(changeYQL?[0] ?? "0")"
@@ -763,16 +765,17 @@ extension StatisticVC: UITableViewDelegate {
 
                 return header
             }
-        } else if (section == 2) {
+        } else if (section == 1) {
+            // MARK: - below don't work
+            let view = UIView(frame: .init(x: 0, y: 0, width: tableView.frame.size.width, height: 44))
+            view.backgroundColor = .systemGroupedBackground //.red
 
-            let vw = UIView()
-            vw.backgroundColor = UIColor.red
-
-            return vw
+            return view
         }
-        return nil 
+        return nil
     }
 }
+@available(iOS 13.0, *)
 extension StatisticVC: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {

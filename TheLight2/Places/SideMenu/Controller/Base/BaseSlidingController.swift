@@ -12,6 +12,7 @@ class RightContainerView: UIView {}
 class MenuContainerView: UIView {}
 class DarkCoverView: UIView {}
 
+@available(iOS 13.0, *)
 class BaseSlidingController: UIViewController {
     
     let redView: RightContainerView = {

@@ -10,8 +10,8 @@ import UIKit
 import Parse
 import Firebase
 import FirebaseDatabase
-//import FirebaseAuth
-//import FirebaseStorage
+import FirebaseAuth
+import FirebaseStorage
 import LocalAuthentication
 import FBSDKLoginKit
 import GoogleSignIn
@@ -734,15 +734,17 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
 
             if UIDevice.current.userInterfaceIdiom == .pad {
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let vc = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-                vc.modalPresentationStyle = .fullScreen
-                self.present(vc, animated: true)
+                self.dismiss(animated: true)
+                self.tabBarController?.selectedIndex = 0
             } else {
+                self.dismiss(animated: true)
+                self.tabBarController?.selectedIndex = 0
+
+                /*
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let vc = storyboard.instantiateViewController(withIdentifier: "TabBarController")
                 vc.modalPresentationStyle = .fullScreen
-                self.present(vc, animated: true)
+                self.present(vc, animated: true) */
             }
 
         }

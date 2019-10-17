@@ -12,7 +12,7 @@ import Parse
 import FirebaseDatabase
 import AVFoundation
 
-
+@available(iOS 13.0, *)
 class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     //firebase
@@ -34,11 +34,7 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.translatesAutoresizingMaskIntoConstraints = false
-        if #available(iOS 13.0, *) {
-            cv.backgroundColor = .secondarySystemGroupedBackground
-        } else {
-           cv.backgroundColor = .white
-        }
+        cv.backgroundColor = .secondarySystemGroupedBackground
         cv.dataSource = self
         cv.delegate = self
         return cv
@@ -56,11 +52,7 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        if #available(iOS 13.0, *) {
-            refreshControl.backgroundColor = .systemGroupedBackground
-        } else {
-            refreshControl.backgroundColor = .white //Color.News.navColor
-        }
+        refreshControl.backgroundColor = .systemGroupedBackground
         refreshControl.tintColor = .lightGray
         let attributes = [NSAttributedString.Key.foregroundColor: UIColor.lightGray]
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: attributes)
@@ -193,7 +185,8 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
             vc.uidProfileStr = newslist[(sender.view!.tag)].uid
         }
         let navigationController = UINavigationController(rootViewController: vc)
-        UIApplication.shared.keyWindow?.rootViewController?.present(navigationController, animated: true)
+        let windows = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+        windows?.rootViewController?.present(navigationController, animated: true)
     }
     
     @objc func shareButton(sender: UIButton) {
@@ -224,7 +217,8 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
         activityVC.popoverPresentationController?.sourceView = (sender)
         activityVC.popoverPresentationController?.permittedArrowDirections = .any
         activityVC.popoverPresentationController?.sourceRect = .init(x: 150, y: 150, width: 0, height: 0)
-        UIApplication.shared.keyWindow?.rootViewController?.present(activityVC, animated: true)
+        let windows = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+        windows?.rootViewController?.present(activityVC, animated: true)
     }
     
     // MARK: - CollectionView
@@ -252,12 +246,7 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
             cell.subtitleLabel.font = Font.News.newssource
             cell.uploadbylabel.font = Font.News.newslabel2
         }
-        
-        if #available(iOS 13.0, *) {
-            cell.titleLabelnew.textColor = .label
-        } else {
-            // Fallback on earlier versions
-        }
+        cell.titleLabelnew.textColor = .label
         cell.subtitleLabel.textColor = .systemGray //Color.DGrayColor
         cell.uploadbylabel.textColor = .systemGray //Color.DGrayColor
         
@@ -451,7 +440,8 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
                     vc.imageUrl = self.imageFile.url
                     //vc.videoURL = self.imageFile.url
                     let navigationController = UINavigationController(rootViewController: vc)
-                    UIApplication.shared.keyWindow?.rootViewController?.present(navigationController, animated: true)
+                    let windows = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+                    windows?.rootViewController?.present(navigationController, animated: true)
                 }
             }
         } else {
@@ -492,7 +482,8 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
                 vc.videoURL = self.newslist[indexPath.row].videoUrl
                 let navigationController = UINavigationController(rootViewController: vc)
                 navigationController.modalPresentationStyle = .fullScreen
-                UIApplication.shared.keyWindow?.rootViewController?.present(navigationController, animated: true)
+                let windows = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+                windows?.rootViewController?.present(navigationController, animated: true)
             }
         }
     }

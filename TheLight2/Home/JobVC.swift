@@ -10,6 +10,8 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
+
+@available(iOS 13.0, *)
 final class JobVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView?
@@ -322,7 +324,7 @@ final class JobVC: UIViewController {
         }
     }
 }
-//-----------------------end------------------------------
+@available(iOS 13.0, *)
 extension JobVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -406,6 +408,7 @@ extension JobVC: UITableViewDelegate {
         }
     }
 }
+@available(iOS 13.0, *)
 extension JobVC: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -503,6 +506,7 @@ extension JobVC: UITableViewDataSource {
         pasteBoard.string = cell!.textLabel?.text
     }
 }
+@available(iOS 13.0, *)
 extension JobVC: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {

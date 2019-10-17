@@ -10,6 +10,7 @@ import UIKit
 import AVKit
 import AVFoundation
 
+@available(iOS 13.0, *)
 final class MusicController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
@@ -39,18 +40,10 @@ final class MusicController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if #available(iOS 13.0, *) {
-            view.backgroundColor = .secondarySystemGroupedBackground
-        } else {
-            // Fallback on earlier versions
-        }
+        view.backgroundColor = .secondarySystemGroupedBackground
         noContactsLabel.isHidden = false
         noContactsLabel.text = "Search to Retrieve Apple Music Library..."
-        if #available(iOS 13.0, *) {
-            self.tableView!.backgroundColor = .systemGray4
-        } else {
-            self.tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
-        }
+        self.tableView!.backgroundColor = .systemGray4
         tableView.isHidden = true
         tableView.tableFooterView = UIView()
         _ = self.downloadsSession
@@ -244,6 +237,7 @@ final class MusicController: UIViewController {
     }
 }
 // MARK: - NSURLSessionDownloadDelegate
+@available(iOS 13.0, *)
 extension MusicController: URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
     
@@ -294,6 +288,7 @@ extension MusicController: URLSessionDownloadDelegate {
 }
 
 // MARK: - NSURLSessionDelegate
+@available(iOS 13.0, *)
 extension MusicController: URLSessionDelegate {
     /*
     func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
@@ -309,6 +304,7 @@ extension MusicController: URLSessionDelegate {
 }
 
 // MARK: - UISearchBarDelegate
+@available(iOS 13.0, *)
 extension MusicController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         dismissKeyboard()
@@ -361,6 +357,7 @@ extension MusicController: UISearchBarDelegate {
 }
 
 // MARK: TrackCellDelegate
+@available(iOS 13.0, *)
 extension MusicController: TrackCellDelegate {
     func pauseTapped(_ cell: TrackCell) {
         if let indexPath = tableView.indexPath(for: cell) {
@@ -396,6 +393,7 @@ extension MusicController: TrackCellDelegate {
 }
 
 // MARK: UITableViewDataSource
+@available(iOS 13.0, *)
 extension MusicController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -407,14 +405,9 @@ extension MusicController: UITableViewDataSource {
         
         // Delegate cell button tap events to this view controller
         cell.delegate = self
-        
-        if #available(iOS 13.0, *) {
-            cell.titleLabel.textColor = .label
-            cell.artistLabel.textColor = .systemGray
-        } else {
-            // Fallback on earlier versions
-        }
-        
+
+        cell.titleLabel.textColor = .label
+        cell.artistLabel.textColor = .systemGray
         
         if UIDevice.current.userInterfaceIdiom == .pad  {
             cell.titleLabel.font = Font.Stat.celltitlePad
@@ -456,6 +449,7 @@ extension MusicController: UITableViewDataSource {
 }
 
 // MARK: UITableViewDelegate
+@available(iOS 13.0, *)
 extension MusicController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

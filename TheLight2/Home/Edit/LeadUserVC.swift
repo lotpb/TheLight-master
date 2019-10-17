@@ -9,6 +9,8 @@
 import UIKit
 import Parse
 
+
+@available(iOS 13.0, *)
 final class LeadUserVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView?

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14865.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7uv-xR-NNR">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7uv-xR-NNR">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14819.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15508"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -107,7 +107,7 @@
                                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="21i-uc-9jK">
                                                             <rect key="frame" x="20" y="6" width="64" height="32"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <state key="normal" title=" Like" image="hand.thumbsup.fill" catalog="system"/>
+                                                            <state key="normal" title=" Like"/>
                                                         </button>
                                                     </barButtonItem>
                                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="gtB-0K-0kw"/>
@@ -253,7 +253,7 @@
                                                         <button key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="cyb-pq-fLm">
                                                             <rect key="frame" x="20" y="6" width="74" height="32"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <state key="normal" title="Like  " image="hand.thumbsup.fill" catalog="system"/>
+                                                            <state key="normal" title="Like  "/>
                                                             <connections>
                                                                 <action selector="likeWithSender:" destination="8pS-KO-tey" eventType="touchUpInside" id="mQ8-9t-lB6"/>
                                                             </connections>
@@ -443,7 +443,7 @@
         <scene sceneID="faB-Mf-dep">
             <objects>
                 <navigationController storyboardIdentifier="blogController" title="BlogNavVC" id="7uv-xR-NNR" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="1" title="Blog" image="square.and.pencil" catalog="system" id="wJ7-fS-jWW"/>
+                    <tabBarItem key="tabBarItem" tag="1" title="Blog" id="wJ7-fS-jWW"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="XcV-Bg-ZuE">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -501,7 +501,7 @@
                                                                 <constraint firstAttribute="width" constant="20" id="QZd-o1-yYj"/>
                                                                 <constraint firstAttribute="height" constant="20" id="V2m-2Q-sA3"/>
                                                             </constraints>
-                                                            <state key="normal" image="bubble.left.fill" catalog="system">
+                                                            <state key="normal">
                                                                 <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                             </state>
                                                         </button>
@@ -511,7 +511,6 @@
                                                                 <constraint firstAttribute="height" constant="20" id="2zN-I6-6gd"/>
                                                                 <constraint firstAttribute="width" constant="20" id="sMW-lb-asK"/>
                                                             </constraints>
-                                                            <state key="normal" image="hand.thumbsup.fill" catalog="system"/>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6r8-8d-mpN">
                                                             <rect key="frame" x="157" y="4" width="20" height="20"/>
@@ -519,7 +518,6 @@
                                                                 <constraint firstAttribute="width" constant="20" id="HTq-Fv-2mB"/>
                                                                 <constraint firstAttribute="height" constant="20" id="i3V-eu-hdC"/>
                                                             </constraints>
-                                                            <state key="normal" image="tv.music.note.fill" catalog="system"/>
                                                         </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KVR-1T-Nqu">
                                                             <rect key="frame" x="31" y="4" width="18" height="20"/>
@@ -539,7 +537,6 @@
                                                                 <constraint firstAttribute="height" constant="18" id="jpY-pT-OBW"/>
                                                                 <constraint firstAttribute="width" constant="18" id="oWj-oI-3VX"/>
                                                             </constraints>
-                                                            <state key="normal" image="flag.fill" catalog="system"/>
                                                         </button>
                                                     </subviews>
                                                     <constraints>
@@ -625,13 +622,6 @@
             <point key="canvasLocation" x="1504" y="2332"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="bubble.left.fill" catalog="system" width="64" height="54"/>
-        <image name="flag.fill" catalog="system" width="64" height="64"/>
-        <image name="hand.thumbsup.fill" catalog="system" width="64" height="64"/>
-        <image name="square.and.pencil" catalog="system" width="64" height="58"/>
-        <image name="tv.music.note.fill" catalog="system" width="64" height="46"/>
-    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="utv-WT-cFD"/>
     </inferredMetricsTieBreakers>

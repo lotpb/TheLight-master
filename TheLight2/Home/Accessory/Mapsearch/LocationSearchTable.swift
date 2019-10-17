@@ -9,7 +9,9 @@
 import UIKit
 import MapKit
 
-final class LocationSearchTable : UITableViewController {
+
+@available(iOS 13.0, *)
+final class LocationSearchTable: UITableViewController {
     
     var handleMapSearchDelegate:HandleMapSearch? = nil
     var matchingItems:[MKMapItem] = []
@@ -47,17 +49,46 @@ final class LocationSearchTable : UITableViewController {
     }
     
     func setupTableView() {
-
-        if #available(iOS 13.0, *) {
-            self.tableView!.backgroundColor = .systemGray4
-        } else {
-            self.tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
-        }
+        self.tableView!.backgroundColor = .systemGray4
         self.tableView!.tableFooterView = UIView(frame: .zero)
     }
+
+    //returns number of rows for the LocationSearchTable
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return matchingItems.count
+    }
+
+    //itterate the data inside the tableView
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell")!
+        cell.backgroundColor = .secondarySystemGroupedBackground
+        let selectedItem = matchingItems[indexPath.row].placemark
+        cell.textLabel?.text = selectedItem.name //selectedItem.locality
+        cell.detailTextLabel?.text = parseAddress(selectedItem: selectedItem)
+        return cell
+    }
+
+    //Action for selectedRow
+     override func tableView(_ tableView: UITableView,didSelectRowAt indexPath: IndexPath) {
+         let selectedItem = matchingItems[indexPath.row].placemark
+         handleMapSearchDelegate?.dropPinZoomIn(placemark: selectedItem)
+         dismiss(animated: true)
+
+         self.performSegue(withIdentifier: "DetailedVC", sender: indexPath);
+     }
+     //perfoms segue
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+         if segue.identifier == "DetailedVC" ,
+             let nextScene = segue.destination as? DetailedMapVC ,
+             let indexPath = self.tableView.indexPathForSelectedRow {
+             let selectedRow = matchingItems[indexPath.row]
+             nextScene.mapData = selectedRow
+         }
+     }
 }
 //creates a custom MKLocalSearchRequest and gets MKLocalSearchResponse
-extension LocationSearchTable : UISearchResultsUpdating {
+@available(iOS 13.0, *)
+extension LocationSearchTable: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         guard let mapView = mapView,
@@ -76,44 +107,11 @@ extension LocationSearchTable : UISearchResultsUpdating {
         }
     }
 }
-
+@available(iOS 13.0, *)
 extension LocationSearchTable {
-    //returns number of rows for the LocationSearchTable
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return matchingItems.count
-    }
-    
-    //itterate the data inside the tableView
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell")!
-        if #available(iOS 13.0, *) {
-            cell.backgroundColor = .secondarySystemGroupedBackground
-        } else {
-            // Fallback on earlier versions
-        }
-        let selectedItem = matchingItems[indexPath.row].placemark
-        cell.textLabel?.text = selectedItem.name //selectedItem.locality
-        cell.detailTextLabel?.text = parseAddress(selectedItem: selectedItem)
-        return cell
-    }
+
 }
-
+@available(iOS 13.0, *)
 extension LocationSearchTable {
-    //Action for selectedRow
-    override func tableView(_ tableView: UITableView,didSelectRowAt indexPath: IndexPath) {
-        let selectedItem = matchingItems[indexPath.row].placemark
-        handleMapSearchDelegate?.dropPinZoomIn(placemark: selectedItem)
-        dismiss(animated: true)
-        
-        self.performSegue(withIdentifier: "DetailedVC", sender: indexPath);
-    }
-    //perfoms segue
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "DetailedVC" ,
-            let nextScene = segue.destination as? DetailedMapVC ,
-            let indexPath = self.tableView.indexPathForSelectedRow {
-            let selectedRow = matchingItems[indexPath.row]
-            nextScene.mapData = selectedRow
-        }
-    }
+
 }

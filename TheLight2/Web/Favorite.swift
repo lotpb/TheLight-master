@@ -8,6 +8,8 @@
 
 import UIKit
 
+
+@available(iOS 13.0, *)
 class Favorite: UITableViewController {
     
     var pasteBoard = UIPasteboard.general

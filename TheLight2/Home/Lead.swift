@@ -10,6 +10,7 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
+@available(iOS 13.0, *)
 final class Lead: UIViewController {
     
     @IBOutlet weak var tableView: UITableView?
@@ -160,7 +161,7 @@ final class Lead: UIViewController {
     func loadData() {
         
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
-            
+
             let query = PFQuery(className:"Leads")
             query.limit = 1000
             query.order(byDescending: "createdAt")
@@ -468,6 +469,7 @@ final class Lead: UIViewController {
         }
     }
 }
+@available(iOS 13.0, *)
 extension Lead: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -589,6 +591,7 @@ extension Lead: UITableViewDataSource {
         }
     }
 }
+@available(iOS 13.0, *)
 extension Lead: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -702,7 +705,7 @@ extension Lead: UITableViewDelegate {
         }
     }
 }
-
+@available(iOS 13.0, *)
 extension Lead: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         filteredTitles.removeAll(keepingCapacity: false)

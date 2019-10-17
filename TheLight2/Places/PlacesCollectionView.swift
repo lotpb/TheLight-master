@@ -8,7 +8,7 @@
 
 import UIKit
 
-
+@available(iOS 13.0, *)
 final class PlacesCollectionView: UICollectionViewController, UIGestureRecognizerDelegate {
     
     fileprivate let cellId = "cellId"
@@ -65,18 +65,14 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
     func setupMenuBar() {
         
         view.addSubview(placeMenu)
-        if #available(iOS 11, *) {
-            let guide = view.safeAreaLayoutGuide
-            placeMenu.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
-        } else {
-            placeMenu.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
-        }
+        let guide = view.safeAreaLayoutGuide
+        placeMenu.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
         
         NSLayoutConstraint.activate([
             placeMenu.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0),
             placeMenu.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0),
             placeMenu.heightAnchor.constraint(equalToConstant: 50)
-            ])
+        ])
     }
 
     func setupCollectionView() {
@@ -85,12 +81,8 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
         collectionView?.contentInset = .init(top: 50,left: 0,bottom: 0,right: 0)
         collectionView?.scrollIndicatorInsets = .init(top: 50,left: 0,bottom: 0,right: 0)
         collectionView?.alwaysBounceVertical = true
-        
-        if #available(iOS 13.0, *) {
-            collectionView?.backgroundColor = .secondarySystemGroupedBackground
-        } else {
-            collectionView?.backgroundColor = Color.Mile.collectColor
-        }
+
+        collectionView?.backgroundColor = .secondarySystemGroupedBackground
         collectionView?.register(PlaceFeedCell.self, forCellWithReuseIdentifier: cellId)
         //collectionView?.register(PlaceFooterCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: footerId)
     }
@@ -98,11 +90,7 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
     func setupNavigation() {
         
         navigationItem.title = "MileIQ"
-        if #available(iOS 13.0, *) {
-            navigationController?.navigationBar.barTintColor = .systemBackground
-        } else {
-            navigationController?.navigationBar.barTintColor = .white
-        }
+        navigationController?.navigationBar.barTintColor = .systemBackground
         navigationController?.navigationBar.tintColor = .systemGray
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
         
@@ -131,8 +119,8 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
         //(UIApplication.shared.keyWindow?.rootViewController as? BaseSlidingController)?.openMenu()
         
         menuController.view.frame = .init(x: -300, y: 0, width: 300, height: self.view.frame.height)
-        guard let keyWindow = UIApplication.shared.keyWindow else {return}
-        keyWindow.addSubview(menuController.view)
+        let windows = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+        windows?.addSubview(menuController.view)
         
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             //          both will work
@@ -232,24 +220,24 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
             self.collectionViewLayout.invalidateLayout()
         })
     }
-}
 
-extension PlacesCollectionView: UICollectionViewDelegateFlowLayout {
-    
     // MARK: - collectionView
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 1
     }
-    
+
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
+
         let identifier: String
         identifier = cellId
-        
+
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
-        
+
         return cell
     }
+}
+@available(iOS 13.0, *)
+extension PlacesCollectionView: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return .init(width: view.frame.width, height: view.frame.height)

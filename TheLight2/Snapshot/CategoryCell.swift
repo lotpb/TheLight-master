@@ -11,6 +11,8 @@ import FirebaseDatabase
 import Parse
 import AVFoundation
 
+
+@available(iOS 13.0, *)
 class CategoryCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
     
     var defaults = UserDefaults.standard
@@ -187,7 +189,7 @@ class CategoryCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout, UI
         return .init(top: 0, left: 14, bottom: 0, right: 14)
     }
 }
-
+@available(iOS 13.0, *)
 class AppCell: UICollectionViewCell {
     
     var news: NewsModel? {

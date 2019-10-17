@@ -8,6 +8,8 @@
 
 import UIKit
 
+
+@available(iOS 13.0, *)
 final class UserProfileGridCell: UICollectionViewCell {
     
     var post: NewsModel? {

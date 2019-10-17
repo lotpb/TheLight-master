@@ -10,6 +10,8 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
+
+@available(iOS 13.0, *)
 final class Vendor: UIViewController {
 
     @IBOutlet weak var tableView: UITableView?
@@ -102,14 +104,9 @@ final class Vendor: UIViewController {
         self.tableView!.dataSource = self
         self.tableView!.sizeToFit()
         self.tableView!.clipsToBounds = true
-        if #available(iOS 13.0, *) {
-            let bgView = UIView()
-            bgView.backgroundColor = .secondarySystemGroupedBackground
-            tableView!.backgroundView = bgView
-        } else {
-            // Fallback on earlier versions
-            self.tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
-        }
+        let bgView = UIView()
+        bgView.backgroundColor = .secondarySystemGroupedBackground
+        tableView!.backgroundView = bgView
         self.tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
@@ -447,6 +444,7 @@ final class Vendor: UIViewController {
     }
 }
 //-----------------------end------------------------------
+@available(iOS 13.0, *)
 extension Vendor: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.performSegue(withIdentifier: "vendordetailSegue", sender: self)
@@ -493,11 +491,7 @@ extension Vendor: UITableViewDataSource {
             }
             
             cell.selectionStyle = .none
-            if #available(iOS 13.0, *) {
-                cell.vendtitleLabel.textColor = .label
-            } else {
-                // Fallback on earlier versions
-            }
+            cell.vendtitleLabel.textColor = .label
             cell.vendsubtitleLabel!.textColor = .systemGray
             cell.vendreplyButton.tintColor = .lightGray
             cell.vendreplyButton.setImage(UIImage(systemName: "bubble.left.fill"), for: .normal)
@@ -560,6 +554,7 @@ extension Vendor: UITableViewDataSource {
     }
     
 }
+@available(iOS 13.0, *)
 extension Vendor: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -640,6 +635,7 @@ extension Vendor: UITableViewDelegate {
         pasteBoard.string = cell!.textLabel?.text
     }
 }
+@available(iOS 13.0, *)
 extension Vendor: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {

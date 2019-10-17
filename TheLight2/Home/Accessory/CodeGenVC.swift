@@ -12,6 +12,8 @@ import Parse
 import FirebaseDatabase
 import FirebaseAuth
 
+
+@available(iOS 13.0, *)
 final class CodeGenVC: UIViewController {
     
     @IBOutlet weak var textField: UITextField!
@@ -47,11 +49,7 @@ final class CodeGenVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //self.extendedLayoutIncludesOpaqueBars = true
-        if #available(iOS 13.0, *) {
-            view.backgroundColor = .secondarySystemGroupedBackground
-        } else {
-            // Fallback on earlier versions
-        }
+        view.backgroundColor = .secondarySystemGroupedBackground
 
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
             let query:PFQuery = PFUser.query()!

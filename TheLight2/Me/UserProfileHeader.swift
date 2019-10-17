@@ -16,6 +16,7 @@ protocol UserProfileHeaderDelegate {
     func didChangeToGridView()
 }
 
+@available(iOS 13.0, *)
 final class UserProfileHeader: UICollectionViewCell {
     
     var delegate: UserProfileHeaderDelegate?
@@ -120,11 +121,7 @@ final class UserProfileHeader: UICollectionViewCell {
     //lazy var because the title is being changed
     lazy var editProfileBtn: UIButton = {
         let button = UIButton(type: .system)
-        if #available(iOS 13.0, *) {
-            button.setTitleColor(.label, for: .normal)
-        } else {
-            button.setTitleColor(.black, for: .normal)
-        }
+        button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.borderWidth = 1

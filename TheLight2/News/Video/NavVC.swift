@@ -8,9 +8,10 @@
 
 import UIKit
 
+
+@available(iOS 13.0, *)
 final class NavVC: UINavigationController, PlayerVCDelegate  {
 
-    
     //MARK: Properties
     lazy var playVC: PlayVC = {
         let pvc: PlayVC = self.storyboard?.instantiateViewController(withIdentifier: "PlayVC") as! PlayVC
@@ -98,7 +99,7 @@ final class NavVC: UINavigationController, PlayerVCDelegate  {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        if let window = UIApplication.shared.keyWindow {
+        if let window = UIApplication.shared.windows.first {
             window.addSubview(self.statusView)
             window.addSubview(self.playVC.view)
         }

@@ -10,6 +10,7 @@ import UIKit
 import WebKit
 import SafariServices
 
+@available(iOS 13.0, *)
 final class Web: UIViewController, UISplitViewControllerDelegate, SFSafariViewControllerDelegate {
     
     @IBOutlet weak var progressView: UIProgressView!
@@ -210,6 +211,7 @@ final class Web: UIViewController, UISplitViewControllerDelegate, SFSafariViewCo
     }
 }
 // MARK: - WKScriptMessageHandler
+@available(iOS 13.0, *)
 extension Web: WKScriptMessageHandler {
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -218,6 +220,7 @@ extension Web: WKScriptMessageHandler {
     }
 }
 // MARK: - WKNavigationDelegate
+@available(iOS 13.0, *)
 extension Web: WKNavigationDelegate, WKUIDelegate {
     
     internal func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: ((WKNavigationActionPolicy) -> Void)) {

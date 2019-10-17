@@ -13,7 +13,7 @@ protocol RegionsProtocol{
     func loadOverlayForRegionWithLatitude(_ latitude:Double, andLongitude longitude:Double)
 }
 
-
+@available(iOS 13.0, *)
 final class RegionsListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var delegate:RegionsProtocol!
@@ -76,11 +76,7 @@ final class RegionsListVC: UIViewController, UITableViewDataSource, UITableViewD
         self.tableView!.dataSource = self
         self.tableView!.sizeToFit()
         self.tableView!.clipsToBounds = true
-        if #available(iOS 13.0, *) {
-            self.tableView!.backgroundColor = .systemGray4
-        } else {
-            self.tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
-        }
+        self.tableView!.backgroundColor = .systemGray4
         self.tableView!.tableFooterView = UIView(frame: .zero)
     }
     
@@ -111,13 +107,8 @@ final class RegionsListVC: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell:UITableViewCell! = tableView.dequeueReusableCell(withIdentifier: "regionCell")
-        
-        if #available(iOS 13.0, *) {
-            cell.backgroundColor = .secondarySystemGroupedBackground 
-            cell.textLabel?.textColor = .label
-        } else {
-            cell.backgroundColor = .white
-        }
+        cell.backgroundColor = .secondarySystemGroupedBackground
+        cell.textLabel?.textColor = .label
         cell?.textLabel!.text = regions[indexPath.row]
         return cell
     }

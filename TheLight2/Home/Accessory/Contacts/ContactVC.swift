@@ -30,7 +30,7 @@ private func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     }
 }
 
-
+@available(iOS 13.0, *)
 final class ContactVC: UIViewController {
     
     @IBOutlet weak private var tableView: UITableView!
@@ -59,12 +59,8 @@ final class ContactVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.extendedLayoutIncludesOpaqueBars = true
-        
-        if #available(iOS 13.0, *) {
-            view.backgroundColor = .secondarySystemGroupedBackground
-        } else {
-            // Fallback on earlier versions
-        }
+
+        view.backgroundColor = .secondarySystemGroupedBackground
         setupTableView()
         setupNavigation()
     }
@@ -134,11 +130,7 @@ final class ContactVC: UIViewController {
         
         self.tableView.register(UINib(nibName: "ContactTableViewCell", bundle: nil), forCellReuseIdentifier: "ContactTableViewCell")
 
-        if #available(iOS 13.0, *) {
-            self.tableView!.backgroundColor = .systemGray4
-        } else {
-            self.tableView!.backgroundColor = Color.LGrayColor
-        }
+        self.tableView!.backgroundColor = .systemGray4
         self.tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
@@ -266,6 +258,7 @@ final class ContactVC: UIViewController {
     }
 }
 //-----------------------end------------------------------
+@available(iOS 13.0, *)
 extension ContactVC: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -273,7 +266,7 @@ extension ContactVC: UISearchBarDelegate {
         tableView.reloadData()
     }
 }
-
+@available(iOS 13.0, *)
 extension ContactVC: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -285,14 +278,9 @@ extension ContactVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
+
         let cell = tableView.dequeueReusableCell(withIdentifier: "ContactTableViewCell", for: indexPath) as! ContactTableViewCell
-        if #available(iOS 13.0, *) {
-            cell.backgroundColor = .secondarySystemGroupedBackground
-        } else {
-            // Fallback on earlier versions
-        }
-        
+        cell.backgroundColor = .secondarySystemGroupedBackground
         //cell.selectionStyle = .none
         cell.accessoryType = .disclosureIndicator
         
@@ -303,7 +291,7 @@ extension ContactVC: UITableViewDataSource {
         return cell
     }
 }
-
+@available(iOS 13.0, *)
 extension ContactVC {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -323,7 +311,7 @@ extension ContactVC {
         navigationController?.pushViewController(contactViewController, animated: true)
     }
 }
-
+@available(iOS 13.0, *)
 extension ContactVC: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {

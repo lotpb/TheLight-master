@@ -15,6 +15,8 @@ import CoreLocation
 import MobileCoreServices //kUTTypeImage
 import MessageUI
 
+
+@available(iOS 13.0, *)
 final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLayout, UserProfileHeaderDelegate {
     
     func didChangeToListView() {
@@ -158,12 +160,7 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
         }
         
         //collectionView?.contentInset = .init(top: 50,left: 50,bottom: 0,right: 50)
-
-        if #available(iOS 13.0, *) {
-            collectionView?.backgroundColor = .secondarySystemGroupedBackground
-        } else {
-            collectionView?.backgroundColor = .white
-        }
+        collectionView?.backgroundColor = .secondarySystemGroupedBackground
         collectionView?.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
         collectionView?.register(UserProfileGridCell.self, forCellWithReuseIdentifier: cellId)
         collectionView?.register(UserProfileListCell.self, forCellWithReuseIdentifier: mapId)
@@ -455,8 +452,8 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
         activityVC.popoverPresentationController?.sourceView = (sender)
         activityVC.popoverPresentationController?.permittedArrowDirections = .any
         activityVC.popoverPresentationController?.sourceRect = .init(x: 150, y: 150, width: 0, height: 0)
-        
-        UIApplication.shared.keyWindow?.rootViewController?.present(activityVC, animated: true)
+        let windows = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+        windows?.rootViewController?.present(activityVC, animated: true)
     }
     
 //----------------below dont work--------------------------------------
@@ -551,7 +548,9 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
                 vc.imageUrl = self.imageFile.url
                 //vc.videoURL = self.imageFile.url
                 let navigationController = UINavigationController(rootViewController: vc)
-                UIApplication.shared.keyWindow?.rootViewController?.present(navigationController, animated: true)
+                let windows = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+                windows?.rootViewController?.present(navigationController, animated: true)
+
             }
         } else {
             //firebase
@@ -563,7 +562,8 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
             vc.imageUrl = self.posts[indexPath.row].imageUrl
             vc.videoURL = self.posts[indexPath.row].videoUrl
             let navigationController = UINavigationController(rootViewController: vc)
-            UIApplication.shared.keyWindow?.rootViewController?.present(navigationController, animated: true)
+            let windows = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+            windows?.rootViewController?.present(navigationController, animated: true)
         }
     }
     

@@ -15,6 +15,7 @@
   import MobileCoreServices //added CoreSpotlight
   
   
+  @available(iOS 13.0, *)
   final class DetailViewVC: UIViewController, RPPreviewViewControllerDelegate, AVSpeechSynthesizerDelegate, CLLocationManagerDelegate, UIPickerViewDelegate, UIPickerViewDataSource, RPScreenRecorderDelegate {
     
     // MARK: NavigationController Hidden

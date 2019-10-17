@@ -10,6 +10,7 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
+@available(iOS 13.0, *)
 final class Employee: UIViewController {
 
     @IBOutlet weak var tableView: UITableView?
@@ -109,16 +110,11 @@ final class Employee: UIViewController {
         self.tableView!.dataSource = self
         self.tableView!.sizeToFit()
         self.tableView!.clipsToBounds = true
-        if #available(iOS 13.0, *) {
-            let bgView = UIView()
-            bgView.backgroundColor = .secondarySystemGroupedBackground
-            tableView!.backgroundView = bgView
-        } else {
-            // Fallback on earlier versions
-            self.tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
-        }
+        let bgView = UIView()
+        bgView.backgroundColor = .secondarySystemGroupedBackground
+        tableView!.backgroundView = bgView
         self.tableView!.tableFooterView = UIView(frame: .zero)
-
+        
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
         resultsController.tableView.backgroundColor = Color.LGrayColor
         resultsController.tableView.sizeToFit()
@@ -457,6 +453,7 @@ final class Employee: UIViewController {
     }
 }
 //-----------------------end------------------------------
+@available(iOS 13.0, *)
 extension Employee: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -503,11 +500,7 @@ extension Employee: UITableViewDataSource {
             }
             
             cell.selectionStyle = .none
-            if #available(iOS 13.0, *) {
-                cell.employtitleLabel.textColor = .label
-            } else {
-                // Fallback on earlier versions
-            }
+            cell.employtitleLabel.textColor = .label
             cell.employsubtitleLabel!.textColor = .systemGray
             cell.employreplyButton.tintColor = .lightGray
             cell.employreplyButton.setImage(UIImage(systemName: "bubble.left.fill"), for: .normal)
@@ -571,6 +564,7 @@ extension Employee: UITableViewDataSource {
         }
     }
 }
+@available(iOS 13.0, *)
 extension Employee: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -651,6 +645,7 @@ extension Employee: UITableViewDelegate {
         pasteBoard.string = cell!.textLabel?.text
     }
 }
+@available(iOS 13.0, *)
 extension Employee: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {

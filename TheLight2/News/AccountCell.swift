@@ -10,7 +10,7 @@ import UIKit
 import Parse
 import MobileCoreServices //kUTTypeImage
 
-
+@available(iOS 13.0, *)
 final class AccountCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     private var image = ["clock", "arrowtriangle.right.fill", "bell", "clock.fill"]

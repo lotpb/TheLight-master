@@ -9,6 +9,7 @@
 import UIKit
 
 
+@available(iOS 13.0, *)
 final class StatHeaderViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?){

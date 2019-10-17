@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@available(iOS 13.0, *)
 struct ContentView : View {
        let users = ["Paul Hudson", "Taylor Swift"]
 

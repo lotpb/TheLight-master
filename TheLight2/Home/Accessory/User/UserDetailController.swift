@@ -17,6 +17,7 @@ import GeoFire
 import MobileCoreServices //kUTTypeImage
 import MessageUI
 
+@available(iOS 13.0, *)
 final class UserDetailController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, MKMapViewDelegate, MFMailComposeViewControllerDelegate, UITextFieldDelegate {
     
     private let headerId = "headerId"
@@ -173,19 +174,15 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
     
     func setupForm() {
         
-        if #available(iOS 13.0, *) {
-            self.view.backgroundColor = .systemBackground
-            mainView?.backgroundColor = .systemBackground
-            mapContainerView?.backgroundColor = .systemBackground
-            infoLabel.textColor = .systemBlue
-            createLabel?.textColor = .label
-            phoneLabel.textColor = .systemBlue
-            emailLabel?.textColor = .systemBlue
-            userLabel.textColor = .systemBlue
-            mapLabel?.textColor = .label
-        } else {
-            // Fallback on earlier versions
-        }
+        self.view.backgroundColor = .systemBackground
+        mainView?.backgroundColor = .systemBackground
+        mapContainerView?.backgroundColor = .systemBackground
+        infoLabel.textColor = .systemBlue
+        createLabel?.textColor = .label
+        phoneLabel.textColor = .systemBlue
+        emailLabel?.textColor = .systemBlue
+        userLabel.textColor = .systemBlue
+        mapLabel?.textColor = .label
         
         if status == "Edit" {
             self.usernameField?.text = self.username

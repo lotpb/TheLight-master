@@ -10,6 +10,7 @@ import UIKit
 import Parse
 import FirebaseDatabase
 
+@available(iOS 13.0, *)
 final class Customer: UIViewController {
 
     @IBOutlet weak var tableView: UITableView?
@@ -526,6 +527,7 @@ final class Customer: UIViewController {
 }
 //-----------------------end------------------------------
 // MARK: Table View Data Source
+@available(iOS 13.0, *)
 extension Customer: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -579,13 +581,9 @@ extension Customer: UITableViewDataSource {
             }
             
             cell.selectionStyle = .none
-            if #available(iOS 13.0, *) {
-                cell.custtitleLabel.textColor = .label
-                cell.myLabel20.textColor = .label
-                cell.custsubtitleLabel!.textColor = .systemGray
-            } else {
-                // Fallback on earlier versions
-            }
+            cell.custtitleLabel.textColor = .label
+            cell.myLabel20.textColor = .label
+            cell.custsubtitleLabel!.textColor = .systemGray
             
             cell.myLabel10.backgroundColor = .systemGray //Color.Cust.labelColor
             cell.custlikeButton.tintColor = .lightGray
@@ -666,6 +664,7 @@ extension Customer: UITableViewDataSource {
     
 }
 // MARK: Table View Delegate
+@available(iOS 13.0, *)
 extension Customer: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -742,7 +741,7 @@ extension Customer: UITableViewDelegate {
         pasteBoard.string = cell!.textLabel?.text
     }
 }
-
+@available(iOS 13.0, *)
 extension Customer: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {

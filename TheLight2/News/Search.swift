@@ -12,6 +12,8 @@ protocol SearchDelegate {
 
 import UIKit
 
+
+@available(iOS 13.0, *)
 final class Search: UIView, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     
     //MARK: Properties

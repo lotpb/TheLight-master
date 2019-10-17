@@ -15,6 +15,8 @@ struct PreferencesKeys {
     static let savedItems = "savedItems"
 }
 
+
+@available(iOS 13.0, *)
 final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, RegionsProtocol {
     
     @IBOutlet weak var mapView: MKMapView!
@@ -157,6 +159,7 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
         super.viewDidAppear(animated)
         //TabBar Hidden
         self.tabBarController?.tabBar.isHidden = false
+
         UIToolbar.appearance().barTintColor = .red //Color.toolbarColor
         
         locationManager.requestAlwaysAuthorization()
@@ -172,8 +175,7 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
         
         // MARK: NavigationController Hidden
         NotificationCenter.default.addObserver(self, selector: #selector(GeotificationVC.hideBar(notification:)), name: NSNotification.Name("hide"), object: nil)
-        
-        segmentedControl.selectedSegmentIndex = 0
+
         setMainNavItems()
     }
     
@@ -267,17 +269,19 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
     
     // MARK: - SegmentedControl
     @IBAction func indexChanged(sender: UISegmentedControl) {
-        
         switch segmentedControl.selectedSegmentIndex {
         case 0: break;
             
         case 1:
+            segmentedControl.selectedSegmentIndex = 0
             self.performSegue(withIdentifier: "getregionSegue", sender: self)
             
         case 2:
+            segmentedControl.selectedSegmentIndex = 0
             self.performSegue(withIdentifier: "getaddressSegue", sender: self)
             
         case 3:
+            segmentedControl.selectedSegmentIndex = 0
             let storyboard = UIStoryboard(name: "MileIQ", bundle: nil)
             let vc = storyboard.instantiateViewController(withIdentifier: "MileVC") as! PlacesCollectionView
             navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
@@ -472,6 +476,7 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
 //---------------------------------------------------------------------
 
 //AddGeotification
+@available(iOS 13.0, *)
 extension GeotificationVC: AddGeotificationsViewControllerDelegate {
     
     func addGeotificationViewController(controller: AddGeotificationVC, didAddCoordinate coordinate: CLLocationCoordinate2D, radius: Double, identifier: String, note: String, eventType: Geotification.EventType) {
@@ -485,6 +490,7 @@ extension GeotificationVC: AddGeotificationsViewControllerDelegate {
 }
 // MARK: - Location Manager Delegate
 //AddGeotification and GetAddress
+@available(iOS 13.0, *)
 extension GeotificationVC: CLLocationManagerDelegate {
     
     // MARK: - Geotify AddGeotification
@@ -534,6 +540,7 @@ extension GeotificationVC: CLLocationManagerDelegate {
 }
 
 // MARK: - MapView Delegate
+@available(iOS 13.0, *)
 extension GeotificationVC: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {

@@ -10,6 +10,8 @@ import UIKit
 import FirebaseDatabase
 import Parse
 
+
+@available(iOS 13.0, *)
 class FeaturedAppController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     private let cellId = "cellId"
@@ -35,12 +37,8 @@ class FeaturedAppController: UICollectionViewController, UICollectionViewDelegat
             self.appStore = appStore
             self.collectionView?.reloadData()
         } 
-        
-        if #available(iOS 13.0, *) {
-            collectionView?.backgroundColor = Color.Snap.collectbackColor
-        } else {
-            // Fallback on earlier versions
-        } //UIColor.white
+
+        collectionView?.backgroundColor = Color.Snap.collectbackColor
         collectionView?.register(CategoryCell.self, forCellWithReuseIdentifier: cellId)
         collectionView?.register(LargeCategoryCell.self, forCellWithReuseIdentifier: largeCellId)
         collectionView?.register(Header.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
@@ -89,49 +87,49 @@ class FeaturedAppController: UICollectionViewController, UICollectionViewDelegat
     }
 }
 
-
+@available(iOS 13.0, *)
 class Header: CategoryCell {
     
     private let bannerCellId = "bannerCellId"
     /*
-    var userpost: UserModel? {
-        didSet {
-            
-            guard let postImageUrl = userpost?.profileImageUrl else {return}
-            imageView.loadImage(urlString: postImageUrl)
-            nameLabel.text = userpost?.username
-        }
-    } */
+     var userpost: UserModel? {
+     didSet {
+
+     guard let postImageUrl = userpost?.profileImageUrl else {return}
+     imageView.loadImage(urlString: postImageUrl)
+     nameLabel.text = userpost?.username
+     }
+     } */
 
     override func setupView() {
-/*
-        ref.child("users").observe(.childAdded , with:{ (snapshot) in
-            
-            guard let dictionary = snapshot.value as? [String: Any] else {return}
-            let post = UserModel(dictionary: dictionary)
-            self.userlist.append(post)
-            
-            DispatchQueue.main.async(execute: {
-                self.appsCollectionView.reloadData()
-            })
-        })
-        
-        var userlist = [UserModel]()
-        
-        
-        
-        let imageView: CustomImageView = {
-            let imageView = CustomImageView()
-            imageView.isUserInteractionEnabled = true
-            imageView.backgroundColor = .black
-            imageView.image = UIImage(named: "")
-            imageView.contentMode = .scaleAspectFill
-            imageView.clipsToBounds = true
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            return imageView
-        }() */
+        /*
+         ref.child("users").observe(.childAdded , with:{ (snapshot) in
 
-    
+         guard let dictionary = snapshot.value as? [String: Any] else {return}
+         let post = UserModel(dictionary: dictionary)
+         self.userlist.append(post)
+
+         DispatchQueue.main.async(execute: {
+         self.appsCollectionView.reloadData()
+         })
+         })
+
+         var userlist = [UserModel]()
+
+
+
+         let imageView: CustomImageView = {
+         let imageView = CustomImageView()
+         imageView.isUserInteractionEnabled = true
+         imageView.backgroundColor = .black
+         imageView.image = UIImage(named: "")
+         imageView.contentMode = .scaleAspectFill
+         imageView.clipsToBounds = true
+         imageView.translatesAutoresizingMaskIntoConstraints = false
+         return imageView
+         }() */
+
+
         appsCollectionView.dataSource = self
         appsCollectionView.delegate = self
 
@@ -139,12 +137,12 @@ class Header: CategoryCell {
 
         addSubview(appsCollectionView)
         NSLayoutConstraint.activate([
-                appsCollectionView.leftAnchor.constraint(equalTo: self.leftAnchor),
-                appsCollectionView.rightAnchor.constraint(equalTo: self.rightAnchor),
-                appsCollectionView.topAnchor.constraint(equalTo: self.topAnchor),
-                appsCollectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            appsCollectionView.leftAnchor.constraint(equalTo: self.leftAnchor),
+            appsCollectionView.rightAnchor.constraint(equalTo: self.rightAnchor),
+            appsCollectionView.topAnchor.constraint(equalTo: self.topAnchor),
+            appsCollectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
 
-            ])
+        ])
     }
 
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -163,11 +161,10 @@ class Header: CategoryCell {
 
         return cell
     }
-
+    @available(iOS 13.0, *)
     private class BannerCell: AppCell {
         
         override func setupView() {
-
             imageView.translatesAutoresizingMaskIntoConstraints = false
             imageView.layer.cornerRadius = 30
             imageView.layer.borderColor = UIColor(white: 0.5, alpha: 0.5).cgColor
@@ -178,11 +175,11 @@ class Header: CategoryCell {
                 imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
                 imageView.leftAnchor.constraint(equalTo: self.leftAnchor),
                 imageView.rightAnchor.constraint(equalTo: self.rightAnchor)
-                ])
+            ])
         }
-
     }
 }
+@available(iOS 13.0, *)
 class LargeCategoryCell: CategoryCell {
 
     private let largeAppCellId = "LargeCellId"
@@ -191,6 +188,7 @@ class LargeCategoryCell: CategoryCell {
         super.setupView()
         appsCollectionView.register(LargeAppCell.self, forCellWithReuseIdentifier: largeAppCellId)
     }
+    
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return .init(width: 200, height: frame.height - 32)
     }
@@ -209,11 +207,11 @@ class LargeCategoryCell: CategoryCell {
             imageView.translatesAutoresizingMaskIntoConstraints = false
             addSubview(imageView)
             NSLayoutConstraint.activate([
-                    imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 2),
-                    imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -14),
-                    imageView.leftAnchor.constraint(equalTo: self.leftAnchor),
-                    imageView.rightAnchor.constraint(equalTo: self.rightAnchor)
-                ])
+                imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 2),
+                imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -14),
+                imageView.leftAnchor.constraint(equalTo: self.leftAnchor),
+                imageView.rightAnchor.constraint(equalTo: self.rightAnchor)
+            ])
         }
         
     }

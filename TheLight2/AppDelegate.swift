@@ -14,8 +14,9 @@ import UserNotifications
 import CoreLocation
 import BackgroundTasks
 
-fileprivate let backgroundTaskIdentifier = "com.nshipster.example.task.refresh"
+fileprivate let backgroundTaskIdentifier = "com.PeterBalsamo.apprefresh"
 
+@available(iOS 13.0, *)
 @UIApplicationMain
 final class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
@@ -31,15 +32,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     //journal
     static let geoCoder = CLGeocoder()
 
-    lazy var backgroundURLSession = {
-        /*
-        let configuration = URLSessionConfiguration.background(withIdentifier: "com.nshipster.url-session.background")
-        configuration.discretionary = true
-        configuration.timeoutIntervalForRequest = 30
-
-        return URLSession(configuration: configuration, delegate: ..., delegateQueue: ...) */
-    }
-
+    @available(iOS 13.0, *)
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
 
         
@@ -62,7 +55,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // MileIQ
         if (defaults.bool(forKey: "geotifyKey"))  {
             
-            center.requestAuthorization(options: [.alert, .sound]) { granted, error in }
+            center.requestAuthorization(options: [.badge, .alert, .sound]) { granted, error in }
             locationManager.requestAlwaysAuthorization()
             locationManager.startMonitoringVisits()
             locationManager.delegate = self
@@ -138,15 +131,17 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     /// MARK: - Register BackGround Tasks
     private func registerBackgroundTaks() {
 
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.PeterBalsamo.imagefetcher", using: DispatchQueue.global()) { (task) in
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.PeterBalsamo.apprefresh", using: DispatchQueue.global()) { (task) in
             task.setTaskCompleted(success: true)
         }
 
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: backgroundTaskIdentifier, using: nil) { task in
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.PeterBalsamo.imagefetcher", using: nil) { task in
+            self.fireBackgrounfNotification()
             self.handleAppRefresh(task: task as! BGAppRefreshTask)
         }
     }
 
+    @available(iOS 13.0, *)
     func handleAppRefresh(task: BGAppRefreshTask) {
         scheduleAppRefresh()
 
@@ -181,6 +176,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         center.add(request)
     }
 }
+@available(iOS 13.0, *)
 extension AppDelegate {
     
     func cancelAllPandingBGTask() {
@@ -304,6 +300,7 @@ extension AppDelegate {
     
 }
 
+@available(iOS 13.0, *)
 extension AppDelegate: UNUserNotificationCenterDelegate {
     
     public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
@@ -329,6 +326,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
 }
 /// Geotify
+@available(iOS 13.0, *)
 extension AppDelegate: CLLocationManagerDelegate {
     
     /// Method is called when the device enters a CLRegion.

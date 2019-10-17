@@ -10,6 +10,8 @@ import UIKit
 import FirebaseDatabase
 //import Parse
 
+
+@available(iOS 13.0, *)
 final class TableViewCell: UITableViewCell {
     var defaults = UserDefaults.standard
     //var _feedItems = NSMutableArray()
@@ -127,11 +129,7 @@ final class TableViewCell: UITableViewCell {
     
     var custpost: CustModel? {
         didSet {
-            if #available(iOS 13.0, *) {
-                custtitleLabel.textColor = .label
-            } else {
-                // Fallback on earlier versions
-            }
+            custtitleLabel.textColor = .label
             custtitleLabel.text = custpost?.lastname
             
             custsubtitleLabel.text = String(format: "%@ %@ %@", (custpost?.city)!,
@@ -175,11 +173,7 @@ final class TableViewCell: UITableViewCell {
     
     var vendpost: VendModel? {
         didSet {
-            if #available(iOS 13.0, *) {
-                vendtitleLabel.textColor = .label
-            } else {
-                // Fallback on earlier versions
-            }
+            vendtitleLabel.textColor = .label
             vendtitleLabel.text = vendpost?.vendor
             
             if vendpost?.profession == "" {

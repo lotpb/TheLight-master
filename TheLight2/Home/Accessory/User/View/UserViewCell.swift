@@ -9,6 +9,7 @@
 import UIKit
 
 
+@available(iOS 13.0, *)
 final class UserViewCell: UICollectionViewCell {
     
     var user: UserModel? {
@@ -33,12 +34,8 @@ final class UserViewCell: UICollectionViewCell {
     let usertitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        if #available(iOS 13.0, *) {
-            label.backgroundColor = .systemBackground
-            label.textColor = .label
-        } else {
-            // Fallback on earlier versions
-        }
+        label.backgroundColor = .systemBackground
+        label.textColor = .label
         label.textAlignment = .center
         label.font = Font.celltitle14m
         label.adjustsFontSizeToFitWidth = true

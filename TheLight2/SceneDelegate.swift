@@ -14,6 +14,7 @@ import FirebaseDatabase
 import FirebaseCore
 import GoogleSignIn
 
+@available(iOS 13.0, *)
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
@@ -31,6 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             "pushnotifyKey": false,
             "geotifyKey": false,
             "weatherNotifyKey": false,
+            "registerKey": true,
             "weatherKey": "2446726",
             "usernameKey": "Peter Balsamo",
             "passwordKey": "3911",
@@ -84,6 +86,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window = UIWindow(frame: UIScreen.main.bounds)
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let initialViewController : UIViewController = storyboard.instantiateViewController(withIdentifier: "loginIDController") as UIViewController
+            initialViewController.modalPresentationStyle = .fullScreen
             window?.rootViewController = initialViewController
             window?.makeKeyAndVisible()
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="9Rf-yi-KAG">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="9Rf-yi-KAG">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15508"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -138,7 +138,7 @@
                                     <segue destination="glx-ee-UdB" kind="presentation" identifier="addGeotification" id="jWB-F2-6JG"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem image="location.fill" catalog="system" id="odw-qT-aoK">
+                            <barButtonItem title="Item" id="odw-qT-aoK">
                                 <connections>
                                     <action selector="zoomToCurrentLocationWithSender:" destination="up2-0X-jZG" id="xkU-iF-1IW"/>
                                 </connections>
@@ -235,7 +235,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radius" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ce9-tB-AfO">
                                                     <rect key="frame" x="26" y="16" width="50" height="13"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                    <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -268,7 +268,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Note" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z0b-c9-2XZ">
                                                     <rect key="frame" x="26" y="16" width="36" height="13"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                    <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -302,7 +302,7 @@
                                     <action selector="onAddWithSender:" destination="hij-Un-aVo" id="3v0-s8-gw5"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem image="location.fill" catalog="system" id="4Mv-aU-K8i" userLabel="CurrentLocation">
+                            <barButtonItem title="Item" id="4Mv-aU-K8i" userLabel="CurrentLocation">
                                 <connections>
                                     <action selector="onZoomToCurrentLocationWithSender:" destination="hij-Un-aVo" id="8ey-NO-uru"/>
                                 </connections>
@@ -394,6 +394,5 @@
     </scenes>
     <resources>
         <image name="AddPin" width="75" height="75"/>
-        <image name="location.fill" catalog="system" width="64" height="60"/>
     </resources>
 </document>

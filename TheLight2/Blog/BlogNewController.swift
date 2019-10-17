@@ -13,6 +13,8 @@ import FirebaseAuth
 import UserNotifications
 import MessageUI
 
+
+@available(iOS 13.0, *)
 final class BlogNewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, MFMailComposeViewControllerDelegate {
     
     let CharacterLimit = 140
@@ -146,24 +148,16 @@ final class BlogNewController: UIViewController, UITextFieldDelegate, UITextView
     }
     
      func setupForm() {
-        if #available(iOS 13.0, *) {
-            self.view.backgroundColor = .systemBackground
-            subject!.backgroundColor = .systemBackground
-            photoView.backgroundColor = .systemBackground
-        } else {
-            // Fallback on earlier versions
-        }
+        self.view.backgroundColor = .systemBackground
+        subject!.backgroundColor = .systemBackground
+        photoView.backgroundColor = .systemBackground
         photoView.addSubview(self.imageProfile)
         self.imageProfile.translatesAutoresizingMaskIntoConstraints = true
         self.imageProfile.layer.cornerRadius = 5
         self.imageProfile.layer.masksToBounds = true
         self.imageProfile.contentMode = .scaleAspectFill
 
-        if #available(iOS 13.0, *) {
-            self.tableView!.backgroundColor = .systemGray4
-        } else {
-            self.tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
-        }
+        self.tableView!.backgroundColor = .systemGray4
         self.tableView!.tableFooterView = UIView(frame: .zero)
         
         self.Like!.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
@@ -675,6 +669,7 @@ final class BlogNewController: UIViewController, UITextFieldDelegate, UITextView
         self.showBadgeHighLight()
     }
 }
+@available(iOS 13.0, *)
 extension BlogNewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -713,13 +708,9 @@ extension BlogNewController: UITableViewDataSource {
         }
         
         cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
-        
-        if #available(iOS 13.0, *) {
-            cell.textLabel?.textColor = .systemBlue
-            cell.detailTextLabel?.textColor = .label
-        } else {
-            // Fallback on earlier versions
-        }
+
+        cell.textLabel?.textColor = .systemBlue
+        cell.detailTextLabel?.textColor = .label
         
         if indexPath.row == 0 {
             
@@ -770,6 +761,7 @@ extension BlogNewController: UITableViewDataSource {
         return cell
     }
 }
+@available(iOS 13.0, *)
 extension BlogNewController: UITableViewDelegate {
 }
 
