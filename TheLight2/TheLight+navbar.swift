@@ -105,13 +105,13 @@ public extension UIViewController {
                navigationController?.navigationBar.isTranslucent = true
                navigationController?.navigationBar.backgroundColor = UIColor.clear
         
-        let separatorLineView1 = UIView(frame: .init(x: 0, y: 0, width: view.frame.size.width, height: 0.5))
-        separatorLineView1.backgroundColor = Color.twitterline
-        view.addSubview(separatorLineView1)
+        let separator = UIView(frame: .init(x: 0, y: 0, width: view.frame.size.width, height: 0.5))
+        separator.translatesAutoresizingMaskIntoConstraints = false
+        separator.backgroundColor = Color.twitterline
+        view.addSubview(separator)
         
         //remove navbar line
         navigationController?.navigationBar.shadowImage = nil //UIImage()
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
-
     }
 }

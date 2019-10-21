@@ -215,7 +215,7 @@ final class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDele
         
         let dateString = dateFormatter.string(from: date1)
         self.detailLabel.text = String(format: "%@ %@ %@", "\(String(describing: self.newsDetail!))", "Uploaded", "\(dateString)")
-        self.detailLabel.textColor = .systemGray
+        self.detailLabel.textColor = .secondaryLabel
         self.detailLabel.sizeToFit() 
     }
     
@@ -237,6 +237,7 @@ final class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDele
     func setupTextView() {
         
         self.newsTextview.text = self.newsStory
+        self.newsTextview.textColor = .secondaryLabel
         self.newsTextview.delegate = self
         self.newsTextview.textContainerInset = .init(top: 0, left: -4, bottom: 0, right: 0)
         // Make web links clickable

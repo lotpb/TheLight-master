@@ -296,9 +296,10 @@ final class LeadUserVC: UIViewController, UITableViewDelegate, UITableViewDataSo
         myLabel1.isUserInteractionEnabled = true
         vw.addSubview(myLabel1)
         
-        let separatorLineView1 = UIView(frame: .init(x: 10, y: 75, width: 50, height: 2.5))
-        separatorLineView1.backgroundColor = .white
-        vw.addSubview(separatorLineView1)
+        let separator = UIView(frame: .init(x: 10, y: 75, width: 50, height: 2.5))
+        separator.translatesAutoresizingMaskIntoConstraints = false
+        separator.backgroundColor = .white
+        vw.addSubview(separator)
         
         let myLabel2:UILabel = UILabel(frame: .init(x: 80, y: 15, width: 50, height: 50))
         myLabel2.numberOfLines = 0

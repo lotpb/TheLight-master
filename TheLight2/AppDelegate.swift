@@ -35,7 +35,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     @available(iOS 13.0, *)
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
 
-        
         /// MARK: -  BackGround Tasks
         if UserDefaults.standard.bool(forKey: "AllowBackgroundFetch") {
             registerBackgroundTaks()
@@ -54,7 +53,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // MileIQ
         if (defaults.bool(forKey: "geotifyKey"))  {
-            
             center.requestAuthorization(options: [.badge, .alert, .sound]) { granted, error in }
             locationManager.requestAlwaysAuthorization()
             locationManager.startMonitoringVisits()
@@ -63,7 +61,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             locationManager.pausesLocationUpdatesAutomatically = false
             locationManager.startUpdatingLocation()  // 2
         }
-        
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
 
@@ -74,15 +71,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    internal func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        
-        let handled = ApplicationDelegate.shared.application(app, open: url, sourceApplication: options[.sourceApplication] as? String, annotation: options[.annotation])
-        
-        //GIDSignIn.sharedInstance().handle(url,
-        //sourceApplication:options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
-        //annotation: [:])
-        
-        return handled
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        GIDSignIn.sharedInstance().handle(url)
+        return true
     }
     
     // MARK: - Facebook

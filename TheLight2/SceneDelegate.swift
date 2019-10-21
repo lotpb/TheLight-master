@@ -7,12 +7,12 @@
 //
 
 import UIKit
-import SwiftUI
 import Parse
 import FirebaseDatabase
-//import FirebaseAuth
 import FirebaseCore
 import GoogleSignIn
+//import FirebaseAuth
+//import SwiftUI
 
 @available(iOS 13.0, *)
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -32,7 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             "pushnotifyKey": false,
             "geotifyKey": false,
             "weatherNotifyKey": false,
-            "registerKey": true,
+            "registerKey": false,
             "weatherKey": "2446726",
             "usernameKey": "Peter Balsamo",
             "passwordKey": "3911",
@@ -53,9 +53,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             UIApplication.shared.isIdleTimerDisabled = true
         }
 
-        /// MARK: - Parse
+        /// MARK: - loadData()
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
-
+            /// MARK: - Parse
             let configuration = ParseClientConfiguration {
                 $0.applicationId = "lMUWcnNfBE2HcaGb2zhgfcTgDLKifbyi6dgmEK3M"
                 $0.clientKey = "UVyAQYRpcfZdkCa5Jzoza5fTIPdELFChJ7TVbSeX"
@@ -69,45 +69,32 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             FirebaseRef.databaseRoot.keepSynced(true)
         }
 
+        /// MARK: - TabBarController
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        window = UIWindow(windowScene: windowScene)
+        window?.rootViewController = TabBarController()
+        window?.windowScene = windowScene
+        window?.makeKeyAndVisible()
+
         /*
-        /// MARK: - splitViewController
-        let splitViewController = UISplitViewController()
-        let rootViewController = MasterViewController()
-        let detailViewController = SnapshotVC()
+         /// MARK: - splitViewController
+         let splitViewController = UISplitViewController()
+         let rootViewController = MasterViewController()
+         let detailViewController = SnapshotVC()
 
-        let homeNavigationController = UINavigationController(rootViewController: rootViewController)
-        let secondNavigationController = UINavigationController(rootViewController: detailViewController)
+         let homeNavigationController = UINavigationController(rootViewController: rootViewController)
+         let secondNavigationController = UINavigationController(rootViewController: detailViewController)
 
-        splitViewController.viewControllers = [homeNavigationController, secondNavigationController]
-        //splitViewController.preferredDisplayMode = .allVisible */
+         splitViewController.viewControllers = [homeNavigationController, secondNavigationController]
+         //splitViewController.preferredDisplayMode = .allVisible */
 
-        /// MARK: - Register login
-        if (!(defaults.bool(forKey: "registerKey")) || defaults.bool(forKey: "loginKey")) {
-            window = UIWindow(frame: UIScreen.main.bounds)
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let initialViewController : UIViewController = storyboard.instantiateViewController(withIdentifier: "loginIDController") as UIViewController
-            initialViewController.modalPresentationStyle = .fullScreen
-            window?.rootViewController = initialViewController
-            window?.makeKeyAndVisible()
-
-        } else {
-
-            /// MARK: - TabBarController
-            guard let windowScene = (scene as? UIWindowScene) else { return }
-
-            window = UIWindow(frame: UIScreen.main.bounds)
-            window!.rootViewController = TabBarController()
-            window!.makeKeyAndVisible()
-            window?.windowScene = windowScene
-            
-            /*
-            if let windowScene = scene as? UIWindowScene {
-            let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: ContentView())
-            self.window = window
-            window.makeKeyAndVisible()
-            } */
-        }
+        /*
+         if let windowScene = scene as? UIWindowScene {
+         let window = UIWindow(windowScene: windowScene)
+         window.rootViewController = UIHostingController(rootView: ContentView())
+         self.window = window
+         window.makeKeyAndVisible()
+         } */
     }
 
     /// MARK: - App Theme Customization

@@ -138,7 +138,7 @@
                                     <segue destination="glx-ee-UdB" kind="presentation" identifier="addGeotification" id="jWB-F2-6JG"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Item" id="odw-qT-aoK">
+                            <barButtonItem image="location.fill" catalog="system" id="odw-qT-aoK">
                                 <connections>
                                     <action selector="zoomToCurrentLocationWithSender:" destination="up2-0X-jZG" id="xkU-iF-1IW"/>
                                 </connections>
@@ -302,7 +302,7 @@
                                     <action selector="onAddWithSender:" destination="hij-Un-aVo" id="3v0-s8-gw5"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Item" id="4Mv-aU-K8i" userLabel="CurrentLocation">
+                            <barButtonItem image="location.fill" catalog="system" id="4Mv-aU-K8i" userLabel="CurrentLocation">
                                 <connections>
                                     <action selector="onZoomToCurrentLocationWithSender:" destination="hij-Un-aVo" id="8ey-NO-uru"/>
                                 </connections>
@@ -394,5 +394,6 @@
     </scenes>
     <resources>
         <image name="AddPin" width="75" height="75"/>
+        <image name="location.fill" catalog="system" width="64" height="56"/>
     </resources>
 </document>

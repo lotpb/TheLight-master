@@ -90,24 +90,13 @@ class SnapshotVC: UIViewController, UISplitViewControllerDelegate {
     var maintitle : UILabel!
     var datetitle : UILabel!
     var myLabel1 : UILabel!
-    
+
     var calendar: EKCalendar!
     var events: [EKEvent]?
 
-    weak var dayYQL: NSArray!
     weak var textYQL: NSArray!
-
-    weak var symYQL: NSArray!
-    weak var tradeYQL: NSArray!
-    weak var changeYQL: NSArray!
-
     var tempYQL: String!
     var weathYQL: String!
-    var riseYQL: String!
-    var setYQL: String!
-    var humYQL: String!
-    var cityYQL: String!
-    var updateYQL: String!
 
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -185,8 +174,8 @@ class SnapshotVC: UIViewController, UISplitViewControllerDelegate {
         self.tableView?.register(SnapHeaderviewCell.self, forCellReuseIdentifier: "Header")
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        self.tableView.backgroundColor = .systemGroupedBackground //Color.Snap.tablebackColor
-        self.tableView.separatorColor = Color.Snap.lineColor //.clear
+        self.tableView.backgroundColor = .systemGroupedBackground
+        self.tableView.separatorColor = .red
         self.tableView.separatorInset = .init(top: 0, left: 5, bottom: 0, right: 5) // .zero
         self.tableView!.tableFooterView = UIView(frame: .zero)
         
@@ -512,10 +501,29 @@ class SnapshotVC: UIViewController, UISplitViewControllerDelegate {
 }
 //-----------------------end------------------------------
 @available(iOS 13.0, *)
-extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
+extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return .init(top: 0, left: 5, bottom: 0, right: 5)
+    }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if (collectionView.tag == 0) {
+            if UIDevice.current.userInterfaceIdiom == .pad  {
+                return .init(width: 250, height: 180)
+            } else {
+                return .init(width: 190, height: 140)
+            }
+        } else if (collectionView.tag == 1) {
+            return .init(width: 155, height: 140)
+        } else if (collectionView.tag == 2) {
+            return .init(width: 125, height: 140)
+        }
+        return .init(width: 95, height: 140)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section:Int)->Int
@@ -564,16 +572,19 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CollectionViewCell
             cell.backgroundColor = .systemGray
 
+
         if (UIDevice.current.userInterfaceIdiom == .pad) && (collectionView.tag == 0) {
-            myLabel1 = UILabel(frame: .init(x: 0, y: 160, width: cell.bounds.size.width, height: 20))
+            myLabel1 = UILabel(frame: .init(x: 0, y: cell.bounds.size.height-20, width: cell.bounds.size.width, height: 20))
         } else {
-            myLabel1 = UILabel(frame: .init(x: 0, y: 110, width: cell.bounds.size.width, height: 20))
+            myLabel1 = UILabel(frame: .init(x: 0, y: cell.bounds.size.height-20, width: cell.bounds.size.width, height: 20))
         }
+
         myLabel1.font = Font.Snapshot.cellLabel
-        myLabel1.backgroundColor = .systemBackground
+        myLabel1.backgroundColor = .secondarySystemGroupedBackground
         myLabel1.textColor = .label
         myLabel1.textAlignment = .center
         myLabel1.clipsToBounds = true
+        myLabel1.adjustsFontSizeToFitWidth = true
 
         var photoImage: UIImage?
         
@@ -752,21 +763,6 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource {
             return cell
         }
         return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if (collectionView.tag == 0) {
-            if UIDevice.current.userInterfaceIdiom == .pad  {
-                return .init(width: 250, height: 180) //w150 h130
-            } else {
-                return .init(width: 190, height: 130)
-            }
-        } else if (collectionView.tag == 1) {
-            return .init(width: 155, height: 130)
-        } else if (collectionView.tag == 2) {
-            return .init(width: 125, height: 130)
-        }
-        return .init(width: 95, height: 130)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -1147,6 +1143,11 @@ extension SnapshotVC: UITableViewDataSource {
         if (indexPath.section == 0) {
 
             if (indexPath.row == 0) {
+
+                let separator = UIView(frame: .init(x: 5, y: 1, width: view.frame.size.width-10, height: 0.5))
+                separator.backgroundColor = .red
+                cell.addSubview(separator)
+
                 cell.collectionView.backgroundColor = .systemGroupedBackground
                 cell.backgroundColor = .systemGroupedBackground
                 cell.accessoryType = .disclosureIndicator

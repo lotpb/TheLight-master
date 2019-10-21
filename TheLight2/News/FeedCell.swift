@@ -247,8 +247,8 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
             cell.uploadbylabel.font = Font.News.newslabel2
         }
         cell.titleLabelnew.textColor = .label
-        cell.subtitleLabel.textColor = .systemGray //Color.DGrayColor
-        cell.uploadbylabel.textColor = .systemGray //Color.DGrayColor
+        cell.subtitleLabel.textColor = .secondaryLabel
+        cell.uploadbylabel.textColor = .secondaryLabel 
         
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
             imageObject = _feedItems.object(at: (indexPath).row) as? PFObject

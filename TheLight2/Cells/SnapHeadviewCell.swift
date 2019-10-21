@@ -123,7 +123,7 @@ final class SnapHeaderviewCell: UITableViewCell {
 
             myListLbl.leadingAnchor.constraint(equalTo: vw.leadingAnchor, constant: 20),
             myListLbl.trailingAnchor.constraint(equalTo: vw.trailingAnchor, constant: -15),
-            myListLbl.bottomAnchor.constraint(equalTo: vw.bottomAnchor, constant: 0),
+            myListLbl.bottomAnchor.constraint(equalTo: vw.bottomAnchor, constant: -5),
         ])
     }
 }

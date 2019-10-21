@@ -114,7 +114,7 @@ class CollectionViewCell: UICollectionViewCell {
         snapImageView.addSubview(activityIndicator)
         
         NSLayoutConstraint.activate([
-        snapImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 0),        snapImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),        snapImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),        snapImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -13),
+        snapImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 0),        snapImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),        snapImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),        snapImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0),
         
         activityIndicator.centerXAnchor.constraint(equalTo: snapImageView.centerXAnchor),        activityIndicator.centerYAnchor.constraint(equalTo: snapImageView.centerYAnchor),        activityIndicator.widthAnchor.constraint(equalToConstant: 50),        activityIndicator.heightAnchor.constraint(equalToConstant: 50),
         ])
@@ -232,7 +232,7 @@ class VideoCell: CollectionViewCell {
     
     lazy var separatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
+        view.backgroundColor = .quaternaryLabel //UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

@@ -54,6 +54,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
         versionCheck()
         speech()
         updateYahoo()
+
         //fetchUserIds()
         edgesForExtendedLayout = []  // FIXME: header space
 
@@ -72,12 +73,16 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
                 }
             }
         }
+
+
         
         self.refreshControl?.backgroundColor = .clear //Color.Lead.navColor
         self.refreshControl?.tintColor = .white
         let attributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         self.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: attributes)
         self.refreshControl?.addTarget(self, action: #selector(self.refreshData), for: .valueChanged)
+
+        registerLogin()
     }
  
     override func viewDidAppear(_ animated: Bool) {
@@ -112,8 +117,18 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
         else {
             return true
         }
-
         return controller.collapseDetailViewController
+    }
+
+    func registerLogin() {
+        /// MARK: - Register login
+        if (!(defaults.bool(forKey: "registerKey")) || defaults.bool(forKey: "loginKey")) {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let initialViewController : UIViewController = storyboard.instantiateViewController(withIdentifier: "loginIDController") as UIViewController
+            initialViewController.modalPresentationStyle = .fullScreen
+            self.present(initialViewController, animated: true)
+
+        }
     }
 
     func setupNavigation() {
@@ -260,10 +275,8 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
         }
     }
     
-    // MARK: - updateYahoo
+    // MARK: - update Yahoo weather
     func updateYahoo() {
-
-        //weather
         let results = YQL.query(statement: String(format: "%@%@", "select * from weather.forecast where woeid=", self.defaults.string(forKey: "weatherKey")!))
         
         let queryResults = results?.value(forKeyPath: "query.results.channel.item") as? NSDictionary
@@ -308,23 +321,16 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             PFUser.logInWithUsername(inBackground: userId, password:userpassword) { (user, error) in
                 if error != nil {
                     print("Error: \(String(describing: error)) \(String(describing: error!._userInfo))")
+                    self.simpleAlert(title: "Oooops", message: "Your username and password does not match")
                     return
                 }
             }
-
         } else {
             //firebase
             Auth.auth().signIn(withEmail: useremail, password: userpassword, completion: { (user, err) in
                 if let err = err {
                     print("Failed to login:", err)
                     self.simpleAlert(title: "Oooops", message: "Your username and password does not match")
-                    //self.handleLogout()
-                    /*
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                        let vc = storyboard.instantiateViewController(withIdentifier: "loginIDController")
-                        vc.modalPresentationStyle = .fullScreen
-                        self.present(vc, animated: true) */
-
                     return
                 }
                 print("Succesfully logged back in with user:", user?.user.uid ?? "")
@@ -333,19 +339,19 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     }
     
     @objc func handleLogout() {
-        //if ((defaults.string(forKey: "backendKey")) == "Firebase") {
+        self.defaults.set(false, forKey: "registerKey")
             do {
                 try
                     Auth.auth().signOut()
             } catch let error as NSError {
                 print(error.localizedDescription)
             }
-        //}
 
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "loginIDController")
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
+
     }
     
     // MARK: - Table View

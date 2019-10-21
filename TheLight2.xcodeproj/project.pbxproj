@@ -44,9 +44,6 @@
 		AF72A4E421CAE03B004DA013 /* EditData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AF72A4E321CAE03B004DA013 /* EditData.storyboard */; };
 		AF80F236224A7C370099A554 /* PlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF80F235224A7C370099A554 /* PlaceCell.swift */; };
 		AF86497420767FB90025AB93 /* SnapshotVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF86497320767FB80025AB93 /* SnapshotVC.swift */; };
-		AF86497620767FC10025AB93 /* FeaturedAppsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF86497520767FC10025AB93 /* FeaturedAppsController.swift */; };
-		AF86497820767FC90025AB93 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF86497720767FC90025AB93 /* CategoryCell.swift */; };
-		AF86497A20767FD70025AB93 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF86497920767FD70025AB93 /* Model.swift */; };
 		AF8AFB811ED22CC000D383E3 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF8AFB801ED22CC000D383E3 /* MasterViewController.swift */; };
 		AF8AFB851ED22CD200D383E3 /* StatisticVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF8AFB841ED22CD200D383E3 /* StatisticVC.swift */; };
 		AF8AFB891ED22CE100D383E3 /* Lead.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF8AFB881ED22CE100D383E3 /* Lead.swift */; };
@@ -203,9 +200,6 @@
 		AF72A4E321CAE03B004DA013 /* EditData.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = EditData.storyboard; path = TheLight2/Layouts/EditData.storyboard; sourceTree = "<group>"; };
 		AF80F235224A7C370099A554 /* PlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceCell.swift; sourceTree = "<group>"; };
 		AF86497320767FB80025AB93 /* SnapshotVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotVC.swift; path = TheLight2/Snapshot/SnapshotVC.swift; sourceTree = SOURCE_ROOT; };
-		AF86497520767FC10025AB93 /* FeaturedAppsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeaturedAppsController.swift; path = TheLight2/Snapshot/FeaturedAppsController.swift; sourceTree = SOURCE_ROOT; };
-		AF86497720767FC90025AB93 /* CategoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CategoryCell.swift; path = TheLight2/Snapshot/CategoryCell.swift; sourceTree = SOURCE_ROOT; };
-		AF86497920767FD70025AB93 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Model.swift; path = TheLight2/Snapshot/Model.swift; sourceTree = SOURCE_ROOT; };
 		AF8AFB801ED22CC000D383E3 /* MasterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
 		AF8AFB841ED22CD200D383E3 /* StatisticVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticVC.swift; sourceTree = "<group>"; };
 		AF8AFB881ED22CE100D383E3 /* Lead.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lead.swift; sourceTree = "<group>"; };
@@ -411,9 +405,6 @@
 			isa = PBXGroup;
 			children = (
 				AF86497320767FB80025AB93 /* SnapshotVC.swift */,
-				AF86497520767FC10025AB93 /* FeaturedAppsController.swift */,
-				AF86497920767FD70025AB93 /* Model.swift */,
-				AF86497720767FC90025AB93 /* CategoryCell.swift */,
 			);
 			name = Snapshot;
 			path = TheLight2/Snapshot;
@@ -1012,7 +1003,6 @@
 				AF26EF791F4B0A8F0035EAE3 /* UserWarningSpeakManager.swift in Sources */,
 				AFBE77AF217772C900403CB2 /* ListController.swift in Sources */,
 				AF8AFB991ED22D4600D383E3 /* LeadDetail.swift in Sources */,
-				AF86497620767FC10025AB93 /* FeaturedAppsController.swift in Sources */,
 				AFF3A27E1F4B11B600F1BC44 /* UserModel.swift in Sources */,
 				AFE2BB5B2157147C00844107 /* PlacesCollectionView.swift in Sources */,
 				AF8AFBC91ED22E6000D383E3 /* Download.swift in Sources */,
@@ -1020,7 +1010,6 @@
 				AF4FA53F1ED2308200EDEFEA /* TheLight+navbar.swift in Sources */,
 				AF4FA5391ED2305500EDEFEA /* Favorite.swift in Sources */,
 				AF8AFBCB1ED22E6F00D383E3 /* LookupData.swift in Sources */,
-				AF86497A20767FD70025AB93 /* Model.swift in Sources */,
 				AF8AFBF51ED22FA100D383E3 /* FeedCell.swift in Sources */,
 				AF8AFBFB1ED22FBC00D383E3 /* NewsDetailVC.swift in Sources */,
 				AF4FA53D1ED2307400EDEFEA /* CollectionViewCell.swift in Sources */,
@@ -1084,7 +1073,6 @@
 				AF8AFBF71ED22FAB00D383E3 /* UploadController.swift in Sources */,
 				AF8AFB9F1ED22D7100D383E3 /* LeadUserVC.swift in Sources */,
 				AFEAA7532119ECDB0049FB4A /* Location.swift in Sources */,
-				AF86497820767FC90025AB93 /* CategoryCell.swift in Sources */,
 				AF0A16BC20166FD500D7AFDF /* QRCodeReader.swift in Sources */,
 				AF5C95911FD6F3BA00D9B2CA /* MapsearchVC.swift in Sources */,
 				AF4DD6B92267530600B64D02 /* Extensions.swift in Sources */,

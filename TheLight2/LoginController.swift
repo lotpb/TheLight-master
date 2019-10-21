@@ -732,21 +732,13 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
     // MARK: - RedirectToHome
     func redirectToHome() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
-
             if UIDevice.current.userInterfaceIdiom == .pad {
                 self.dismiss(animated: true)
                 self.tabBarController?.selectedIndex = 0
             } else {
                 self.dismiss(animated: true)
                 self.tabBarController?.selectedIndex = 0
-
-                /*
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let vc = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-                vc.modalPresentationStyle = .fullScreen
-                self.present(vc, animated: true) */
             }
-
         }
     }
     
@@ -761,17 +753,13 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
     
     @objc func keyboardHide() {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            
             self.view.frame = .init(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
-            
             }, completion: nil)
     }
     
     @objc func keyboardShow() {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            
             self.view.frame = .init(x: 0, y: -140, width: self.view.frame.width, height: self.view.frame.height)
-            
             }, completion: nil)
     }
     
@@ -787,7 +775,6 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
         imagePickerController.allowsEditing = true
-        
         present(imagePickerController, animated:true)
     }
     
@@ -796,11 +783,8 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         
         if let originalImage = info["UIImagePickerControllerOriginalImage"] as? UIImage {
             plusPhotoButton.setImage(originalImage.withRenderingMode(.alwaysOriginal), for: .normal)
-        }
-            
-        else if let editedImage = info["UIImagePickerControllerEditedImage"] as? UIImage {
+        } else if let editedImage = info["UIImagePickerControllerEditedImage"] as? UIImage {
             plusPhotoButton.setImage(editedImage.withRenderingMode(.alwaysOriginal), for: .normal)
-            
         }
         
         plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width/2
