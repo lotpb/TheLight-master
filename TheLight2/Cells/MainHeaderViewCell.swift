@@ -173,7 +173,7 @@ final class MainHeaderViewCell: UITableViewCell {
 
     func setupViews() {
 
-        if UIDevice.current.userInterfaceIdiom == .phone  {
+        //if UIDevice.current.userInterfaceIdiom == .phone  {
 
             self.contentView.addSubview(vw)
 
@@ -220,7 +220,7 @@ final class MainHeaderViewCell: UITableViewCell {
                 myListLbl.trailingAnchor.constraint(equalTo: vw.trailingAnchor, constant: -15),
                 myListLbl.bottomAnchor.constraint(equalTo: vw.bottomAnchor, constant: -5),
             ])
-        }
+       // }
     }
 
 }

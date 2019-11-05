@@ -31,6 +31,11 @@ final class SpotBeaconVC: UIViewController, CLLocationManagerDelegate, CBPeriphe
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .secondarySystemGroupedBackground
+        lblBTStatus.textColor = .systemOrange
+        lblBeaconDetails.textColor = .label
+        lblBeaconReport.textColor = .label
+        beaconlocateLabel.textColor = .label
         
         locationManager = CLLocationManager()
         locationManager.delegate = self
@@ -89,7 +94,7 @@ final class SpotBeaconVC: UIViewController, CLLocationManagerDelegate, CBPeriphe
         if !isSearchingForBeacons {
             btnSwitchSpotting.setTitle("Stop Spotting", for: .normal)
             lblBeaconReport.text = "Spotting beacons..."
-            self.view.backgroundColor = .white
+            view.backgroundColor = .secondarySystemGroupedBackground
         }
         else {
             locationManager.stopMonitoring(for: beaconRegion)
@@ -99,7 +104,7 @@ final class SpotBeaconVC: UIViewController, CLLocationManagerDelegate, CBPeriphe
             btnSwitchSpotting.setTitle("Start Spotting", for: .normal)
             lblBeaconReport.text = "Not running"
             lblBeaconDetails.isHidden = false
-            self.view.backgroundColor = .white
+            view.backgroundColor = .secondarySystemGroupedBackground
         }
         
         isSearchingForBeacons = !isSearchingForBeacons
@@ -136,9 +141,9 @@ final class SpotBeaconVC: UIViewController, CLLocationManagerDelegate, CBPeriphe
                 self.btnSwitchSpotting?.titleLabel?.textColor = .white
                 self.btnSwitchSpotting?.backgroundColor = .systemOrange
                 self.beaconspotLabel.textColor = .systemOrange
-                self.lblBeaconReport.textColor = .white
-                self.lblBeaconDetails.textColor = .white
-                self.beaconlocateLabel.textColor = .black
+                self.lblBeaconReport.textColor = .label
+                self.lblBeaconDetails.textColor = .label
+                self.beaconlocateLabel.textColor = .label
                 
             case .far:
                 proximityMessage = "within 20ft"

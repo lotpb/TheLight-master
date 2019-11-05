@@ -38,6 +38,7 @@ class PlaceCell: UICollectionViewCell {
             
             dateFormatter.timeStyle = .medium
             dateFormatter.dateStyle = .medium
+            //let date1 = mapStart?.arrival_date
             let date1 = dateFormatter.date(from: (mapStart?.dateString)!)
             let calendar = Calendar.current
             let time = calendar.dateComponents([.month,.weekday,.day,.hour,.minute,.second], from: date1!)
@@ -71,6 +72,7 @@ class PlaceCell: UICollectionViewCell {
         didSet {
             dateFormatter.timeStyle = .medium
             dateFormatter.dateStyle = .medium
+            //let date2 = mapDest?.arrival_date
             let date2 = dateFormatter.date(from: (mapDest?.dateString)!)
             
             dateFormatter.timeStyle = .short

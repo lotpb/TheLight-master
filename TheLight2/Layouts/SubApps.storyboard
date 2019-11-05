@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="TQE-hf-71A">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="TQE-hf-71A">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15508"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -11,6 +11,7 @@
             <objects>
                 <navigationController storyboardIdentifier="CodeGenNC" extendedLayoutIncludesOpaqueBars="YES" id="Res-iq-RMp" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="fhQ-K0-pwH">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -157,6 +158,7 @@
             <objects>
                 <navigationController storyboardIdentifier="StatisticNC" extendedLayoutIncludesOpaqueBars="YES" id="OoS-zA-brm" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="G2k-pp-RBB">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -266,6 +268,7 @@
             <objects>
                 <navigationController storyboardIdentifier="DetailNC" extendedLayoutIncludesOpaqueBars="YES" id="xUG-mX-u9e" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="yS5-fP-LR8">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -281,6 +284,7 @@
             <objects>
                 <navigationController storyboardIdentifier="MusicNC" extendedLayoutIncludesOpaqueBars="YES" id="rky-8p-ax4" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="cZB-8s-d7s">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -318,7 +322,7 @@
                                         <rect key="frame" x="0.0" y="28" width="414" height="62"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Xfl-KV-JJV" id="7bb-of-a2f">
-                                            <rect key="frame" x="0.0" y="0.0" width="382.66666666666669" height="62"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="383" height="62"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="68e-KX-8Ph">
@@ -328,10 +332,10 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <progressView hidden="YES" opaque="NO" tag="40" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6r8-fa-cBr">
-                                                    <rect key="frame" x="14" y="52" width="258.66666666666669" height="2"/>
+                                                    <rect key="frame" x="14" y="52" width="259" height="2"/>
                                                 </progressView>
                                                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zCT-NA-dWY">
-                                                    <rect key="frame" x="326.66666666666669" y="12" width="48" height="30"/>
+                                                    <rect key="frame" x="327" y="12" width="48" height="30"/>
                                                     <state key="normal" title="Cancel">
                                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     </state>
@@ -340,7 +344,7 @@
                                                     </connections>
                                                 </button>
                                                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vry-sH-MGH">
-                                                    <rect key="frame" x="276.66666666666669" y="12" width="42" height="30"/>
+                                                    <rect key="frame" x="277" y="12" width="42" height="30"/>
                                                     <state key="normal" title="Pause">
                                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     </state>
@@ -349,13 +353,13 @@
                                                     </connections>
                                                 </button>
                                                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100% of 1.35MB" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ex-Tw-1pk">
-                                                    <rect key="frame" x="289.66666666666669" y="44" width="84" height="14"/>
+                                                    <rect key="frame" x="290" y="44" width="84" height="14"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <color key="textColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oHi-zU-1le">
-                                                    <rect key="frame" x="296.66666666666669" y="9" width="69" height="30"/>
+                                                    <rect key="frame" x="297" y="9" width="69" height="30"/>
                                                     <state key="normal" title="Download">
                                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     </state>
@@ -448,6 +452,7 @@
             <objects>
                 <navigationController storyboardIdentifier="YouTubeNC" extendedLayoutIncludesOpaqueBars="YES" id="Nv0-CS-qAY" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="3AB-vR-TsW">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -617,6 +622,7 @@
             <objects>
                 <navigationController storyboardIdentifier="SpotBeaconNC" extendedLayoutIncludesOpaqueBars="YES" id="YwK-yU-4nP" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="k4C-XZ-LmV">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -632,6 +638,7 @@
             <objects>
                 <navigationController storyboardIdentifier="TransmitBeaconNC" extendedLayoutIncludesOpaqueBars="YES" id="PRq-kF-t4L" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ymY-Pd-Rly">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -899,7 +906,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="22" sectionFooterHeight="22" id="c4y-XZ-Dod">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
@@ -916,19 +923,14 @@
                         </subviews>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="c4y-XZ-Dod" secondAttribute="trailing" id="8Zj-63-EDO"/>
-                            <constraint firstItem="Dgz-se-sWo" firstAttribute="centerX" secondItem="akp-3c-yeL" secondAttribute="centerX" id="8qf-XQ-cNf"/>
-                            <constraint firstItem="nyu-Wm-btm" firstAttribute="top" secondItem="c4y-XZ-Dod" secondAttribute="bottom" id="CXK-bt-BEr"/>
-                            <constraint firstItem="Dgz-se-sWo" firstAttribute="centerY" secondItem="akp-3c-yeL" secondAttribute="centerY" id="pMC-mK-IZl"/>
-                            <constraint firstItem="c4y-XZ-Dod" firstAttribute="top" secondItem="MPW-b8-Cj3" secondAttribute="bottom" id="pWo-cm-vP8"/>
-                            <constraint firstItem="c4y-XZ-Dod" firstAttribute="leading" secondItem="akp-3c-yeL" secondAttribute="leading" id="tb6-2u-PL8"/>
+                            <constraint firstItem="Dgz-se-sWo" firstAttribute="top" secondItem="MPW-b8-Cj3" secondAttribute="bottom" constant="304.66666666666669" id="UE8-s4-Pit"/>
+                            <constraint firstItem="Dgz-se-sWo" firstAttribute="centerX" secondItem="c4y-XZ-Dod" secondAttribute="centerX" id="b5r-0r-Zvt"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="0gv-NE-4Ov" appends="YES" id="fTD-JU-mUC"/>
                         </connections>
                     </view>
                     <navigationItem key="navigationItem" id="to1-ut-acG"/>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
                         <outlet property="noContactsLabel" destination="Dgz-se-sWo" id="5Wu-zp-7QU"/>
                         <outlet property="tableView" destination="c4y-XZ-Dod" id="A3e-ih-BqT"/>
@@ -938,13 +940,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zMj-Uq-1bi" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="0gv-NE-4Ov"/>
             </objects>
-            <point key="canvasLocation" x="-4932" y="554"/>
+            <point key="canvasLocation" x="-4933.3333333333339" y="553.79464285714278"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="8PQ-eS-tMA">
             <objects>
                 <navigationController storyboardIdentifier="ContactNC" extendedLayoutIncludesOpaqueBars="YES" id="TQE-hf-71A" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="dIR-k7-Za4">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -1043,7 +1046,7 @@
                         <viewControllerLayoutGuide type="bottom" id="IU7-Ot-EuB"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="otk-To-KFt">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create contact" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="tIO-Uo-MuV">

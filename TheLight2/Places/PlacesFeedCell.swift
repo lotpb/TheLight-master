@@ -12,6 +12,10 @@ import UIKit
 class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
     
     fileprivate let cellId = "cellId"
+
+    //firebase
+       var visitlist = [VisitModel]()
+       var defaults = UserDefaults.standard
     
     // MARK: NavigationController Hidden
     private var lastContentOffset: CGFloat = 0.0
@@ -39,6 +43,8 @@ class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        //loadData()
+
         addSubview(collectionView)
         addConstraintsWithFormat(format: "H:|[v0]|", views: collectionView)
         addConstraintsWithFormat(format: "V:|[v0]|", views: collectionView)
@@ -64,6 +70,32 @@ class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
             self.collectionView.reloadData()
         }
         self.refreshControl.endRefreshing()
+    }
+
+    func loadData() {
+
+        if ((defaults.string(forKey: "backendKey")) == "Firebase") {
+
+            //firebase
+            FirebaseRef.databaseRoot.child("visits").child("test")
+                .observe(.childAdded , with:{ (snapshot) in
+
+                    guard let dictionary = snapshot.value as? [String: Any] else {return}
+                    let post = VisitModel(dictionary: dictionary)
+                    self.visitlist.append(post)
+
+                    self.visitlist.sort(by: { (p1, p2) -> Bool in
+                        return p1.arrival_date.compare(p2.arrival_date) == .orderedDescending
+                    })
+                    print(self.visitlist)
+
+                    DispatchQueue.main.async(execute: {
+                        self.collectionView.reloadData()
+                    })
+                }) { (err) in
+                    print("Failed to fetch posts:", err)
+            }
+        }
     }
     
     // MARK: - NavigationController Hidden
@@ -117,6 +149,7 @@ extension PlaceFeedCell: UICollectionViewDataSource {
         
         //Cell-----------------------------------------------------------------
         cell.mapStart = LocationsStorage.shared.locations[indexPath.row]
+        //cell.mapStart = visitlist[indexPath.item]
         //Cell2-----------------------------------------------------------------
         let thisIndexPath = indexPath.row
         if thisIndexPath - 1 > -1 {

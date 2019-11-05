@@ -13,11 +13,12 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
     
     fileprivate let cellId = "cellId"
     //fileprivate let footerId = "footerId"
-    fileprivate var tabBarStr: String?
+    //fileprivate var tabBarStr: String?
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupCollectionView()
         setupMenuBar()
         setupNavigation()
@@ -84,7 +85,6 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
 
         collectionView?.backgroundColor = .secondarySystemGroupedBackground
         collectionView?.register(PlaceFeedCell.self, forCellWithReuseIdentifier: cellId)
-        //collectionView?.register(PlaceFooterCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: footerId)
     }
     
     func setupNavigation() {
@@ -242,31 +242,6 @@ extension PlacesCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return .init(width: view.frame.width, height: view.frame.height)
     }
-    /*
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: footerId, for: indexPath) as! PlaceFooterCell
-        footer.numbersLabel.text = "crap"
-        return footer
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        if section == 1 {
-            return .zero
-        }
-        let height = view.frame.height * 0.2
-        return .init(width: view.frame.width, height: height)
-    }
-    
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if section == 1 {
-            return 2
-        }
-        return 1
-    } */
     
     @objc func refresh() {
         //addItem()

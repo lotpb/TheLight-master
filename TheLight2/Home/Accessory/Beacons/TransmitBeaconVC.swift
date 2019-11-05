@@ -34,7 +34,11 @@ final class TransmitBeaconVC: UIViewController, CBPeripheralManagerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = .secondarySystemGroupedBackground
+        lblBTStatus.textColor = .systemOrange
+        beaconBroadlabel.textColor = .label
+        lblStatus.textColor = .label
+
         if UIDevice.current.userInterfaceIdiom == .pad  {
             self.lblStatus?.font = Font.Snapshot.celltitlePad
             self.txtMajor?.font = Font.Snapshot.celltitlePad
@@ -111,7 +115,8 @@ final class TransmitBeaconVC: UIViewController, CBPeripheralManagerDelegate {
             txtMajor.isEnabled = false
             txtMinor.isEnabled = false
             isBroadcasting = true
-            self.view.backgroundColor = .lightGray
+            self.view.backgroundColor = .systemGray
+
 
         } else {
             
@@ -125,7 +130,7 @@ final class TransmitBeaconVC: UIViewController, CBPeripheralManagerDelegate {
             txtMajor.isEnabled = true
             txtMinor.isEnabled = true
             isBroadcasting = false
-            self.view.backgroundColor = .white
+            self.view.backgroundColor = .secondarySystemGroupedBackground
         } 
     }
     

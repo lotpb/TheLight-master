@@ -23,7 +23,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     //firebase
     var currentUser: UserModel?
 
-    private var menuItems = ["Snapshot","Statistics","Leads","Customers","Vendors","Employee","Advertising","Product","Job","Salesman", "Zip","Geotify","Search Places","Music","YouTube","Spot Beacon","Transmit Beacon","Contacts", "Show Detail"]
+    private var menuItems = ["Snapshot","Statistics","Leads","Customers","Vendors","Employee","Advertising","Product","Job","Salesman", "Zip","Geotify","Search Places","Music","YouTube","Contacts","Spot Beacon","Transmit Beacon", "Show Detail"]
     //search
     private var searchController: UISearchController!
     private var resultsController = UITableViewController()
@@ -347,6 +347,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
                 print(error.localizedDescription)
             }
 
+        UIApplication.shared.applicationIconBadgeNumber = 0
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "loginIDController")
         vc.modalPresentationStyle = .fullScreen
@@ -357,7 +358,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     // MARK: - Table View
     override func numberOfSections(in tableView: UITableView) -> Int {
         if tableView == self.tableView {
-            return 4
+            return 6
         } else {
             return 1
         }
@@ -373,7 +374,11 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             } else if (section == 2) {
                 return 5
             } else if (section == 3) {
-                return 8
+                return 2
+            } else if (section == 4) {
+                return 3
+            } else if (section == 5) {
+                return 3
             }
         } else {
             return filteredMenu.count
@@ -435,22 +440,28 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
                     cell.textLabel!.text = menuItems[10]
                 }
             } else if (indexPath.section == 3) {
-                
+
                 if (indexPath.row == 0) {
                     cell.textLabel!.text = menuItems[11]
                 } else if (indexPath.row == 1) {
                     cell.textLabel!.text = menuItems[12]
-                } else if (indexPath.row == 2) {
+                }
+            } else if (indexPath.section == 4) {
+
+                if (indexPath.row == 0) {
                     cell.textLabel!.text = menuItems[13]
-                } else if (indexPath.row == 3) {
+                } else if (indexPath.row == 1) {
                     cell.textLabel!.text = menuItems[14]
-                } else if (indexPath.row == 4) {
+                } else if (indexPath.row == 2) {
                     cell.textLabel!.text = menuItems[15]
-                } else if (indexPath.row == 5) {
+                }
+            } else if (indexPath.section == 5) {
+
+                if (indexPath.row == 0) {
                     cell.textLabel!.text = menuItems[16]
-                } else if (indexPath.row == 6) {
+                } else if (indexPath.row == 1) {
                     cell.textLabel!.text = menuItems[17]
-                } else if (indexPath.row == 7) {
+                } else if (indexPath.row == 2) {
                     cell.textLabel!.text = menuItems[18]
                 }
             }
@@ -473,14 +484,18 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
                 if UIDevice.current.userInterfaceIdiom == .phone {
                     return 275
                 } else {
-                    return CGFloat.leastNormalMagnitude
+                    return 275 //0
                 }
             } else if (section == 1) {
-                return 10
+                return 35
             } else if (section == 2) {
-                return 10
+                return 35
             } else if (section == 3) {
-                return 10
+                return 35
+            } else if (section == 4) {
+                return 35
+            } else if (section == 5) {
+                return 35
             }
             return 0
         }
@@ -489,81 +504,94 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        if (tableView == self.tableView) {
+        //if (tableView == self.tableView) {
 
-            if (section == 0) {
-                if UIDevice.current.userInterfaceIdiom == .phone {
+        if (section == 0) {
 
-                    guard let header = tableView.dequeueReusableCell(withIdentifier: "Header") as? MainHeaderViewCell else { fatalError("Unexpected Index Path") }
+            guard let header = tableView.dequeueReusableCell(withIdentifier: "Header") as? MainHeaderViewCell else { fatalError("Unexpected Index Path") }
 
-                    //tableView.tableHeaderView = vw
-                    header.myLabel1.text = String(format: "%@%d", "COUNT\n", menuItems.count)
-                    header.myLabel2.text = "NASDAQ \n \(tradeYQL?[0] ?? "00")"
-                    header.myLabel15.text = "\(changeYQL?[0] ?? "0")"
-                    header.myLabel25.text = "\(changeYQL?[0] ?? "0")"
-                    header.myLabel3.text = "S&P 500 \n \(tradeYQL?[1] ?? "00")"
-                    header.myLabel35.text = "\(changeYQL?[1] ?? "0")"
+            //tableView.tableHeaderView = vw
+            header.myLabel1.text = String(format: "%@%d", "COUNT\n", menuItems.count)
+            header.myLabel2.text = "NASDAQ \n \(tradeYQL?[0] ?? "00")"
+            header.myLabel15.text = "\(changeYQL?[0] ?? "0")"
+            header.myLabel25.text = "\(changeYQL?[0] ?? "0")"
+            header.myLabel3.text = "S&P 500 \n \(tradeYQL?[1] ?? "00")"
+            header.myLabel35.text = "\(changeYQL?[1] ?? "0")"
 
-                    if (header.myLabel15.text?.contains("-"))! {
-                        header.separatorLine3.backgroundColor = .systemRed
-                        header.myLabel15.backgroundColor = .systemRed
-                    } else {
-                        header.separatorLine3.backgroundColor = .systemGreen
-                        header.myLabel15.backgroundColor = .systemGreen
-                    }
-                    
-                    if (header.myLabel25.text?.contains("-"))! {
-                        header.separatorLine2.backgroundColor = .systemRed
-                        header.myLabel25.backgroundColor = .systemRed
-                    } else {
-                        header.separatorLine2.backgroundColor = .systemGreen
-                        header.myLabel25.backgroundColor = .systemGreen
-                    }
-                    
-                    if (header.myLabel35.text?.contains("-"))! {
-                        header.separatorLine3.backgroundColor = .systemRed
-                        header.myLabel35.backgroundColor = .systemRed
-                    } else {
-                        header.separatorLine3.backgroundColor = .systemGreen
-                        header.myLabel35.backgroundColor = .systemGreen
-                    }
-
-                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
-                        header.titleLabeltxt1.text = "Parse"
-                    } else {
-                        header.titleLabeltxt1.text = "Firebase"
-                    }
-
-                    if (tempYQL != nil) && (textYQL != nil) {
-                        header.titleLabeltxt2.text = String(format: "%@ %@ %@", "Weather:", "\(tempYQL!)°", "\(textYQL!)")
-                        if (textYQL!.contains("Rain") ||
-                            textYQL!.contains("Snow") ||
-                            textYQL!.contains("Thunderstorms") ||
-                            textYQL!.contains("Showers")) {
-                            header.titleLabeltxt2.textColor = .systemRed
-                        } else {
-                            header.titleLabeltxt2.textColor = .systemGreen
-                        }
-                    } else {
-                        header.titleLabeltxt2.text = "not available"
-                        header.titleLabeltxt2.textColor = .systemRed
-                    }
-
-                    header.myListLbl.text = String(format: "%@%d", "MyList ", menuItems.count)
-
-                    /*
-                     photoImage.frame = .init(x: 0, y: 0, width: tableView..frame.size.width, height: 145)
-                     vw.addSubview(photoImage)
-                     
-                     let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-                     visualEffectView.frame = photoImage.bounds
-                     photoImage.addSubview(visualEffectView) */
-                    
-                    return header
-                }
+            if (header.myLabel15.text?.contains("-"))! {
+                header.separatorLine3.backgroundColor = .systemRed
+                header.myLabel15.backgroundColor = .systemRed
+            } else {
+                header.separatorLine3.backgroundColor = .systemGreen
+                header.myLabel15.backgroundColor = .systemGreen
             }
+
+            if (header.myLabel25.text?.contains("-"))! {
+                header.separatorLine2.backgroundColor = .systemRed
+                header.myLabel25.backgroundColor = .systemRed
+            } else {
+                header.separatorLine2.backgroundColor = .systemGreen
+                header.myLabel25.backgroundColor = .systemGreen
+            }
+
+            if (header.myLabel35.text?.contains("-"))! {
+                header.separatorLine3.backgroundColor = .systemRed
+                header.myLabel35.backgroundColor = .systemRed
+            } else {
+                header.separatorLine3.backgroundColor = .systemGreen
+                header.myLabel35.backgroundColor = .systemGreen
+            }
+
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
+                header.titleLabeltxt1.text = "Parse"
+            } else {
+                header.titleLabeltxt1.text = "Firebase"
+            }
+
+            if (tempYQL != nil) && (textYQL != nil) {
+                header.titleLabeltxt2.text = String(format: "%@ %@ %@", "Weather:", "\(tempYQL!)°", "\(textYQL!)")
+                if (textYQL!.contains("Rain") ||
+                    textYQL!.contains("Snow") ||
+                    textYQL!.contains("Thunderstorms") ||
+                    textYQL!.contains("Showers")) {
+                    header.titleLabeltxt2.textColor = .systemRed
+                } else {
+                    header.titleLabeltxt2.textColor = .systemGreen
+                }
+            } else {
+                header.titleLabeltxt2.text = "not available"
+                header.titleLabeltxt2.textColor = .systemRed
+            }
+
+            header.myListLbl.text = String(format: "%@%d", "MyList ", menuItems.count)
+
+            return header
+
+        } else {
+
+            let view = UIView()
+            view.backgroundColor = .clear
+
+            let label = UILabel()
+            label.frame = CGRect(x: 20, y: 0, width: 150, height: 40)
+
+            if (section == 1) {
+                label.text = ""
+            } else if (section == 2) {
+                label.text  = ""
+            } else if (section == 3) {
+                label.text  = ""
+            } else if (section == 4) {
+                label.text  = ""
+            } else if (section == 5) {
+                label.text  = ""
+            } else if (section == 6) {
+                label.text  = ""
+            }
+            view.addSubview(label)
+
+            return view
         }
-        return nil
     }
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

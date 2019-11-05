@@ -218,7 +218,7 @@ final class StatHeaderViewCell: UITableViewCell {
 
             myListLbl.leadingAnchor.constraint(equalTo: vw.leadingAnchor, constant: 20),
             myListLbl.trailingAnchor.constraint(equalTo: vw.trailingAnchor, constant: -15),
-            myListLbl.bottomAnchor.constraint(equalTo: vw.bottomAnchor, constant: -10),
+            myListLbl.topAnchor.constraint(equalTo: headView.bottomAnchor, constant: 20),
         ])
     }
 }

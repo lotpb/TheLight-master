@@ -22,11 +22,13 @@
 		AF26EF791F4B0A8F0035EAE3 /* UserWarningSpeakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF26EF781F4B0A8E0035EAE3 /* UserWarningSpeakManager.swift */; };
 		AF29BC2322D2196F00CFC3B8 /* places.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AF29BC2122D2196F00CFC3B8 /* places.xcdatamodeld */; };
 		AF29BC2522D21E9500CFC3B8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF29BC2422D21E9500CFC3B8 /* ContentView.swift */; };
-		AF36594F224ADE2300B1B09B /* PlaceFooterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF36594E224ADE2300B1B09B /* PlaceFooterCell.swift */; };
 		AF374ED521B95AB9008DB808 /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF374ED421B95AB9008DB808 /* Firebase.swift */; };
 		AF3752232298356700579D81 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF3752222298356700579D81 /* WebKit.framework */; };
 		AF3B20051FD6FB0B0029C3B4 /* DetailedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3B20041FD6FB0A0029C3B4 /* DetailedVC.swift */; };
 		AF4DD6B92267530600B64D02 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9897551ED216A900D14D7D /* Extensions.swift */; };
+		AF4E6BFB235F2F5A00E3F9DE /* AppsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4E6BFA235F2F5A00E3F9DE /* AppsViewController.swift */; };
+		AF4E6BFD235F307300E3F9DE /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4E6BFC235F307300E3F9DE /* SectionHeader.swift */; };
+		AF4E6BFF235F30C600E3F9DE /* FeaturedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4E6BFE235F30C600E3F9DE /* FeaturedCell.swift */; };
 		AF4FA5351ED2303700EDEFEA /* NavVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4FA5341ED2303700EDEFEA /* NavVC.swift */; };
 		AF4FA5371ED2304C00EDEFEA /* Web.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4FA5361ED2304C00EDEFEA /* Web.swift */; };
 		AF4FA5391ED2305500EDEFEA /* Favorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4FA5381ED2305500EDEFEA /* Favorite.swift */; };
@@ -178,10 +180,12 @@
 		AF26EF811F4B0DAB0035EAE3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "TheLight2/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		AF29BC2222D2196F00CFC3B8 /* places.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = places.xcdatamodel; sourceTree = "<group>"; };
 		AF29BC2422D21E9500CFC3B8 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = TheLight2/ContentView.swift; sourceTree = "<group>"; };
-		AF36594E224ADE2300B1B09B /* PlaceFooterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceFooterCell.swift; sourceTree = "<group>"; };
 		AF374ED421B95AB9008DB808 /* Firebase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Firebase.swift; path = TheLight2/Firebase.swift; sourceTree = "<group>"; };
 		AF3752222298356700579D81 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		AF3B20041FD6FB0A0029C3B4 /* DetailedVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailedVC.swift; sourceTree = "<group>"; };
+		AF4E6BFA235F2F5A00E3F9DE /* AppsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppsViewController.swift; sourceTree = "<group>"; };
+		AF4E6BFC235F307300E3F9DE /* SectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
+		AF4E6BFE235F30C600E3F9DE /* FeaturedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeaturedCell.swift; sourceTree = "<group>"; };
 		AF4FA5341ED2303700EDEFEA /* NavVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavVC.swift; sourceTree = "<group>"; };
 		AF4FA5361ED2304C00EDEFEA /* Web.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Web.swift; sourceTree = "<group>"; };
 		AF4FA5381ED2305500EDEFEA /* Favorite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Favorite.swift; sourceTree = "<group>"; };
@@ -405,6 +409,9 @@
 			isa = PBXGroup;
 			children = (
 				AF86497320767FB80025AB93 /* SnapshotVC.swift */,
+				AF4E6BFA235F2F5A00E3F9DE /* AppsViewController.swift */,
+				AF4E6BFE235F30C600E3F9DE /* FeaturedCell.swift */,
+				AF4E6BFC235F307300E3F9DE /* SectionHeader.swift */,
 			);
 			name = Snapshot;
 			path = TheLight2/Snapshot;
@@ -789,7 +796,6 @@
 				AFE2BB5A2157147C00844107 /* PlacesCollectionView.swift */,
 				AFE2BB5C215716BB00844107 /* PlacesFeedCell.swift */,
 				AF80F235224A7C370099A554 /* PlaceCell.swift */,
-				AF36594E224ADE2300B1B09B /* PlaceFooterCell.swift */,
 				AF5BDD002159575B0093C7F7 /* PlaceMenuBar.swift */,
 				AFEAA7522119ECDB0049FB4A /* Location.swift */,
 				AFEAA7502119EC890049FB4A /* LocationsStorage.swift */,
@@ -1020,6 +1026,7 @@
 				AF0C5DC6216CE630008862EE /* AccountCell.swift in Sources */,
 				AF12AABF234CFBE7008793B3 /* SplitViewController.swift in Sources */,
 				AF8AFBC51ED22E5200D383E3 /* TrackCell.swift in Sources */,
+				AF4E6BFB235F2F5A00E3F9DE /* AppsViewController.swift in Sources */,
 				AF8AFB8D1ED22CF000D383E3 /* Vendor.swift in Sources */,
 				AF8AFBDF1ED22F1D00D383E3 /* UserViewVC.swift in Sources */,
 				AF8AFBF91ED22FB400D383E3 /* News.swift in Sources */,
@@ -1027,7 +1034,6 @@
 				AF8AFBF11ED22F8D00D383E3 /* SettingsLauncher.swift in Sources */,
 				AF98975A1ED216B900D14D7D /* LoginController.swift in Sources */,
 				AF98974F1ED215BD00D14D7D /* AppDelegate.swift in Sources */,
-				AF36594F224ADE2300B1B09B /* PlaceFooterCell.swift in Sources */,
 				AFB5A489234A15FD0061149D /* StatHeaderViewCell.swift in Sources */,
 				AF8AFBE31ED22F3E00D383E3 /* BlogEditController.swift in Sources */,
 				AF8AFB9D1ED22D6700D383E3 /* NewEditData.swift in Sources */,
@@ -1059,6 +1065,7 @@
 				AFBE77AC217772C900403CB2 /* MenuController.swift in Sources */,
 				AF8AFBD11ED22EB200D383E3 /* SocialVC.swift in Sources */,
 				AFF3A27A1F4B11B600F1BC44 /* JobModel.swift in Sources */,
+				AF4E6BFD235F307300E3F9DE /* SectionHeader.swift in Sources */,
 				AFF3A2791F4B11B600F1BC44 /* ZipModel.swift in Sources */,
 				AFE615221ED50A33002ADDD6 /* ReplyTableCell.swift in Sources */,
 				AF8AFB971ED22D2600D383E3 /* SalesmanVC.swift in Sources */,
@@ -1079,6 +1086,7 @@
 				AF8AFB811ED22CC000D383E3 /* MasterViewController.swift in Sources */,
 				AF29BC2322D2196F00CFC3B8 /* places.xcdatamodeld in Sources */,
 				AF4FA5351ED2303700EDEFEA /* NavVC.swift in Sources */,
+				AF4E6BFF235F30C600E3F9DE /* FeaturedCell.swift in Sources */,
 				AFFD4BEB204A4CBC007AF4F4 /* DetailMapVC.swift in Sources */,
 				AF8AFBA71ED22D8F00D383E3 /* PhotoSelectorHeader.swift in Sources */,
 			);

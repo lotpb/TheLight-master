@@ -34,7 +34,8 @@ struct VisitModel {
     init(dictionary: [String: Any]) {
         
         self.uid = dictionary["uid"] as? String ?? ""
-        self.arrival_date = Date(timeIntervalSince1970: dictionary["arrival_date"] as? Double ?? 0)
+        let secondsFrom1970 = dictionary["arrival_date"] as? Double ?? 0
+        self.arrival_date = Date(timeIntervalSince1970: secondsFrom1970)
         self.departure_date = Date(timeIntervalSince1970: dictionary["departure_date"] as? Double ?? 0)
         self.latitude =  dictionary["latitude"] as? Double ?? 0
         self.longitude =  dictionary["longitude"] as? Double ?? 0

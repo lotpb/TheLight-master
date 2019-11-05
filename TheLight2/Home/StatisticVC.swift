@@ -673,7 +673,7 @@ extension StatisticVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         if (section == 0) {
-            return 275
+            return 225
         } else if (section == 1) {
             return 44
         } else if (section == 2) {
@@ -686,93 +686,90 @@ extension StatisticVC: UITableViewDelegate {
         return 0
     }
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if (section == 0) {
-            return nil
-        } else if (section == 1) {
-            return "Weather Forecast"
-        } else if (section == 2) {
-            return "Stocks"
-        } else if (section == 3) {
-            return "Leads"
-        } else if (section == 4) {
-            return "Customer"
-        }
-        return nil
-    }
-
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 
-        if (tableView == self.tableView) {
+        if (section == 0) {
 
-            if (section == 0) {
-                //tableView.tableHeaderView = header
-                guard let header = tableView.dequeueReusableCell(withIdentifier: "Header") as? StatHeaderViewCell else { fatalError("Unexpected Index Path") }
+            guard let header = tableView.dequeueReusableCell(withIdentifier: "Header") as? StatHeaderViewCell else { fatalError("Unexpected Index Path") }
+            tableView.tableHeaderView = header
 
-                header.myLabel1.text = String(format: "%@%d", "COUNT\n", (_feedLeadItems.count + _feedCustItems.count))
-                header.myLabel2.text = "NASDAQ \n \(tradeYQL?[0] ?? "00")"
-                header.myLabel15.text = "\(changeYQL?[0] ?? "0")"
-                header.myLabel25.text = "\(changeYQL?[0] ?? "0")"
-                header.myLabel3.text = "S&P 500 \n \(tradeYQL?[1] ?? "00")"
-                header.myLabel35.text = "\(changeYQL?[1] ?? "0")"
+            header.myLabel1.text = String(format: "%@%d", "COUNT\n", (_feedLeadItems.count + _feedCustItems.count))
+            header.myLabel2.text = "NASDAQ \n \(tradeYQL?[0] ?? "00")"
+            header.myLabel15.text = "\(changeYQL?[0] ?? "0")"
+            header.myLabel25.text = "\(changeYQL?[0] ?? "0")"
+            header.myLabel3.text = "S&P 500 \n \(tradeYQL?[1] ?? "00")"
+            header.myLabel35.text = "\(changeYQL?[1] ?? "0")"
 
-                if (header.myLabel15.text?.contains("-"))! {
-                    header.separatorLine3.backgroundColor = .systemRed
-                    header.myLabel15.backgroundColor = .systemRed
-                } else {
-                    header.separatorLine3.backgroundColor = .systemGreen
-                    header.myLabel15.backgroundColor = .systemGreen
-                }
-
-                if (header.myLabel25.text?.contains("-"))! {
-                    header.separatorLine2.backgroundColor = .systemRed
-                    header.myLabel25.backgroundColor = .systemRed
-                } else {
-                    header.separatorLine2.backgroundColor = .systemGreen
-                    header.myLabel25.backgroundColor = .systemGreen
-                }
-
-                if (header.myLabel35.text?.contains("-"))! {
-                    header.separatorLine3.backgroundColor = .systemRed
-                    header.myLabel35.backgroundColor = .systemRed
-                } else {
-                    header.separatorLine3.backgroundColor = .systemGreen
-                    header.myLabel35.backgroundColor = .systemGreen
-                }
-
-                if ((defaults.string(forKey: "backendKey")) == "Parse") {
-                    header.titleLabeltxt1.text = "Parse"
-                } else {
-                    header.titleLabeltxt1.text = "Firebase"
-                }
-
-                if (tempYQL != nil) && (textYQL != nil) {
-                    header.titleLabeltxt2.text = String(format: "%@ %@ %@", "Weather:", "\(tempYQL!)°", "\(textYQL!)")
-                    if (textYQL!.contains("Rain") ||
-                        textYQL!.contains("Snow") ||
-                        textYQL!.contains("Thunderstorms") ||
-                        textYQL!.contains("Showers")) {
-                        header.titleLabeltxt2.textColor = .systemRed
-                    } else {
-                        header.titleLabeltxt2.textColor = .systemGreen
-                    }
-                } else {
-                    header.titleLabeltxt2.text = "not available"
-                    header.titleLabeltxt2.textColor = .systemBlue
-                }
-
-                header.myListLbl.text = String(format: "%@ %@", "Weather ", "")
-
-                return header
+            if (header.myLabel15.text?.contains("-"))! {
+                header.separatorLine3.backgroundColor = .systemRed
+                header.myLabel15.backgroundColor = .systemRed
+            } else {
+                header.separatorLine3.backgroundColor = .systemGreen
+                header.myLabel15.backgroundColor = .systemGreen
             }
-        } else if (section == 1) {
-            // MARK: - below don't work
-            let view = UIView(frame: .init(x: 0, y: 0, width: tableView.frame.size.width, height: 44))
-            view.backgroundColor = .systemGroupedBackground //.red
+
+            if (header.myLabel25.text?.contains("-"))! {
+                header.separatorLine2.backgroundColor = .systemRed
+                header.myLabel25.backgroundColor = .systemRed
+            } else {
+                header.separatorLine2.backgroundColor = .systemGreen
+                header.myLabel25.backgroundColor = .systemGreen
+            }
+
+            if (header.myLabel35.text?.contains("-"))! {
+                header.separatorLine3.backgroundColor = .systemRed
+                header.myLabel35.backgroundColor = .systemRed
+            } else {
+                header.separatorLine3.backgroundColor = .systemGreen
+                header.myLabel35.backgroundColor = .systemGreen
+            }
+
+            if ((defaults.string(forKey: "backendKey")) == "Parse") {
+                header.titleLabeltxt1.text = "Parse"
+            } else {
+                header.titleLabeltxt1.text = "Firebase"
+            }
+
+            if (tempYQL != nil) && (textYQL != nil) {
+                header.titleLabeltxt2.text = String(format: "%@ %@ %@", "Weather:", "\(tempYQL!)°", "\(textYQL!)")
+                if (textYQL!.contains("Rain") ||
+                    textYQL!.contains("Snow") ||
+                    textYQL!.contains("Thunderstorms") ||
+                    textYQL!.contains("Showers")) {
+                    header.titleLabeltxt2.textColor = .systemRed
+                } else {
+                    header.titleLabeltxt2.textColor = .systemGreen
+                }
+            } else {
+                header.titleLabeltxt2.text = "not available"
+                header.titleLabeltxt2.textColor = .systemBlue
+            }
+
+            header.myListLbl.text = String(format: "%@ %@", "Weather ", "")
+
+            return header
+
+        } else {
+
+            let view = UIView()
+            view.backgroundColor = .clear
+
+            let label = UILabel()
+            label.frame = CGRect(x: 20, y: 0, width: 150, height: 40)
+            
+            if (section == 1) {
+                label.text = "Weather Forecast"
+            } else if (section == 2) {
+                label.text  = "Stocks"
+            } else if (section == 3) {
+                label.text  = "Leads"
+            } else if (section == 4) {
+                label.text  = "Customer"
+            }
+            view.addSubview(label)
 
             return view
         }
-        return nil
     }
 }
 @available(iOS 13.0, *)

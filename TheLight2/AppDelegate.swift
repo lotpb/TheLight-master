@@ -79,7 +79,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Facebook
     func applicationDidBecomeActive(_ application: UIApplication) {
         AppEvents.activateApp()
-        application.applicationIconBadgeNumber = 0
+        //application.applicationIconBadgeNumber = 0 //dont work anymore
         center.removeAllPendingNotificationRequests()
         center.removeAllDeliveredNotifications()
     }

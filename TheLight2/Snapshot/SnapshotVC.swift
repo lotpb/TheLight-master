@@ -579,7 +579,7 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
             myLabel1 = UILabel(frame: .init(x: 0, y: cell.bounds.size.height-20, width: cell.bounds.size.width, height: 20))
         }
 
-        myLabel1.font = Font.Snapshot.cellLabel
+        myLabel1.font = UIFont.preferredFont(forTextStyle: .footnote)
         myLabel1.backgroundColor = .secondarySystemGroupedBackground
         myLabel1.textColor = .label
         myLabel1.textAlignment = .center
