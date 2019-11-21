@@ -106,13 +106,6 @@ enum Color {
     }
 }
 
-/*
- UIFontTextStyleTitle1 UIFontTextStyleTitle2 UIFontTextStyleTitle3
- UIFontTextStyleHeadline UIFontTextStyleSubheadline UIFontTextStyleBody
- UIFontTextStyleFootnote UIFontTextStyleCaption1 UIFontTextStyleCaption2
- //buttonFontSize,  labelFontSize, systemFontSize
- */
-
 struct Font {
     
     static let celltitle40r = UIFont.systemFont(ofSize: 40)

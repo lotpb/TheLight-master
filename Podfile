@@ -24,6 +24,7 @@ target 'TheLight2' do
     #pod 'FirebaseUI/Twitter'
     #pod 'FirebaseUI/Phone'
     pod 'SwiftKeychainWrapper'
+    #pod 'YouTubePlayerSwift'
     pod 'YouTubePlayer'
     pod 'GeoFire', :git => 'https://github.com/firebase/geofire-objc.git'
 

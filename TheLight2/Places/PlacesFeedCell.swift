@@ -12,7 +12,6 @@ import UIKit
 class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
     
     fileprivate let cellId = "cellId"
-
     //firebase
        var visitlist = [VisitModel]()
        var defaults = UserDefaults.standard
@@ -200,26 +199,5 @@ extension PlaceFeedCell: UICollectionViewDataSource {
         let windows = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
         windows?.rootViewController?.present(controller, animated: true)
     }
-    /*
-    func setEditing(_ editing: Bool, animated: Bool) {
-        super.setEditing(editing, animated: animated)
-        addButton.isEnabled = !editing
-        collectionView.allowsMultipleSelection = editing
-        let indexPaths = collectionView.indexPathsForVisibleItems
-        for indexPath in indexPaths {
-            let cell = collectionView.cellForItem(at: indexPath) as! CollectionViewCell
-            cell.isEditing = editing
-        }
-        deleteButton.isEnabled = isEditing
-    }
-    
-    @IBAction func deleteSelected() {
-        if let selected = collectionView.indexPathsForSelectedItems {
-            let items = selected.map { $0.item }.sorted().reversed()
-            for item in items {
-                collectionData.remove(at: item)
-            }
-            collectionView.deleteItems(at: selected)
-        }
-    } */
+
 }

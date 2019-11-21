@@ -28,7 +28,8 @@ class PlaceCell: UICollectionViewCell {
     var streetNumber: String?
     var streetName: String?
     var cityName: String?
-    
+
+    //var mapStart: VisitModel? {
     var mapStart: Location? {
         didSet {
             
@@ -67,9 +68,10 @@ class PlaceCell: UICollectionViewCell {
             startLocation = getCenterLocation(for: mapViewStart)
         }
     }
-    
+    //var mapDest: VisitModel? {
     var mapDest: Location? {
         didSet {
+            
             dateFormatter.timeStyle = .medium
             dateFormatter.dateStyle = .medium
             //let date2 = mapDest?.arrival_date
