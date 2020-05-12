@@ -71,7 +71,7 @@ final class LookupData: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.barTintColor = Color.DGrayColor
+        self.navigationController?.navigationBar.barTintColor = ColorX.DGrayColor
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -107,7 +107,7 @@ final class LookupData: UIViewController {
         self.tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
-        resultsController.tableView.backgroundColor = Color.LGrayColor
+        resultsController.tableView.backgroundColor = ColorX.LGrayColor
         resultsController.tableView.sizeToFit()
         resultsController.tableView.clipsToBounds = true
         resultsController.tableView.dataSource = self

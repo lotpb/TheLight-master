@@ -143,7 +143,7 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
     @objc func likeSetButton(sender: UIButton) {
         
         sender.isSelected = true
-        sender.tintColor = Color.BlueColor
+        sender.tintColor = ColorX.BlueColor
         let hitPoint = sender.convert(CGPoint.zero, to: self.collectionView)
         let indexPath = self.collectionView.indexPathForItem(at: hitPoint)
         
@@ -176,13 +176,13 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
     @objc func imgLoadSegue(_ sender: UITapGestureRecognizer) {
         
         let storyboard = UIStoryboard(name:"Me", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "userProfileVC") as! UserProfileVC
+        let vc = storyboard.instantiateViewController(withIdentifier: "MeProfileID") as! MeProfileVC
         vc.isFormMe = false
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
-            vc.uidProfileStr = ((_feedItems.object(at: (sender.view!.tag)) as AnyObject).value(forKey: "objectId") as? String)!
+            //vc.uidProfileStr = ((_feedItems.object(at: (sender.view!.tag)) as AnyObject).value(forKey: "objectId") as? String)!
         } else {
             //firebase
-            vc.uidProfileStr = newslist[(sender.view!.tag)].uid
+            //vc.uidProfileStr = newslist[(sender.view!.tag)].uid
         }
         let navigationController = UINavigationController(rootViewController: vc)
         let windows = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
@@ -461,7 +461,7 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
             if !(imageDetailurl == "") {
 
                 NotificationCenter.default.post(name: NSNotification.Name("open"), object: nil)
-                
+                let storyboard = UIStoryboard(name: "News", bundle: nil)
                 let vc = storyboard.instantiateViewController(withIdentifier: "PlayVC") as! PlayVC
                 vc.videoURL = self.newslist[indexPath.row].videoUrl
                 vc.idLookup = self.newslist[indexPath.row].newsId
@@ -469,9 +469,11 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
                 vc.likesLookup = String(describing: self.newslist[indexPath.row].liked)
                 vc.dislikesLookup = String(describing: self.newslist[indexPath.row].dislikes)
                 vc.viewLookup = String(describing: self.newslist[indexPath.row].viewCount)
-                
-                //let navigationController = UINavigationController(rootViewController: vc)
-                //UIApplication.shared.keyWindow?.rootViewController?.present(navigationController, animated: true) */
+
+                let navigationController = UINavigationController(rootViewController: vc)
+                let windows = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+                windows?.rootViewController?.present(navigationController, animated: true)
+
             } else {
                 vc.objectId = self.newslist[indexPath.row].newsId
                 vc.newsTitle = self.newslist[indexPath.row].newsTitle

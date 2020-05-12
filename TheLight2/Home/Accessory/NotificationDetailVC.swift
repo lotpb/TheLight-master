@@ -73,7 +73,7 @@ final class NotificationDetailVC: UIViewController, UNUserNotificationCenterDele
         if #available(iOS 13.0, *) {
             self.tableView!.backgroundColor = .systemGray4
         } else {
-            self.tableView!.backgroundColor = Color.LGrayColor
+            self.tableView!.backgroundColor = ColorX.LGrayColor
         }
         self.tableView!.tableFooterView = UIView(frame: .zero)
     }

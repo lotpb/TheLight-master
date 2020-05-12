@@ -63,7 +63,7 @@ final class TabBarController: UITabBarController, UISplitViewControllerDelegate 
         let myTab5 = PlacesCollectionView(collectionViewLayout: layout5)
 
         let layout6 = UICollectionViewFlowLayout()
-        let myTab6 = UserProfileVC(collectionViewLayout: layout6)
+        let myTab6 = MeProfileVC(collectionViewLayout: layout6)
 
         let navController1 = UINavigationController(rootViewController: myTab1)
         navController1.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 1)

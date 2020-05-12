@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="9Rf-yi-KAG">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16095" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="9Rf-yi-KAG">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15508"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16084.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -29,7 +29,7 @@
         <!--Get Address-->
         <scene sceneID="ASR-HY-yhw">
             <objects>
-                <viewController id="IaC-dg-WYr" customClass="GetAddress" customModule="TheLight2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="getAddressVC" id="IaC-dg-WYr" customClass="GetAddress" customModule="TheLight2" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nYS-6f-U3O">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -82,77 +82,29 @@
             </objects>
             <point key="canvasLocation" x="6521" y="2901"/>
         </scene>
-        <!--Geotify: 0-->
+        <!--Geotify-->
         <scene sceneID="IQK-LY-W1n">
             <objects>
                 <viewController storyboardIdentifier="GeotificationsViewController" id="up2-0X-jZG" customClass="GeotificationVC" customModule="TheLight2" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="BdU-GF-OyN">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" pitchEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e7h-CW-IDY">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="862"/>
-                                <connections>
-                                    <outlet property="delegate" destination="up2-0X-jZG" id="kga-a5-ytg"/>
-                                </connections>
-                            </mapView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eFU-1Y-HZF">
-                                <rect key="frame" x="0.0" y="813" width="414" height="49"/>
-                                <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="aM8-wK-rf6"/>
-                                    <barButtonItem style="plain" id="wUC-N5-Ez6">
-                                        <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="PVI-Ts-ZAP">
-                                            <rect key="frame" x="67.666666666666686" y="11" width="279" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <segments>
-                                                <segment title="Geotify"/>
-                                                <segment title="Region"/>
-                                                <segment title="Address"/>
-                                                <segment title="Places"/>
-                                            </segments>
-                                            <connections>
-                                                <action selector="indexChangedWithSender:" destination="up2-0X-jZG" eventType="valueChanged" id="osn-HJ-cJZ"/>
-                                            </connections>
-                                        </segmentedControl>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="xSm-ZG-ZWh"/>
-                                </items>
-                            </toolbar>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="Hti-Pf-6lr" firstAttribute="bottom" secondItem="e7h-CW-IDY" secondAttribute="bottom" id="685-c9-AgN"/>
-                            <constraint firstAttribute="trailing" secondItem="e7h-CW-IDY" secondAttribute="trailing" id="KNX-iI-oF6"/>
-                            <constraint firstItem="e7h-CW-IDY" firstAttribute="top" secondItem="BdU-GF-OyN" secondAttribute="top" id="dj0-AY-j9r"/>
-                            <constraint firstItem="Hti-Pf-6lr" firstAttribute="trailing" secondItem="eFU-1Y-HZF" secondAttribute="trailing" id="eks-gz-mNo"/>
-                            <constraint firstItem="eFU-1Y-HZF" firstAttribute="leading" secondItem="Hti-Pf-6lr" secondAttribute="leading" id="jvr-Xc-5sK"/>
-                            <constraint firstItem="eFU-1Y-HZF" firstAttribute="top" secondItem="e7h-CW-IDY" secondAttribute="bottom" constant="-49" id="roS-B2-sUW"/>
-                            <constraint firstItem="e7h-CW-IDY" firstAttribute="leading" secondItem="BdU-GF-OyN" secondAttribute="leading" id="sQq-Xq-6ge"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="Hti-Pf-6lr"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Geotify: 0" id="dxT-Nq-ioE">
-                        <rightBarButtonItems>
-                            <barButtonItem systemItem="add" id="kxu-kt-FCy">
-                                <connections>
-                                    <segue destination="glx-ee-UdB" kind="presentation" identifier="addGeotification" id="jWB-F2-6JG"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem image="location.fill" catalog="system" id="odw-qT-aoK">
-                                <connections>
-                                    <action selector="zoomToCurrentLocationWithSender:" destination="up2-0X-jZG" id="xkU-iF-1IW"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem title="📌" id="rRr-UP-VUS">
-                                <connections>
-                                    <action selector="addItemPressed:" destination="up2-0X-jZG" id="wZ5-7P-93x"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
+                    <navigationItem key="navigationItem" title="Geotify" id="dxT-Nq-ioE">
+                        <barButtonItem key="leftBarButtonItem" title="📌" id="rRr-UP-VUS">
+                            <connections>
+                                <action selector="addItemPressed:" destination="up2-0X-jZG" id="wZ5-7P-93x"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="kxu-kt-FCy">
+                            <connections>
+                                <segue destination="glx-ee-UdB" kind="presentation" identifier="addGeotification" id="jWB-F2-6JG"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="mapView" destination="e7h-CW-IDY" id="KSp-Gk-REY"/>
-                        <outlet property="segmentedControl" destination="PVI-Ts-ZAP" id="S4P-kp-nna"/>
                         <segue destination="IaC-dg-WYr" kind="show" identifier="getaddressSegue" id="5Oy-x4-fEI"/>
                         <segue destination="NBW-pf-hkF" kind="show" identifier="getregionSegue" id="IGi-rY-hi2"/>
                     </connections>
@@ -258,7 +210,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Reminder note to be shown" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Edr-QY-4P0">
-                                                    <rect key="frame" x="87" y="16" width="292" height="18"/>
+                                                    <rect key="frame" x="87" y="16" width="292" height="19.666666666666671"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                     <connections>
@@ -325,7 +277,7 @@
         <!--Regions ListVC-->
         <scene sceneID="yzs-7p-QMf">
             <objects>
-                <viewController id="NBW-pf-hkF" customClass="RegionsListVC" customModule="TheLight2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RegionVC" id="NBW-pf-hkF" customClass="RegionsListVC" customModule="TheLight2" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="a2S-LB-nfN">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -378,7 +330,7 @@
         <!--Navigation Controller-->
         <scene sceneID="gjI-HD-9uc">
             <objects>
-                <navigationController id="glx-ee-UdB" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="addGeotifyNC" id="glx-ee-UdB" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="sXD-gn-hXV">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -394,6 +346,6 @@
     </scenes>
     <resources>
         <image name="AddPin" width="75" height="75"/>
-        <image name="location.fill" catalog="system" width="64" height="56"/>
+        <image name="location.fill" catalog="system" width="128" height="115"/>
     </resources>
 </document>

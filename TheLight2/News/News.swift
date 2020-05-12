@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 
 @available(iOS 13.0, *)
@@ -107,8 +108,8 @@ final class News: UICollectionViewController, SearchDelegate {
      private func setupNavigationButtons() {
         
         let moreButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: #selector(handleMore))
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action:#selector(newButton))
-        let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action:#selector(handleSearch))
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newButton))
+        let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
         navigationItem.rightBarButtonItems = [moreButton,searchButton,addButton]
     }
     
@@ -122,9 +123,23 @@ final class News: UICollectionViewController, SearchDelegate {
     }
     
     // MARK: - Button
-    @objc func newButton(sender: AnyObject) {
-        
-        self.performSegue(withIdentifier: "uploadSegue", sender: self)
+    @objc func newButton(_ sender: AnyObject) {
+        //self.performSegue(withIdentifier: "uploadVCSegue", sender: self)
+        let storyboard = UIStoryboard(name: "News", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "uploadId")
+        self.show(vc, sender: self)
+    }
+
+    // MARK: - Segue
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        if segue.identifier == "uploadVCSegue"
+        {
+            guard let photo = segue.destination as? UploadController else { return }
+
+            photo.formState = ""
+
+        }
     }
     
     // MARK: - youtube Action Menu
@@ -140,11 +155,6 @@ final class News: UICollectionViewController, SearchDelegate {
         launcher.homeController = self
         return launcher
     }()
-    
-    @objc func handleMore() {
-        //show menu
-        settingsLauncher.showSettings()
-    }
     
     func showControllerForSetting(setting: Setting) {
         let dummySettingsViewController = UIViewController()
@@ -218,11 +228,19 @@ final class News: UICollectionViewController, SearchDelegate {
         }
     }
     
+//    @IBSegueAction func SwiftUIVC(_ coder: NSCoder) -> UIViewController? {
+//        return UIHostingController(coder: coder, rootView: BookListViewUI())
+//    }
+
+    @objc func handleMore() {
+        //show menu
+        settingsLauncher.showSettings()
+    }
+    
     @objc func handleSearch() {
-        if let window = UIApplication.shared.windows.first {
-            window.addSubview(self.search)
-            self.search.animate()
-        }
+
+        let newView = UIHostingController(rootView: LoginUI())
+        self.present(newView, animated: true)
     }
     
     func hideSearchView(status : Bool){
@@ -264,7 +282,6 @@ final class News: UICollectionViewController, SearchDelegate {
 @available(iOS 13.0, *)
 extension News: UICollectionViewDelegateFlowLayout {
     
-
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return .init(width: view.frame.width, height: view.frame.height - 50)
     }
@@ -274,3 +291,9 @@ extension News: UICollectionViewDelegateFlowLayout {
 }
 
 //-----------------------end------------------------------
+
+struct News_Previews: PreviewProvider {
+    static var previews: some View {
+        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
+    }
+}

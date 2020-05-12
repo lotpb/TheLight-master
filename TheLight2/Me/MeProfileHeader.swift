@@ -11,15 +11,15 @@ import FirebaseDatabase
 import FirebaseAuth
 import Parse
 
-protocol UserProfileHeaderDelegate {
+protocol MeProfileHeaderDelegate {
     func didChangeToListView()
     func didChangeToGridView()
 }
 
 @available(iOS 13.0, *)
-final class UserProfileHeader: UICollectionViewCell {
+final class MeProfileHeader: UICollectionViewCell {
     
-    var delegate: UserProfileHeaderDelegate?
+    var delegate: MeProfileHeaderDelegate?
     var defaults = UserDefaults.standard
     
     var user: UserModel? {
@@ -91,7 +91,7 @@ final class UserProfileHeader: UICollectionViewCell {
     }()
     
     @objc func handleChangeToGridView() {
-        gridButton.tintColor = Color.twitterBlue
+        gridButton.tintColor = ColorX.twitterBlue
         listButton.tintColor = .systemGray //UIColor(white: 0, alpha: 0.2)
         delegate?.didChangeToGridView()
     }
@@ -105,7 +105,7 @@ final class UserProfileHeader: UICollectionViewCell {
     }()
     
     @objc func handleChangeToListView() {
-        listButton.tintColor = Color.twitterBlue
+        listButton.tintColor = ColorX.twitterBlue
         gridButton.tintColor = .systemGray //UIColor(white: 0, alpha: 0.2)
         delegate?.didChangeToListView()
     }
@@ -139,7 +139,7 @@ final class UserProfileHeader: UICollectionViewCell {
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 3
-        button.addTarget(self, action: #selector(UserProfileVC.settingButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(MeProfileVC.settingButton), for: .touchUpInside)
         return button
     }()
 

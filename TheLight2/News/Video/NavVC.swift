@@ -14,6 +14,7 @@ final class NavVC: UINavigationController, PlayerVCDelegate  {
 
     //MARK: Properties
     lazy var playVC: PlayVC = {
+        let storyboard = UIStoryboard(name: "News", bundle: nil)
         let pvc: PlayVC = self.storyboard?.instantiateViewController(withIdentifier: "PlayVC") as! PlayVC
         pvc.view.frame = .init(origin: self.hiddenOrigin, size: UIScreen.main.bounds.size)
         pvc.delegate = self

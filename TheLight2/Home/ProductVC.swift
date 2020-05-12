@@ -37,7 +37,7 @@ final class ProductVC: UIViewController {
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        refreshControl.backgroundColor = Color.Table.navColor
+        refreshControl.backgroundColor = ColorX.Table.navColor
         refreshControl.tintColor = .white
         let attributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: attributes)
@@ -63,7 +63,7 @@ final class ProductVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.barTintColor = Color.Table.navColor
+        self.navigationController?.navigationBar.barTintColor = ColorX.Table.navColor
         //TabBar Hidden
         self.tabBarController?.tabBar.isHidden = false
         
@@ -116,7 +116,7 @@ final class ProductVC: UIViewController {
         self.tableView!.tableFooterView = UIView(frame: .zero)
   
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
-        resultsController.tableView.backgroundColor = Color.LGrayColor
+        resultsController.tableView.backgroundColor = ColorX.LGrayColor
         resultsController.tableView.tableFooterView = UIView(frame: .zero)
         resultsController.tableView.sizeToFit()
         resultsController.tableView.clipsToBounds = true

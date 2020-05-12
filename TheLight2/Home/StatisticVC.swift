@@ -411,7 +411,7 @@ extension StatisticVC: UITableViewDataSource {
                 if (label2.text?.contains("-"))! {
                     label2.backgroundColor = .systemRed
                 } else {
-                    label2.backgroundColor = Color.DGreenColor
+                    label2.backgroundColor = ColorX.DGreenColor
                 }
                 cell.contentView.addSubview(label1)
                 cell.contentView.addSubview(label2)
@@ -426,7 +426,7 @@ extension StatisticVC: UITableViewDataSource {
                 if (label2.text?.contains("-"))! {
                     label2.backgroundColor = .systemRed
                 } else {
-                    label2.backgroundColor = Color.DGreenColor
+                    label2.backgroundColor = ColorX.DGreenColor
                 }
                 cell.contentView.addSubview(label1)
                 cell.contentView.addSubview(label2)
@@ -441,7 +441,7 @@ extension StatisticVC: UITableViewDataSource {
                 if (label2.text?.contains("-"))! {
                     label2.backgroundColor = .systemRed
                 } else {
-                    label2.backgroundColor = Color.DGreenColor
+                    label2.backgroundColor = ColorX.DGreenColor
                 }
                 cell.contentView.addSubview(label1)
                 cell.contentView.addSubview(label2)
@@ -456,7 +456,7 @@ extension StatisticVC: UITableViewDataSource {
                 if (label2.text?.contains("-"))! {
                     label2.backgroundColor = .systemRed
                 } else {
-                    label2.backgroundColor = Color.DGreenColor
+                    label2.backgroundColor = ColorX.DGreenColor
                 }
                 cell.contentView.addSubview(label1)
                 cell.contentView.addSubview(label2)
@@ -471,7 +471,7 @@ extension StatisticVC: UITableViewDataSource {
                 if (label2.text?.contains("-"))! {
                     label2.backgroundColor = .systemRed
                 } else {
-                    label2.backgroundColor = Color.DGreenColor
+                    label2.backgroundColor = ColorX.DGreenColor
                 }
                 cell.contentView.addSubview(label1)
                 cell.contentView.addSubview(label2)
@@ -486,7 +486,7 @@ extension StatisticVC: UITableViewDataSource {
                 if (label2.text?.contains("-"))! {
                     label2.backgroundColor = .systemRed
                 } else {
-                    label2.backgroundColor = Color.DGreenColor
+                    label2.backgroundColor = ColorX.DGreenColor
                 }
                 cell.contentView.addSubview(label1)
                 cell.contentView.addSubview(label2)
@@ -501,7 +501,7 @@ extension StatisticVC: UITableViewDataSource {
                 if (label2.text?.contains("-"))! {
                     label2.backgroundColor = .systemRed
                 } else {
-                    label2.backgroundColor = Color.DGreenColor
+                    label2.backgroundColor = ColorX.DGreenColor
                 }
                 cell.contentView.addSubview(label1)
                 cell.contentView.addSubview(label2)
@@ -516,7 +516,7 @@ extension StatisticVC: UITableViewDataSource {
                 if (label2.text?.contains("-"))! {
                     label2.backgroundColor = .systemRed
                 } else {
-                    label2.backgroundColor = Color.DGreenColor
+                    label2.backgroundColor = ColorX.DGreenColor
                 }
                 cell.contentView.addSubview(label1)
                 cell.contentView.addSubview(label2)
@@ -531,7 +531,7 @@ extension StatisticVC: UITableViewDataSource {
                 if (label2.text?.contains("-"))! {
                     label2.backgroundColor = .systemRed
                 } else {
-                    label2.backgroundColor = Color.DGreenColor
+                    label2.backgroundColor = ColorX.DGreenColor
                 }
                 cell.contentView.addSubview(label1)
                 cell.contentView.addSubview(label2)
@@ -546,7 +546,7 @@ extension StatisticVC: UITableViewDataSource {
                 if (label2.text?.contains("-"))! {
                     label2.backgroundColor = .systemRed
                 } else {
-                    label2.backgroundColor = Color.DGreenColor
+                    label2.backgroundColor = ColorX.DGreenColor
                 }
                 cell.contentView.addSubview(label1)
                 cell.contentView.addSubview(label2)

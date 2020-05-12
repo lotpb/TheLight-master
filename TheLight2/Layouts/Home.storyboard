@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Izl-5v-Je2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Izl-5v-Je2">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15508"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -65,7 +65,7 @@
                     </refreshControl>
                     <connections>
                         <segue destination="BMu-ah-Db5" kind="showDetail" identifier="geotifySegue" id="Cxr-qW-djN"/>
-                        <segue destination="7iJ-e5-9PE" kind="presentation" identifier="searchMapSegue" modalPresentationStyle="fullScreen" id="sUE-7K-6Te"/>
+                        <segue destination="7iJ-e5-9PE" kind="showDetail" identifier="searchMapSegue" id="sUE-7K-6Te"/>
                         <segue destination="FDd-ir-fVb" kind="show" identifier="showzipSegue" id="I3U-D0-UJr"/>
                         <segue destination="cQs-K3-Vg9" kind="show" identifier="showsalesmanSegue" id="1m6-9q-Z3Z"/>
                         <segue destination="mxF-ad-HMj" kind="show" identifier="showjobSegue" id="CZv-Lr-efr"/>
@@ -282,7 +282,9 @@
         <!--AdVC-->
         <scene sceneID="30v-0N-2bR">
             <objects>
-                <viewControllerPlaceholder storyboardName="SubTable" referencedIdentifier="AdVC" id="SFk-LG-wCV" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="SubTable" referencedIdentifier="AdVC" id="SFk-LG-wCV" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="hKP-P1-yA9"/>
+                </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LOz-Pz-0wR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-4388" y="1860"/>
@@ -431,7 +433,9 @@
         <!--Geotify-->
         <scene sceneID="WQP-M2-Gib">
             <objects>
-                <viewControllerPlaceholder storyboardName="Geotify" id="BMu-ah-Db5" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="Geotify" id="BMu-ah-Db5" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="N8C-Jz-ckw"/>
+                </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pMm-QT-Qoo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-4498" y="2119"/>

@@ -111,7 +111,7 @@ final class YouTubeController: UIViewController {
         resultsController.tableView.delegate = self
         resultsController.tableView.sizeToFit()
         resultsController.tableView.clipsToBounds = true
-        resultsController.tableView.backgroundColor = Color.LGrayColor
+        resultsController.tableView.backgroundColor = ColorX.LGrayColor
         resultsController.tableView.tableFooterView = UIView(frame: .zero)
     }
     

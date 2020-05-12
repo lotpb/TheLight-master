@@ -37,7 +37,7 @@ final class AdVC: UIViewController {
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        refreshControl.backgroundColor = Color.Table.navColor
+        refreshControl.backgroundColor = ColorX.Table.navColor
         refreshControl.tintColor = .white
         let attributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: attributes)
@@ -115,7 +115,7 @@ final class AdVC: UIViewController {
         self.tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
-        resultsController.tableView.backgroundColor = Color.LGrayColor
+        resultsController.tableView.backgroundColor = ColorX.LGrayColor
         resultsController.tableView.tableFooterView = UIView(frame: .zero)
         resultsController.tableView.sizeToFit()
         resultsController.tableView.clipsToBounds = true
@@ -363,7 +363,7 @@ extension AdVC: UITableViewDataSource {
             cell.accessoryType = .disclosureIndicator
             cell.customImagelabel.text = "Ad"
             cell.customImagelabel.tag = indexPath.row
-            cell.customImagelabel.backgroundColor = Color.Table.labelColor
+            cell.customImagelabel.backgroundColor = ColorX.Table.labelColor
             
             if UIDevice.current.userInterfaceIdiom == .pad  {
                 cell.customtitleLabel.font = Font.celltitle22m
@@ -428,7 +428,7 @@ extension AdVC: UITableViewDelegate {
                     cell.myLabel2.text = String(format: "%@%d", "Active\n", activeCount ?? 0)
                     cell.myLabel3.text = String(format: "%@%d", "Event\n", 0)
                 }
-                cell.contentView.backgroundColor = Color.Table.labelColor //Color.Lead.navColor
+                cell.contentView.backgroundColor = ColorX.Table.labelColor //Color.Lead.navColor
                 self.tableView!.tableHeaderView = nil //cell.header
                 
                 return cell.contentView

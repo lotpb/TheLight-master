@@ -11,8 +11,9 @@ import Parse
 import FirebaseDatabase
 import FirebaseCore
 import GoogleSignIn
+import FirebaseFirestore
 //import FirebaseAuth
-//import SwiftUI
+import SwiftUI
 
 @available(iOS 13.0, *)
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -45,7 +46,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             "mileIQKey": "0.545",
         ])
 
+        //Firebase
         FirebaseApp.configure()
+
+        //Firestore
+        let settings = FirestoreSettings()
+        Firestore.firestore().settings = settings
+
         customizeAppearance()
 
         /// MARK: - prevent Autolock
@@ -76,6 +83,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
 
+/*
+        if let windowScene = scene as? UIWindowScene {
+        let window = UIWindow(windowScene: windowScene)
+        window.rootViewController = UIHostingController(rootView: ChatUI())
+        self.window = window
+        window.makeKeyAndVisible()
+        } */
+
         /*
          /// MARK: - splitViewController
          let splitViewController = UISplitViewController()
@@ -87,14 +102,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
          splitViewController.viewControllers = [homeNavigationController, secondNavigationController]
          //splitViewController.preferredDisplayMode = .allVisible */
-
-        /*
-         if let windowScene = scene as? UIWindowScene {
-         let window = UIWindow(windowScene: windowScene)
-         window.rootViewController = UIHostingController(rootView: ContentView())
-         self.window = window
-         window.makeKeyAndVisible()
-         } */
     }
 
     /// MARK: - App Theme Customization
@@ -123,16 +130,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12.0)
         ]
         let attrsSelected = [
-            NSAttributedString.Key.foregroundColor: Color.twitterBlue,
+            NSAttributedString.Key.foregroundColor: ColorX.twitterBlue,
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12.0)
         ]
         UITabBarItem.appearance().setTitleTextAttributes(attrsNormal, for: .normal)
         UITabBarItem.appearance().setTitleTextAttributes(attrsSelected, for: .selected)
         UITabBar.appearance().barTintColor = .systemBackground
-        UITabBar.appearance().tintColor = Color.twitterBlue
+        UITabBar.appearance().tintColor = ColorX.twitterBlue
         UITabBar.appearance().isTranslucent = false
 
-        UIToolbar.appearance().barTintColor = Color.toolbarColor //Color.DGrayColor
+        UIToolbar.appearance().barTintColor = ColorX.toolbarColor //Color.DGrayColor
         UIToolbar.appearance().tintColor = .secondarySystemGroupedBackground
         UIToolbar.appearance().isTranslucent = false
     }

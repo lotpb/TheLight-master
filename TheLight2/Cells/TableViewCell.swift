@@ -102,11 +102,11 @@ final class TableViewCell: UITableViewCell {
                 if leadpost?.comments == "" {
                     leadreplyButton!.tintColor = .lightGray
                 } else {
-                    leadreplyButton!.tintColor = Color.Lead.buttonColor
+                    leadreplyButton!.tintColor = ColorX.Lead.buttonColor
                 }
                 
                 if leadpost?.active as? Int == 1 {
-                    leadlikeButton!.tintColor = Color.Lead.buttonColor
+                    leadlikeButton!.tintColor = ColorX.Lead.buttonColor
                     leadlikeLabel.text! = "Active"
                     leadlikeLabel.sizeToFit()
                 } else {
@@ -153,7 +153,7 @@ final class TableViewCell: UITableViewCell {
             if custpost?.comments == "" {
                 custreplyButton!.tintColor = .lightGray
             } else {
-                custreplyButton!.tintColor = Color.Cust.buttonColor
+                custreplyButton!.tintColor = ColorX.Cust.buttonColor
             }
             
             if custpost?.active as? Int == 1 {
@@ -164,7 +164,7 @@ final class TableViewCell: UITableViewCell {
             }
             
             if custpost?.rate == "A" {
-                custlikeButton!.tintColor = Color.Cust.buttonColor
+                custlikeButton!.tintColor = ColorX.Cust.buttonColor
             } else {
                 custlikeButton!.tintColor = .lightGray
             }
@@ -189,11 +189,11 @@ final class TableViewCell: UITableViewCell {
             if vendpost?.comments == "" {
                 vendreplyButton!.tintColor = .lightGray
             } else {
-                vendreplyButton!.tintColor = Color.Vend.buttonColor
+                vendreplyButton!.tintColor = ColorX.Vend.buttonColor
             }
             
             if vendpost?.active as? Int == 1 {
-                vendlikeButton!.tintColor = Color.Vend.buttonColor
+                vendlikeButton!.tintColor = ColorX.Vend.buttonColor
                 vendlikeLabel.text! = "Active"
                 vendlikeLabel.sizeToFit()
             } else {
@@ -223,11 +223,11 @@ final class TableViewCell: UITableViewCell {
             if employpost?.comments == "" {
                 employreplyButton!.tintColor = .lightGray
             } else {
-                employreplyButton!.tintColor = Color.Employ.buttonColor
+                employreplyButton!.tintColor = ColorX.Employ.buttonColor
             }
             
             if employpost?.active as? Int == 1 {
-                employlikeButton!.tintColor = Color.Employ.buttonColor
+                employlikeButton!.tintColor = ColorX.Employ.buttonColor
                 employlikeLabel.text! = "Active"
                 employlikeLabel.sizeToFit()
             } else {

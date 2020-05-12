@@ -100,7 +100,7 @@ final class Blog: UIViewController {
     
     private func setupSearch() {
         searchController = UISearchController(searchResultsController: resultsController)
-        searchController.searchBar.tintColor = Color.twitterBlue
+        searchController.searchBar.tintColor = ColorX.twitterBlue
         if let textfield = searchController.searchBar.value(forKey: "searchField") as? UITextField {
             if let backgroundview = textfield.subviews.first {
                 backgroundview.backgroundColor = .white
@@ -140,7 +140,7 @@ final class Blog: UIViewController {
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
         resultsController.tableView.dataSource = self
         resultsController.tableView.delegate = self
-        resultsController.tableView.backgroundColor = Color.LGrayColor
+        resultsController.tableView.backgroundColor = ColorX.LGrayColor
         resultsController.tableView.sizeToFit()
         resultsController.tableView.clipsToBounds = true
         resultsController.tableView.tableFooterView = UIView(frame: .zero)
@@ -185,7 +185,7 @@ final class Blog: UIViewController {
     
     @objc func likeSetButton(_ sender: UIButton) {
         sender.isSelected = true
-        sender.tintColor = Color.twitterBlue
+        sender.tintColor = ColorX.twitterBlue
         let hitPoint = sender.convert(CGPoint.zero, to: self.tableView)
         let indexPath = self.tableView!.indexPathForRow(at: hitPoint)
         
@@ -513,7 +513,7 @@ extension Blog: UITableViewDataSource {
             cell.backgroundColor = .secondarySystemGroupedBackground
             cell.blogtitleLabel.textColor = .label
             cell.blogmsgDateLabel?.textColor = .systemGray
-            cell.blogsubtitleLabel?.textColor = Color.twitterText
+            cell.blogsubtitleLabel?.textColor = ColorX.twitterText
             cell.customImagelabel.backgroundColor = .clear //fix
             
             if UIDevice.current.userInterfaceIdiom == .pad  {
@@ -596,7 +596,7 @@ extension Blog: UITableViewDataSource {
             cell.actionBtn .addTarget(self, action: #selector(showShare), for: .touchUpInside)
             
             if !(cell.numLabel.text! == "0") {
-                cell.numLabel.textColor = Color.Blog.buttonColor
+                cell.numLabel.textColor = ColorX.Blog.buttonColor
             } else {
                 cell.numLabel.text! = ""
             }
@@ -610,7 +610,7 @@ extension Blog: UITableViewDataSource {
             if (cell.commentLabel.text! == "") {
                 cell.replyButton.tintColor = .lightGray
             } else {
-                cell.replyButton.tintColor = Color.Blog.buttonColor
+                cell.replyButton.tintColor = ColorX.Blog.buttonColor
             }
             
             //fix dont work
@@ -622,10 +622,10 @@ extension Blog: UITableViewDataSource {
             let myText = NSString(string: cell.blogsubtitleLabel.text!)
             let attributedText = NSMutableAttributedString(string: myText as String)
             
-            let boldRange = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24), NSAttributedString.Key.foregroundColor: Color.Blog.weblinkText]
-            let highlightedRange = [NSAttributedString.Key.backgroundColor: Color.Blog.phonelinkText]
+            let boldRange = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24), NSAttributedString.Key.foregroundColor: ColorX.Blog.weblinkText]
+            let highlightedRange = [NSAttributedString.Key.backgroundColor: ColorX.Blog.phonelinkText]
             let underlinedRange = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue]
-            let tintedRange1 = [NSAttributedString.Key.foregroundColor: Color.Blog.weblinkText]
+            let tintedRange1 = [NSAttributedString.Key.foregroundColor: ColorX.Blog.weblinkText]
             
             attributedText.addAttributes(boldRange, range: myText.range(of: "VCSY"))
             attributedText.addAttributes(highlightedRange, range: myText.range(of: "passed"))
@@ -699,10 +699,10 @@ extension Blog: UITableViewDelegate {
                         header.myLabel2.text = String(format: "%@%d", "likes\n", likeCount ?? 0)
                         header.myLabel3.text = String(format: "%@%d", "users\n", userCount ?? 0)
                     }
-                    header.separatorView1.backgroundColor = Color.Blog.borderColor
-                    header.separatorView2.backgroundColor = Color.Blog.borderColor
-                    header.separatorView3.backgroundColor = Color.Blog.borderColor
-                    header.contentView.backgroundColor = Color.Blog.navColor
+                    header.separatorView1.backgroundColor = ColorX.Blog.borderColor
+                    header.separatorView2.backgroundColor = ColorX.Blog.borderColor
+                    header.separatorView3.backgroundColor = ColorX.Blog.borderColor
+                    header.contentView.backgroundColor = ColorX.Blog.navColor
                     self.tableView!.tableHeaderView = nil //header.header
                     
                     return header.contentView

@@ -95,7 +95,7 @@ public extension UIViewController {
                app .configureWithTransparentBackground()
                app.backgroundColor = .systemBackground
                
-               app.titleTextAttributes = [NSAttributedString.Key.foregroundColor:Color.twitterline]
+               app.titleTextAttributes = [NSAttributedString.Key.foregroundColor:ColorX.twitterline]
                app.largeTitleTextAttributes = [
                    NSAttributedString.Key.foregroundColor:UIColor.white,
                    NSAttributedString.Key.font:UIFont.boldSystemFont(ofSize: 24)]
@@ -107,7 +107,7 @@ public extension UIViewController {
         
         let separator = UIView(frame: .init(x: 0, y: 0, width: view.frame.size.width, height: 0.5))
         separator.translatesAutoresizingMaskIntoConstraints = false
-        separator.backgroundColor = Color.twitterline
+        separator.backgroundColor = ColorX.twitterline
         view.addSubview(separator)
         
         //remove navbar line

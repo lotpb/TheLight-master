@@ -203,7 +203,7 @@ class PlaceCell: UICollectionViewCell {
         label.backgroundColor = .red
         label.textColor = .white
         label.textAlignment = .center
-        label.layer.borderColor = Color.Mile.borderColor.cgColor
+        label.layer.borderColor = ColorX.Mile.borderColor.cgColor
         label.layer.borderWidth = 1
         label.layer.masksToBounds = true
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -217,7 +217,7 @@ class PlaceCell: UICollectionViewCell {
         label.backgroundColor = .white
         label.textAlignment = .center
         label.textColor = .black
-        label.layer.borderColor = Color.Mile.borderColor.cgColor
+        label.layer.borderColor = ColorX.Mile.borderColor.cgColor
         label.layer.borderWidth = 1
         label.layer.masksToBounds = true
         label.translatesAutoresizingMaskIntoConstraints = false

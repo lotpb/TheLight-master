@@ -254,8 +254,10 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
     }
     
     private func thumbnailImageForFileUrl(fileUrl: URL) -> UIImage? {
+        
         let asset = AVAsset(url: fileUrl)
         let imageGeneretor = AVAssetImageGenerator(asset: asset)
+        imageGeneretor.appliesPreferredTrackTransform = true
         
         do {
             let thumbnailCGImage = try imageGeneretor.copyCGImage(at: CMTimeMake(value: 1, timescale: 60), actualTime: nil)
@@ -543,8 +545,9 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
         metadata.contentType = "video/quicktime"
         
         let ref = Storage.storage().reference().child("News_movies").child(filename)
-        
-        let uploadTask = ref.putFile(from: url, metadata: metadata, completion: { (_, error) in
+
+        let videoData = (NSData(contentsOf: url) as Data?)!
+        let uploadTask = ref.putData(videoData, metadata: nil, completion: {(metadata, error) in
             
             if error != nil {
                 print("CRAP Failed upload of video:", error!)
@@ -584,6 +587,7 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
             let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount)
                 / Double(snapshot.progress!.totalUnitCount)
             self.progressView.setProgress(Float(percentComplete), animated: true)
+            self.navigationItem.title = String("\(percentComplete) %")
         }
         
         uploadTask.observe(.success) { (snapshot) in
@@ -661,8 +665,8 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
                                           ] as [String: Any]
                             
                             userRef.updateChildValues(values) { (err, ref) in
-                                if let err = err {
-                                    self.simpleAlert(title: "Upload Failure", message: err as? String)
+                                if err != nil {
+                                    self.simpleAlert(title: "Upload Failure", message: "Failure updating the data")
                                     return
                                 }
                                 self.simpleAlert(title: "update Complete", message: "Successfully updated the data")
@@ -698,9 +702,9 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
         let childUpdates = ["/News/\(String(key!))": values]
         
         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
-            if let err = err {
+            if err != nil {
                 self.navigationItem.rightBarButtonItem?.isEnabled = true
-                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                self.simpleAlert(title:"Upload Failure", message:"Failure updating the data")
                 return
             }
             

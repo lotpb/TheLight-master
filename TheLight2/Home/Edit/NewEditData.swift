@@ -93,7 +93,7 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
         if UIDevice.current.userInterfaceIdiom == .pad  {
             self.navigationController?.navigationBar.barTintColor = .black
         } else {
-            self.navigationController?.navigationBar.barTintColor = Color.Table.labelColor
+            self.navigationController?.navigationBar.barTintColor = ColorX.Table.labelColor
         }
     }
     
@@ -154,7 +154,6 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
             self.frm11 = ""
         }
         self.tableView!.reloadData()
-        
     }
     
     // MARK: - Update Data
@@ -199,8 +198,8 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                                       "active": self.active ?? NSNull()] as [String: Any]
                         
                         userRef.updateChildValues(values) { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                            if err != nil {
+                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             let vc = self.storyboard?.instantiateViewController(withIdentifier: "salesId")
@@ -238,8 +237,8 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         
                         let childUpdates = ["/Salesman/\(String(key!))": values]
                         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                            if err != nil {
+                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             
@@ -279,8 +278,8 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                                       "active": self.active ?? NSNull()] as [String: Any]
                         
                         userRef.updateChildValues(values) { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                            if err != nil {
+                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             let vc = self.storyboard?.instantiateViewController(withIdentifier: "jobId")
@@ -319,8 +318,8 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         
                         let childUpdates = ["/Job/\(String(key!))": values]
                         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                            if err != nil {
+                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             
@@ -365,8 +364,8 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                                       "active": self.active ?? NSNull()] as [String: Any]
                         
                         userRef.updateChildValues(values) { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                            if err != nil {
+                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             let vc = self.storyboard?.instantiateViewController(withIdentifier: "productId")
@@ -406,8 +405,8 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         
                         let childUpdates = ["/Product/\(String(key!))": values]
                         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                            if err != nil {
+                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             
@@ -445,8 +444,8 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                                       "active": self.active ?? NSNull()] as [String: Any]
                         
                         userRef.updateChildValues(values) { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                            if err != nil {
+                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             let vc = self.storyboard?.instantiateViewController(withIdentifier: "adId")
@@ -484,8 +483,8 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         
                         let childUpdates = ["/Advertising/\(String(key!))": values]
                         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                            if err != nil {
+                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             
@@ -526,8 +525,8 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                                       ] as [String: Any]
                         
                         userRef.updateChildValues(values) { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                            if err != nil {
+                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             let vc = self.storyboard?.instantiateViewController(withIdentifier: "adId")
@@ -567,8 +566,8 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         
                         let childUpdates = ["/Zip/\(String(key!))": values]
                         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                            if err != nil {
+                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             

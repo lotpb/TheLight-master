@@ -110,7 +110,7 @@ final class Vendor: UIViewController {
         self.tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
-        resultsController.tableView.backgroundColor = Color.LGrayColor
+        resultsController.tableView.backgroundColor = ColorX.LGrayColor
         resultsController.tableView.sizeToFit()
         resultsController.tableView.clipsToBounds = true
         resultsController.tableView.dataSource = self
@@ -503,7 +503,7 @@ extension Vendor: UITableViewDataSource {
             cell.customImagelabel.text = "Vend"
             cell.customImagelabel.tag = indexPath.row
             cell.customImagelabel.frame = .init(x: 10, y: 10, width: 50, height: 50)
-            cell.customImagelabel.backgroundColor = Color.Vend.labelColor
+            cell.customImagelabel.backgroundColor = ColorX.Vend.labelColor
             cell.customImagelabel.layer.cornerRadius = 25.0
             
             if ((defaults.string(forKey: "backendKey")) == "Parse") {
@@ -514,11 +514,11 @@ extension Vendor: UITableViewDataSource {
                 if ((_feedItems[indexPath.row] as AnyObject).value(forKey: "Comments") as? String == nil) || ((_feedItems[indexPath.row] as AnyObject).value(forKey: "Comments") as? String == "") {
                     cell.vendreplyButton!.tintColor = .lightGray
                 } else {
-                    cell.vendreplyButton!.tintColor = Color.Vend.buttonColor
+                    cell.vendreplyButton!.tintColor = ColorX.Vend.buttonColor
                 }
                 
                 if ((_feedItems[indexPath.row] as AnyObject).value(forKey: "Active") as? Int == 1 ) {
-                    cell.vendlikeButton!.tintColor = Color.Vend.buttonColor
+                    cell.vendlikeButton!.tintColor = ColorX.Vend.buttonColor
                     cell.vendlikeLabel.text! = "Active"
                     cell.vendlikeLabel.adjustsFontSizeToFitWidth = true
                 } else {
@@ -583,7 +583,7 @@ extension Vendor: UITableViewDelegate {
                 header.myLabel2.text = String(format: "%@%d", "Active\n", activeCount ?? 0)
                 header.myLabel3.text = String(format: "%@%d", "Events\n", 0)
             }
-            header.contentView.backgroundColor = Color.Vend.buttonColor//.secondarySystemFill //Color.Lead.navColor
+            header.contentView.backgroundColor = ColorX.Vend.buttonColor//.secondarySystemFill //Color.Lead.navColor
             self.tableView!.tableHeaderView = nil //header.header
             
             return header.contentView

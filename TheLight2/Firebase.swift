@@ -17,6 +17,7 @@ struct FirebaseRef {
     static let databaseLeads: DatabaseReference = databaseRoot.child("Leads")
     static let databaseCust: DatabaseReference = databaseRoot.child("Customer")
     static let databaseBlog: DatabaseReference = databaseRoot.child("Blog")
+    static let databaseUsers: DatabaseReference = databaseRoot.child("users")
     //static let databaseUpdatingLocations: DatabaseReference = databaseRoot.child("update_locations")
     //static let databaseSignificantChange: DatabaseReference = databaseRoot.child("significant_change")
     //static let databaseHeading: DatabaseReference = databaseRoot.child("headings")

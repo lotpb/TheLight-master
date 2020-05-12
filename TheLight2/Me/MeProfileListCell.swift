@@ -10,11 +10,10 @@ import UIKit
 import FirebaseDatabase
 
 @available(iOS 13.0, *)
-final class UserProfileListCell: UICollectionViewCell {
+final class MeProfileListCell: UICollectionViewCell {
     
     var post: NewsModel? {
         didSet{
-
             FirebaseRef.databaseRoot.child("users")
                 .queryOrdered(byChild: "uid")
                 .queryEqual(toValue: post?.uid)
@@ -43,7 +42,7 @@ final class UserProfileListCell: UICollectionViewCell {
         }
     }
     
-    var userProfileController: UserProfileVC?
+    var userProfileController: MeProfileVC?
     
     let photoImageView: CustomImageView = {
         let iv = CustomImageView()
@@ -117,7 +116,7 @@ final class UserProfileListCell: UICollectionViewCell {
         button.isUserInteractionEnabled = true
         button.tintColor = .black
         button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
-        button.addTarget(self, action: #selector(UserProfileVC.shareButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(MeProfileVC.shareButton), for: .touchUpInside)
         return button
     }()
     

@@ -230,7 +230,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        refreshControl.backgroundColor = Color.Lead.navColor
+        refreshControl.backgroundColor = ColorX.Lead.navColor
         refreshControl.tintColor = .white
         let attributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: attributes)
@@ -530,7 +530,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
         if UIDevice.current.userInterfaceIdiom == .pad  {
             if (section == 0) {
                 let vw = UIView()
-                vw.backgroundColor = Color.LGrayColor
+                vw.backgroundColor = ColorX.LGrayColor
                 return vw
             }
         }
@@ -1171,6 +1171,8 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
             self.simpleAlert(title: "Info", message: "No Birthdays for \(nameStr) ")
         }
     }
+
+    
     
     // MARK: - Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -1178,7 +1180,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         
         if segue.identifier == "showmapSegue" {
-            guard let controller = segue.destination as? MapView else { return }
+            guard let controller = segue.destination as? MapViewVC else { return }
             controller.formController = "CustMap"
             controller.mapaddress = self.address! as NSString
             controller.mapcity = self.city! as NSString

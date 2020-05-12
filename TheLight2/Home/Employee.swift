@@ -69,7 +69,7 @@ final class Employee: UIViewController {
         if UIDevice.current.userInterfaceIdiom == .pad  {
             self.navigationController?.navigationBar.barTintColor = .black
         } else {
-            self.navigationController?.navigationBar.barTintColor = Color.Employ.navColor
+            self.navigationController?.navigationBar.barTintColor = ColorX.Employ.navColor
         }
     }
     
@@ -116,7 +116,7 @@ final class Employee: UIViewController {
         self.tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
-        resultsController.tableView.backgroundColor = Color.LGrayColor
+        resultsController.tableView.backgroundColor = ColorX.LGrayColor
         resultsController.tableView.sizeToFit()
         resultsController.tableView.clipsToBounds = true
         resultsController.tableView.dataSource = self
@@ -512,7 +512,7 @@ extension Employee: UITableViewDataSource {
             cell.customImagelabel.text = "Employ"
             cell.customImagelabel.tag = indexPath.row
             cell.customImagelabel.frame = .init(x: 10, y: 10, width: 50, height: 50)
-            cell.customImagelabel.backgroundColor = Color.Employ.labelColor
+            cell.customImagelabel.backgroundColor = ColorX.Employ.labelColor
             cell.customImagelabel.layer.cornerRadius = 25.0
             cell.customImagelabel.adjustsFontSizeToFitWidth = true
             
@@ -526,11 +526,11 @@ extension Employee: UITableViewDataSource {
                 if ((_feedItems[indexPath.row] as AnyObject).value(forKey: "Comments") as? String == nil) || ((_feedItems[indexPath.row] as AnyObject).value(forKey: "Comments") as? String == "") {
                     cell.employreplyButton!.tintColor = .lightGray
                 } else {
-                    cell.employreplyButton!.tintColor = Color.Employ.buttonColor
+                    cell.employreplyButton!.tintColor = ColorX.Employ.buttonColor
                 }
                 
                 if ((_feedItems[indexPath.row] as AnyObject).value(forKey: "Active") as? Int == 1 ) {
-                    cell.employlikeButton!.tintColor = Color.Employ.buttonColor
+                    cell.employlikeButton!.tintColor = ColorX.Employ.buttonColor
                     cell.employlikeLabel.text! = "Active"
                     cell.employlikeLabel.adjustsFontSizeToFitWidth = true
                 } else {
@@ -593,7 +593,7 @@ extension Employee: UITableViewDelegate {
                 header.myLabel2.text = String(format: "%@%d", "Active\n", activeCount ?? 0)
                 header.myLabel3.text = String(format: "%@%d", "Events\n", 3)
             }
-            header.contentView.backgroundColor = Color.Employ.buttonColor //Color.Lead.navColor
+            header.contentView.backgroundColor = ColorX.Employ.buttonColor //Color.Lead.navColor
             self.tableView!.tableHeaderView = nil //header.header
             
             return header.contentView

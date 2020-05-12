@@ -11,6 +11,11 @@ import FirebaseAuth
 import Parse
 import AVFoundation
 import FirebaseAnalytics
+
+import FirebaseCore
+import FirebaseFirestore
+import FirebaseFirestoreSwift
+
 //import SwiftKeychainWrapper
 
 
@@ -44,6 +49,24 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     override func viewDidLoad() {
         super.viewDidLoad()
 
+//        let db = Firestore.firestore()
+//        var ref: DocumentReference? = nil
+//        ref = db.collection("users").addDocument(data: [
+//            "creationDate": 1498765972.128394,
+//            "email": "eunited@optonline.net",
+//            "profileImageUrl": "https://firebasestorage.googleapis.com/v0/b/thelight-da74.appspot.com/o/profile_images%2F5AEAB2F4-FC38-498C-BDE6-B78EB0EF4FDF.jpeg?alt=media&token=08ce573b-ecef-4962-83c0-67812f359d91",
+//            "uid": "9lTwLrn4Ibh50na8xbQxRGCpfxl2",
+//            "username": "Peter Balsamo",
+//            "born": 1958
+//        ]) { err in
+//            if let err = err {
+//                print("Error adding document: \(err)")
+//            } else {
+//                print("Document added with ID: \(ref!.documentID)")
+//            }
+//        }
+
+
         self.extendedLayoutIncludesOpaqueBars = true
         self.splitViewController?.delegate = self
         self.splitViewController?.preferredDisplayMode = .allVisible
@@ -73,8 +96,6 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
                 }
             }
         }
-
-
         
         self.refreshControl?.backgroundColor = .clear //Color.Lead.navColor
         self.refreshControl?.tintColor = .white
@@ -127,7 +148,6 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             let initialViewController : UIViewController = storyboard.instantiateViewController(withIdentifier: "loginIDController") as UIViewController
             initialViewController.modalPresentationStyle = .fullScreen
             self.present(initialViewController, animated: true)
-
         }
     }
 
@@ -235,6 +255,8 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             synthesizer.speak(utterance)
         }
     }
+
+
     
     // MARK: - VersionCheck
     //fix

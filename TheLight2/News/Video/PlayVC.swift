@@ -87,16 +87,16 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
         slider.translatesAutoresizingMaskIntoConstraints = false
         slider.minimumTrackTintColor = .systemRed
         slider.maximumTrackTintColor = .white
-        let config = UIImage.SymbolConfiguration(pointSize: 50)
-        slider.setThumbImage(UIImage(systemName: "circle"), for: .normal)
+        slider.setThumbImage(UIImage(systemName: "circle.fill"), for: .normal)
+        slider.thumbTintColor = .systemRed
         slider.addTarget(self, action: #selector(handleSliderChange), for: .valueChanged)
         return slider
     }()
     
     lazy var minimizeButton: UIButton = {
         let button = UIButton(type: .system)
-        let config = UIImage.SymbolConfiguration(pointSize: 50)
-        button.setImage(UIImage(systemName: "chevron.down", withConfiguration: config), for: .normal)
+        let config = UIImage.SymbolConfiguration(pointSize: 30)
+        button.setImage(UIImage(systemName: "chevron.compact.down", withConfiguration: config), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .white
         button.isHidden = false
@@ -129,6 +129,9 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
             videoURL = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
         }
         self.playVideo(videoURL: videoURL!)
+
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.title = "Video"
     }
     
     deinit {
@@ -224,7 +227,8 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
             
             pausePlayButton.centerXAnchor.constraint(equalTo: playerView.centerXAnchor),
             pausePlayButton.centerYAnchor.constraint(equalTo: playerView.centerYAnchor),
-            pausePlayButton.heightAnchor.constraint(equalToConstant: 50),
+            pausePlayButton.widthAnchor.constraint(equalToConstant: 30),
+            pausePlayButton.heightAnchor.constraint(equalToConstant: 30),
             
             videoLengthLabel.rightAnchor.constraint(equalTo: playerView.rightAnchor, constant: -8),
             videoLengthLabel.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -2),
@@ -386,8 +390,7 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
             }
         })
     }
-    
-    
+
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
         //this is when the player is ready and rendering frames
@@ -456,18 +459,18 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
     @objc func setthumbUp(_ sender: UIButton) {
         
         sender.isSelected = true
-        sender.tintColor = Color.BlueColor
+        sender.tintColor = ColorX.BlueColor
         
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
-        let query = PFQuery(className:"Newsios")
-        query.whereKey("objectId", equalTo:(self.idLookup!))
-        query.getFirstObjectInBackground {(object: PFObject?, error: Error?) in
-            if error == nil {
-                object!.incrementKey("Liked")
-                object!.saveInBackground()
+            let query = PFQuery(className:"Newsios")
+            query.whereKey("objectId", equalTo:(self.idLookup!))
+            query.getFirstObjectInBackground {(object: PFObject?, error: Error?) in
+                if error == nil {
+                    object!.incrementKey("Liked")
+                    object!.saveInBackground()
+                }
             }
-        }
         } else {
             //firebase
             let likeStr = self.idLookup
@@ -486,18 +489,18 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
     @objc func setthumbDown(_ sender: UIButton) {
         
         sender.isSelected = true
-        sender.tintColor = Color.BlueColor
+        sender.tintColor = ColorX.BlueColor
         
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
-        let query = PFQuery(className:"Newsios")
-        query.whereKey("objectId", equalTo:(self.idLookup!))
-        query.getFirstObjectInBackground {(object: PFObject?, error: Error?) in
-            if error == nil {
-                object!.incrementKey("Dislikes")
-                object!.saveInBackground()
+            let query = PFQuery(className:"Newsios")
+            query.whereKey("objectId", equalTo:(self.idLookup!))
+            query.getFirstObjectInBackground {(object: PFObject?, error: Error?) in
+                if error == nil {
+                    object!.incrementKey("Dislikes")
+                    object!.saveInBackground()
+                }
             }
-        }
         } else {
             //firebase
             let likeStr = self.idLookup
@@ -1022,12 +1025,12 @@ class headerCell: UITableViewCell {
     
     lazy var subscribed: UIButton = {
         let button = UIButton(type: .system)
-        button.tintColor = Color.youtubeRed
+        button.tintColor = ColorX.youtubeRed
         button.isUserInteractionEnabled = true
         button.setImage(UIImage(systemName: "star.fill"), for: .normal)
         //button.setImage(#imageLiteral(resourceName: "iosStar").withRenderingMode(.alwaysTemplate), for: .normal)
         button.setTitle(" SUBSCRIBE", for: .normal)
-        button.setTitleColor(Color.youtubeRed, for: .normal)
+        button.setTitleColor(ColorX.youtubeRed, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         //button.addTarget(self, action: #selector(subscribedBtn), for: .touchUpInside)
         return button
@@ -1035,8 +1038,8 @@ class headerCell: UITableViewCell {
     
     func setupsubscribedStyle() {
         subscribed.setTitle(" SUBSCRIBE", for: .normal)
-        subscribed.setTitleColor(Color.youtubeRed, for: .normal)
-        subscribed.tintColor = Color.youtubeRed
+        subscribed.setTitleColor(ColorX.youtubeRed, for: .normal)
+        subscribed.tintColor = ColorX.youtubeRed
         subscribed.setImage(UIImage(systemName: "star.fill"), for: .normal)
         //subscribed.setImage(#imageLiteral(resourceName: "iosStar").withRenderingMode(.alwaysTemplate), for: .normal)
         //sender.addTarget(self, action: #selector(subscribedBtn), for: .touchUpInside)
@@ -1044,7 +1047,7 @@ class headerCell: UITableViewCell {
     
     func setupUnsubscribedStyle() {
         subscribed.setTitle(" UNSUBSCRIBE", for: .normal)
-        subscribed.setTitleColor(Color.DGrayColor, for: .normal)
+        subscribed.setTitleColor(ColorX.DGrayColor, for: .normal)
         subscribed.tintColor = .systemGray
         subscribed.setImage(UIImage(systemName: "star.fill"), for: .normal)
         //subscribed.setImage(#imageLiteral(resourceName: "iosStarNA").withRenderingMode(.alwaysTemplate), for: .normal)

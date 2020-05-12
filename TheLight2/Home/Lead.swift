@@ -112,7 +112,7 @@ final class Lead: UIViewController {
         self.tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
-        resultsController.tableView.backgroundColor = Color.LGrayColor
+        resultsController.tableView.backgroundColor = ColorX.LGrayColor
         resultsController.tableView.sizeToFit()
         resultsController.tableView.clipsToBounds = true
         resultsController.tableView.dataSource = self
@@ -551,11 +551,11 @@ extension Lead: UITableViewDataSource {
                     
                     cell.leadreplyButton!.tintColor = .lightGray
                 } else {
-                    cell.leadreplyButton!.tintColor = Color.Lead.buttonColor
+                    cell.leadreplyButton!.tintColor = ColorX.Lead.buttonColor
                 }
                 
                 if ((_feedItems[indexPath.row] as AnyObject).value(forKey: "Active") as? Int == 1 ) {
-                    cell.leadlikeButton!.tintColor = Color.Lead.buttonColor
+                    cell.leadlikeButton!.tintColor = ColorX.Lead.buttonColor
                     cell.leadlikeLabel.text! = "Active"
                     cell.leadlikeLabel.adjustsFontSizeToFitWidth = true
                 } else {

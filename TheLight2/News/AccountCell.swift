@@ -100,7 +100,7 @@ final class AccountCell: UICollectionViewCell, UITableViewDelegate, UITableViewD
         
         let floatingButton = UIButton(frame: .init(x: frame.size.width - 70, y: 65, width: 50, height: 50))
         floatingButton.layer.cornerRadius = floatingButton.frame.size.width / 2
-        floatingButton.backgroundColor = Color.News.navColor
+        floatingButton.backgroundColor = ColorX.News.navColor
         floatingButton.tintColor = .white
         floatingButton.setImage(UIImage(systemName: "video.fill"), for: .normal)
         floatingButton.addTarget(self, action: #selector(selectCamera), for: .touchUpInside)

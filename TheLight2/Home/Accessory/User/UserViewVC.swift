@@ -56,7 +56,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        refreshControl.backgroundColor = Color.Cust.navColor
+        refreshControl.backgroundColor = ColorX.Cust.navColor
         refreshControl.tintColor = .white
         let attributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: attributes)
@@ -70,35 +70,34 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
         setupNavigation()
         setupTableView()
         loadData()
-        
+        scrollView.backgroundColor = .systemGroupedBackground
         self.scrollView!.addSubview(refreshControl)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        /*
         //Fix Grey Bar on Bpttom Bar
         if UIDevice.current.userInterfaceIdiom == .phone {
             if let con = self.splitViewController {
                 con.preferredDisplayMode = .allVisible
             }
-        }
+        } */
         setMainNavItems()
         setupMap()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     private func setupNavigation() {
         if UIDevice.current.userInterfaceIdiom == .pad  {
-            navigationItem.title = "TheLight - Users"
+            navigationItem.title = "TheLight - Current Users"
         } else {
-            navigationItem.title = "Users"
+            navigationItem.title = "Current Users"
         }
-        self.navigationItem.largeTitleDisplayMode = .always
+        self.navigationItem.largeTitleDisplayMode = .never
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newData))
         let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: nil)
         navigationItem.rightBarButtonItems = [addButton, searchButton]
@@ -312,36 +311,28 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        self.formController = "CollectionView"
-        isFormStat = false
-        
+
+        let storyboard = UIStoryboard(name:"Me", bundle: nil)
+        let VC = storyboard.instantiateViewController(withIdentifier: "MeProfileID") as! MeProfileVC
+        VC.isFormMe = false
+
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
-            let imageObject = _feedItems.object(at: indexPath.row) as! PFObject
-            let imageFile = imageObject.object(forKey: "imageFile") as? PFFileObject
-            
-            imageFile!.getDataInBackground { imageData, error in
-                self.selectedImage = UIImage(data: imageData!)
-            }
+            VC.objectId = (self._feedItems[indexPath.row] as AnyObject).value(forKey: "objectId") as? String
+            VC.username = (self._feedItems[indexPath.row] as AnyObject).value(forKey: "username") as? String
         } else {
-            //firebase
-            let userImageUrl = userlist[indexPath.item].profileImageUrl
-            self.userImageview.loadImage(urlString: userImageUrl)
-            self.selectedImage = self.userImageview.image
+            VC.objectId = self.userlist[indexPath.row].uid
+            VC.username = self.userlist[indexPath.row].username
+
+            let navController = UINavigationController(rootViewController: VC)
+            self.present(navController, animated: true)
         }
-        //fix
-        let layout = UICollectionViewFlowLayout()
-        let controller = UserProfileVC(collectionViewLayout: layout)
-        let navController = UINavigationController(rootViewController: controller)
-        //navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
-        //self.show(navController, sender: true)
-        self.present(navController, animated: true)
-        
     }
+
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        let updated: Date?
+        let create: Date?
+        //let updated: Date?
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM dd, yyyy"
         
@@ -356,8 +347,8 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
                     let indexPath = (self.tableView!.indexPathForSelectedRow! as NSIndexPath).row
                     
                     if ((defaults.string(forKey: "backendKey")) == "Parse") {
-                        
-                        updated = ((self._feedItems[indexPath] as AnyObject).value(forKey: "createdAt") as? Date)!
+                        create = ((self._feedItems[indexPath] as AnyObject).value(forKey: "createdAt") as? Date)!
+                        //updated = ((self._feedItems[indexPath] as AnyObject).value(forKey: "createdAt") as? Date)!
                         VC.objectId = (self._feedItems[indexPath] as AnyObject).value(forKey: "objectId") as? String
                         VC.username = (self._feedItems[indexPath] as AnyObject).value(forKey: "username") as? String
                         VC.email = (self._feedItems[indexPath] as AnyObject).value(forKey: "email") as? String
@@ -365,49 +356,23 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
                         VC.userimage = self.selectedImage
                     } else {
                         //firebase
-                        updated = userlist[indexPath].creationDate
+                        create = userlist[indexPath].creationDate
+                        //updated = userlist[indexPath].lastUpdate
+                        VC.objectId = userlist[indexPath].uid
                         VC.username = userlist[indexPath].username
                         VC.email = userlist[indexPath].email
                         VC.phone = userlist[indexPath].phone
                         VC.userimage = self.selectedImage
                     }
-                    
-                    let createString = dateFormatter.string(from: updated!)
+                    let createString = dateFormatter.string(from: create!)
                     VC.create = createString
                 }
-                
             } else if self.formController == "CollectionView" {
-                
-                if (isFormStat == true) {
-                    VC.status = "New"
-                } else {
-                    VC.status = "Edit"
-                    let indexPaths = self.collectionView!.indexPathsForSelectedItems!
-                    let indexPath = indexPaths[0] as IndexPath
-                    
-                    if ((defaults.string(forKey: "backendKey")) == "Parse") {
-                        
-                        updated = ((self._feedItems[(indexPath.row)] as AnyObject).value(forKey: "createdAt") as? Date)!
-                        VC.objectId = (self._feedItems[(indexPath.row)] as AnyObject).value(forKey: "objectId") as? String
-                        VC.username = (self._feedItems[(indexPath.row)] as AnyObject).value(forKey: "username") as? String
-                        VC.email = (self._feedItems[(indexPath.row)] as AnyObject).value(forKey: "email") as? String
-                        VC.phone = (self._feedItems[(indexPath.row)] as AnyObject).value(forKey: "phone") as? String
-                        VC.userimage = self.selectedImage
-                    } else {
-                        //firebase
-                        updated = userlist[indexPath.row].creationDate
-                        VC.username = userlist[indexPath.row].username
-                        VC.email = userlist[indexPath.row].email
-                        VC.phone = userlist[indexPath.row].phone
-                        VC.userimage = self.selectedImage
-                    }
-                    
-                    let createString = dateFormatter.string(from: updated!)
-                    VC.create = createString
-                }
+
             }
         }
     }
+
 }
  @available(iOS 13.0, *)
  extension UserViewVC: UITableViewDataSource {

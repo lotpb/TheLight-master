@@ -19,7 +19,7 @@ enum Config {
     static let BaseUrl = "http://lotpb.github.io/UnitedWebPage/index.html"
 }
 
-enum Color {
+enum ColorX {
     static let BlueColor = #colorLiteral(red: 0.2039215686, green: 0.4823529412, blue: 0.968627451, alpha: 1)  //UIColor(red:0.0, green:122.0/255.0, blue:1.0, alpha: 1.0)
     static let DGrayColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1) //UIColor(white:0.45, alpha:1.0)
     static let LGrayColor = UIColor(white:0.90, alpha:1.0)
@@ -33,30 +33,30 @@ enum Color {
     static let toolbarColor = #colorLiteral(red: 0.137254902, green: 0.137254902, blue: 0.137254902, alpha: 1)
     
     enum Header {
-        static let headtextColor = Color.goldColor
+        static let headtextColor = ColorX.goldColor
     }
     
     enum Blog {
-        static let navColor = Color.twitterBlue
+        static let navColor = ColorX.twitterBlue
         //static let borderbtnColor = Color.LGrayColor.cgColor
         static let borderColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1) //Color.goldColor
-        static let buttonColor = Color.twitterBlue
-        static let weblinkText = Color.twitterBlue
+        static let buttonColor = ColorX.twitterBlue
+        static let weblinkText = ColorX.twitterBlue
         static let emaillinkText = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
         static let phonelinkText = UIColor.systemGreen
     }
     enum Lead {
         static let navColor = #colorLiteral(red: 0.07058823529, green: 0.07058823529, blue: 0.07058823529, alpha: 1)
-        static let labelColor = Color.DGrayColor
+        static let labelColor = ColorX.DGrayColor
         static let labelColor1 = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
         static let buttonColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
     }
     
     enum Cust {
         static let navColor = UIColor.black
-        static let labelColor = Color.DGrayColor
-        static let labelColor1 = Color.BlueColor
-        static let buttonColor = Color.BlueColor
+        static let labelColor = ColorX.DGrayColor
+        static let labelColor1 = ColorX.BlueColor
+        static let buttonColor = ColorX.BlueColor
     }
     
     enum Vend {
@@ -84,7 +84,7 @@ enum Color {
     
     enum News {
         static let navColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1) //Color.youtubeRed
-        static let buttonColor = Color.BlueColor
+        static let buttonColor = ColorX.BlueColor
     }
     
     enum Stat {

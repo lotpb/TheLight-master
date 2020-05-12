@@ -105,8 +105,8 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         self.extendedLayoutIncludesOpaqueBars = true
-        //view?.backgroundColor = .systemGray6
-        contentView?.backgroundColor = .secondarySystemGroupedBackground
+        view?.backgroundColor = .secondarySystemGroupedBackground
+        contentView?.backgroundColor = .clear
         mainView?.backgroundColor = .clear
         tableView?.backgroundColor = .clear
         passFieldData()
@@ -139,7 +139,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         if UIDevice.current.userInterfaceIdiom == .pad  {
             self.navigationController?.navigationBar.barTintColor = .black
         } else {
-            self.navigationController?.navigationBar.barTintColor = Color.DGrayColor
+            self.navigationController?.navigationBar.barTintColor = ColorX.DGrayColor
         }
         
         self.tabBarController?.tabBar.isHidden = false
@@ -185,7 +185,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         self.tableView!.dataSource = self
         self.tableView!.estimatedRowHeight = 44
         self.tableView!.rowHeight = UITableView.automaticDimension
-        self.tableView!.backgroundColor = .secondarySystemGroupedBackground
+        self.tableView!.backgroundColor = .clear
         self.tableView!.tableFooterView = UIView(frame: .zero)
     }
     
@@ -683,8 +683,8 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                                       ] as [String: Any]
                         
                         userRef.updateChildValues(values) { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                            if err != nil {
+                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             self.simpleAlert(title: "update Complete", message: "Successfully updated the data")
@@ -754,8 +754,8 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                         
                         let childUpdates = ["/Leads/\(String(key!))": values]
                         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                            if err != nil {
+                                self.simpleAlert(title: "Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
@@ -847,8 +847,8 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                                       "custId": self.objectId ?? ""] as [String: Any]
                         
                         userRef.updateChildValues(values) { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                            if err != nil {
+                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             self.simpleAlert(title: "update Complete", message: "Successfully updated the data")
@@ -928,8 +928,8 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                         
                         let childUpdates = ["/Customer/\(String(key!))": values]
                         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                            if err != nil {
+                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
@@ -1008,8 +1008,8 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                                       "vendId": self.objectId ?? ""] as [String: Any]
                         
                         userRef.updateChildValues(values) { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                            if err != nil {
+                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             self.simpleAlert(title: "update Complete", message: "Successfully updated the data")
@@ -1079,8 +1079,8 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                         
                         let childUpdates = ["/Vendor/\(String(key!))": values]
                         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                            if err != nil {
+                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
@@ -1161,8 +1161,8 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                                       "employeeId": self.objectId ?? ""] as [String: Any]
                         
                         userRef.updateChildValues(values) { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                            if err != nil {
+                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             self.simpleAlert(title: "update Complete", message: "Successfully updated the data")
@@ -1235,8 +1235,8 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                         
                         let childUpdates = ["/Employee/\(String(key!))": values]
                         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: "Upload Failure", message: err as? String)
+                            if err != nil {
+                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")

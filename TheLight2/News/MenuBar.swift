@@ -18,7 +18,7 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
         if UIDevice.current.userInterfaceIdiom == .pad  {
             cv.backgroundColor = .black
         } else {
-            cv.backgroundColor = Color.youtubeRed
+            cv.backgroundColor = ColorX.youtubeRed
         }
         cv.dataSource = self
         cv.delegate = self

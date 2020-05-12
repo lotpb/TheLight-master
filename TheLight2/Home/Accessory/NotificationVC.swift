@@ -5,13 +5,14 @@
 //  Created by Peter Balsamo on 12/20/15.
 //  Copyright © 2015 Peter Balsamo. All rights reserved.
 //
-/*
+
 import UIKit
 import UserNotifications
 
 @available(iOS 13.0, *)
 final class NotificationVC: UIViewController {
     
+    @IBOutlet weak var scrollWiew: UIScrollView!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var customMessage: UITextField!
     @IBOutlet weak var datePicker: UIDatePicker!
@@ -25,7 +26,10 @@ final class NotificationVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.extendedLayoutIncludesOpaqueBars = true
-        self.contentView.backgroundColor = .secondarySystemGroupedBackground
+        
+        view.backgroundColor = .secondarySystemGroupedBackground
+        self.scrollWiew.backgroundColor = .clear
+        self.contentView.backgroundColor = .clear
         
         self.customMessage.clearButtonMode = .always
         self.customMessage!.font = celltitle
@@ -256,7 +260,7 @@ final class NotificationVC: UIViewController {
         })
         
         let promo = UIAlertAction(title: "Promo Code", style: .default, handler: { (action)  in
-            self.promoNotification()
+            //self.promoNotification()
         })
         let buttonCancel = UIAlertAction(title: "Cancel", style: .cancel) { (action)  in
             
@@ -277,5 +281,5 @@ final class NotificationVC: UIViewController {
         self.performSegue(withIdentifier: "notificationdetailsegue", sender: self)
     }
     
-} */
+}
 

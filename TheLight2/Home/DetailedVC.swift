@@ -174,7 +174,7 @@
         button.setTitle("Light off", for: .normal)
         button.titleLabel?.textAlignment = .center
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = Color.BlueColor
+        button.backgroundColor = ColorX.BlueColor
         button.addTarget(self, action: #selector(lightoff), for: .touchUpInside)
         return button
     }()
@@ -186,7 +186,7 @@
         button.setTitle("Spotlight", for: .normal)
         button.titleLabel?.textAlignment = .center
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = Color.BlueColor
+        button.backgroundColor = ColorX.BlueColor
         button.addTarget(self, action: #selector(AddItemToCoreSpotlight), for: .touchUpInside)
         return button
     }()
@@ -198,7 +198,7 @@
         button.setTitle("Spotlight off", for: .normal)
         button.titleLabel?.textAlignment = .center
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = Color.BlueColor
+        button.backgroundColor = ColorX.BlueColor
         button.addTarget(self, action: #selector(RemoveItemFromCoreSpotlight), for: .touchUpInside)
         return button
     }()
@@ -594,7 +594,7 @@
     
     private func buttonEnabledControl(_ isRecording: Bool) {
         DispatchQueue.main.async { [unowned self] in
-            let enebledColor = Color.BlueColor
+            let enebledColor = ColorX.BlueColor
             let disabledColor = UIColor.lightGray
             
             if !self.recorder.isAvailable {
@@ -731,9 +731,9 @@
             longitudeLabel.text = String(format: "Lon: %.4f", location.coordinate.longitude)
             altitudeLabel.text = String(format: "Alt: %.2f", location.altitude)
             
-            latitudeLabel.textColor = Color.twitterBlue
-            longitudeLabel.textColor = Color.twitterBlue
-            altitudeLabel.textColor = Color.twitterBlue
+            latitudeLabel.textColor = ColorX.twitterBlue
+            longitudeLabel.textColor = ColorX.twitterBlue
+            altitudeLabel.textColor = ColorX.twitterBlue
         }
     }
     

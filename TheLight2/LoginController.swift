@@ -9,7 +9,7 @@
 import UIKit
 import Parse
 import Firebase
-import FirebaseDatabase
+//import FirebaseDatabase
 import FirebaseAuth
 import FirebaseStorage
 import LocalAuthentication
@@ -39,21 +39,30 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
     @IBOutlet weak var reEnterPasswordField: UITextField?
     @IBOutlet weak var emailField: UITextField?
     @IBOutlet weak var phoneField: UITextField?
-    
+
+
     var defaults = UserDefaults.standard
     var pictureData : Data?
     var user : PFUser?
     //firebase
     var users: UserModel?
-    
+    var userimage : UIImage?
+    var userimageView : UIImageView?
     //Facebook
+    var profile_pic: String?
     var fbButton : FBLoginButton = FBLoginButton()
     //Google
     var googleButton : GIDSignInButton = GIDSignInButton()
     //Twitter
     //var twitterButton : TWTRLogInButton = TWTRLogInButton()
-    
-    var profile_pic: String?
+
+
+    let plusPhotoButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.addTarget(self, action: #selector(handlePlusPhoto), for: .touchUpInside)
+        return button
+    }()
     
 
     override func viewDidLoad() {
@@ -61,7 +70,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         
         view.addSubview(plusPhotoButton)
         
-        plusPhotoButton.anchor(top: view.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 30, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 140, height: 140)
+        plusPhotoButton.anchor(top: view.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 60, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 140, height: 140)
         plusPhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
 
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
@@ -81,11 +90,11 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         
         //Google
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()!.options.clientID
-        //GIDSignIn.sharedInstance().uiDelegate = self
-        //GIDSignIn.sharedInstance().signInSilently() //.signIn()
+        GIDSignIn.sharedInstance()?.presentingViewController = self
+        //GIDSignIn.sharedInstance().signIn()
         
         //Twitter
-        setupTwitterButton()
+        //setupTwitterButton()
         
         setupDefaults()
         setupView()
@@ -124,7 +133,6 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // MARK: - LoginUser
@@ -145,14 +153,6 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
     }
     
     private func setupView() {
-        //Password AutoFill in iOS 11 - not setup
-        if #available(iOS 11.0, *) {
-            //self.usernameField!.textContentType = .username
-            //self.emailField!.textContentType = .emailAddress
-            //self.phoneField!.textContentType = .password
-        } else {
-            // Fallback on earlier versions
-        }
         
         if ((defaults.string(forKey: "registerKey") == nil)) {
             self.registerBtn?.setTitle("Register", for: .normal)
@@ -189,7 +189,6 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         self.phoneField?.keyboardType = .numbersAndPunctuation
         
         self.passwordField?.text = ""
-        //self.userimage = nil
     }
     
     func setupConstraints() {
@@ -198,7 +197,8 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         self.mainView?.addSubview(googleButton)
         
         mapView?.translatesAutoresizingMaskIntoConstraints = false
-        if UIDevice.current.userInterfaceIdiom == .pad  {            mapView?.heightAnchor.constraint(equalToConstant: 380).isActive = true
+        if UIDevice.current.userInterfaceIdiom == .pad  {
+            mapView?.heightAnchor.constraint(equalToConstant: 380).isActive = true
         } else {
             mapView?.heightAnchor.constraint(equalToConstant: 175).isActive = true
         }
@@ -278,6 +278,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         self.googleButton.isHidden = false
         //self.twitterButton.isHidden = false
         self.plusPhotoButton.isHidden = true
+        self.mapView?.isHidden = false
         setupDefaults()
     }
     
@@ -299,6 +300,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
             self.googleButton.isHidden = true
             //self.twitterButton.isHidden = true
             self.plusPhotoButton.isHidden = false
+            self.mapView?.isHidden = true
             
         } else {
             //check if all text fields are completed
@@ -330,7 +332,6 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
             if (self.self.plusPhotoButton.imageView?.image == nil) {
                 self.self.plusPhotoButton.imageView?.image = UIImage(named:"profile-rabbit-toy.png")
             }
-            //pictureData = UIImageJPEGRepresentation((self.plusPhotoButton.imageView?.image)!, 0.9)
             pictureData = self.plusPhotoButton.imageView?.image?.jpegData(compressionQuality: 0.9)
             let file = PFFileObject(name: "Image.jpg", data: pictureData!)
             
@@ -368,8 +369,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
                     return
                     
                 } else {
-                    
-                    //print("Successfully created user: ", user?.uid ?? "")
+
                     guard let image = self.plusPhotoButton.imageView?.image else {return}
                     guard let uploadData = image.jpegData(compressionQuality: 0.9) else {return}
                     
@@ -380,14 +380,13 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
                     
                     let storageItem = Storage.storage().reference().child("profile_images").child(fileName)
                     storageItem.putData(uploadData, metadata: metadata) { (metadata, error) in
-                        //Storage.storage().reference().child("profile_images").child(fileName).putData(uploadData, metadata: metadata, completion: {(metadata, err) in
                         
                         if let err = error {
                             print("Failed to upload profile image:" , err)
                             return
                         } else {
                             storageItem.downloadURL(completion: { (url, error) in
-                                //guard let profileImageUrl = metadata?.downloadURL()?.absoluteString else {return}
+
                                 if error != nil {
                                     print(error!)
                                     return
@@ -407,9 +406,11 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
                                     FirebaseRef.databaseRoot.child("users").updateChildValues(values, withCompletionBlock: {(error, ref) in
                                         
                                         if let err = error {
+                                            self.simpleAlert(title:"new member Failure", message: "Failure updating the data")
                                             print("Failed to save user info to database: ", err)
                                             return
                                         } else {
+                                            self.simpleAlert(title: "Congratulations", message: "Successfully became a member")
                                             print("Succefully saved user info to db")
                                             self.defaults.set(self.usernameField!.text, forKey: "usernameKey")
                                             self.saveDefaults()
@@ -420,6 +421,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
                                             self.emailField!.text = nil
                                             self.phoneField!.text = nil
                                             self.simpleAlert(title: "Success", message: "You have registered a new user")
+                                            self.redirectToHome()
                                         }
                                     })
                                 }
@@ -459,36 +461,36 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         self.mainView.addSubview(twitterButton) */
     } 
     
-    // MARK: - Google
+    // MARK: - Google //not worling
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         
-        if error != nil {
-            print(error!)
+        if let error = error {
+          print(error.localizedDescription)
             return
         }
         
-        guard let idToken = user.authentication.idToken else { return }
-        guard let accessToken = user.authentication.accessToken else { return }
-        let credentials = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
+        guard let authentication = user.authentication else { return }
+        let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
+                                                          accessToken: authentication.accessToken)
         
-        Auth.auth().signIn(with: credentials) { (authResult, error) in
+        Auth.auth().signIn(with: credential) { (result, error) in
             if let err = error {
                 print("Failed to create a Firebase User with Google account: ", err)
                 return
             }
             guard let uid = self.user else { return }
             print("Successfully logged into Firebase with Google", uid)
-        }
+
         
-        self.usernameField!.text = user.profile.name
-        self.emailField!.text = user.profile.email
-        self.passwordField!.text = "united" //user.userID
-        
-        if user.profile.hasImage{
-            let profilePicURL = user.profile.imageURL(withDimension: 200).absoluteString
-            print(profilePicURL)
-            self.profile_pic = profilePicURL
-        }
+//        self.usernameField!.text = user.profile.name
+//        self.emailField!.text = user.profile.email
+//        self.passwordField!.text = "united" //user.userID
+//
+//        if user.profile.hasImage{
+//            let profilePicURL = user.profile.imageURL(withDimension: 200).absoluteString
+//            print(profilePicURL)
+//            self.profile_pic = profilePicURL
+//        }
  
         //let dimension = round(imageSize.width * UIScreen.main.scale)
         //let pic = user.profile.imageURL(withDimension: dimension)
@@ -509,6 +511,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         self.saveDefaults()
         self.refreshLocation()
         self.redirectToHome()
+        }
     }
     
     func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
@@ -567,11 +570,6 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
                         print(imageURL)
                         self.profile_pic = imageURL
                     }
-                    /*
-                     self.plusPhotoButton.imageView?.image = UIImage(data: try! Data(contentsOf: URL(string: pictureUrl)!))
-                     DispatchQueue.main.async(execute: { ()  in
-                     //self.userImageView.image = self.plusPhotoButton.imageView?.image
-                     }) */
                     
                     self.usernameField!.text = "\(firstName) \(lastName)"
                     self.emailField!.text = "\(email)"
@@ -721,10 +719,6 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
                 self.defaults.set(self.passwordField!.text, forKey: "passwordKey")
             }
         }
-        /*
-        if (self.emailField!.text != nil) {
-            self.defaults.set(self.emailField!.text, forKey: "emailKey")
-        }*/
         self.defaults.set(true, forKey: "registerKey")
         self.redirectToHome()
     }
@@ -764,35 +758,69 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
     }
     
     // MARK: - AvatarImage
-    let plusPhotoButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal), for: .normal)
-        button.addTarget(self, action: #selector(handlePhotoButton), for: .touchUpInside)
-        return button
-    }()
-    
-    @objc func handlePhotoButton () {
+
+    @objc func handlePlusPhoto () {
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
         imagePickerController.allowsEditing = true
         present(imagePickerController, animated:true)
     }
     
-    private func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-        
-        if let originalImage = info["UIImagePickerControllerOriginalImage"] as? UIImage {
-            plusPhotoButton.setImage(originalImage.withRenderingMode(.alwaysOriginal), for: .normal)
-        } else if let editedImage = info["UIImagePickerControllerEditedImage"] as? UIImage {
+        if let editedImage = info[UIImagePickerController.InfoKey(rawValue: "UIImagePickerControllerEditedImage")] as? UIImage {
             plusPhotoButton.setImage(editedImage.withRenderingMode(.alwaysOriginal), for: .normal)
+        } else if  let originalImage = info[UIImagePickerController.InfoKey(rawValue: "UIImagePickerControllerOriginalImage")] as? UIImage {
+            plusPhotoButton.setImage(originalImage.withRenderingMode(.alwaysOriginal), for: .normal)
         }
-        
-        plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width/2
+        plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width / 2
         plusPhotoButton.layer.masksToBounds = true
-        plusPhotoButton.layer.borderColor = UIColor.black.cgColor
+        plusPhotoButton.layer.borderColor = UIColor.red.cgColor
         plusPhotoButton.layer.borderWidth = 3
-        
-        dismiss(animated: true)
+        dismiss(animated: true, completion: nil)
+    }
+
+    func updateUsersProfile() {
+        //firebase
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+
+        if let userID = Auth.auth().currentUser?.uid {
+            let storageItem = Storage.storage().reference().child("profile_images").child(userID)
+            guard let image = userimageView?.image else {return}
+            if let newImage = image.jpegData(compressionQuality: 0.9)  {
+                storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
+                    if error != nil{
+                        print(error!)
+                        return
+                    }
+                    storageItem.downloadURL(completion: { (url, error) in
+                        if error != nil{
+                            print(error!)
+                            return
+                        }
+
+                        if let profilePhotoURL = url?.absoluteString {
+                            let userRef = FirebaseRef.databaseUsers.child(userID)
+                            let values = ["username": self.usernameField!.text!,
+                                          "phone": self.phoneField!.text!,
+                                          "email": self.emailField!.text!,
+                                          "lastUpdate": Date().timeIntervalSince1970,
+                                          "uid": userID,
+                                          "profileImageUrl": profilePhotoURL] as [String: Any]
+                            userRef.updateChildValues(values) { (error, ref) in
+                                if error != nil {
+                                    self.simpleAlert(title:"Update Failure", message: "Failure updating the data")
+                                    return
+                                } else {
+                                    self.simpleAlert(title: "Update Complete", message: "Successfully updated the data")
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+        }
     }
 }
 

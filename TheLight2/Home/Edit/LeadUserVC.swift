@@ -43,7 +43,7 @@ final class LeadUserVC: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        refreshControl.backgroundColor = Color.Lead.navColor
+        refreshControl.backgroundColor = ColorX.Lead.navColor
         refreshControl.tintColor = .white
         let attributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: attributes)
@@ -229,24 +229,24 @@ final class LeadUserVC: UIViewController, UITableViewDelegate, UITableViewDataSo
         } else {
 
             if (self.formController == "Leads") {
-                cell.replyButton.tintColor = Color.youtubeRed
+                cell.replyButton.tintColor = ColorX.youtubeRed
             } else if (self.formController == "Customer") {
-                cell.replyButton.tintColor = Color.BlueColor
+                cell.replyButton.tintColor = ColorX.BlueColor
             } else if (self.formController == "Blog") {
-                cell.replyButton.tintColor = Color.twitterBlue
+                cell.replyButton.tintColor = ColorX.twitterBlue
             }
         }
         
         let imageLabel:UILabel = UILabel(frame: .init(x: 10, y: 10, width: 50, height: 50))
         if (self.formController == "Leads") {
             imageLabel.text = "Cust"
-            imageLabel.backgroundColor = Color.youtubeRed
+            imageLabel.backgroundColor = ColorX.youtubeRed
         } else if (self.formController == "Customer") {
             imageLabel.text = "Lead"
-            imageLabel.backgroundColor = Color.BlueColor
+            imageLabel.backgroundColor = ColorX.BlueColor
         } else if (self.formController == "Blog") {
             imageLabel.text = "Blog"
-            imageLabel.backgroundColor = Color.twitterBlue
+            imageLabel.backgroundColor = ColorX.twitterBlue
         }
         imageLabel.textColor = .white
         imageLabel.textAlignment = .center
@@ -267,7 +267,7 @@ final class LeadUserVC: UIViewController, UITableViewDelegate, UITableViewDataSo
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let vw = UIView()
-        vw.backgroundColor = Color.LGrayColor
+        vw.backgroundColor = ColorX.LGrayColor
         //tableView.tableHeaderView = vw
         
         let myLabel4:UILabel = UILabel(frame: .init(x: 10, y: 70, width: self.tableView!.frame.size.width-20, height: 50))

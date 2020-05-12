@@ -27,20 +27,24 @@ final class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     lazy var floatingBtn: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = .white
+        button.backgroundColor = .secondarySystemGroupedBackground
         button.setTitle("+", for: .normal)
-        button.setTitleColor(.lightGray, for: .normal)
-        button.titleEdgeInsets = .init(top: 0, left: 0, bottom: 5, right: 0)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.titleEdgeInsets = .init(top: 0, left: 0, bottom: 6, right: 0)
+        button.layer.borderColor = UIColor.systemGray.cgColor
+        button.layer.borderWidth = 1.0
         button.addTarget(self, action: #selector(maptype), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     lazy var floatingZoomBtn: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = .white
-        button.tintColor = .lightGray
+        button.backgroundColor = .secondarySystemGroupedBackground
+        button.tintColor = .systemBlue
         button.setImage(UIImage(systemName: "location.fill"), for: .normal)
         button.addTarget(self, action: #selector(zoomToCurrentLocation), for: .touchUpInside)
+        button.layer.borderColor = UIColor.systemGray.cgColor
+        button.layer.borderWidth = 1.0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -48,9 +52,9 @@ final class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerD
     private func floatButton() {
         
         if UIDevice.current.userInterfaceIdiom == .pad  {
-            buttonSize = 50
+            buttonSize = 60
         } else {
-            buttonSize = 40
+            buttonSize = 50
         }
         floatingBtn.titleLabel?.font = UIFont(name: floatingBtn.titleLabel!.font.familyName , size: buttonSize)
         let btnLayer: CALayer = floatingBtn.layer
@@ -154,8 +158,8 @@ final class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerD
             floatingBtn.widthAnchor.constraint(equalToConstant: buttonSize),
             floatingBtn.heightAnchor.constraint(equalToConstant: buttonSize),
             
-            floatingZoomBtn.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 10),
-            floatingZoomBtn.bottomAnchor.constraint(equalTo: floatingBtn.topAnchor, constant: -15),
+            floatingZoomBtn.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -15),
+            floatingZoomBtn.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -15),
             floatingZoomBtn.widthAnchor.constraint(equalToConstant: buttonSize),
             floatingZoomBtn.heightAnchor.constraint(equalToConstant: buttonSize)
             ])

@@ -25,9 +25,6 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
     //firebase
     //var userlist = [UserModel]()
     
-    var userId: String?
-    var followingNumber: Int?
-    
     let defaults = UserDefaults.standard
     
     @IBOutlet weak var containView: UIView!
@@ -42,7 +39,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
     @IBOutlet weak var phoneField : UITextField?
     
     @IBOutlet weak var infoLabel: UILabel!
-    @IBOutlet weak var createLabel: UILabel?
+    @IBOutlet weak var createtitleLabel: UILabel!
     @IBOutlet weak var phoneLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var userLabel: UILabel!
@@ -52,7 +49,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
     var objectId : String?
     var username : String?
     var create : String?
-    //var creationDate : Date?
+    var update : String?
     var email : String?
     var phone : String?
     
@@ -72,7 +69,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         let button = UIButton(type: .system)
         button.setTitle("Edit Photo", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        //button.addTarget(self, action: #selector(UserProfileController.EditProfileButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(selectPhotosAlbum), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -81,9 +78,9 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         let button = UIButton(type: .system)
         button.setTitle("Update", for: .normal)
         button.layer.cornerRadius = 24.0
-        button.layer.borderColor = Color.BlueColor.cgColor
+        button.layer.borderColor = ColorX.BlueColor.cgColor
         button.layer.borderWidth = 3.0
-        button.setTitleColor(Color.BlueColor, for: .normal)
+        button.setTitleColor(ColorX.BlueColor, for: .normal)
         button.addTarget(self, action: #selector(Update), for: .touchUpInside)
         return button
     }()
@@ -103,14 +100,47 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         let button = UIButton(type: .system)
         button.setTitle("Email", for: .normal)
         button.layer.cornerRadius = 24.0
-        button.layer.borderColor = Color.BlueColor.cgColor
+        button.layer.borderColor = ColorX.BlueColor.cgColor
         button.layer.borderWidth = 3.0
-        button.setTitleColor(Color.BlueColor, for: .normal)
+        button.setTitleColor(ColorX.BlueColor, for: .normal)
         button.addTarget(self, action: #selector(sendEmail), for: .touchUpInside)
         return button
     }()
-    
-    
+
+    lazy var createLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .label
+        label.textAlignment = .left
+        label.sizeToFit()
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
+
+    lazy var updatetitle: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "last update:"
+        label.font = Font.celltitle14r
+        label.textColor = .systemBlue
+        label.textAlignment = .left
+        label.sizeToFit()
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
+
+    lazy var updateLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = Font.celltitle14r
+        label.textColor = .label
+        label.textAlignment = .left
+        label.sizeToFit()
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -156,9 +186,8 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
     }
     
     private func setupNavigationButtons() {
-        let albumBtn = UIBarButtonItem(image: UIImage(systemName: "camera"), style: .plain, target: self, action: #selector(selectPhotosAlbum))
         let cameraBtn = UIBarButtonItem(image: UIImage(systemName: "video.fill"), style: .plain, target: self, action: #selector(selectCamera))
-        navigationItem.rightBarButtonItems = [albumBtn, cameraBtn]
+        navigationItem.rightBarButtonItems = [cameraBtn]
     }
     
     func setupBorder() {
@@ -178,7 +207,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         mainView?.backgroundColor = .systemBackground
         mapContainerView?.backgroundColor = .systemBackground
         infoLabel.textColor = .systemBlue
-        createLabel?.textColor = .label
+        createLabel.textColor = .label
         phoneLabel.textColor = .systemBlue
         emailLabel?.textColor = .systemBlue
         userLabel.textColor = .systemBlue
@@ -188,7 +217,8 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
             self.usernameField?.text = self.username
             self.emailField?.text = self.email
             self.phoneField?.text = self.phone
-            self.createLabel?.text = self.create
+            self.createLabel.text = self.create
+            self.updateLabel.text = self.update
             self.userimageView?.image = self.userimage
         } else {
             self.userimageView?.image = #imageLiteral(resourceName: "profile-rabbit-toy")
@@ -262,15 +292,18 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
             self.usernameField!.font = Font.celltitle20l
             self.emailField!.font = Font.celltitle20l
             self.phoneField!.font = Font.celltitle20l
-            self.createLabel!.font = Font.celltitle16l
+            self.createtitleLabel!.font = Font.celltitle20l
+            self.infoLabel.font = Font.celltitle20l
+            self.createLabel.font = Font.celltitle16l
             self.mapLabel!.font = Font.celltitle20l
         } else {
             self.usernameField!.font = Font.celltitle18l
             self.emailField!.font = Font.celltitle18l
             self.phoneField!.font = Font.celltitle18l
-            self.createLabel!.font = Font.celltitle14l
+            self.createtitleLabel!.font = Font.celltitle14l
+            self.createLabel.font = Font.celltitle14l
             self.mapLabel!.font = Font.celltitle20l
-            self.infoLabel.font = Font.celltitle14l
+            self.infoLabel.font = Font.celltitle18l
             self.phoneLabel.font = Font.celltitle14l
             self.emailLabel?.font = Font.celltitle14l
             self.userLabel.font = Font.celltitle14l
@@ -279,9 +312,28 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
     
     func setupConstraints() {
         mainView.addSubview(editProfileBtn)
+        mainView.addSubview(createLabel)
+        mainView.addSubview(updatetitle)
+        mainView.addSubview(updateLabel)
         mapView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
+
+            createLabel.topAnchor.constraint(equalTo: (createtitleLabel.bottomAnchor), constant: 2),
+            createLabel.leadingAnchor.constraint(equalTo: (view.leadingAnchor), constant: 10),
+            createLabel.widthAnchor.constraint(equalToConstant: 100),
+            createLabel.heightAnchor.constraint(equalToConstant: 20),
+
+            updatetitle.topAnchor.constraint(equalTo: (createLabel.bottomAnchor), constant: 10),
+            updatetitle.leadingAnchor.constraint(equalTo: (view.leadingAnchor), constant: 10),
+            updatetitle.widthAnchor.constraint(equalToConstant: 100),
+            updatetitle.heightAnchor.constraint(equalToConstant: 20),
+
+            updateLabel.topAnchor.constraint(equalTo: (updatetitle.bottomAnchor), constant: 2),
+            updateLabel.leadingAnchor.constraint(equalTo: (view.leadingAnchor), constant: 10),
+            updateLabel.widthAnchor.constraint(equalToConstant: 100),
+            updateLabel.heightAnchor.constraint(equalToConstant: 20),
+
             editProfileBtn.topAnchor.constraint(equalTo: (userimageView?.bottomAnchor)!, constant: 10),
             editProfileBtn.centerXAnchor.constraint(equalTo: (userimageView?.centerXAnchor)!),
             editProfileBtn.widthAnchor.constraint(equalToConstant: 200),
@@ -315,6 +367,10 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
     
     // MARK: - Button
     @objc func selectCamera() {
+        guard case self.objectId = Auth.auth().currentUser?.uid else {
+        self.simpleAlert(title: "Alert!", message: "Updates not allowed for this member")
+        return}
+
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             let imagePicker = UIImagePickerController()
             imagePicker.allowsEditing = true
@@ -329,15 +385,22 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
     }
     
     @objc func selectPhotosAlbum() {
-        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-            imagePicker = UIImagePickerController()
-            imagePicker.sourceType = .photoLibrary
-            imagePicker.mediaTypes = [kUTTypeImage as String]
-            imagePicker.allowsEditing = true
-            imagePicker.delegate = self
-            self.present(imagePicker, animated: false)
-        }
-    }
+        guard case self.objectId = Auth.auth().currentUser?.uid else {
+            self.simpleAlert(title: "Alert!", message: "Updates not allowed for this member")
+            return}
+
+            if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+                imagePicker = UIImagePickerController()
+                imagePicker.sourceType = .photoLibrary
+                imagePicker.mediaTypes = [kUTTypeImage as String]
+                imagePicker.allowsEditing = true
+                imagePicker.delegate = self
+                self.present(imagePicker, animated: false)
+            } else {
+                self.simpleAlert(title: "Alert!", message: "you are not authorize")
+            }
+        //}
+}
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
@@ -345,12 +408,98 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
             self.userimageView?.contentMode = .scaleAspectFill
             self.userimageView?.clipsToBounds = true
             self.userimageView?.image = image
+        updateUsersProfile()
             dismiss(animated: true)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         
         self.dismiss(animated: true)
+    }
+
+    func updateUsersProfile() {
+        //firebase
+        guard case self.objectId = Auth.auth().currentUser?.uid else {
+            self.simpleAlert(title: "Alert!", message: "Updates not allowed for this member")
+            return
+        }
+
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+
+        if let userID = Auth.auth().currentUser?.uid {
+            let storageItem = Storage.storage().reference().child("profile_images").child(userID)
+            guard let image = userimageView?.image else {return}
+            if let newImage = image.jpegData(compressionQuality: 0.9)  {
+                storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
+                    if error != nil{
+                        print(error!)
+                        return
+                    }
+                    storageItem.downloadURL(completion: { (url, error) in
+                        if error != nil{
+                            print(error!)
+                            return
+                        }
+
+                        if let profilePhotoURL = url?.absoluteString {
+                            let userRef = FirebaseRef.databaseUsers.child(userID)
+                            let values = ["username": self.usernameField!.text!,
+                                          "phone": self.phoneField!.text!,
+                                          "email": self.emailField!.text!,
+                                          "lastUpdate": Date().timeIntervalSince1970,
+                                          "uid": userID,
+                                          "profileImageUrl": profilePhotoURL] as [String: Any]
+                            userRef.updateChildValues(values) { (error, ref) in
+                                if error != nil {
+                                    self.simpleAlert(title:"Update Failure", message: "Failure updating the data")
+                                    return
+                                } else {
+                                    self.simpleAlert(title: "Update Complete", message: "Successfully updated the data")
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+        }
+    }
+
+    @IBAction func Update(_ sender: AnyObject) {
+
+        self.activityIndicator.center = self.userimageView!.center
+        self.activityIndicator.startAnimating()
+        self.view.addSubview(activityIndicator)
+
+        if ((defaults.string(forKey: "backendKey")) == "Parse") {
+
+            self.user = PFUser.current()
+            if self.usernameField!.text! == self.user?.username {
+
+                pictureData = self.userimageView?.image?.jpegData(compressionQuality: 0.9)
+                let file = PFFileObject(name: "img", data: pictureData!)
+
+                file!.saveInBackground { (success: Bool, error: Error?) in
+                    if success {
+                        self.user!.setObject(self.usernameField!.text!, forKey:"username")
+                        self.user!.setObject(self.emailField!.text!, forKey:"email")
+                        self.user!.setObject(self.phoneField!.text!, forKey:"phone")
+                        self.user!.setObject(file!, forKey:"imageFile")
+                        self.user!.saveInBackground { (success: Bool, error: Error?) in
+                        }
+                        self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                    } else {
+                        self.simpleAlert(title: "Upload Failure", message: "Failure updating the data")
+                    }
+                }
+                activityIndicator.stopAnimating()
+                activityIndicator.removeFromSuperview()
+            } else {
+                self.simpleAlert(title: "Alert", message: "User is not valid to edit data")
+            }
+        } else {
+            updateUsersProfile()
+        }
     }
     
     // MARK: - Call Phone
@@ -404,89 +553,5 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         dismiss(animated: true)
     }
-    
-    @IBAction func Update(_ sender: AnyObject) {
-        
-        self.activityIndicator.center = self.userimageView!.center
-        self.activityIndicator.startAnimating()
-        self.view.addSubview(activityIndicator)
-        
-        if ((defaults.string(forKey: "backendKey")) == "Parse") {
-            
-            self.user = PFUser.current()
-            if self.usernameField!.text! == self.user?.username {
-                
-                pictureData = self.userimageView?.image?.jpegData(compressionQuality: 0.9)
-                let file = PFFileObject(name: "img", data: pictureData!)
-                
-                file!.saveInBackground { (success: Bool, error: Error?) in
-                    if success {
-                        self.user!.setObject(self.usernameField!.text!, forKey:"username")
-                        self.user!.setObject(self.emailField!.text!, forKey:"email")
-                        self.user!.setObject(self.phoneField!.text!, forKey:"phone")
-                        self.user!.setObject(file!, forKey:"imageFile")
-                        self.user!.saveInBackground { (success: Bool, error: Error?) in
-                        }
-                        self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
-                    } else {
-                        self.simpleAlert(title: "Upload Failure", message: "Failure updating the data")
-                    }
-                }
-                activityIndicator.stopAnimating()
-                activityIndicator.removeFromSuperview()
-            } else {
-                self.simpleAlert(title: "Alert", message: "User is not valid to edit data")
-            }
-        } else {
-            //firebase
-            //fix
-            guard let image = self.userimageView?.image else { return }
-            let fileName = UUID().uuidString
-            
-            let metadata = StorageMetadata()
-            metadata.contentType = "image/jpeg"
-            
-            let storageRef = Storage.storage().reference().child("profile_images").child(fileName)
-            guard let uploadData = image.jpegData(compressionQuality: 0.3) else {return}
-            storageRef.putData(uploadData, metadata: metadata, completion: {(metadata, error) in
-                
-                if let err = error {
-                    print("Failed to upload profile image:" , err)
-                    return
-                }
-                
-                storageRef.downloadURL(completion: { (url, error) in
-                    if error != nil {
-                        print(error!)
-                        return
-                    }
-                    if url != nil {
-                        //guard let profileImageUrl = metadata?.downloadURL()?.absoluteString else {return}
-                        guard let uid = Auth.auth().currentUser?.uid else { return } //maybe needs fix
-                        
-                        //let newValue = ["profileImageURL": newImageURL]
-                        let dictionaryValues = ["username": self.usernameField!.text!,
-                                                "phone": self.phoneField!.text!,
-                                                "email": self.emailField!.text!,
-                                                "creationDate": Date().timeIntervalSince1970,
-                                                "lastUpdate": Date().timeIntervalSince1970,
-                                                "uid": uid,
-                                                "profileImageUrl": url!.absoluteString] as [String: Any]
-                        let values =  [uid: dictionaryValues]
-                        
-                        FirebaseRef.databaseRoot.child("users").updateChildValues(values, withCompletionBlock: {(err, ref) in
-                            //FirebaseRef.databaseRoot.child("Users").child(uid).updateChildValues(values, withCompletionBlock: { (err, ref) in
-                            if let err = err {
-                                self.simpleAlert(title: err as? String, message: "Failure updating the data")
-                                return
-                            } else {
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
-                            }
-                        })
-                    }
-                })
-            })
-        }
-        self.navigationController?.popToRootViewController(animated: true)
-    }
 }
+

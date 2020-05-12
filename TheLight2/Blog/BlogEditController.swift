@@ -52,7 +52,7 @@ final class BlogEditController: UIViewController {
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        refreshControl.backgroundColor = Color.twitterText
+        refreshControl.backgroundColor = ColorX.twitterText
         refreshControl.tintColor = .black
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
@@ -109,12 +109,12 @@ final class BlogEditController: UIViewController {
             self.Like!.tintColor = .lightGray
             self.Like!.setTitle(" Like", for: .normal)
         } else {
-            self.Like!.tintColor = Color.Blog.buttonColor
+            self.Like!.tintColor = ColorX.Blog.buttonColor
             self.Like!.setTitle(" Likes \(liked!)", for: .normal)
         }
         
         self.update?.frame = .init(x: 0, y: 0, width: 60, height: 30)
-        self.update?.backgroundColor = Color.twitterBlue
+        self.update?.backgroundColor = ColorX.twitterBlue
         self.update?.setTitleColor(.white, for: .normal)
         let btnLayer: CALayer = self.update!.layer
         btnLayer.cornerRadius = 9.0
@@ -138,6 +138,9 @@ final class BlogEditController: UIViewController {
         self.tableView!.delegate = self
         self.tableView!.dataSource = self
         self.tableView!.estimatedRowHeight = 110
+        let bgView = UIView()
+        bgView.backgroundColor = .systemGroupedBackground
+        tableView!.backgroundView = bgView
         self.tableView!.rowHeight = UITableView.automaticDimension
         
         
@@ -165,7 +168,7 @@ final class BlogEditController: UIViewController {
     @objc func likeButton(sender: UIButton) {
         
         sender.isSelected = true
-        sender.tintColor = Color.twitterBlue
+        sender.tintColor = ColorX.twitterBlue
         let hitPoint = sender.convert(CGPoint.zero, to: self.listTableView)
         let indexPath = self.listTableView!.indexPathForRow(at: hitPoint)
         
@@ -463,7 +466,7 @@ extension BlogEditController: UITableViewDataSource {
             
             cell.selectionStyle = .none
             cell.titleLabel?.textColor = .label
-            cell.subtitleLabel?.textColor = Color.twitterText
+            cell.subtitleLabel?.textColor = ColorX.twitterText
             cell.customImageView.frame = .init(x: 15, y: 11, width: 50, height: 50)
             cell.customImageView.layer.cornerRadius = 0
             cell.customImageView.layer.borderWidth = 0
@@ -535,10 +538,10 @@ extension BlogEditController: UITableViewDataSource {
             let myText = NSString(string: self.subject!)
             let attributedText = NSMutableAttributedString(string: myText as String)
             
-            let boldRange = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24), NSAttributedString.Key.foregroundColor: Color.Blog.weblinkText]
-            let highlightedRange = [NSAttributedString.Key.backgroundColor: Color.Blog.phonelinkText]
+            let boldRange = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24), NSAttributedString.Key.foregroundColor: ColorX.Blog.weblinkText]
+            let highlightedRange = [NSAttributedString.Key.backgroundColor: ColorX.Blog.phonelinkText]
             let underlinedRange = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue]
-            let tintedRange1 = [NSAttributedString.Key.foregroundColor: Color.Blog.weblinkText]
+            let tintedRange1 = [NSAttributedString.Key.foregroundColor: ColorX.Blog.weblinkText]
             
             attributedText.addAttributes(boldRange, range: myText.range(of: "VCSY"))
             attributedText.addAttributes(highlightedRange, range: myText.range(of: "passed"))
@@ -620,7 +623,7 @@ extension BlogEditController: UITableViewDataSource {
             }
             
             if !(cell.replylikeLabel.text! == "0") { //dont move
-                cell.replylikeLabel.textColor = Color.twitterBlue
+                cell.replylikeLabel.textColor = ColorX.twitterBlue
             } else {
                 cell.replylikeLabel.text! = ""
             }
@@ -637,7 +640,7 @@ extension BlogEditController: UITableViewDataSource {
             }
             
             let attributedText = NSMutableAttributedString(string: myText as String)
-            let tintedRange1 = [NSAttributedString.Key.foregroundColor: Color.Blog.weblinkText]
+            let tintedRange1 = [NSAttributedString.Key.foregroundColor: ColorX.Blog.weblinkText]
             
             let textName = String(format: "%@", "@\(self.postby!.removingWhitespaces())")
             attributedText.addAttributes(tintedRange1, range: myText.range(of: textName))

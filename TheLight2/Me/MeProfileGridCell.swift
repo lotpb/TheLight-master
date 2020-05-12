@@ -10,7 +10,7 @@ import UIKit
 
 
 @available(iOS 13.0, *)
-final class UserProfileGridCell: UICollectionViewCell {
+final class MeProfileGridCell: UICollectionViewCell {
     
     var post: NewsModel? {
         didSet {
@@ -20,7 +20,7 @@ final class UserProfileGridCell: UICollectionViewCell {
         }
     }
     
-    var userProfileController: UserProfileVC?
+    var MeProfileController: MeProfileVC?
     
     lazy var photoImageView: CustomImageView = {
         let iv = CustomImageView()

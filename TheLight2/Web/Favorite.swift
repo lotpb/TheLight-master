@@ -69,7 +69,7 @@ class Favorite: UITableViewController {
     func setupTableView() {
         self.tableView!.delegate = self
         self.tableView!.dataSource = self
-        self.tableView!.backgroundColor = Color.LGrayColor
+        self.tableView!.backgroundColor = ColorX.LGrayColor
         self.tableView!.estimatedRowHeight = 100
         self.tableView!.rowHeight = UITableView.automaticDimension
         self.tableView!.tableFooterView = UIView(frame: .zero)

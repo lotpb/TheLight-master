@@ -17,7 +17,7 @@ import MessageUI
 
 
 @available(iOS 13.0, *)
-final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLayout, UserProfileHeaderDelegate {
+final class MeProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLayout, MeProfileHeaderDelegate {
     
     func didChangeToListView() {
         isGridView = false
@@ -46,8 +46,8 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
     var users: UserModel?
     var posts = [NewsModel]()
     
-    var isFormMe = true
-    var uidProfileStr: String?
+    var isFormMe: Bool = true
+    //var uidProfileStr: String?
     var uidStr: String?
 
     //parse
@@ -121,7 +121,7 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
         self.tabBarController?.tabBar.isHidden = false
         
         // MARK: NavigationController Hidden
-        NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.hideBar(notification:)), name: NSNotification.Name("hide"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MeProfileVC.hideBar(notification:)), name: NSNotification.Name("hide"), object: nil)
         setupNewsNavigationItems()
     }
     
@@ -161,9 +161,9 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
         
         //collectionView?.contentInset = .init(top: 50,left: 50,bottom: 0,right: 50)
         collectionView?.backgroundColor = .secondarySystemGroupedBackground
-        collectionView?.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
-        collectionView?.register(UserProfileGridCell.self, forCellWithReuseIdentifier: cellId)
-        collectionView?.register(UserProfileListCell.self, forCellWithReuseIdentifier: mapId)
+        collectionView?.register(MeProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
+        collectionView?.register(MeProfileGridCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView?.register(MeProfileListCell.self, forCellWithReuseIdentifier: mapId)
     }
     
     private func setupNavigation() {
@@ -213,6 +213,8 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
             
             if isFormMe == true {
                 uidStr = Auth.auth().currentUser?.uid
+            } else {
+                uidStr = self.objectId
             }
             Database.fetchUserWithUID(uid: uidStr!) { (user) in
                 self.users = user
@@ -248,7 +250,8 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
             if isFormMe == true {
                 uidStr = Auth.auth().currentUser?.uid
             } else {
-                uidStr = uidProfileStr
+                //uidStr = uidProfileStr
+                uidStr = self.objectId
             }
             //News
             FirebaseRef.databaseRoot.child("News")
@@ -258,6 +261,10 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
                     guard let dictionary = snapshot.value as? [String: Any] else {return}
                     let post = NewsModel(dictionary: dictionary)
                     self.posts.append(post)
+
+                    self.posts.sort(by: { (p1, p2) -> Bool in
+                        return p1.creationDate.compare(p2.creationDate) == .orderedDescending
+                    })
                     DispatchQueue.main.async(execute: {
                         self.collectionView?.reloadData()
                     })
@@ -318,7 +325,7 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
 
         if isGridView {
             
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserProfileGridCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MeProfileGridCell
             
             if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
@@ -343,7 +350,7 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
             return cell
         } else {
             
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: mapId, for: indexPath) as! UserProfileListCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: mapId, for: indexPath) as! MeProfileListCell
             
             if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
@@ -370,7 +377,7 @@ final class UserProfileVC: UICollectionViewController, UICollectionViewDelegateF
 
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerId", for: indexPath) as! UserProfileHeader
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerId", for: indexPath) as! MeProfileHeader
         
         header.user = self.users
         header.delegate = self

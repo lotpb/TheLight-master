@@ -43,7 +43,7 @@ final class DetailedMapVC: UIViewController, MKMapViewDelegate, CLLocationManage
 
         // Track user location
         detailedMapView.delegate = self
-        detailedMapView.userTrackingMode = MKUserTrackingMode.follow
+        detailedMapView.userTrackingMode = .follow
         detailedMapView.showsUserLocation = true
         //Get data from segue and drop custom pin on MKplacemark object
         let customPlacemark = mapData.placemark

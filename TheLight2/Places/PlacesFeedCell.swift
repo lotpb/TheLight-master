@@ -128,7 +128,7 @@ extension PlaceFeedCell: UICollectionViewDataSource {
         cell.backgroundColor = .systemBackground
         cell.layer.cornerRadius = 8.0
         cell.layer.borderWidth = 1.0
-        cell.layer.borderColor = Color.Mile.cellborderColor.cgColor
+        cell.layer.borderColor = ColorX.Mile.cellborderColor.cgColor
 
         cell.miletextLabel.textColor = .systemGray
         cell.costTextLabel.textColor = .systemGray
@@ -148,7 +148,7 @@ extension PlaceFeedCell: UICollectionViewDataSource {
         
         //Cell-----------------------------------------------------------------
         cell.mapStart = LocationsStorage.shared.locations[indexPath.row]
-        //cell.mapStart = visitlist[indexPath.item]
+        //cell.mapStart = visitlist[indexPath.row]
         //Cell2-----------------------------------------------------------------
         let thisIndexPath = indexPath.row
         if thisIndexPath - 1 > -1 {
@@ -191,7 +191,7 @@ extension PlaceFeedCell: UICollectionViewDataSource {
         let cell = collectionView.cellForItem(at:indexPath) as! PlaceCell
         
         let storyboard = UIStoryboard(name:"EditData", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "mapviewStory") as! MapView
+        let vc = storyboard.instantiateViewController(withIdentifier: "mapviewStory") as! MapViewVC
         vc.formController = "MileIQ"
         vc.startCoordinates = cell.startCoordinates
         vc.endCoordinates = cell.endCoordinates

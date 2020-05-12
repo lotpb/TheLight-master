@@ -52,7 +52,7 @@ class PlaceMenuBar: UIView {
         let label = UILabel()
         label.text = "0"
         label.textAlignment = .center
-        label.textColor = Color.twitterBlue
+        label.textColor = ColorX.twitterBlue
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -61,7 +61,7 @@ class PlaceMenuBar: UIView {
         let label = UILabel()
         label.text = "0"
         label.textAlignment = .center
-        label.textColor = Color.twitterBlue
+        label.textColor = ColorX.twitterBlue
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -70,7 +70,7 @@ class PlaceMenuBar: UIView {
         let label = UILabel()
         label.text = "$0.0"
         label.textAlignment = .center
-        label.textColor = Color.twitterBlue
+        label.textColor = ColorX.twitterBlue
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

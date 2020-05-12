@@ -163,13 +163,13 @@ final class BlogNewController: UIViewController, UITextFieldDelegate, UITextView
         self.Like!.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
         self.Like!.setTitleColor(.white, for: .normal)
         self.Like!.frame = .init(x: 0, y: 0, width: 90, height: 30)
-        self.Share!.setTitleColor(Color.twitterBlue, for: .normal)
+        self.Share!.setTitleColor(ColorX.twitterBlue, for: .normal)
         self.Share!.backgroundColor = .white
         self.Share!.frame = .init(x: 0, y: 0, width: 60, height: 30)
         let btnLayer: CALayer = self.Share!.layer
         btnLayer.cornerRadius = 9.0
         btnLayer.masksToBounds = true
-        self.toolBar!.barTintColor = Color.twitterBlue
+        self.toolBar!.barTintColor = ColorX.twitterBlue
         
         self.subject?.textContainerInset = .init(top: 15, left: 5, bottom: 0, right: 0)
         
@@ -195,7 +195,7 @@ final class BlogNewController: UIViewController, UITextFieldDelegate, UITextView
             if (self.liked == nil || self.liked == 0) {
                 self.Like!.tintColor = .white
             } else {
-                self.Like!.tintColor = Color.Blog.buttonColor
+                self.Like!.tintColor = ColorX.Blog.buttonColor
             }
         }
         
@@ -254,7 +254,7 @@ final class BlogNewController: UIViewController, UITextFieldDelegate, UITextView
             while (range.location != NSNotFound) {
                 range = (attrStr.string as NSString).range(of: searchString, options: [], range: range)
                 if (range.location != NSNotFound) {
-                    attrStr.addAttribute(NSAttributedString.Key.foregroundColor, value: Color.Blog.weblinkText, range: NSRange(location: range.location, length: searchLength))
+                    attrStr.addAttribute(NSAttributedString.Key.foregroundColor, value: ColorX.Blog.weblinkText, range: NSRange(location: range.location, length: searchLength))
                     attrStr.addAttribute(NSAttributedString.Key.font, value: Font.Blog.cellsubject, range: NSRange(location: 0, length: (inputLength)))
                     range = NSRange(location: range.location + range.length, length: inputLength - (range.location + range.length))
                     self.subject?.attributedText = attrStr
@@ -575,8 +575,8 @@ final class BlogNewController: UIViewController, UITextFieldDelegate, UITextView
                         "blogId": self.objectId ?? ""] as [String: Any]
                     
                     userRef.updateChildValues(values) { (err, ref) in
-                        if let err = err {
-                            self.simpleAlert(title: "Upload Failure", message: err as? String)
+                        if err != nil {
+                            self.simpleAlert(title: "Upload Failure", message: "Failure updating the data")
                             return
                         }
                         self.simpleAlert(title: "update Complete", message: "Successfully updated the data")
@@ -630,8 +630,8 @@ final class BlogNewController: UIViewController, UITextFieldDelegate, UITextView
                     
                     let childUpdates = ["/Blog/\(String(key!))": values]
                     FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
-                        if let err = err {
-                            self.simpleAlert(title: "Upload Failure", message: err as? String)
+                        if err != nil {
+                            self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
                             return
                         }
                         
@@ -724,7 +724,7 @@ extension BlogNewController: UITableViewDataSource {
                 //self.activeImage.image = #imageLiteral(resourceName: "iosStarNA")
                 
             } else {
-                self.Like!.tintColor = Color.Blog.buttonColor
+                self.Like!.tintColor = ColorX.Blog.buttonColor
                 self.Like!.setTitle(" Likes \(liked!)", for: .normal)
                 self.activeImage.tintColor = .systemYellow
                 //self.activeImage.image = #imageLiteral(resourceName: "iosStar")

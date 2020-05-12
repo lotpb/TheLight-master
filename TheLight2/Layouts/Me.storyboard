@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yJK-Om-g1K">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yJK-Om-g1K">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15508"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -23,10 +23,10 @@
             </objects>
             <point key="canvasLocation" x="574" y="4783"/>
         </scene>
-        <!--User ProfileVC-->
+        <!--Me ProfileVC-->
         <scene sceneID="7zx-yJ-OXx">
             <objects>
-                <collectionViewController storyboardIdentifier="userProfileVC" hidesBottomBarWhenPushed="YES" id="2SK-jw-jk9" customClass="UserProfileVC" customModule="TheLight2" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController storyboardIdentifier="MeProfileID" hidesBottomBarWhenPushed="YES" id="2SK-jw-jk9" customClass="MeProfileVC" customModule="TheLight2" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="hXL-ZK-QZ1">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

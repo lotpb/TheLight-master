@@ -115,7 +115,7 @@ final class Customer: UIViewController {
         self.tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
-        resultsController.tableView.backgroundColor = Color.LGrayColor
+        resultsController.tableView.backgroundColor = ColorX.LGrayColor
         resultsController.tableView.sizeToFit()
         resultsController.tableView.clipsToBounds = true
         resultsController.tableView.dataSource = self
@@ -619,7 +619,7 @@ extension Customer: UITableViewDataSource {
                 if ((_feedItems[indexPath.row] as AnyObject).value(forKey: "Comments") as? String == nil) || ((_feedItems[indexPath.row] as AnyObject).value(forKey: "Comments") as? String == "") {
                     cell.custreplyButton!.tintColor = .lightGray
                 } else {
-                    cell.custreplyButton!.tintColor = Color.Cust.buttonColor
+                    cell.custreplyButton!.tintColor = ColorX.Cust.buttonColor
                 }
                 
                 if ((_feedItems[indexPath.row] as AnyObject).value(forKey: "Active") as? Int == 1 ) {
@@ -630,7 +630,7 @@ extension Customer: UITableViewDataSource {
                 }
                 
                 if ((_feedItems[indexPath.row] as AnyObject).value(forKey: "Rate") as? String == "A" ) {
-                    cell.custlikeButton!.tintColor = Color.Cust.buttonColor
+                    cell.custlikeButton!.tintColor = ColorX.Cust.buttonColor
                 } else {
                     cell.custlikeButton!.tintColor = .lightGray
                 }
