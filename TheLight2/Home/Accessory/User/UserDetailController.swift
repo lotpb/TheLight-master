@@ -121,7 +121,6 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "last update:"
-        label.font = Font.celltitle14r
         label.textColor = .systemBlue
         label.textAlignment = .left
         label.sizeToFit()
@@ -132,7 +131,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
     lazy var updateLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = Font.celltitle14r
+        label.text = "none"
         label.textColor = .label
         label.textAlignment = .left
         label.sizeToFit()
@@ -292,18 +291,22 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
             self.usernameField!.font = Font.celltitle20l
             self.emailField!.font = Font.celltitle20l
             self.phoneField!.font = Font.celltitle20l
-            self.createtitleLabel!.font = Font.celltitle20l
-            self.infoLabel.font = Font.celltitle20l
+            self.infoLabel.font = Font.celltitle22l
+            self.createtitleLabel!.font = Font.celltitle16l
             self.createLabel.font = Font.celltitle16l
+            self.updatetitle.font = Font.celltitle16l
+            self.updateLabel.font = Font.celltitle16l
             self.mapLabel!.font = Font.celltitle20l
         } else {
+            self.mapLabel!.font = Font.celltitle20l
+            self.infoLabel.font = Font.celltitle18l
+            self.createtitleLabel!.font = Font.celltitle14l
+            self.createLabel.font = Font.celltitle14l
+            self.updatetitle.font = Font.celltitle14l
+            self.updateLabel.font = Font.celltitle14l
             self.usernameField!.font = Font.celltitle18l
             self.emailField!.font = Font.celltitle18l
             self.phoneField!.font = Font.celltitle18l
-            self.createtitleLabel!.font = Font.celltitle14l
-            self.createLabel.font = Font.celltitle14l
-            self.mapLabel!.font = Font.celltitle20l
-            self.infoLabel.font = Font.celltitle18l
             self.phoneLabel.font = Font.celltitle14l
             self.emailLabel?.font = Font.celltitle14l
             self.userLabel.font = Font.celltitle14l
@@ -408,12 +411,11 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
             self.userimageView?.contentMode = .scaleAspectFill
             self.userimageView?.clipsToBounds = true
             self.userimageView?.image = image
-        updateUsersProfile()
+            updateUsersProfile()
             dismiss(animated: true)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        
         self.dismiss(animated: true)
     }
 

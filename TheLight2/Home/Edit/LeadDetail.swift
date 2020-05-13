@@ -12,9 +12,12 @@ import FirebaseDatabase
 import ContactsUI
 import EventKit
 import MessageUI
+import FirebaseAuth
+import FirebaseStorage
+import MobileCoreServices //kUTTypeImage
 
 @available(iOS 13.0, *)
-final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
+final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     // MARK: NavigationController Hidden
     private var lastContentOffset: CGFloat = 0.0
@@ -36,6 +39,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     
     var formController : String?
     var status : String?
+    var imagePicker: UIImagePickerController!
     
     var objectId : String?
     var custNo : String?
@@ -185,13 +189,20 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
         return label
     }()
 
-    let photoImage: CustomImageView = {
+    let plusPhotoButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.addTarget(self, action: #selector(handlePlusPhoto), for: .touchUpInside)
+        button.contentMode = .scaleAspectFill
+        return button
+    }()
+
+    let customImageView: CustomImageView = { //firebase
         let imageView = CustomImageView()
-        imageView.image = #imageLiteral(resourceName: "plus_photo")
-        imageView.layer.borderColor = UIColor.systemBlue.cgColor
-        imageView.layer.masksToBounds = true
-        imageView.isUserInteractionEnabled = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        //imageView.contentMode = .scaleAspectFit
+        //imageView.clipsToBounds = true
         return imageView
     }()
 
@@ -245,13 +256,14 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
         }
         
         func configureView() {
+
         }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.extendedLayoutIncludesOpaqueBars = true
-        
+
         setupNavigationButtons()
         //Leave this setup below
         setupConstraints()
@@ -261,6 +273,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
         setupSwitch()
         loadData()
         followButton()
+
         
         if UIDevice.current.userInterfaceIdiom == .pad  {
             navigationItem.title = String(format: "%@ %@", "TheLight Software - \(self.formController!)", "Profile")
@@ -273,7 +286,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
- 
+
         fieldData()
         refreshData()
         self.tabBarController?.tabBar.isHidden = false
@@ -316,6 +329,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     }
     
     func setupForm() {
+        //loadAvatarImage()
         mainView?.backgroundColor = .secondarySystemGroupedBackground
         contentView?.backgroundColor = .secondarySystemGroupedBackground
         tableView?.backgroundColor = .secondarySystemGroupedBackground
@@ -382,11 +396,9 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
         mainView?.addSubview(labeldate)
         mainView?.addSubview(labeldatetext)
         mainView?.addSubview(mySwitch)
-        mainView?.addSubview(photoImage)
+        mainView?.addSubview(plusPhotoButton)
         mainView?.addSubview(labelNo)
         mainView?.addSubview(mapButton)
-
-        //mainView?.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
 
@@ -406,15 +418,15 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
 
             labelamount.topAnchor.constraint(equalTo: mainView!.topAnchor, constant: 60),
             labelamount.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 15),
-            labelamount.rightAnchor.constraint(equalTo: photoImage.leftAnchor, constant: 1),
+            labelamount.rightAnchor.constraint(equalTo: plusPhotoButton.leftAnchor, constant: 1),
 
             labeladdress.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 15),
-            labeladdress.rightAnchor.constraint(equalTo: photoImage.leftAnchor, constant: 1),
+            labeladdress.rightAnchor.constraint(equalTo: plusPhotoButton.leftAnchor, constant: 1),
             labeladdress.heightAnchor.constraint(equalToConstant: 30),
 
             labelcity.topAnchor.constraint(equalTo: labeladdress.bottomAnchor, constant: 1),
             labelcity.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 15),
-            labelcity.rightAnchor.constraint(equalTo: photoImage.leftAnchor, constant: 1),
+            labelcity.rightAnchor.constraint(equalTo: plusPhotoButton.leftAnchor, constant: 1),
             labelcity.heightAnchor.constraint(equalToConstant: 30),
 
             labeldatetext.topAnchor.constraint(equalTo: labelcity.bottomAnchor, constant: 10),
@@ -428,11 +440,11 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
             mySwitch.topAnchor.constraint(equalTo: labeldate.bottomAnchor, constant: 15),
             mySwitch.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 15),
 
-            photoImage.topAnchor.constraint(equalTo: (mainView?.topAnchor)!, constant: +65),
-            photoImage.trailingAnchor.constraint( equalTo: (mainView?.trailingAnchor)!, constant: -15),
+            plusPhotoButton.topAnchor.constraint(equalTo: (mainView?.topAnchor)!, constant: +55),
+            plusPhotoButton.trailingAnchor.constraint( equalTo: (mainView?.trailingAnchor)!, constant: -15),
 
-            labelNo.topAnchor.constraint(equalTo: photoImage.bottomAnchor, constant: 5),
-            labelNo.rightAnchor.constraint( equalTo: photoImage.rightAnchor),
+            labelNo.topAnchor.constraint(equalTo: plusPhotoButton.bottomAnchor, constant: 5),
+            labelNo.rightAnchor.constraint( equalTo: plusPhotoButton.rightAnchor),
             labelNo.widthAnchor.constraint(equalToConstant: 125),
             labelNo.heightAnchor.constraint(equalToConstant: 20),
             
@@ -445,8 +457,8 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
         if UIDevice.current.userInterfaceIdiom == .pad  {
             NSLayoutConstraint.activate([
                 (mainView?.heightAnchor.constraint(equalToConstant: 325))!,
-                photoImage.widthAnchor.constraint(equalToConstant: 150),
-                photoImage.heightAnchor.constraint(equalToConstant: 150),
+                plusPhotoButton.widthAnchor.constraint(equalToConstant: 150),
+                plusPhotoButton.heightAnchor.constraint(equalToConstant: 150),
                 labeladdress.topAnchor.constraint(equalTo: labelamount.bottomAnchor, constant: 25),
                 labelamount.heightAnchor.constraint(equalToConstant: 40),
                 ])
@@ -454,8 +466,8 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
             let width = 110 //view.frame.width/2-25
             NSLayoutConstraint.activate([
                 (mainView?.heightAnchor.constraint(equalToConstant: 265))!,
-                photoImage.widthAnchor.constraint(equalToConstant: CGFloat(width)),
-                photoImage.heightAnchor.constraint(equalToConstant: 110),
+                plusPhotoButton.widthAnchor.constraint(equalToConstant: CGFloat(width)),
+                plusPhotoButton.heightAnchor.constraint(equalToConstant: 110),
                 labeladdress.topAnchor.constraint(equalTo: labelamount.bottomAnchor, constant: 15),
                 labelamount.heightAnchor.constraint(equalToConstant: 30),
                 ])
@@ -649,6 +661,11 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
             } else {
                 t24 = "None"
             }
+            if self.photo != nil {
+                t24 = self.photo
+            } else {
+                t24 = "None"
+            }
             
         } else {
             
@@ -689,6 +706,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     // MARK: - Parse
     func loadData() {
 
+        loadAvatarImage()
         if (formController == "Leads" || formController == "Customer") {
             
             if ((defaults.string(forKey: "backendKey")) == "Parse") {
@@ -1172,8 +1190,6 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
         }
     }
 
-    
-    
     // MARK: - Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -1466,6 +1482,138 @@ extension LeadDetail: UITableViewDataSource {
             
         } else {
             return UITableViewCell()
+        }
+    }
+
+    // MARK: - AvatarImage
+
+ @objc func handlePlusPhoto() {
+
+         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+             imagePicker = UIImagePickerController()
+             imagePicker.sourceType = .photoLibrary
+             imagePicker.mediaTypes = [kUTTypeImage as String]
+             imagePicker.allowsEditing = true
+             imagePicker.delegate = self
+             self.present(imagePicker, animated: false)
+         } else {
+             self.simpleAlert(title: "Alert!", message: "you are not authorize")
+         }
+     }
+
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+
+        guard let image = info[.originalImage] as? UIImage else { return }
+        self.plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width / 2
+        self.plusPhotoButton.layer.masksToBounds = true
+        self.plusPhotoButton.layer.borderColor = UIColor.systemBlue.cgColor
+        self.plusPhotoButton.layer.borderWidth = 3
+        self.plusPhotoButton.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
+        setupAvatarImage()
+        dismiss(animated: true, completion: nil)
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true)
+    }
+
+    func setupAvatarImage() { //dont work
+
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+
+        guard let userID = self.objectId else {return}
+
+
+            if (formController == "Customer") {
+
+                let storageItem = Storage.storage().reference().child("Customer_images").child(userID)
+                guard let image = self.plusPhotoButton.imageView?.image else {return}
+                if let newImage = image.jpegData(compressionQuality: 0.3)  {
+                    storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
+                        if error != nil{
+                            print(error!)
+                            return
+                        }
+                        storageItem.downloadURL(completion: { (url, error) in
+                            if error != nil{
+                                print(error!)
+                                return
+                            }
+
+                            if let profilePhotoURL = url?.absoluteString {
+                                let userRef = FirebaseRef.databaseCust.child(userID)
+                                let values = [
+                                    "photo": profilePhotoURL] as [String: Any]
+                                userRef.updateChildValues(values) { (error, ref) in
+                                    if error != nil {
+                                        self.simpleAlert(title:"Update Failure", message: "Failure updating the data")
+                                        return
+                                    } else {
+                                        self.simpleAlert(title: "Update Complete", message: "Successfully updated the data")
+                                    }
+                                }
+                            }
+                        })
+                    }
+                }
+
+
+            } else if (formController == "Employee") {
+
+                let storageItem = Storage.storage().reference().child("Employee_images").child(userID)
+                guard let image = self.plusPhotoButton.imageView?.image else {return}
+                if let newImage = image.jpegData(compressionQuality: 0.3)  {
+                    storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
+                        if error != nil{
+                            print(error!)
+                            return
+                        }
+                        storageItem.downloadURL(completion: { (url, error) in
+                            if error != nil{
+                                print(error!)
+                                return
+                            }
+
+                            if let profilePhotoURL = url?.absoluteString {
+                                let userRef = FirebaseRef.databaseEmply.child(userID)
+                                let values = [
+                                    "photo": profilePhotoURL] as [String: Any]
+                                userRef.updateChildValues(values) { (error, ref) in
+                                    if error != nil {
+                                        self.simpleAlert(title:"Update Failure", message: "Failure updating the data")
+                                        return
+                                    } else {
+                                        self.simpleAlert(title: "Update Complete", message: "Successfully updated the data")
+                                    }
+                                }
+                            }
+                        })
+                    }
+                }
+
+            }
+
+
+    }
+
+    // MARK: - create AvatarImage
+    func loadAvatarImage() {
+
+        if (formController == "Customer") {
+            if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
+
+            } else {
+                //firebase
+                self.plusPhotoButton.layer.cornerRadius = self.plusPhotoButton.frame.width / 2
+                self.plusPhotoButton.layer.masksToBounds = true
+                self.plusPhotoButton.layer.borderColor = UIColor.systemBlue.cgColor
+                self.plusPhotoButton.layer.borderWidth = 3
+
+                guard let imageUrl = self.photo else { return }
+                self.customImageView.loadImage(urlString: imageUrl)
+                self.plusPhotoButton.setImage(self.customImageView.image?.withRenderingMode(.alwaysOriginal), for: .normal)
+            }
         }
     }
 }

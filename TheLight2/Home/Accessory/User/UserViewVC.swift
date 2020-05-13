@@ -328,11 +328,10 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
         }
     }
 
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         let create: Date?
-        //let updated: Date?
+        let updated: Date?
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM dd, yyyy"
         
@@ -348,7 +347,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
                     
                     if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         create = ((self._feedItems[indexPath] as AnyObject).value(forKey: "createdAt") as? Date)!
-                        //updated = ((self._feedItems[indexPath] as AnyObject).value(forKey: "createdAt") as? Date)!
+                        updated = ((self._feedItems[indexPath] as AnyObject).value(forKey: "createdAt") as? Date)!
                         VC.objectId = (self._feedItems[indexPath] as AnyObject).value(forKey: "objectId") as? String
                         VC.username = (self._feedItems[indexPath] as AnyObject).value(forKey: "username") as? String
                         VC.email = (self._feedItems[indexPath] as AnyObject).value(forKey: "email") as? String
@@ -357,7 +356,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
                     } else {
                         //firebase
                         create = userlist[indexPath].creationDate
-                        //updated = userlist[indexPath].lastUpdate
+                        updated = userlist[indexPath].lastUpdate
                         VC.objectId = userlist[indexPath].uid
                         VC.username = userlist[indexPath].username
                         VC.email = userlist[indexPath].email
@@ -366,6 +365,8 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
                     }
                     let createString = dateFormatter.string(from: create!)
                     VC.create = createString
+                    let updatedString = dateFormatter.string(from: updated!)
+                    VC.update = updatedString
                 }
             } else if self.formController == "CollectionView" {
 

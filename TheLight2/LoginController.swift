@@ -56,7 +56,6 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
     //Twitter
     //var twitterButton : TWTRLogInButton = TWTRLogInButton()
 
-
     let plusPhotoButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal), for: .normal)
@@ -329,8 +328,8 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         // MARK: - Parse
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
-            if (self.self.plusPhotoButton.imageView?.image == nil) {
-                self.self.plusPhotoButton.imageView?.image = UIImage(named:"profile-rabbit-toy.png")
+            if (self.plusPhotoButton.imageView?.image == nil) {
+                self.plusPhotoButton.imageView?.image = UIImage(named:"profile-rabbit-toy.png")
             }
             pictureData = self.plusPhotoButton.imageView?.image?.jpegData(compressionQuality: 0.9)
             let file = PFFileObject(name: "Image.jpg", data: pictureData!)
