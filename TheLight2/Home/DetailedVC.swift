@@ -49,18 +49,21 @@
     lazy var topView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .secondarySystemBackground
         return view
     }()
     
     lazy var middleView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .secondarySystemBackground
         return view
     }()
     
     lazy var pickView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .secondarySystemBackground
         return view
     }()
     
@@ -247,8 +250,7 @@
         
         setupViews()
         setupNavigation()
-        
-        
+
         // MARK: - locationManager
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
@@ -265,7 +267,6 @@
         
         setupFonts()
         self.subject.text = textviewText
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -399,16 +400,17 @@
         middleView.addSubview(stopRecordingButton)
         view.addSubview(pickView)
         pickView.addSubview(languagePick)
-        
+
+        let guide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
-            topView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 0),
+            topView.topAnchor.constraint(equalTo: guide.topAnchor, constant: 0),
             topView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             topView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             topView.heightAnchor.constraint(equalToConstant: 150),
             
             subject.topAnchor.constraint(equalTo: topView.topAnchor, constant: 15),
             subject.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 18),
-            subject.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: 0),
+            subject.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -18),
             subject.heightAnchor.constraint(equalToConstant: 90),
             
             speakBtn.topAnchor.constraint(equalTo: subject.bottomAnchor, constant: 10),
@@ -417,7 +419,7 @@
             speakBtn.heightAnchor.constraint(equalToConstant: 32),
             
             speechBtn.topAnchor.constraint(equalTo: subject.bottomAnchor, constant: 10),
-            speechBtn.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: 0),
+            speechBtn.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -18),
             speechBtn.widthAnchor.constraint(equalToConstant: 85),
             speechBtn.heightAnchor.constraint(equalToConstant: 32),
             
@@ -442,17 +444,17 @@
             volume.heightAnchor.constraint(equalToConstant: 30),
             
             lightoffBtn.topAnchor.constraint(equalTo: middleView.topAnchor, constant: 20),
-            lightoffBtn.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: 0),
+            lightoffBtn.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -18),
             lightoffBtn.widthAnchor.constraint(equalToConstant: 100),
             lightoffBtn.heightAnchor.constraint(equalToConstant: 30),
             
             spotlightBtn.topAnchor.constraint(equalTo: lightoffBtn.bottomAnchor, constant: 20),
-            spotlightBtn.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: 0),
+            spotlightBtn.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -18),
             spotlightBtn.widthAnchor.constraint(equalToConstant: 100),
             spotlightBtn.heightAnchor.constraint(equalToConstant: 30),
             
             nospotBtn.topAnchor.constraint(equalTo: spotlightBtn.bottomAnchor, constant: 20),
-            nospotBtn.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: 0),
+            nospotBtn.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -18),
             nospotBtn.widthAnchor.constraint(equalToConstant: 100),
             nospotBtn.heightAnchor.constraint(equalToConstant: 30),
             
@@ -477,7 +479,7 @@
             longitudeLabel.heightAnchor.constraint(equalToConstant: 21),
             
             altitudeLabel.topAnchor.constraint(equalTo: nospotBtn.bottomAnchor, constant: 10),
-            altitudeLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: 0),
+            altitudeLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -18),
             altitudeLabel.heightAnchor.constraint(equalToConstant: 21),
             
             startRecordingButton.topAnchor.constraint(equalTo: longitudeLabel.bottomAnchor, constant: 10),
@@ -486,7 +488,7 @@
             startRecordingButton.heightAnchor.constraint(equalToConstant: 50),
             
             stopRecordingButton.topAnchor.constraint(equalTo: longitudeLabel.bottomAnchor, constant: 10),
-            stopRecordingButton.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: 0),
+            stopRecordingButton.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -18),
             stopRecordingButton.widthAnchor.constraint(equalToConstant: 150),
             stopRecordingButton.heightAnchor.constraint(equalToConstant: 50),
             
@@ -663,7 +665,7 @@
                 print("Torch could not be used")
             }
         } else {
-            self.simpleAlert(title: "Alert!", message: "Torch is not available")
+            self.showAlert(title: "Alert!", message: "Torch is not available")
         }
     }
     

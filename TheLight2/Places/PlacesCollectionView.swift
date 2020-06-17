@@ -12,8 +12,14 @@ import UIKit
 final class PlacesCollectionView: UICollectionViewController, UIGestureRecognizerDelegate {
     
     fileprivate let cellId = "cellId"
-    //fileprivate let footerId = "footerId"
-    //fileprivate var tabBarStr: String?
+    private var isMenuOpened = false
+
+    lazy var placeMenu: PlaceMenuBar = {
+        let mb = PlaceMenuBar()
+        mb.translatesAutoresizingMaskIntoConstraints = false
+        mb.placeController = self
+        return mb
+    }()
    
     
     override func viewDidLoad() {
@@ -26,6 +32,9 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
         let refresh = UIRefreshControl()
         refresh.addTarget(self, action: #selector(self.refresh), for: .valueChanged)
         collectionView.refreshControl = refresh
+
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        view.addGestureRecognizer(panGesture)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -41,7 +50,6 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
         
         // MARK: NavigationController Hidden
         NotificationCenter.default.addObserver(self, selector: #selector(PlacesCollectionView.hideBar(notification:)), name: NSNotification.Name("hide"), object: nil)
-        //setupNewsNavigationItems()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -53,23 +61,15 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-    
-    lazy var placeMenu: PlaceMenuBar = {
-        let mb = PlaceMenuBar()
-        mb.translatesAutoresizingMaskIntoConstraints = false
-        mb.placeController = self
-        return mb
-    }()
     
     func setupMenuBar() {
         
         view.addSubview(placeMenu)
+
         let guide = view.safeAreaLayoutGuide
-        placeMenu.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
-        
         NSLayoutConstraint.activate([
+            placeMenu.topAnchor.constraint(equalTo: guide.topAnchor),
             placeMenu.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0),
             placeMenu.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0),
             placeMenu.heightAnchor.constraint(equalToConstant: 50)
@@ -82,7 +82,7 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
         collectionView?.contentInset = .init(top: 50,left: 0,bottom: 0,right: 0)
         collectionView?.scrollIndicatorInsets = .init(top: 50,left: 0,bottom: 0,right: 0)
         collectionView?.alwaysBounceVertical = true
-
+        collectionView.isPagingEnabled = true
         collectionView?.backgroundColor = .secondarySystemGroupedBackground
         collectionView?.register(PlaceFeedCell.self, forCellWithReuseIdentifier: cellId)
     }
@@ -97,13 +97,15 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
         self.navigationItem.largeTitleDisplayMode = .never
         
         let addButton = UIBarButtonItem(image: UIImage(systemName: "link"), style: .plain, target: self, action: #selector(self.actionButton))
-        navigationItem.rightBarButtonItems = [addButton]
+        let hideButton = UIBarButtonItem(image: UIImage(systemName: "arrowshape.turn.up.left.circle"), style: .plain, target: self, action: #selector(handleHide))
+        navigationItem.rightBarButtonItems = [addButton, hideButton]
         
         let gridButton = UIBarButtonItem(image: UIImage(systemName: "line.horizontal.3"), style: .plain, target: self, action: #selector(handleOpen))
         navigationItem.leftBarButtonItems = [gridButton]
     }
     
     // MARK: - NavigationController Hidden
+
     @objc func hideBar(notification: NSNotification)  {
         let state = notification.object as! Bool
         self.navigationController?.setNavigationBarHidden(state, animated: true)
@@ -111,37 +113,54 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
             self.tabBarController?.hideTabBarAnimated(hide: state) //added
         }, completion: nil)
     }
-    // MARK: - Side menu
+    // MARK: - Side Menu
+
+    fileprivate func setupTouchGesture() {
+        if(isMenuOpened) {
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapDismiss))
+            view.addGestureRecognizer(tapGesture)
+        } else{
+            view.gestureRecognizers?.removeAll(keepingCapacity: false)
+        }
+    }
+
+    @objc private func handleTapDismiss() {
+        handleHide()
+    }
     let menuController = MenuController()
+    fileprivate let menuWidth: CGFloat = 300.0
     
     @objc func handleOpen() {
-        
-        //(UIApplication.shared.keyWindow?.rootViewController as? BaseSlidingController)?.openMenu()
-        
+        isMenuOpened = true
+        setupTouchGesture()
         menuController.view.frame = .init(x: -300, y: 0, width: 300, height: self.view.frame.height)
         let windows = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
         windows?.addSubview(menuController.view)
         
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-            //          both will work
-            //          self.menuController.view.frame = .init(x: 0, y: 0, width: 300, height: self.view.frame.height)
             self.menuController.view.transform = CGAffineTransform(translationX: 300, y: 0)
         }, completion: nil)
         addChild(menuController) 
     }
     
     @objc func handleHide() {
-        
-        //(UIApplication.shared.keyWindow?.rootViewController as? BaseSlidingController)?.closeMenu()
-        
+        isMenuOpened = false
+        setupTouchGesture()
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.menuController.view.transform = .identity
         }, completion: nil)
-        //        menuController.view.removeFromSuperview()
-        //        menuController.removeFromParent()
+    }
+
+ @objc func handlePan(gesture: UIPanGestureRecognizer) {
+        if gesture.state == .changed {
+
+        } else if gesture.state == .ended {
+            handleHide()
+        }
     }
     
     // MARK: - Button
+
     @objc func actionButton(_ sender: AnyObject) {
         
         let date = Date()
@@ -214,14 +233,15 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
         }
         self.present(alert, animated: true)
     }
-    
+
+    // MARK: - collectionView
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         coordinator.animate(alongsideTransition: { (_) in
             self.collectionViewLayout.invalidateLayout()
         })
     }
 
-    // MARK: - collectionView
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 1
     }

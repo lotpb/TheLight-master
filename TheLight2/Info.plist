@@ -30,16 +30,6 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>twitterkit-hbgrlOXMyIalr90tDIsDlmrGl</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>fb990654514310679</string>
@@ -53,31 +43,9 @@
 				<string>com.googleusercontent.apps.328078072867-vokkcqp95skbjps0cqao09gfhmsvqea2</string>
 			</array>
 		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>com.PeterBalsamo.TheLight2</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>oauth-swift</string>
-			</array>
-		</dict>
 	</array>
-	<key>CFBundleVersion</key>
-	<string>1</string>
-	<key>FacebookAdvertiserIDCollectionEnabled</key>
-	<true/>
 	<key>FacebookAppID</key>
 	<string>990654514310679</string>
-	<key>FacebookAutoLogAppEventsEnabled</key>
-	<true/>
 	<key>FacebookDisplayName</key>
 	<string>TheLight</string>
 	<key>FirebaseScreenReportingEnabled</key>
@@ -86,10 +54,19 @@
 	<string></string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<string>twitter</string>
-		<string>twitterauth</string>
 		<string>fbapi</string>
-		<string>b-messenger-api</string>
+		<string>fbapi20130214</string>
+		<string>fbapi20130410</string>
+		<string>fbapi20130702</string>
+		<string>fbapi20131010</string>
+		<string>fbapi20131219</string>
+		<string>fbapi20140410</string>
+		<string>fbapi20140116</string>
+		<string>fbapi20150313</string>
+		<string>fbapi20150629</string>
+		<string>fbapi20160328</string>
+		<string>fbauth</string>
+		<string>fb-messenger-share-api</string>
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
 	</array>
@@ -124,10 +101,10 @@
 	<string>If you only allow access to your location while you are using the app, some features may not work in the background</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app wants to record sound</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app wants to use your picture &amp;amp; video library.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>This app wants to save pictures &amp;amp; videos to your library.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app wants to use your picture &amp;amp; video library.</string>
 	<key>NSRemindersUsageDescription</key>
 	<string>Can we use your reminder?</string>
 	<key>NSSiriUsageDescription</key>

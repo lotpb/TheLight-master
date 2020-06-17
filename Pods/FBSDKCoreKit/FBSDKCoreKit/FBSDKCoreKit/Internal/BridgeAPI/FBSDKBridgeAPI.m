@@ -16,6 +16,10 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+#import "TargetConditionals.h"
+
+#if !TARGET_OS_TV
+
 #import "FBSDKBridgeAPI.h"
 
 #import "FBSDKCoreKit+Internal.h"
@@ -99,6 +103,10 @@ typedef void (^FBSDKAuthenticationCompletionHandler)(NSURL *_Nullable callbackUR
          annotation:(id)annotation
 {
   id<FBSDKURLOpening> pendingURLOpen = _pendingURLOpen;
+  BOOL canOpenURL =   [pendingURLOpen canOpenURL:url
+                                  forApplication:application
+                               sourceApplication:sourceApplication
+                                      annotation:annotation];
 
   void (^completePendingOpenURLBlock)(void) = ^{
     self->_pendingURLOpen = nil;
@@ -119,15 +127,28 @@ typedef void (^FBSDKAuthenticationCompletionHandler)(NSURL *_Nullable callbackUR
       if (_authenticationSession != nil) {
         [_authenticationSession cancel];
         _authenticationSession = nil;
+
+        // This check is needed in case another sdk / message / ad etc... tries to open the app
+        // during the login flow.
+        // This dismisses the authentication browser without triggering any login callbacks.
+        // Hence we need to explicitly call the authentication session's completion handler.
+        if (!canOpenURL) {
+          NSString *errorMessage = [[NSString alloc]
+                                    initWithFormat:@"Login attempt cancelled by alternate call to openURL from: %@",
+                                    url];
+          NSError *loginError = [[NSError alloc]
+                                 initWithDomain:FBSDKErrorDomain
+                                 code:FBSDKErrorBridgeAPIInterruption
+                                 userInfo:@{FBSDKErrorLocalizedDescriptionKey: errorMessage}];
+          _authenticationSessionCompletionHandler(url, loginError);
+          _authenticationSessionCompletionHandler = nil;
+        }
       }
     }
     completePendingOpenURLBlock();
   }
 
-  if ([pendingURLOpen canOpenURL:url
-                  forApplication:application
-               sourceApplication:sourceApplication
-                      annotation:annotation]) {
+  if (canOpenURL) {
     return YES;
   }
 
@@ -321,13 +342,11 @@ didFinishLaunchingWithOptions:(NSDictionary<UIApplicationLaunchOptionsKey, id> *
     _authenticationSession = [[AuthenticationSessionClass alloc] initWithURL:url
                                                            callbackURLScheme:[FBSDKInternalUtility appURLScheme]
                                                            completionHandler:_authenticationSessionCompletionHandler];
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 130000
     if (@available(iOS 13.0, *)) {
       if ([_authenticationSession respondsToSelector:@selector(setPresentationContextProvider:)]) {
         [_authenticationSession setPresentationContextProvider:self];
       }
     }
-#endif
     _isRequestingSFAuthenticationSession = YES;
     [_authenticationSession start];
   }
@@ -335,9 +354,9 @@ didFinishLaunchingWithOptions:(NSDictionary<UIApplicationLaunchOptionsKey, id> *
 
 - (void)_setSessionCompletionHandlerFromHandler:(void(^)(BOOL, NSError *))handler
 {
-  __weak typeof(self) weakSelf = self;
+  __weak FBSDKBridgeAPI *weakSelf = self;
   _authenticationSessionCompletionHandler = ^ (NSURL *aURL, NSError *error) {
-    typeof(self) strongSelf = weakSelf;
+    FBSDKBridgeAPI *strongSelf = weakSelf;
     strongSelf->_isRequestingSFAuthenticationSession = NO;
     handler(error == nil, error);
     if (error == nil) {
@@ -425,12 +444,15 @@ didFinishLaunchingWithOptions:(NSDictionary<UIApplicationLaunchOptionsKey, id> *
   _pendingRequestCompletionBlock = NULL;
 }
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 130000
 #pragma mark - ASWebAuthenticationPresentationContextProviding
-
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 130000
 - (ASPresentationAnchor)presentationAnchorForWebAuthenticationSession:(ASWebAuthenticationSession *)session API_AVAILABLE(ios(13.0)){
-    return UIApplication.sharedApplication.keyWindow;
-}
+#else
+- (UIWindow *)presentationAnchorForWebAuthenticationSession:(id<FBSDKAuthenticationSession>)session API_AVAILABLE(ios(11.0)) {
 #endif
+  return UIApplication.sharedApplication.keyWindow;
+}
 
 @end
+
+#endif

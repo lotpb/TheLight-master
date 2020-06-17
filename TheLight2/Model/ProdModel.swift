@@ -16,14 +16,16 @@ struct ProdModel {
     let active: String
     let price: Int
     let imageUrl: String
+    let photo: String
     
     init(dictionary: [String: Any]) {
         
-        self.prodId = dictionary["prodId"] as? String ?? ""
+        self.prodId = dictionary["proddId"] as? String ?? ""
         self.productNo = dictionary["productNo"] as? String ?? ""
         self.products = dictionary["products"] as? String ?? ""
         self.price = dictionary["price"] as? Int ?? 0
         self.active = dictionary["active"] as? String ?? ""
         self.imageUrl = dictionary["imageUrl"] as? String ?? ""
+        self.photo = dictionary["photo"] as? String ?? ""
     }
 }

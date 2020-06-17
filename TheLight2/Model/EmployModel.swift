@@ -30,6 +30,7 @@ struct EmployModel {
     let department: String
     let country: String
     let imageUrl: String
+    let photo: String
     
     let zip: NSNumber
     let employeeNo: NSNumber
@@ -43,7 +44,7 @@ struct EmployModel {
         
         //self.users = users
         self.uid = dictionary["uid"] as? String ?? ""
-        self.employeeId = dictionary["employeeId"] as? String ?? ""
+        self.employeeId = dictionary["emplyeeId"] as? String ?? ""
         self.lastname = dictionary["lastname"] as? String ?? ""
         self.address = dictionary["address"] as? String ?? ""
         self.city = dictionary["city"] as? String ?? ""
@@ -62,6 +63,7 @@ struct EmployModel {
         self.department = dictionary["department"] as? String ?? ""
         self.country = dictionary["country"] as? String ?? ""
         self.imageUrl = dictionary["imageUrl"] as? String ?? ""
+        self.photo = dictionary["photo"] as? String ?? ""
         
         self.employeeNo = dictionary["employeeNo"] as? NSNumber ?? 0
         self.zip = dictionary["zip"] as? NSNumber ?? 0

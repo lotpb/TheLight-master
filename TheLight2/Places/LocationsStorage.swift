@@ -80,16 +80,7 @@ class LocationsStorage {
             }
         }
     }
-    /*
-    func deleteDoc() {
-        if let docPath = docPath {
-            do {
-                try FileManager.default.removeItem(at: docPath)
-            }catch {
-                print("Error Deleting Folder. " + error.localizedDescription)
-            }
-        }
-    } */
+
 }
 
 extension Notification.Name {

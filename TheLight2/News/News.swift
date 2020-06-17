@@ -114,7 +114,7 @@ final class News: UICollectionViewController, SearchDelegate {
     }
     
     // MARK: - NavigationController Hidden
-    @objc func hideBar(notification: NSNotification)  {
+    @objc func hideBar(notification: NSNotification) {
         let state = notification.object as! Bool
         self.navigationController?.setNavigationBarHidden(state, animated: true)
         UIView.animate(withDuration: 0.2, animations: {
@@ -133,12 +133,9 @@ final class News: UICollectionViewController, SearchDelegate {
     // MARK: - Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
-        if segue.identifier == "uploadVCSegue"
-        {
+        if segue.identifier == "uploadVCSegue" {
             guard let photo = segue.destination as? UploadController else { return }
-
             photo.formState = ""
-
         }
     }
     
@@ -243,7 +240,7 @@ final class News: UICollectionViewController, SearchDelegate {
         self.present(newView, animated: true)
     }
     
-    func hideSearchView(status : Bool){
+    func hideSearchView(status : Bool) {
         if status == true {
             self.search.removeFromSuperview()
         }
@@ -276,8 +273,6 @@ final class News: UICollectionViewController, SearchDelegate {
            collectionView?.collectionViewLayout.invalidateLayout()
        }
 
-
-
 }
 @available(iOS 13.0, *)
 extension News: UICollectionViewDelegateFlowLayout {
@@ -285,15 +280,7 @@ extension News: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return .init(width: view.frame.width, height: view.frame.height - 50)
     }
-    
-
-
 }
 
 //-----------------------end------------------------------
 
-struct News_Previews: PreviewProvider {
-    static var previews: some View {
-        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
-    }
-}

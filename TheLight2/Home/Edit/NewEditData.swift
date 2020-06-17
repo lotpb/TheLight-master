@@ -7,12 +7,15 @@
 //
 
 import UIKit
-import Parse
 import FirebaseDatabase
+import FirebaseAuth
+import FirebaseStorage
+import Parse
+import SDWebImage
 
 
 @available(iOS 13.0, *)
-final class NewEditData: UIViewController, UITextFieldDelegate {
+final class NewEditData: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate , UITextFieldDelegate {
     
     @IBOutlet weak var tableView: UITableView?
     
@@ -36,6 +39,7 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
     
     var image : UIImage!
     var imageUrl: String?
+    var photo: String?
     
     var objects = [AnyObject]()
     var pasteBoard = UIPasteboard.general
@@ -47,14 +51,23 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-    
+
+    let plusPhotoButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysTemplate), for: .normal)
+        button.addTarget(self, action: #selector(handlePlusPhoto), for: .touchUpInside)
+        //button.contentMode = .scaleAspectFill
+        return button
+    }()
+
     let customImageView: CustomImageView = { //firebase
         let imageView = CustomImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         return imageView
-    }()
+    }() 
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -108,19 +121,18 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
     }
     
     func setupImageView() {
-        
+
+        self.loadAvatarImage()
+
         if (formController == "Product") || (formController == "Jobs") || (formController == "Salesman") {
-        UIView.transition(with: self.customImageView, duration: 0.5, options: .transitionCrossDissolve, animations: {
+        UIView.transition(with: self.plusPhotoButton, duration: 0.5, options: .transitionCrossDissolve, animations: {
             if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
 
             } else {
                 //firebase
-                guard let newsImageUrl = self.imageUrl else { return }
-                self.customImageView.loadImage(urlString: newsImageUrl)
             }
         }, completion: nil)
         }
-        
     }
     
     private func setupNavigationButtons() {
@@ -163,7 +175,7 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
         
         if textSales == "" {
             
-            self.simpleAlert(title: "Oops!", message: "No text entered.")
+            self.showAlert(title: "Oops!", message: "No text entered.")
             
         } else {
             
@@ -183,11 +195,11 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                                 updateblog!.saveEventually()
                                 self.tableView!.reloadData()
                                 
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                                 
                             } else {
                                 
-                                self.simpleAlert(title: "Upload Failure", message: "Failure updated the data")
+                                self.showAlert(title: "Upload Failure", message: "Failure updated the data")
                             }
                         }
                     } else {
@@ -199,12 +211,12 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         
                         userRef.updateChildValues(values) { (err, ref) in
                             if err != nil {
-                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             let vc = self.storyboard?.instantiateViewController(withIdentifier: "salesId")
                             self.show(vc!, sender: self)
-                            self.simpleAlert(title: "update Complete", message: "Successfully updated the data")
+                            self.showAlert(title: "update Complete", message: "Successfully updated the data")
                         }
                     }
                     
@@ -220,11 +232,11 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         saveblog.saveInBackground { (success: Bool, error: Error?) in
                             if success == true {
                                 
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully saved the data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully saved the data")
                                 
                             } else {
                                 
-                                self.simpleAlert(title: "Upload Failure", message: "Failure to save the data")
+                                self.showAlert(title: "Upload Failure", message: "Failure to save the data")
                             }
                         }
                     } else {
@@ -238,11 +250,11 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         let childUpdates = ["/Salesman/\(String(key!))": values]
                         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
                             if err != nil {
-                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             
-                            self.simpleAlert(title: "Upload Complete", message: "Successfully saved data")
+                            self.showAlert(title: "Upload Complete", message: "Successfully saved data")
                         }
                     }
                 }
@@ -263,11 +275,11 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                                 updateblog!.saveEventually()
                                 self.tableView!.reloadData()
                                 
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                                 
                             } else {
                                 
-                                self.simpleAlert(title: "Upload Failure", message: "Failure updated the data")
+                                self.showAlert(title: "Upload Failure", message: "Failure updated the data")
                             }
                         }
                     } else {
@@ -279,12 +291,12 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         
                         userRef.updateChildValues(values) { (err, ref) in
                             if err != nil {
-                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             let vc = self.storyboard?.instantiateViewController(withIdentifier: "jobId")
                             self.show(vc!, sender: self)
-                            self.simpleAlert(title: "update Complete", message: "Successfully updated the data")
+                            self.showAlert(title: "update Complete", message: "Successfully updated the data")
                         }
                         
                     }
@@ -301,11 +313,11 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         saveblog.saveInBackground { (success: Bool, error: Error?) in
                             if success == true {
                                 
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully saved data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully saved data")
                                 
                             } else {
                                 
-                                self.simpleAlert(title: "Upload Failure", message: "Failure updated the data")
+                                self.showAlert(title: "Upload Failure", message: "Failure updated the data")
                             }
                         }
                     } else {
@@ -319,11 +331,11 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         let childUpdates = ["/Job/\(String(key!))": values]
                         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
                             if err != nil {
-                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             
-                            self.simpleAlert(title: "Upload Complete", message: "Successfully saved data")
+                            self.showAlert(title: "Upload Complete", message: "Successfully saved data")
                         }
                     }
                 }
@@ -348,11 +360,11 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                                 updateblog!.saveEventually()
                                 self.tableView!.reloadData()
                                 
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                                 
                             } else {
                                 
-                                self.simpleAlert(title: "Upload Failure", message: "Failure updated the data")
+                                self.showAlert(title: "Upload Failure", message: "Failure updated the data")
                             }
                         }
                     } else {
@@ -365,12 +377,12 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         
                         userRef.updateChildValues(values) { (err, ref) in
                             if err != nil {
-                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             let vc = self.storyboard?.instantiateViewController(withIdentifier: "productId")
                             self.show(vc!, sender: self)
-                            self.simpleAlert(title: "update Complete", message: "Successfully updated the data")
+                            self.showAlert(title: "update Complete", message: "Successfully updated the data")
                         }
                     }
                     
@@ -387,11 +399,11 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         saveblog.saveInBackground { (success: Bool, error: Error?) in
                             if success == true {
                                 
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully saved data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully saved data")
                                 
                             } else {
                                 
-                                self.simpleAlert(title: "Upload Failure", message: "Failure saving the data")
+                                self.showAlert(title: "Upload Failure", message: "Failure saving the data")
                             }
                         }
                     } else {
@@ -406,11 +418,11 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         let childUpdates = ["/Product/\(String(key!))": values]
                         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
                             if err != nil {
-                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             
-                            self.simpleAlert(title: "Upload Complete", message: "Successfully saved data")
+                            self.showAlert(title: "Upload Complete", message: "Successfully saved data")
                         }
                     }
                 }
@@ -429,11 +441,11 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                                 updateblog!.saveEventually()
                                 self.tableView!.reloadData()
                                 
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                                 
                             } else {
                                 
-                                self.simpleAlert(title: "Upload Failure", message: "Failure updated the data")
+                                self.showAlert(title: "Upload Failure", message: "Failure updated the data")
                             }
                         }
                     } else {
@@ -445,12 +457,12 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         
                         userRef.updateChildValues(values) { (err, ref) in
                             if err != nil {
-                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             let vc = self.storyboard?.instantiateViewController(withIdentifier: "adId")
                             self.show(vc!, sender: self)
-                            self.simpleAlert(title: "update Complete", message: "Successfully updated the data")
+                            self.showAlert(title: "update Complete", message: "Successfully updated the data")
                         }
                     }
                     
@@ -466,11 +478,11 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         saveblog.saveInBackground { (success: Bool, error: Error?) in
                             if success == true {
                                 
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully saved data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully saved data")
                                 
                             } else {
                                 
-                                self.simpleAlert(title: "Upload Failure", message: "Failure saving data")
+                                self.showAlert(title: "Upload Failure", message: "Failure saving data")
                             }
                         }
                     } else {
@@ -484,11 +496,11 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         let childUpdates = ["/Advertising/\(String(key!))": values]
                         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
                             if err != nil {
-                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             
-                            self.simpleAlert(title: "Upload Complete", message: "Successfully saved data")
+                            self.showAlert(title: "Upload Complete", message: "Successfully saved data")
                         }
                     }
                 }
@@ -507,11 +519,11 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                                 updateblog!.saveEventually()
                                 self.tableView!.reloadData()
                                 
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                                 
                             } else {
                                 
-                                self.simpleAlert(title: "Upload Failure", message: "Failure updated the data")
+                                self.showAlert(title: "Upload Failure", message: "Failure updated the data")
                             }
                         }
                     } else {
@@ -526,12 +538,12 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         
                         userRef.updateChildValues(values) { (err, ref) in
                             if err != nil {
-                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             let vc = self.storyboard?.instantiateViewController(withIdentifier: "adId")
                             self.show(vc!, sender: self)
-                            self.simpleAlert(title: "update Complete", message: "Successfully updated the data")
+                            self.showAlert(title: "update Complete", message: "Successfully updated the data")
                         }
                     }
                     
@@ -547,11 +559,11 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         saveblog.saveInBackground { (success: Bool, error: Error?) in
                             if success == true {
                                 
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully saved data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully saved data")
                                 
                             } else {
                                 
-                                self.simpleAlert(title: "Upload Failure", message: "Failure saving data")
+                                self.showAlert(title: "Upload Failure", message: "Failure saving data")
                             }
                         }
                     } else {
@@ -567,11 +579,11 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                         let childUpdates = ["/Zip/\(String(key!))": values]
                         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
                             if err != nil {
-                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
                             
-                            self.simpleAlert(title: "Upload Complete", message: "Successfully saved data")
+                            self.showAlert(title: "Upload Complete", message: "Successfully saved data")
                         }
                     }
                 }
@@ -635,7 +647,7 @@ extension NewEditData: UITableViewDataSource {
         
         textframe = UITextField(frame: .init(x: 130, y: 7, width: 175, height: 30))
         activeImage.frame = .init(x: 130, y: 10, width: 18, height: 22)
-        customImageView.frame = .init(x: 130, y: 10, width: 180, height: 180)
+        plusPhotoButton.frame = .init(x: 130, y: 10, width: 180, height: 180)
         
         if UIDevice.current.userInterfaceIdiom == .pad  {
             cell.textLabel!.font = Font.Stat.celltitlePad
@@ -759,18 +771,19 @@ extension NewEditData: UITableViewDataSource {
             
             if (formController == "Salesman") {
                 cell.textLabel!.text = "Photo"
-                self.customImageView.image = image
-                cell.contentView.addSubview(customImageView)
+                //self.plusPhotoButton.imageView!.image = image
+                cell.contentView.addSubview(plusPhotoButton)
             }
                 
             else if (formController == "Jobs") {
                 cell.textLabel!.text = "Photo"
-                self.customImageView.image = image
-                cell.contentView.addSubview(customImageView)
+                //self.plusPhotoButton.imageView!.image = image
+                cell.contentView.addSubview(plusPhotoButton)
             }
                 
             else if (formController == "Product") {
                 self.price.placeholder = "Price"
+                //self.plusPhotoButton.imageView!.image = image
                 cell.textLabel!.text = "Price"
                 
                 if self.frm14 == nil {
@@ -783,7 +796,7 @@ extension NewEditData: UITableViewDataSource {
                     self.price!.text = "\(Price!)"
                 }
                 
-                cell.contentView.addSubview(self.price)
+                cell.contentView.addSubview(plusPhotoButton)
             }
                 
             else if (formController == "Zip") {
@@ -808,8 +821,8 @@ extension NewEditData: UITableViewDataSource {
             if (formController == "Product") {
                 
                 cell.textLabel!.text = "Photo"
-                self.customImageView.image = image
-                cell.contentView.addSubview(customImageView)
+                //self.plusPhotoButton.imageView!.image = image
+                cell.contentView.addSubview(plusPhotoButton)
             }
                 
             else if (formController == "Zip") {
@@ -826,7 +839,197 @@ extension NewEditData: UITableViewDataSource {
         }
         return cell
     }
-}
+           // MARK: - AvatarImage
+
+        @objc func handlePlusPhoto() {
+
+                let imagePickerController = UIImagePickerController()
+                imagePickerController.delegate = self
+                imagePickerController.allowsEditing = true
+                present(imagePickerController, animated: true, completion: nil)
+            }
+
+           func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+
+               guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else { return }
+               plusPhotoButton.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
+               plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width / 2
+               plusPhotoButton.layer.masksToBounds = true
+               plusPhotoButton.layer.borderColor = UIColor.darkGray.cgColor
+               plusPhotoButton.layer.borderWidth = 3
+               setupAvatarImage()
+               dismiss(animated: true, completion: nil)
+           }
+
+           func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+               self.dismiss(animated: true)
+           }
+
+           func setupAvatarImage() { //dont work
+
+               let metadata = StorageMetadata()
+               metadata.contentType = "image/jpeg"
+
+               guard let userID = self.objectId else { return }
+
+                   if (formController == "Advertising") {
+
+                       let storageItem = Storage.storage().reference().child("Advertise_images").child(userID)
+                       guard let image = self.plusPhotoButton.imageView?.image else {return}
+                       if let newImage = image.jpegData(compressionQuality: 0.3)  {
+                           storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
+                               if error != nil{
+                                   print(error!)
+                                   return
+                               }
+                               storageItem.downloadURL(completion: { (url, error) in
+                                   if error != nil{
+                                       print(error!)
+                                       return
+                                   }
+
+                                   if let profilePhotoURL = url?.absoluteString {
+                                       let userRef = FirebaseRef.databaseAd.child(userID)
+                                       let values = [
+                                           "photo": profilePhotoURL] as [String: Any]
+                                       userRef.updateChildValues(values) { (error, ref) in
+                                           if error != nil {
+                                               self.showAlert(title:"Update Failure", message: "Failure updating the data")
+                                               return
+                                           } else {
+                                               self.showAlert(title: "Update Complete", message: "Successfully updated the data")
+                                           }
+                                       }
+                                   }
+                               })
+                           }
+                       }
+                   }
+                   if (formController == "Product") {
+
+                       let storageItem = Storage.storage().reference().child("Product_images").child(userID)
+                       guard let image = self.plusPhotoButton.imageView?.image else {return}
+                       if let newImage = image.jpegData(compressionQuality: 0.3)  {
+                           storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
+                               if error != nil{
+                                   print(error!)
+                                   return
+                               }
+                               storageItem.downloadURL(completion: { (url, error) in
+                                   if error != nil{
+                                       print(error!)
+                                       return
+                                   }
+
+                                   if let profilePhotoURL = url?.absoluteString {
+                                       let userRef = FirebaseRef.databaseProd.child(userID)
+                                       let values = [
+                                           "photo": profilePhotoURL] as [String: Any]
+                                       userRef.updateChildValues(values) { (error, ref) in
+                                           if error != nil {
+                                               self.showAlert(title:"Update Failure", message: "Failure updating the data")
+                                               return
+                                           } else {
+                                               self.showAlert(title: "Update Complete", message: "Successfully updated the data")
+                                           }
+                                       }
+                                   }
+                               })
+                           }
+                       }
+
+                   }
+                   if (formController == "Job") {
+
+                       let storageItem = Storage.storage().reference().child("Job_images").child(userID)
+                       guard let image = self.plusPhotoButton.imageView?.image else {return}
+                       if let newImage = image.jpegData(compressionQuality: 0.3)  {
+                           storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
+                               if error != nil{
+                                   print(error!)
+                                   return
+                               }
+                               storageItem.downloadURL(completion: { (url, error) in
+                                   if error != nil{
+                                       print(error!)
+                                       return
+                                   }
+
+                                   if let profilePhotoURL = url?.absoluteString {
+                                       let userRef = FirebaseRef.databaseJob.child(userID)
+                                       let values = [
+                                           "photo": profilePhotoURL] as [String: Any]
+                                       userRef.updateChildValues(values) { (error, ref) in
+                                           if error != nil {
+                                               self.showAlert(title:"Update Failure", message: "Failure updating the data")
+                                               return
+                                           } else {
+                                               self.showAlert(title: "Update Complete", message: "Successfully updated the data")
+                                           }
+                                       }
+                                   }
+                               })
+                           }
+                       }
+                   }
+                   if (formController == "Salesman") {
+
+                       let storageItem = Storage.storage().reference().child("Saleman_images").child(userID)
+                       guard let image = self.plusPhotoButton.imageView?.image else {return}
+                       if let newImage = image.jpegData(compressionQuality: 0.3)  {
+                           storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
+                               if error != nil{
+                                   print(error!)
+                                   return
+                               }
+                               storageItem.downloadURL(completion: { (url, error) in
+                                   if error != nil{
+                                       print(error!)
+                                       return
+                                   }
+
+                                   if let profilePhotoURL = url?.absoluteString {
+                                       let userRef = FirebaseRef.databaseSales.child(userID)
+                                       let values = [
+                                           "photo": profilePhotoURL] as [String: Any]
+                                       userRef.updateChildValues(values) { (error, ref) in
+                                           if error != nil {
+                                               self.showAlert(title:"Update Failure", message: "Failure updating the data")
+                                               return
+                                           } else {
+                                               self.showAlert(title: "Update Complete", message: "Successfully updated the data")
+                                           }
+                                       }
+                                   }
+                               })
+                           }
+                       }
+                   }
+
+           }
+        // MARK: - create AvatarImage
+        func loadAvatarImage() {
+            if (self.photo == nil) || (self.photo == "") {
+                self.photo = imageUrl
+            }
+            guard let temp = self.photo else {return}
+
+            if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
+
+            } else {
+                //firebase
+                guard let imageUrl:URL = URL(string: temp) else { return }
+                self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+                
+                self.plusPhotoButton.layer.cornerRadius = self.plusPhotoButton.frame.width / 2
+                self.plusPhotoButton.layer.masksToBounds = true
+                self.plusPhotoButton.layer.borderColor = UIColor.systemBlue.cgColor
+                self.plusPhotoButton.layer.borderWidth = 3
+                self.plusPhotoButton.setImage(self.customImageView.image?.withRenderingMode(.alwaysOriginal), for: .normal)
+            }
+        }
+    }
+
 @available(iOS 13.0, *)
 extension NewEditData: UITableViewDelegate {
   
@@ -867,6 +1070,7 @@ extension NewEditData: UITableViewDelegate {
         pasteBoard.string = cell!.textLabel?.text
     }
 }
+
 // MARK: - UISearchBar Delegate
 @available(iOS 13.0, *)
 extension NewEditData: UISearchBarDelegate {

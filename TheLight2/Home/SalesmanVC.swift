@@ -90,7 +90,7 @@ final class SalesmanVC: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newData))
         navigationItem.title = "Salesman"
-        //self.navigationItem.largeTitleDisplayMode = .always
+        self.navigationItem.largeTitleDisplayMode = .always
         
         searchController = UISearchController(searchResultsController: resultsController)
         navigationItem.searchController = searchController
@@ -276,7 +276,7 @@ final class SalesmanVC: UIViewController {
                     //search
                     let indexPath = resultsController.tableView!.indexPathForSelectedRow!.row
                     
-                    VC.objectId = filteredTitles[indexPath].salesNo
+                    VC.objectId = filteredTitles[indexPath].salesId
                     VC.frm11 = filteredTitles[indexPath].active
                     VC.frm12 = filteredTitles[indexPath].salesNo
                     VC.frm13 = filteredTitles[indexPath].salesman
@@ -292,7 +292,7 @@ final class SalesmanVC: UIViewController {
                         VC.image = self.selectedImage
                     } else {
                         //firebase
-                        VC.objectId = saleslist[indexPath].salesNo
+                        VC.objectId = saleslist[indexPath].salesId
                         VC.frm11 = saleslist[indexPath].active
                         VC.frm12 = saleslist[indexPath].salesNo
                         VC.frm13 = saleslist[indexPath].salesman

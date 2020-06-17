@@ -7,14 +7,19 @@
 //
 
 import UIKit
+import Firebase
 
 @available(iOS 13.0, *)
 class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
     
     fileprivate let cellId = "cellId"
     //firebase
-       var visitlist = [VisitModel]()
-       var defaults = UserDefaults.standard
+    var visitlist = [VisitModel]()
+    var fetchingMore = false
+    var endReached = false
+    let leadingScreensForBatching:CGFloat = 3.0
+
+    var defaults = UserDefaults.standard
     
     // MARK: NavigationController Hidden
     private var lastContentOffset: CGFloat = 0.0
@@ -42,12 +47,12 @@ class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        //loadData()
+        beginBatchFetch()
 
         addSubview(collectionView)
         addConstraintsWithFormat(format: "H:|[v0]|", views: collectionView)
         addConstraintsWithFormat(format: "V:|[v0]|", views: collectionView)
-   
+
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.register(PlaceCell.self, forCellWithReuseIdentifier: cellId)
         self.collectionView.addSubview(self.refreshControl)
@@ -70,13 +75,12 @@ class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
         }
         self.refreshControl.endRefreshing()
     }
-
-    func loadData() {
-
+    
+    // MARK: - NavigationController Hidden
+    func fetchPosts(completion:@escaping (_ posts:[VisitModel])->()) {
         if ((defaults.string(forKey: "backendKey")) == "Firebase") {
-
             //firebase
-            FirebaseRef.databaseRoot.child("visits").child("test")
+            FirebaseRef.databaseRoot.child("visits").child("test").queryLimited(toLast: 20)
                 .observe(.childAdded , with:{ (snapshot) in
 
                     guard let dictionary = snapshot.value as? [String: Any] else {return}
@@ -84,10 +88,8 @@ class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
                     self.visitlist.append(post)
 
                     self.visitlist.sort(by: { (p1, p2) -> Bool in
-                        return p1.arrival_date.compare(p2.arrival_date) == .orderedDescending
+                        return p1.arrivaldate.compare(p2.arrivaldate) == .orderedDescending
                     })
-                    print(self.visitlist)
-
                     DispatchQueue.main.async(execute: {
                         self.collectionView.reloadData()
                     })
@@ -96,9 +98,32 @@ class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
             }
         }
     }
-    
-    // MARK: - NavigationController Hidden
+
+    func beginBatchFetch() {
+        fetchingMore = true
+        self.collectionView.reloadSections(IndexSet(integer: 0))
+
+        fetchPosts { newPosts in
+            self.visitlist.append(contentsOf: newPosts)
+            self.fetchingMore = false
+            self.endReached = newPosts.count == 0
+            UIView.performWithoutAnimation {
+                self.collectionView.reloadData()
+            }
+        }
+    }
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        //fetch
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        if offsetY > contentHeight - scrollView.frame.size.height * leadingScreensForBatching {
+            if !fetchingMore && !endReached {
+                beginBatchFetch()
+            }
+        }
+
+        //hidden tabBar
         if (self.lastContentOffset > scrollView.contentOffset.y) {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: false)
         } else {
@@ -119,7 +144,16 @@ extension PlaceFeedCell: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return LocationsStorage.shared.locations.count    }
+        switch section {
+        case 0:
+            //return LocationsStorage.shared.locations.count
+            return visitlist.count
+        case 1:
+            return fetchingMore ? 1 : 0
+        default:
+            return 0
+        }
+    }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
@@ -147,12 +181,13 @@ extension PlaceFeedCell: UICollectionViewDataSource {
         cell.subtitleTimeLabel.font = Font.celltitle12m
         
         //Cell-----------------------------------------------------------------
-        cell.mapStart = LocationsStorage.shared.locations[indexPath.row]
-        //cell.mapStart = visitlist[indexPath.row]
+        //cell.mapStart = LocationsStorage.shared.locations[indexPath.row]
+        cell.mapStart = visitlist[indexPath.row]
         //Cell2-----------------------------------------------------------------
         let thisIndexPath = indexPath.row
         if thisIndexPath - 1 > -1 {
-            cell.mapDest = LocationsStorage.shared.locations[thisIndexPath - 1]
+            //cell.mapDest = LocationsStorage.shared.locations[thisIndexPath - 1]
+            cell.mapDest = visitlist[indexPath.row - 1]
         }
         //-----------------------------------------------------------------
         

@@ -29,6 +29,7 @@ struct VendModel {
     let manager: String
     let profession: String
     let webpage: String
+    let photo: String
     
     let zip: NSNumber
     let vendorNo: NSNumber
@@ -60,6 +61,7 @@ struct VendModel {
         self.manager = dictionary["manager"] as? String ?? ""
         self.profession = dictionary["profession"] as? String ?? ""
         self.webpage = dictionary["webpage"] as? String ?? ""
+        self.photo = dictionary["photo"] as? String ?? ""
         
         self.vendorNo = dictionary["vendorNo"] as? NSNumber ?? 0
         self.zip = dictionary["zip"] as? NSNumber ?? 0

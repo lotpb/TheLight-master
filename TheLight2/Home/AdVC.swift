@@ -90,6 +90,7 @@ final class AdVC: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newData))
         navigationItem.title = "Advertisers"
+        self.navigationItem.largeTitleDisplayMode = .always
         
         searchController = UISearchController(searchResultsController: resultsController)
         navigationItem.searchController = searchController
@@ -278,7 +279,7 @@ final class AdVC: UIViewController {
                     //search
                     let indexPath = resultsController.tableView!.indexPathForSelectedRow!.row
                     
-                    VC.objectId = filteredTitles[indexPath].adNo
+                    VC.objectId = filteredTitles[indexPath].adId
                     VC.frm11 = filteredTitles[indexPath].active
                     VC.frm12 = filteredTitles[indexPath].adNo
                     VC.frm13 = filteredTitles[indexPath].advertiser
@@ -292,7 +293,7 @@ final class AdVC: UIViewController {
                         
                     } else {
                         //firebase
-                        VC.objectId = adlist[indexPath].adNo
+                        VC.objectId = adlist[indexPath].adId
                         VC.frm11 = adlist[indexPath].active
                         VC.frm12 = adlist[indexPath].adNo
                         VC.frm13 = adlist[indexPath].advertiser

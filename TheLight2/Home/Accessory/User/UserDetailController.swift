@@ -320,6 +320,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         mainView.addSubview(updateLabel)
         mapView.translatesAutoresizingMaskIntoConstraints = false
 
+        let guide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
 
             createLabel.topAnchor.constraint(equalTo: (createtitleLabel.bottomAnchor), constant: 2),
@@ -343,9 +344,9 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
             editProfileBtn.heightAnchor.constraint(equalToConstant: 20),
             
             mapView.topAnchor.constraint(equalTo: (mapLabel?.bottomAnchor)!, constant: +25),
-            mapView.leadingAnchor.constraint( equalTo: view.layoutMarginsGuide.leadingAnchor),
-            mapView.trailingAnchor.constraint( equalTo: view.layoutMarginsGuide.trailingAnchor),
-            mapView.bottomAnchor.constraint( equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -16)
+            mapView.leadingAnchor.constraint( equalTo: guide.leadingAnchor),
+            mapView.trailingAnchor.constraint( equalTo: guide.trailingAnchor),
+            mapView.bottomAnchor.constraint( equalTo: guide.bottomAnchor, constant: -16)
             ])
         
         containView.addSubview(updateBtn)
@@ -371,7 +372,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
     // MARK: - Button
     @objc func selectCamera() {
         guard case self.objectId = Auth.auth().currentUser?.uid else {
-        self.simpleAlert(title: "Alert!", message: "Updates not allowed for this member")
+        self.showAlert(title: "Alert!", message: "Updates not allowed for this member")
         return}
 
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
@@ -383,13 +384,13 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
             imagePicker.showsCameraControls = true
             self.present(imagePicker, animated: true)
         } else {
-            self.simpleAlert(title: "Alert!", message: "Camera not available")
+            self.showAlert(title: "Alert!", message: "Camera not available")
         }
     }
     
     @objc func selectPhotosAlbum() {
         guard case self.objectId = Auth.auth().currentUser?.uid else {
-            self.simpleAlert(title: "Alert!", message: "Updates not allowed for this member")
+            self.showAlert(title: "Alert!", message: "Updates not allowed for this member")
             return}
 
             if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
@@ -400,7 +401,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
                 imagePicker.delegate = self
                 self.present(imagePicker, animated: false)
             } else {
-                self.simpleAlert(title: "Alert!", message: "you are not authorize")
+                self.showAlert(title: "Alert!", message: "you are not authorize")
             }
         //}
 }
@@ -417,54 +418,6 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.dismiss(animated: true)
-    }
-
-    func updateUsersProfile() {
-        //firebase
-        guard case self.objectId = Auth.auth().currentUser?.uid else {
-            self.simpleAlert(title: "Alert!", message: "Updates not allowed for this member")
-            return
-        }
-
-        let metadata = StorageMetadata()
-        metadata.contentType = "image/jpeg"
-
-        if let userID = Auth.auth().currentUser?.uid {
-            let storageItem = Storage.storage().reference().child("profile_images").child(userID)
-            guard let image = userimageView?.image else {return}
-            if let newImage = image.jpegData(compressionQuality: 0.9)  {
-                storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
-                    if error != nil{
-                        print(error!)
-                        return
-                    }
-                    storageItem.downloadURL(completion: { (url, error) in
-                        if error != nil{
-                            print(error!)
-                            return
-                        }
-
-                        if let profilePhotoURL = url?.absoluteString {
-                            let userRef = FirebaseRef.databaseUsers.child(userID)
-                            let values = ["username": self.usernameField!.text!,
-                                          "phone": self.phoneField!.text!,
-                                          "email": self.emailField!.text!,
-                                          "lastUpdate": Date().timeIntervalSince1970,
-                                          "uid": userID,
-                                          "profileImageUrl": profilePhotoURL] as [String: Any]
-                            userRef.updateChildValues(values) { (error, ref) in
-                                if error != nil {
-                                    self.simpleAlert(title:"Update Failure", message: "Failure updating the data")
-                                    return
-                                } else {
-                                    self.simpleAlert(title: "Update Complete", message: "Successfully updated the data")
-                                }
-                            }
-                        }
-                    })
-                }
-            }
-        }
     }
 
     @IBAction func Update(_ sender: AnyObject) {
@@ -489,18 +442,65 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
                         self.user!.setObject(file!, forKey:"imageFile")
                         self.user!.saveInBackground { (success: Bool, error: Error?) in
                         }
-                        self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                        self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                     } else {
-                        self.simpleAlert(title: "Upload Failure", message: "Failure updating the data")
+                        self.showAlert(title: "Upload Failure", message: "Failure updating the data")
                     }
                 }
                 activityIndicator.stopAnimating()
                 activityIndicator.removeFromSuperview()
             } else {
-                self.simpleAlert(title: "Alert", message: "User is not valid to edit data")
+                self.showAlert(title: "Alert", message: "User is not valid to edit data")
             }
         } else {
             updateUsersProfile()
+        }
+    }
+
+    func updateUsersProfile() {
+        //firebase
+        guard case self.objectId = Auth.auth().currentUser?.uid else {
+            self.showAlert(title: "Alert!", message: "Updates not allowed for this member")
+            return
+        }
+
+        if let userID = Auth.auth().currentUser?.uid {
+            let storageItem = Storage.storage().reference().child("profile_images").child(userID)
+            guard let image = userimageView?.image else {return}
+            let metadata = StorageMetadata()
+            metadata.contentType = "image/jpeg"
+            if let newImage = image.jpegData(compressionQuality: 0.9)  {
+                storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
+                    if error != nil{
+                        print(error!.localizedDescription)
+                        return
+                    }
+                    storageItem.downloadURL(completion: { (url, error) in
+                        if error != nil{
+                            print(error!.localizedDescription)
+                            return
+                        }
+
+                        if let profilePhotoURL = url?.absoluteString {
+                            let userRef = FirebaseRef.databaseUsers.child(userID)
+                            let values = ["username": self.usernameField!.text!,
+                                          "phone": self.phoneField!.text!,
+                                          "email": self.emailField!.text!,
+                                          "lastUpdate": Date().timeIntervalSince1970,
+                                          "uid": userID,
+                                          "profileImageUrl": profilePhotoURL] as [String: Any]
+                            userRef.updateChildValues(values) { (error, ref) in
+                                if error != nil {
+                                    self.showAlert(title:"Update Failure", message: "Failure updating the data")
+                                    return
+                                } else {
+                                    self.showAlert(title: "Update Complete", message: "Successfully updated the data")
+                                }
+                            }
+                        }
+                    })
+                }
+            }
         }
     }
     
@@ -520,11 +520,11 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
                 }
             } else {
                 
-                self.simpleAlert(title: "Alert", message: "Call facility is not available!!!")
+                self.showAlert(title: "Alert", message: "Call facility is not available!!!")
             }
         } else {
             
-            self.simpleAlert(title: "Alert", message: "Your device doesn't support this feature.")
+            self.showAlert(title: "Alert", message: "Your device doesn't support this feature.")
         }
     }
     
@@ -537,7 +537,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
             
         } else {
             
-            self.simpleAlert(title: "Alert", message: "Your field doesn't have valid email.")
+            self.showAlert(title: "Alert", message: "Your field doesn't have valid email.")
         }
     }
     

@@ -9,10 +9,6 @@
 import UIKit
 
 
-protocol RegionsProtocol{
-    func loadOverlayForRegionWithLatitude(_ latitude:Double, andLongitude longitude:Double)
-}
-
 @available(iOS 13.0, *)
 final class RegionsListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     

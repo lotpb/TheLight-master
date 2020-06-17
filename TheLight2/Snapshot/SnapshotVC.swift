@@ -12,6 +12,7 @@ import Parse
 import EventKit
 import MobileCoreServices
 import AVFoundation
+import SDWebImage
 
 @available(iOS 13.0, *)
 class SnapshotVC: UIViewController, UISplitViewControllerDelegate {
@@ -450,7 +451,7 @@ class SnapshotVC: UIViewController, UISplitViewControllerDelegate {
             
         } else if segue.identifier == "userdetailSegue" {
             let storyboard = UIStoryboard(name:"Supporting", bundle: nil)
-            let VC = storyboard.instantiateViewController(withIdentifier: "userDetailVC") as! UserDetailController
+            let VC = storyboard.instantiateViewController(withIdentifier: "UserDetailVC") as! UserDetailController
             VC.status = "Edit"
             VC.objectId = self.selectedObjectId ?? ""
             VC.username = self.selectedName ?? ""
@@ -570,7 +571,7 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath:IndexPath)->UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CollectionViewCell
-            cell.backgroundColor = .systemGray
+        cell.backgroundColor = .systemGray
 
 
         if (UIDevice.current.userInterfaceIdiom == .pad) && (collectionView.tag == 0) {
@@ -616,10 +617,12 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
 
             } else {
                 //firebase
-                let newsImageUrl = newslist[indexPath.item].imageUrl
-                cell.snapImageView.loadImage(urlString: newsImageUrl)
-                myLabel1.text = newslist[indexPath.item].newsTitle
+                //let newsImageUrl = newslist[indexPath.item].imageUrl
+                //cell.snapImageView.loadImage(urlString: newsImageUrl)
+                let imageUrl:URL = URL(string: newslist[indexPath.item].imageUrl)!
+                cell.snapImageView.sd_setImage(with: imageUrl, completed: nil)
 
+                myLabel1.text = newslist[indexPath.item].newsTitle
                 let videoDetailurl = newslist[indexPath.item].videoUrl
                 cell.playBtn.isHidden = newslist[indexPath.item].videoUrl == ""
                 cell.playBtn.setTitle(videoDetailurl, for: .normal)
@@ -638,7 +641,7 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
                 cell.videoLengthLabel.rightAnchor.constraint(equalTo: cell.snapImageView.rightAnchor, constant: -8),
                 cell.videoLengthLabel.bottomAnchor.constraint(equalTo: cell.snapImageView.bottomAnchor, constant: -2),
                 cell.videoLengthLabel.heightAnchor.constraint(equalToConstant: 30)
-                ])
+            ])
 
             cell.activityIndicator.stopAnimating()
             cell.activityIndicator.isHidden = true
@@ -666,8 +669,8 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
                 //firebase
                 let jobImageUrl = joblist[indexPath.item].imageUrl
                 cell.snapImageView.loadImage(urlString: jobImageUrl)
+                //cell.snapImageView.sd_setImage(with: jobImageUrl, completed: nil)
                 myLabel1.text = joblist[indexPath.item].description
-                
             }
             cell.activityIndicator.stopAnimating()
             cell.activityIndicator.isHidden = true
@@ -693,8 +696,10 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
                 myLabel1.text = (_feedUser[indexPath.row] as AnyObject).value(forKey: "username") as? String
             } else {
                 //firebase
-                let newsImageUrl = userlist[indexPath.item].profileImageUrl
-                cell.snapImageView.loadImage(urlString: newsImageUrl)
+                //let newsImageUrl = userlist[indexPath.item].profileImageUrl
+                //cell.snapImageView.loadImage(urlString: newsImageUrl)
+                let imageUrl:URL = URL(string: userlist[indexPath.item].profileImageUrl)!
+                cell.snapImageView.sd_setImage(with: imageUrl, completed: nil)
                 myLabel1.text = userlist[indexPath.item].username
                 
             }
@@ -751,10 +756,12 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
                 myLabel1.text = String(format: "%@ %@ %@ ", ((_feedItems5[indexPath.row] as AnyObject).value(forKey: "First") as? String)!, ((_feedItems5[indexPath.row] as AnyObject).value(forKey: "Last") as? String)!, ((_feedItems5[indexPath.row] as AnyObject).value(forKey: "Company") as? String)!)
             } else {
                 //firebase
+
                 let newsImageUrl = employlist[indexPath.item].imageUrl
                 cell.snapImageView.loadImage(urlString: newsImageUrl)
-                myLabel1.text = employlist[indexPath.item].lastname
-                
+                //let imageUrl:URL = URL(string: employlist[indexPath.item].imageUrl)!
+                //cell.snapImageView.sd_setImage(with: imageUrl, completed: nil)
+                myLabel1.text = String(format: "%@ %@", employlist[indexPath.item].lastname, employlist[indexPath.item].company).removeWhiteSpace()
             }
             cell.activityIndicator.stopAnimating()
             cell.activityIndicator.isHidden = true
@@ -795,13 +802,13 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
                         self.selectedPhone = (self._feedNews[indexPath.row] as AnyObject).value(forKey: "storyText") as? String
                         self.imageDetailurl = self.imageFile.url
                         self.selectedDate = (self._feedNews[indexPath.row] as AnyObject).value(forKey: "createdAt") as? Date
-                        
-                        self.performSegue(withIdentifier: "snapuploadSegue", sender:self)
                     }
                 }
             } else {
                 //firebase
             }
+            //self.performSegue(withIdentifier: "snapuploadSegue", sender:self)
+
         } else if (collectionView.tag == 1) {
             
             if ((defaults.string(forKey: "backendKey")) == "Parse") {
@@ -812,12 +819,12 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
                     
                     self.selectedImage = UIImage(data: imageData!)
                     self.selectedTitle = (self._feedJob[indexPath.row] as AnyObject).value(forKey: "imageGroup") as? String
-                    self.performSegue(withIdentifier: "snapuploadSegue", sender:self)
                 }
             } else {
                 //firebase
             }
-            
+            //self.performSegue(withIdentifier: "snapuploadSegue", sender:self)
+
         } else if (collectionView.tag == 2) {
             
             if ((defaults.string(forKey: "backendKey")) == "Parse") {
@@ -837,12 +844,19 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
                     dateFormatter.dateFormat = "MMM dd, yyyy"
                     let createString = dateFormatter.string(from: updated)
                     self.selectedCreate = createString
-                    
-                    self.performSegue(withIdentifier: "userdetailSegue", sender:self)
                 }
             } else {
                 //firebase
+                //self.selectedCreate = userlist[indexPath.row].creationDate
+                //updated = userlist[indexPath.row].lastUpdate
+                self.selectedObjectId = userlist[indexPath.row].uid
+                self.selectedTitle = userlist[indexPath.row].username
+                self.selectedEmail = userlist[indexPath.row].email
+                self.selectedPhone = userlist[indexPath.row].phone
+                //self.selectedImage = selectedImage
             }
+            self.performSegue(withIdentifier: "userdetailSegue", sender:self)
+
         } else if (collectionView.tag == 3) {
             
             if ((defaults.string(forKey: "backendKey")) == "Parse") {
@@ -856,12 +870,12 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
                     self.selectedEmail = (self._feedSales[indexPath.row] as AnyObject).value(forKey: "SalesNo") as? String
                     self.selectedPhone = (self._feedSales[indexPath.row] as AnyObject).value(forKey: "Active") as? String
                     self.selectedTitle = (self._feedSales[indexPath.row] as AnyObject).value(forKey: "Salesman") as? String
-                    
-                    self.performSegue(withIdentifier: "snapuploadSegue", sender:self)
                 }
             } else {
                 //firebase
             }
+            //self.performSegue(withIdentifier: "snapuploadSegue", sender:self)
+
         } else if (collectionView.tag == 4) {
             
             if ((defaults.string(forKey: "backendKey")) == "Parse") {
@@ -900,13 +914,13 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
                     self.selected27 = (self._feedItems5[indexPath.row] as AnyObject).value(forKey: "Company") as? String
                     self.selectedComments = (self._feedItems5[indexPath.row] as AnyObject).value(forKey: "Comments") as? String
                     self.selectedActive = (self._feedItems5[indexPath.row] as AnyObject).value(forKey: "Active") as? String
-                    
-                    self.performSegue(withIdentifier: "snapemployeeSegue", sender:self)
                 }
             }
         } else {
             //firebase
         }
+        //self.performSegue(withIdentifier: "snapemployeeSegue", sender:self)
+
     }
 }
 // MARK: - UISearchBar Delegate

@@ -176,21 +176,6 @@ final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewContr
         self.refreshControl.endRefreshing()
     }
     
-    /*
-    // MARK: - SegmentedControl
-    @objc func segmentedControlAction(_ sender: UISegmentedControl) {
-        
-        if(segmentedControl.selectedSegmentIndex == 0) {
-            myLabel3.text = "$100,000"
-        }
-        else if(segmentedControl.selectedSegmentIndex == 1) {
-            myLabel3.text = "$200,000"
-        }
-        else if(segmentedControl.selectedSegmentIndex == 2) {
-            myLabel3.text = "$300,000"
-        }
-    } */
-    
     // MARK: - YahooFinance
     func YahooFinanceLoad() {
         guard ProcessInfo.processInfo.isLowPowerModeEnabled == false else { return }

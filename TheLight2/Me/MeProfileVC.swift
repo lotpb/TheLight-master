@@ -14,6 +14,7 @@ import MapKit
 import CoreLocation
 import MobileCoreServices //kUTTypeImage
 import MessageUI
+import AVKit
 
 
 @available(iOS 13.0, *)
@@ -47,7 +48,6 @@ final class MeProfileVC: UICollectionViewController, UICollectionViewDelegateFlo
     var posts = [NewsModel]()
     
     var isFormMe: Bool = true
-    //var uidProfileStr: String?
     var uidStr: String?
 
     //parse
@@ -64,16 +64,7 @@ final class MeProfileVC: UICollectionViewController, UICollectionViewDelegateFlo
     var create : String?
     var email : String?
     var phone : String?
-    
-    //var userimage : UIImage?
-    //var pickImage : UIImage?
-    //var pictureData : Data?
-    
-    //var imagePicker: UIImagePickerController!
-    //var activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorView.Style.gray)
-    
-    //var emailTitle :NSString?
-    //var messageBody:NSString?
+
     
     let userDetailImageview: CustomImageView = { //firebase only
         let imageView = CustomImageView()
@@ -112,7 +103,7 @@ final class MeProfileVC: UICollectionViewController, UICollectionViewDelegateFlo
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
-        fetchUserImage() //dont move viewWillAppear
+        fetchUserName() //dont move viewWillAppear
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -143,7 +134,7 @@ final class MeProfileVC: UICollectionViewController, UICollectionViewDelegateFlo
         userlist.removeAll()
         posts.removeAll()
         fetchPhotoImages()
-        fetchUserImage()
+        fetchUserName()
         DispatchQueue.main.async { //added
             self.collectionView?.reloadData()
         }
@@ -169,13 +160,14 @@ final class MeProfileVC: UICollectionViewController, UICollectionViewDelegateFlo
     private func setupNavigation() {
 
         navigationItem.largeTitleDisplayMode = .never
+        /*
         if isFormMe == false {
             let userMapItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(userDetailBtn))
             navigationItem.setRightBarButton(userMapItem, animated: true)
             
             let doneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(setbackButton))
             navigationItem.setLeftBarButton(doneBarButtonItem, animated: true)
-        }
+        } */
     }
     
     // MARK: - NavigationController Hidden
@@ -201,7 +193,7 @@ final class MeProfileVC: UICollectionViewController, UICollectionViewDelegateFlo
     }
     
     // MARK: - LoadData
-    private func fetchUserImage() {
+    private func fetchUserName() {
         
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
 
@@ -283,16 +275,16 @@ final class MeProfileVC: UICollectionViewController, UICollectionViewDelegateFlo
             }
             //followers
             /*
-            ref.child("followers")
-            ref.queryOrdered(byChild: "uid")
-                .queryEqual(toValue: uidStr)
-                .observe(.value, with: { snapshot in
-                    /*
-                    if let foo = snapshot.value as? [String: AnyObject] {
-                        //let name = foo["name"] as? String
-                        //let email = foo["email"] as? String
-                    } */
-            }) */
+             ref.child("followers")
+             ref.queryOrdered(byChild: "uid")
+             .queryEqual(toValue: uidStr)
+             .observe(.value, with: { snapshot in
+             /*
+             if let foo = snapshot.value as? [String: AnyObject] {
+             //let name = foo["name"] as? String
+             //let email = foo["email"] as? String
+             } */
+             }) */
         }
     }
     
@@ -462,68 +454,6 @@ final class MeProfileVC: UICollectionViewController, UICollectionViewDelegateFlo
         let windows = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
         windows?.rootViewController?.present(activityVC, animated: true)
     }
-    
-//----------------below dont work--------------------------------------
-    /*
-    var startingFrame: CGRect?
-    var blackBackgroundView: UIView?
-    var startingImageView: UIImageView?
-    
-    func performZoomInForStartingImageView(startingImageView: UIImageView) -> UIImageView {
-        print("Holy Crap")
-        self.startingImageView = startingImageView
-        self.startingImageView?.isHidden = true
-        
-        startingFrame = startingImageView.superview?.convert(startingImageView.frame, to: nil)
-        
-        let zoomingImageView = CustomImageView(frame: startingFrame!)
-        zoomingImageView.backgroundColor = .red
-        zoomingImageView.image = startingImageView.image
-        zoomingImageView.isUserInteractionEnabled = true
-        zoomingImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomOut)))
-        
-        if let keyWindow = UIApplication.shared.keyWindow {
-            blackBackgroundView = UIView(frame: keyWindow.frame)
-            blackBackgroundView?.alpha = 0
-            blackBackgroundView?.backgroundColor = .black
-            
-            keyWindow.addSubview(blackBackgroundView!)
-            keyWindow.addSubview(zoomingImageView)
-            
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                
-                self.blackBackgroundView?.alpha = 1
-                //self.inputContainerView.alpha = 0
-                
-                let height = self.startingFrame!.height / self.startingFrame!.width * keyWindow.frame.width
-                
-                zoomingImageView.frame = .init(x: 0, y: 0, width: keyWindow.frame.width, height: height)
-                zoomingImageView.center = keyWindow.center
-                
-            }, completion: { (completed: Bool) in
-                // Do nothing
-            })
-        }
-        return zoomingImageView
-    }
-    
-    @objc func handleZoomOut(tapGesture: UITapGestureRecognizer) {
-        print("Holy Crap2")
-        if let zoomOutImageView = tapGesture.view {
-            // Need to animate back out to controller
-            zoomOutImageView.layer.cornerRadius = 16
-            zoomOutImageView.clipsToBounds = true
-            
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                zoomOutImageView.frame = self.startingFrame!
-                self.blackBackgroundView?.alpha = 0
-                //self.inputContainerView.alpha = 1
-            }, completion: { (completed: Bool) in
-                zoomOutImageView.removeFromSuperview()
-                self.startingImageView?.isHidden = false
-            })
-        }
-    } */
     //----------------------------------------------------------------
     
     // MARK: - Segue
@@ -581,7 +511,7 @@ final class MeProfileVC: UICollectionViewController, UICollectionViewDelegateFlo
         dateFormatter.dateFormat = "MMM dd, yyyy"
         
         if segue.identifier == "userprofileDetailSegue" {
-            
+
             guard let VC = segue.destination as? UserDetailController else { return }
   
                 VC.status = "Edit"
@@ -610,4 +540,61 @@ final class MeProfileVC: UICollectionViewController, UICollectionViewDelegateFlo
                 }
             }
         }
+}
+extension MeProfileVC{
+
+    func performZoomLogic(imageView: UIImageView){
+        print("performing zoom in logic")
+        let fullScreenImageViewController = FullScreenImageViewController()
+        fullScreenImageViewController.imageView.image = imageView.image
+        fullScreenImageViewController.modalPresentationStyle = .fullScreen
+        fullScreenImageViewController.modalTransitionStyle = .crossDissolve
+        present(fullScreenImageViewController, animated: true, completion: nil)
+    }
+
+    //MARK: Another logic for zoom functionality (better than the first one in terms of functionality)
+    class FullScreenImageViewController: UIViewController {
+
+        lazy var imageView: UIImageView = {
+            let imageView = UIImageView()
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            imageView.contentMode = .scaleAspectFit
+            return imageView
+        }()
+
+        override func viewDidLoad() {
+            super .viewDidLoad()
+            view.backgroundColor = .black
+            view.addSubview(imageView)
+
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleDismiss))
+            let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleDismiss))
+            swipeUpGesture.direction = .up
+            let swipeDownGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleDismiss))
+            swipeDownGesture.direction = .down
+
+            view.gestureRecognizers = [tapGesture ,swipeUpGesture, swipeDownGesture]
+
+            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+            imageView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+            imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        }
+
+        @objc func handleDismiss(){
+            dismiss(animated: true, completion: nil)
+        }
+    }
+
+}
+extension MeProfileVC{
+    func playVideo(with videoUrl: URL){
+        let videoPlayer = AVPlayer(url: videoUrl)
+        let videoPlayerVC = AVPlayerViewController()
+        videoPlayerVC.player = videoPlayer
+
+        present(videoPlayerVC, animated: true) {
+            videoPlayer.play()
+        }
+    }
 }

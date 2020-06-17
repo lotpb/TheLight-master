@@ -19,6 +19,14 @@ struct FirebaseRef {
     static let databaseBlog: DatabaseReference = databaseRoot.child("Blog")
     static let databaseUsers: DatabaseReference = databaseRoot.child("users")
     static let databaseEmply: DatabaseReference = databaseRoot.child("Employee")
+    static let databaseVendor: DatabaseReference = databaseRoot.child("Vendor")
+    static let databaseNews: DatabaseReference = databaseRoot.child("News")
+
+    static let databaseAd: DatabaseReference = databaseRoot.child("Advertising")
+    static let databaseJob: DatabaseReference = databaseRoot.child("Job")
+    static let databaseProd: DatabaseReference = databaseRoot.child("Product")
+    static let databaseSales: DatabaseReference = databaseRoot.child("Salesman")
+
     //static let databaseUpdatingLocations: DatabaseReference = databaseRoot.child("update_locations")
     //static let databaseSignificantChange: DatabaseReference = databaseRoot.child("significant_change")
     //static let databaseHeading: DatabaseReference = databaseRoot.child("headings")
@@ -85,13 +93,14 @@ struct FirebaseRef {
 
 extension Database {
     static func fetchUserWithUID( uid: String, completion: @escaping (UserModel) -> ()) {
-        print("Fetching user with uid", uid)
-        FirebaseRef.databaseRoot.child("users").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+
+        FirebaseRef.databaseRoot.child("users").child(uid)
+            .observeSingleEvent(of: .value, with: { (snapshot) in
             
-            guard let userDictionary = snapshot.value as? [String: Any] else { return }
-            let user = UserModel(dictionary: userDictionary)
-            //let user = UserModel(uid: uid, dictionary: userDictionary)
+            guard let dict = snapshot.value as? [String: Any] else { return }
+            let user = UserModel(dictionary: dict)
             print(user.username)
+            print("Fetching user with uid", uid)
             completion(user)
             //self.fetchPostsWithUser(user: user)
         }) { (err) in

@@ -15,6 +15,7 @@ struct JobModel {
     let description: String
     let active: String
     let imageUrl: String
+    //let photo: String
     
     init(dictionary: [String: Any]) {
         
@@ -23,5 +24,6 @@ struct JobModel {
         self.description = dictionary["description"] as? String ?? ""
         self.active = dictionary["active"] as? String ?? ""
         self.imageUrl = dictionary["imageUrl"] as? String ?? ""
+        //self.photo = dictionary["photo"] as? String ?? ""
     }
 }

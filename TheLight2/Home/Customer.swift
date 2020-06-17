@@ -285,11 +285,11 @@ final class Customer: UIViewController {
             let formatter = NumberFormatter()
             formatter.numberStyle = .none
             
-            let controller = (segue.destination as! UINavigationController).topViewController as! LeadDetail
-            controller.formController = "Customer"
+            let VC = (segue.destination as! UINavigationController).topViewController as! LeadDetail
+            VC.formController = "Customer"
             navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
             
             var CustNo:Int?
             var LeadNo:Int?
@@ -377,7 +377,7 @@ final class Customer: UIViewController {
             }
             let dateFormat = DateFormatter()
             dateFormat.dateFormat = "MMM dd yy"
-            controller.tbl16 = String(format: "%@", dateFormat.string(from: dateUpdated!)) as String
+            VC.tbl16 = String(format: "%@", dateFormat.string(from: dateUpdated!)) as String
             
             
             if navigationItem.searchController?.isActive == true {
@@ -385,117 +385,123 @@ final class Customer: UIViewController {
                 let cust: CustModel
                 cust = filteredTitles[indexPath!]
                 
-                controller.leadNo = formatter.string(from: LeadNo! as NSNumber)
-                controller.zip = formatter.string(from: Zip! as NSNumber)
-                controller.amount = formatter.string(from: Amount! as NSNumber)
-                controller.tbl22 = formatter.string(from: SalesNo! as NSNumber)
-                controller.tbl23 = formatter.string(from: JobNo! as NSNumber)
-                controller.tbl24 = formatter.string(from: AdNo! as NSNumber)
-                controller.tbl25 = formatter.string(from: Quan! as NSNumber)
-                controller.active = formatter.string(from: Active! as NSNumber)
-                controller.objectId = cust.custId
-                controller.date = dateFormat.string(from: cust.creationDate as Date)
-                controller.name = cust.lastname
-                controller.address = cust.address
-                controller.city = cust.city
-                controller.state = cust.state
-                controller.tbl11 = cust.first
-                controller.tbl12 = cust.phone
-                controller.tbl13 = cust.contractor
-                controller.tbl14 = cust.spouse
-                controller.tbl15 = cust.email as NSString
-                controller.tbl21 = dateFormat.string(from: cust.start as Date) as NSString
-                controller.tbl26 = cust.rate as NSString
-                controller.complete = dateFormat.string(from: cust.completion as Date)
-                controller.photo = cust.photo
-                controller.comments = cust.comments
+                VC.leadNo = formatter.string(from: LeadNo! as NSNumber)
+                VC.zip = formatter.string(from: Zip! as NSNumber)
+                VC.amount = formatter.string(from: Amount! as NSNumber)
+                VC.tbl22 = formatter.string(from: SalesNo! as NSNumber)
+                VC.tbl23 = formatter.string(from: JobNo! as NSNumber)
+                VC.tbl24 = formatter.string(from: AdNo! as NSNumber)
+                VC.tbl25 = formatter.string(from: Quan! as NSNumber)
+                VC.active = formatter.string(from: Active! as NSNumber)
+                VC.objectId = cust.custId
+                VC.date = dateFormat.string(from: cust.creationDate as Date)
+                VC.name = cust.lastname
+                VC.address = cust.address
+                VC.city = cust.city
+                VC.state = cust.state
+                VC.tbl11 = cust.first
+                VC.tbl12 = cust.phone
+                VC.tbl13 = cust.contractor
+                VC.tbl14 = cust.spouse
+                VC.tbl15 = cust.email as NSString
+                VC.tbl21 = dateFormat.string(from: cust.start as Date) as NSString
+                VC.tbl26 = cust.rate as NSString
+                VC.complete = dateFormat.string(from: cust.completion as Date)
+                VC.photo = cust.photo
+                VC.comments = cust.comments
                 
             } else {
                 
                 if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     
-                    controller.custNo = formatter.string(from: CustNo! as NSNumber)
-                    controller.leadNo = formatter.string(from: LeadNo! as NSNumber)
-                    controller.zip = formatter.string(from: Zip! as NSNumber)
-                    controller.amount = formatter.string(from: Amount! as NSNumber)
-                    controller.tbl22 = formatter.string(from: SalesNo! as NSNumber)
-                    controller.tbl23 = formatter.string(from: JobNo! as NSNumber)
-                    controller.tbl24 = formatter.string(from: AdNo! as NSNumber)
-                    controller.tbl25 = formatter.string(from: Quan! as NSNumber)
-                    controller.active = formatter.string(from: Active! as NSNumber)
-                    controller.objectId = (_feedItems[indexPath!] as AnyObject).value(forKey: "objectId") as? String
-                    controller.date = (_feedItems[indexPath!] as AnyObject).value(forKey: "Date") as? String
-                    controller.name = (_feedItems[indexPath!] as AnyObject).value(forKey: "LastName") as? String
-                    controller.address = (_feedItems[indexPath!] as AnyObject).value(forKey: "Address") as? String
-                    controller.city = (_feedItems[indexPath!] as AnyObject).value(forKey: "City") as? String
-                    controller.state = (_feedItems[indexPath!] as AnyObject).value(forKey: "State") as? String
-                    controller.tbl11 = (_feedItems[indexPath!] as AnyObject).value(forKey: "First") as? String
-                    controller.tbl12 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Phone") as? String
-                    controller.tbl13 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Contractor") as? String
-                    controller.tbl14 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Spouse") as? String
-                    controller.tbl15 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Email") as? NSString
-                    controller.tbl21 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Start") as? NSString
-                    controller.tbl26 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Rate") as? NSString
-                    controller.complete = (_feedItems[indexPath!] as AnyObject).value(forKey: "Completion") as? String
-                    controller.photo = (_feedItems[indexPath!] as AnyObject).value(forKey: "Photo") as? String
-                    controller.comments = (_feedItems[indexPath!] as AnyObject).value(forKey: "Comments") as? String
+                    VC.custNo = formatter.string(from: CustNo! as NSNumber)
+                    VC.leadNo = formatter.string(from: LeadNo! as NSNumber)
+                    VC.zip = formatter.string(from: Zip! as NSNumber)
+                    VC.amount = formatter.string(from: Amount! as NSNumber)
+                    VC.tbl22 = formatter.string(from: SalesNo! as NSNumber)
+                    VC.tbl23 = formatter.string(from: JobNo! as NSNumber)
+                    VC.tbl24 = formatter.string(from: AdNo! as NSNumber)
+                    VC.tbl25 = formatter.string(from: Quan! as NSNumber)
+                    VC.active = formatter.string(from: Active! as NSNumber)
+                    VC.objectId = (_feedItems[indexPath!] as AnyObject).value(forKey: "objectId") as? String
+                    VC.date = (_feedItems[indexPath!] as AnyObject).value(forKey: "Date") as? String
+                    VC.name = (_feedItems[indexPath!] as AnyObject).value(forKey: "LastName") as? String
+                    VC.address = (_feedItems[indexPath!] as AnyObject).value(forKey: "Address") as? String
+                    VC.city = (_feedItems[indexPath!] as AnyObject).value(forKey: "City") as? String
+                    VC.state = (_feedItems[indexPath!] as AnyObject).value(forKey: "State") as? String
+                    VC.tbl11 = (_feedItems[indexPath!] as AnyObject).value(forKey: "First") as? String
+                    VC.tbl12 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Phone") as? String
+                    VC.tbl13 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Contractor") as? String
+                    VC.tbl14 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Spouse") as? String
+                    VC.tbl15 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Email") as? NSString
+                    VC.tbl21 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Start") as? NSString
+                    VC.tbl26 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Rate") as? NSString
+                    VC.complete = (_feedItems[indexPath!] as AnyObject).value(forKey: "Completion") as? String
+                    VC.photo = (_feedItems[indexPath!] as AnyObject).value(forKey: "Photo") as? String
+                    VC.comments = (_feedItems[indexPath!] as AnyObject).value(forKey: "Comments") as? String
                 } else {
                     //firebase
-                    controller.leadNo = custlist[indexPath!].custId
-                    controller.zip = formatter.string(from: Zip! as NSNumber)
-                    controller.amount = formatter.string(from: Amount! as NSNumber)
-                    controller.tbl22 = formatter.string(from: SalesNo! as NSNumber)
-                    controller.tbl23 = formatter.string(from: JobNo! as NSNumber)
-                    controller.tbl24 = formatter.string(from: AdNo! as NSNumber)
-                    controller.tbl25 = formatter.string(from: Quan! as NSNumber)
-                    controller.active = formatter.string(from: Active! as NSNumber)
-                    controller.objectId = custlist[indexPath!].custId
-                    controller.date = dateFormat.string(from: custlist[indexPath!].creationDate as Date)
-                    controller.name = custlist[indexPath!].lastname
-                    controller.address = custlist[indexPath!].address
-                    controller.city = custlist[indexPath!].city
-                    controller.state = custlist[indexPath!].state
-                    controller.tbl11 = custlist[indexPath!].first
-                    controller.tbl12 = custlist[indexPath!].phone
-                    controller.tbl13 = custlist[indexPath!].contractor
-                    controller.tbl14 = custlist[indexPath!].spouse
-                    controller.tbl15 = custlist[indexPath!].email as NSString
-                    controller.tbl21 = dateFormat.string(from: custlist[indexPath!].start as Date) as NSString
-                    controller.tbl26 = custlist[indexPath!].rate as NSString
-                    controller.complete = dateFormat.string(from: custlist[indexPath!].completion as Date)
-                    controller.photo = custlist[indexPath!].photo
-                    controller.comments = custlist[indexPath!].comments
+                    VC.leadNo = custlist[indexPath!].custId
+                    VC.zip = formatter.string(from: Zip! as NSNumber)
+                    VC.amount = formatter.string(from: Amount! as NSNumber)
+
+                    VC.active = formatter.string(from: Active! as NSNumber)
+                    VC.objectId = custlist[indexPath!].custId
+                    VC.date = dateFormat.string(from: custlist[indexPath!].creationDate as Date)
+                    VC.lastname = custlist[indexPath!].lastname
+                    VC.name = String(format: "%@ %@", custlist[indexPath!].first, custlist[indexPath!].lastname).removeWhiteSpace()
+                    //controller.name = custlist[indexPath!].lastname
+                    VC.address = custlist[indexPath!].address
+                    VC.city = custlist[indexPath!].city
+                    VC.state = custlist[indexPath!].state
+                    VC.tbl11 = custlist[indexPath!].first
+                    VC.tbl12 = custlist[indexPath!].phone
+                    VC.tbl13 = custlist[indexPath!].contractor
+                    VC.tbl14 = custlist[indexPath!].spouse
+                    VC.tbl15 = custlist[indexPath!].email as NSString
+                    VC.tbl17 = custlist[indexPath!].photo as String
+                    VC.tbl21 = custlist[indexPath!].rate as NSString
+                    VC.tbl22 = formatter.string(from: SalesNo! as NSNumber)
+                    VC.tbl23 = formatter.string(from: JobNo! as NSNumber)
+                    VC.tbl24 = formatter.string(from: AdNo! as NSNumber)
+                    VC.tbl25 = formatter.string(from: Quan! as NSNumber)
+                    VC.tbl26 = dateFormat.string(from: custlist[indexPath!].start as Date) as NSString
+                    VC.tbl27 = dateFormat.string(from: custlist[indexPath!].completion as Date)
+                    VC.photo = custlist[indexPath!].photo as String
+                    VC.comments = custlist[indexPath!].comments
+                    //controller.complete = dateFormat.string(from: custlist[indexPath!].completion as Date)
                 }
                 
             }
             
-            controller.l11 = "First"; controller.l12 = "Phone"
-            controller.l13 = "Contractor"; controller.l14 = "Spouse"
-            controller.l15 = "Email"; controller.l21 = "Start date"
-            controller.l22 = "Salesman"; controller.l23 = "Job"
-            controller.l24 = "Product"; controller.l25 = "Quan"
-            controller.l16 = "Last Updated"; controller.l26 = "Rate"
-            controller.l1datetext = "Sale Date:"
-            controller.lnewsTitle = Config.NewsCust
+            VC.l11 = "First"; VC.l21 = "Rate"
+            VC.l12 = "Phone"; VC.l22 = "Salesman";
+            VC.l13 = "Contractor"; VC.l23 = "Job"
+            VC.l14 = "Spouse"; VC.l24 = "Product";
+            VC.l15 = "Email"; VC.l25 = "Quan"
+            VC.l16 = "Last Updated"; VC.l26 = "Start"
+            VC.l17 = "Photo"; VC.l27 = "Complete"
+            VC.l1datetext = "Sale Date:"
+            VC.lnewsTitle = Config.NewsCust
         }
         
         if segue.identifier == "custuserSeque" { // FIXME: This needs to replaced next sprint
             //guard let controller = (segue.destination as! UINavigationController).topViewController as? LeadUserVC else { return }
-            guard let controller = segue.destination as? LeadUserVC else { return }
-            controller.formController = "Customer"
-            controller.objectId = objectIdLabel
-            controller.postBy = titleLabel
-            controller.leadDate = dateLabel
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            guard let VC = segue.destination as? LeadUserVC else { return }
+            VC.formController = "Customer"
+            VC.objectId = objectIdLabel
+            VC.postBy = titleLabel
+            VC.leadDate = dateLabel
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
         }
         
         if segue.identifier == "newcustSegue" {
-            let controller = (segue.destination as! UINavigationController).topViewController as! EditData
-            controller.formController = "Customer"
-            controller.status = "New"
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            let VC = (segue.destination as! UINavigationController).topViewController as! EditData
+            VC.formController = "Customer"
+            VC.status = "New"
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
         }
         
     }

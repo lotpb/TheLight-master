@@ -74,11 +74,8 @@ final class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerD
         //fixed - remove bottom bar
         self.splitViewController?.delegate = self
         self.splitViewController?.preferredDisplayMode = .allVisible
-        
-        // Track user location
-        mapView.delegate = self
-        mapView.userTrackingMode = .follow
-        
+
+        setupMap()
         setupNavigation()
         setupSearch()
         
@@ -114,6 +111,21 @@ final class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerD
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+
+    func setupMap() {
+        // Track user location
+        self.mapView.delegate = self
+        self.mapView.userTrackingMode = .follow
+        self.mapView.alpha = 0.8
+        self.mapView.isZoomEnabled = true
+        self.mapView.isScrollEnabled = true
+        self.mapView.isRotateEnabled = true
+        self.mapView.showsCompass = false
+        self.mapView.showsScale = true
+
+        let filter = MKPointOfInterestFilter(including: [.gasStation, .cafe, .police, .bank])
+        mapView.pointOfInterestFilter = filter
     }
     
     func setupSearch() {
@@ -195,7 +207,6 @@ final class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerD
         } else {
             locationManager.requestWhenInUseAuthorization()
         }
-        
     }
     
     //display user location(blue dot) in mapView

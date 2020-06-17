@@ -439,7 +439,11 @@ extension LookupData: UITableViewDataSource {
                     return adproductArray.count
                 } else {
                     //firebase
-                    return adlist.count
+                    if (lookupItem == "Product") {
+                        return prodlist.count
+                    } else {
+                        return adlist.count
+                    }
                 }
             }
         } else {

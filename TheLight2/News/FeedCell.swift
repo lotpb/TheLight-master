@@ -478,10 +478,12 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
                 vc.objectId = self.newslist[indexPath.row].newsId
                 vc.newsTitle = self.newslist[indexPath.row].newsTitle
                 vc.newsDetail = self.newslist[indexPath.row].newsDetail
+                //vc.viewCount = self.newslist[indexPath.row].viewCount
                 vc.newsDate = self.newslist[indexPath.row].creationDate
                 vc.newsStory = self.newslist[indexPath.row].storyLabel
                 vc.imageUrl = self.newslist[indexPath.row].imageUrl
                 vc.videoURL = self.newslist[indexPath.row].videoUrl
+                vc.storageID = self.newslist[indexPath.row].storageID
                 let navigationController = UINavigationController(rootViewController: vc)
                 navigationController.modalPresentationStyle = .fullScreen
                 let windows = UIApplication.shared.windows.filter {$0.isKeyWindow}.first

@@ -54,17 +54,17 @@
                     </collectionView>
                     <navigationItem key="navigationItem" id="up7-jX-6V3"/>
                     <connections>
-                        <segue destination="H6W-E9-79V" kind="show" identifier="userprofileDetailSegue" id="1dp-gm-1l2"/>
+                        <segue destination="H6W-E9-79V" kind="showDetail" identifier="userprofileDetailSegue" id="gdq-Ra-5v6"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FhT-Wl-tG0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1268" y="4782"/>
         </scene>
-        <!--userDetailVC-->
+        <!--UserDetailVC-->
         <scene sceneID="WzN-fk-7eH">
             <objects>
-                <viewControllerPlaceholder storyboardName="Supporting" referencedIdentifier="userDetailVC" id="H6W-E9-79V" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="Supporting" referencedIdentifier="UserDetailVC" id="H6W-E9-79V" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LD3-tp-DS4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1854" y="4781"/>

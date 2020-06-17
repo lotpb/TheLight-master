@@ -18,10 +18,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var tableView: UITableView?
-    @IBOutlet weak var first: UITextField!
-    @IBOutlet weak var last: UITextField!
-    @IBOutlet weak var company: UITextField!
-    @IBOutlet weak var profileImageView: UIImageView?
+
     // MARK: NavigationController Hidden
     private var lastContentOffset: CGFloat = 0.0
     
@@ -48,6 +45,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     var start : UITextField! //cust
     var complete : UITextField! //cust
     var comment : UITextView!
+    var photo : UITextField!
     
     var formController : String?
     var status : String?
@@ -60,10 +58,6 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     var saleNo : String?
     var jobNo : String?
     var adNo : String?
-    
-    var photo : String?
-    var photo1 : String?
-    var photo2 : String?
     
     var frm11 : String?
     var frm12 : String?
@@ -87,12 +81,73 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     var frm30 : NSString?
     var frm31 : String? //start
     var frm32 : String? //completion
+    var profileImage : UIImage?
     
     var defaults = UserDefaults.standard
     var simpleStepper : UIStepper!
     var lookupItem : String?
     var pasteBoard = UIPasteboard.general
-    
+
+    let profileImageView: CustomImageView = {
+        let imageView = CustomImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 37.5
+        imageView.layer.masksToBounds = true
+        imageView.layer.borderColor = UIColor.systemBackground.cgColor
+        imageView.layer.borderWidth = 2.0
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isUserInteractionEnabled = true
+        return imageView
+    }()
+
+    let editlabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Edit"
+        label.textColor = .systemBlue
+        label.textAlignment = .center
+        return label
+    }()
+
+    lazy var first: UITextField = {
+        let textField = UITextField()
+        textField.layer.borderColor = UIColor.secondaryLabel.cgColor
+        textField.layer.borderWidth = 0.7
+        textField.backgroundColor = .systemBackground
+        textField.font = Font.celltitle20l
+        textField.leftViewMode = .always
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
+        textField.keyboardAppearance = .dark
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
+    }()
+
+    lazy var last: UITextField = {
+        let textField = UITextField()
+        textField.layer.borderColor = UIColor.secondaryLabel.cgColor
+        textField.layer.borderWidth = 0.7
+        textField.backgroundColor = .systemBackground
+        textField.font = Font.celltitle20l
+        textField.leftViewMode = .always
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
+        textField.keyboardAppearance = .dark
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
+    }()
+
+    lazy var company: UITextField = {
+        let textField = UITextField()
+        textField.layer.borderColor = UIColor.secondaryLabel.cgColor
+        textField.layer.borderWidth = 0.7
+        textField.backgroundColor = .systemBackground
+        textField.font = Font.celltitle20l
+        textField.leftViewMode = .always
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
+        textField.keyboardAppearance = .dark
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
+    }()
+
     let activeImage: CustomImageView = {
         let imageView = CustomImageView()
         imageView.layer.masksToBounds = true
@@ -122,7 +177,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         if (status == "Edit") {
             loadData()
         }
-        //observeKeyboardNotifications() // Move Keyboard
+        observeKeyboardNotifications() // Move Keyboard not working
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -149,8 +204,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
          //Fix Grey Bar on Bpttom Bar
         if UIDevice.current.userInterfaceIdiom == .phone {
             if let con = self.splitViewController {
-                //con.preferredDisplayMode = .primaryOverlay //prpblem
-                con.preferredDisplayMode = .allVisible
+                con.preferredDisplayMode = .allVisible //.primaryOverlay //problem
             }
         }
     }
@@ -160,7 +214,6 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         NotificationCenter.default.removeObserver(self)
         //TabBar Hidden
         self.tabBarController?.tabBar.isHidden = true
-        //UIApplication.shared.isStatusBarHidden = false
     }
     
     override func didReceiveMemoryWarning() {
@@ -190,7 +243,12 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     func setupForm() {
-        
+
+        self.profileImageView.image = profileImage
+        self.pickerView.delegate = self
+        self.pickerView.dataSource = self
+        NotificationCenter.default.addObserver(self, selector: (#selector(EditData.updatePicker)), name: UITextField.textDidBeginEditingNotification, object: nil)
+
         self.first.autocapitalizationType = .words
         if (self.formController == "Vendor") {
             self.last.autocapitalizationType = .none
@@ -198,15 +256,40 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             self.last.autocapitalizationType = .words
         }
         self.company.autocapitalizationType = .words
-        
-        self.pickerView.delegate = self
-        self.pickerView.dataSource = self
-        NotificationCenter.default.addObserver(self, selector: (#selector(EditData.updatePicker)), name: UITextField.textDidBeginEditingNotification, object: nil)
-        
-        profileImageView!.layer.cornerRadius = 32.0
-        profileImageView!.layer.borderColor = UIColor.systemBackground.cgColor
-        profileImageView!.layer.borderWidth = 2.0
-        profileImageView!.layer.masksToBounds = true
+
+        self.mainView?.addSubview(profileImageView)
+        self.mainView?.addSubview(editlabel)
+        self.mainView?.addSubview(first)
+        self.mainView?.addSubview(last)
+        self.mainView?.addSubview(company)
+
+        NSLayoutConstraint.activate([
+
+            profileImageView.topAnchor.constraint(equalTo: mainView.topAnchor, constant: 9),
+            profileImageView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 20),
+            profileImageView.widthAnchor.constraint(equalToConstant: 75),
+            profileImageView.heightAnchor.constraint(equalToConstant: 75),
+
+            editlabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 5),
+            editlabel.centerXAnchor.constraint(equalTo: profileImageView.centerXAnchor),
+            editlabel.widthAnchor.constraint(equalToConstant: 36),
+            editlabel.heightAnchor.constraint(equalToConstant: 20),
+
+            first.topAnchor.constraint(equalTo: profileImageView.topAnchor, constant: 0),
+            first.leftAnchor.constraint( equalTo: profileImageView.rightAnchor, constant: 20),
+            first.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -10),
+            first.heightAnchor.constraint(equalToConstant: 30),
+
+            last.topAnchor.constraint(equalTo: first.bottomAnchor, constant: 15),
+            last.leftAnchor.constraint( equalTo: first.leftAnchor, constant: 0),
+            last.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -10),
+            last.heightAnchor.constraint(equalToConstant: 30),
+
+            company.topAnchor.constraint(equalTo: last.bottomAnchor, constant: 15),
+            company.leftAnchor.constraint( equalTo: first.leftAnchor, constant: 0),
+            company.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -10),
+            company.heightAnchor.constraint(equalToConstant: 30),
+        ])
     }
     
     // MARK: - NavigationController Hidden
@@ -320,24 +403,18 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     // MARK: - FieldData Header
     func passFieldData() {
-        
-        self.first.font = Font.celltitle20l
-        self.last.font = Font.celltitle20l
-        self.company.font = Font.celltitle20l
         /*
-        if (self.formController == "Leads" || self.formController == "Customer") {
-            self.last.borderStyle = UITextBorderStyle.roundedRect
-            self.last.layer.borderColor = UIColor(red:151/255.0, green:193/255.0, blue:252/255.0, alpha: 1.0).cgColor
-            self.last.layer.borderWidth = 2.0
-            self.last.layer.cornerRadius = 7.0
-        } */
-        
-        //if (self.formController == "Vendor" || self.formController == "Employee") {
+         if (self.formController == "Leads" || self.formController == "Customer") {
+         self.last.borderStyle = UITextBorderStyle.roundedRect
+         self.last.layer.borderColor = UIColor(red:151/255.0, green:193/255.0, blue:252/255.0, alpha: 1.0).cgColor
+         self.last.layer.borderWidth = 2.0
+         self.last.layer.cornerRadius = 7.0
+         } */
+
         self.first.borderStyle = .roundedRect
-            self.first.layer.borderColor = UIColor(red:151/255.0, green:193/255.0, blue:252/255.0, alpha: 1.0).cgColor
-            self.first.layer.borderWidth = 2.0
-            self.first.layer.cornerRadius = 7.0
-        //}
+        self.first.layer.borderColor = UIColor(red:151/255.0, green:193/255.0, blue:252/255.0, alpha: 1.0).cgColor
+        self.first.layer.borderWidth = 2.0
+        self.first.layer.cornerRadius = 7.0
         
         if self.frm11 != nil {
             let myString1 = self.frm11
@@ -363,10 +440,10 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         if (formController == "Customer") {
             
             if (self.status == "New") {
-                self.company?.isHidden = true
+                self.company.isHidden = true
             } else {
                 self.company.placeholder = "Contractor"
-                self.company?.inputView = self.pickerView
+                self.company.inputView = self.pickerView
             }
         } else if (self.formController == "Vendor") {
             self.first.placeholder = "Company"
@@ -565,10 +642,12 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         guard let textFirst = self.first.text else { return }
         guard let textLast = self.last.text else { return }
         guard let textComp = self.company.text else { return }
+
+        guard let uid = Auth.auth().currentUser?.uid else {return}
         
         if textFirst == "", textLast == "", textComp == "" {
             
-            self.simpleAlert(title: "Oops!", message: "No text entered.")
+            self.showAlert(title: "Oops!", message: "No text entered.")
             
         } else {
             
@@ -650,9 +729,9 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                                 //updateblog!.setObject(self.photo.text ?? NSNull(), forKey:"Photo")
                                 updateLead!.saveEventually()
                                 
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                             } else {
-                                self.simpleAlert(title: "Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title: "Upload Failure", message: "Failure updating the data")
                             }
                         }
                     } else {
@@ -666,9 +745,9 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                                       "state": self.state.text!,
                                       "phone": self.phone.text!,
                                       "aptdate": myTimeStamp,
-                                      "email": self.email.text ?? "",
-                                      "spouse": self.spouse.text ?? "",
-                                      "callback": self.callback.text ?? "",
+                                      "email": self.email.text!,
+                                      "spouse": self.spouse.text!,
+                                      "callback": self.callback.text!,
                                       "comments": self.comment.text!,
                                       "active": myActive,
                                       "amount": myAmount!,
@@ -676,18 +755,19 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                                       "salesNo": mySale!,
                                       "jobNo": myJob!,
                                       "adNo": myAd!,
-                                      "photo": self.photo ?? "",
+                                      "photo": self.photo.text!,
                                       "lastUpdate": Date().timeIntervalSince1970,
                                       "leadId": self.objectId ?? "",
+                                      "uid": uid
                                       //"leadNo": key,
                                       ] as [String: Any]
                         
                         userRef.updateChildValues(values) { (err, ref) in
                             if err != nil {
-                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
-                            self.simpleAlert(title: "update Complete", message: "Successfully updated the data")
+                            self.showAlert(title: "update Complete", message: "Successfully updated the data")
                         }
                     }
                     
@@ -719,15 +799,15 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                         //PFACL.setDefault(PFACL(), withAccessForCurrentUser: true)
                         saveLead.saveInBackground { (success: Bool, error: Error?) in
                             if success == true {
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                             } else {
-                                self.simpleAlert(title: "Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title: "Upload Failure", message: "Failure updating the data")
                             }
                         }
                     } else { //Save Lead
                         
                         //firebase
-                        guard let uid = Auth.auth().currentUser?.uid else {return}
+                        //guard let uid = Auth.auth().currentUser?.uid else {return}
                         let key = FirebaseRef.databaseLeads.childByAutoId().key
                         let values = ["first": self.first.text!,
                                       "lastname": self.last.text!,
@@ -748,28 +828,28 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                                       "salesNo": mySale ?? NSNumber(value:-1) as! Int,
                                       "jobNo": myJob ?? NSNumber(value:-1) as! Int,
                                       "adNo": myAd ?? NSNumber(value:-1) as! Int,
-                                      "photo": self.photo ?? "",
+                                      "photo": self.photo.text ?? "",
                                       "leadId": key!,
                                       "uid": uid] as [String: Any]
                         
                         let childUpdates = ["/Leads/\(String(key!))": values]
                         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
                             if err != nil {
-                                self.simpleAlert(title: "Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title: "Upload Failure", message: "Failure updating the data")
                                 return
                             }
-                            self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                            self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                         }
                     }
                 }
             } else if (self.formController == "Customer") {
 
-                let start = self.start.text
-                let startDate:NSDate = dateFormatter.date(from: start!)! as NSDate
+                guard let start = self.start.text else {return}
+                let startDate:NSDate = dateFormatter.date(from: start)! as NSDate
                 let myStart = NSNumber(value: Int(startDate.timeIntervalSince1970))
                 
-                let completion = self.complete.text
-                let completionDate:NSDate = dateFormatter.date(from: completion!)! as NSDate
+                guard let completion = self.complete.text else {return}
+                let completionDate:NSDate = dateFormatter.date(from: completion)! as NSDate
                 let myCompletion = NSNumber(value: Int(completionDate.timeIntervalSince1970))
                 
                 if (self.status == "Edit") { //Edit Customer
@@ -804,16 +884,16 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                                 updateCust!.setObject(self.comment.text ?? NSNull(), forKey:"Comments")
                                 updateCust!.setObject(self.company.text ?? NSNull(), forKey:"Contractor")
                                 updateCust!.setObject(self.photo ?? NSNull(), forKey:"Photo")
-                                updateCust!.setObject(self.photo1 ?? NSNull(), forKey:"Photo1")
-                                updateCust!.setObject(self.photo2 ?? NSNull(), forKey:"Photo2")
+                                //updateCust!.setObject(self.photo1 ?? NSNull(), forKey:"Photo1")
+                                //updateCust!.setObject(self.photo2 ?? NSNull(), forKey:"Photo2")
                                 updateCust!.setObject(self.time ?? NSNull(), forKey:"Time")
                                 updateCust!.saveEventually()
                                 
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                                 
                             } else {
                                 
-                                self.simpleAlert(title: "Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title: "Upload Failure", message: "Failure updating the data")
                             }
                         }
                     } else {
@@ -837,21 +917,21 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                                       "salesNo": mySale!,
                                       "jobNo": myJob!,
                                       "adNo": myAd!,
-                                      "photo": self.photo ?? "",
+                                      "photo": self.photo.text!,
                                       "start": myStart,
                                       "completion": myCompletion,
                                       "lastUpdate": Date().timeIntervalSince1970,
                                       //"creationDate": myDate,
-                                      //"custNo": self.custNo ?? NSNumber(value:-1) as! Int,
+                                      "uid": uid,
                                       "leadNo": self.leadNo ?? NSNumber(value:-1) as! Int,
                                       "custId": self.objectId ?? ""] as [String: Any]
                         
                         userRef.updateChildValues(values) { (err, ref) in
                             if err != nil {
-                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
-                            self.simpleAlert(title: "update Complete", message: "Successfully updated the data")
+                            self.showAlert(title: "update Complete", message: "Successfully updated the data")
                         }
                     }
                 } else { //Save Customer
@@ -887,14 +967,14 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                         //PFACL.setDefault(PFACL(), withAccessForCurrentUser: true)
                         saveCust.saveInBackground { (success: Bool, error: Error?) in
                             if success == true {
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                             } else {
-                                self.simpleAlert(title: "Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title: "Upload Failure", message: "Failure updating the data")
                             }
                         }
                     } else {
                         //firebase
-                        guard let uid = Auth.auth().currentUser?.uid else {return}
+                        //guard let uid = Auth.auth().currentUser?.uid else {return}
                         let key = FirebaseRef.databaseCust.childByAutoId().key
                         let values = ["first": self.first.text!,
                                       "lastname": self.last.text!,
@@ -917,7 +997,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                                       "jobNo": myJob ?? NSNumber(value:-1) as! Int,
                                       "adNo": myAd ?? NSNumber(value:-1) as! Int,
                                       "quan": myQuan ?? NSNumber(value:-1) as! Int,
-                                      "photo": self.photo ?? "",
+                                      "photo": self.photo.text ?? "",
                                       "creationDate": Date().timeIntervalSince1970,
                                       "start": Date().timeIntervalSince1970,
                                       "completion": Date().timeIntervalSince1970,
@@ -929,10 +1009,10 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                         let childUpdates = ["/Customer/\(String(key!))": values]
                         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
                             if err != nil {
-                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
-                            self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                            self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                         }
                     }
                 }
@@ -975,11 +1055,11 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                                 updateVend!.setObject(self.comment.text ?? NSNull(), forKey:"Comments")
                                 updateVend!.saveEventually()
                                 
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                                 
                             } else {
                                 
-                                self.simpleAlert(title: "Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title: "Upload Failure", message: "Failure updating the data")
                             }
                         }
                     } else {
@@ -1004,15 +1084,16 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                                       "webpage": self.last.text!,
                                       "zip": myZip ?? NSNumber(value:-1) as! Int,
                                       "lastUpdate": Date().timeIntervalSince1970,
-                                      //"vendNo": myLead!,
+                                      "photo": self.photo.text ?? "",
+                                      "uid": uid,
                                       "vendId": self.objectId ?? ""] as [String: Any]
                         
                         userRef.updateChildValues(values) { (err, ref) in
                             if err != nil {
-                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
-                            self.simpleAlert(title: "update Complete", message: "Successfully updated the data")
+                            self.showAlert(title: "update Complete", message: "Successfully updated the data")
                         }
                     }
                 } else { //Save Vendor
@@ -1043,15 +1124,16 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                         saveVend.saveInBackground { (success: Bool, error: Error?) in
                             if success == true {
                                 
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                             } else {
                                 
-                                self.simpleAlert(title: "Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title: "Upload Failure", message: "Failure updating the data")
                             }
                         }
                     } else {
                         //firebase
-                        guard let uid = Auth.auth().currentUser?.uid else {return}
+
+                        //guard let uid = Auth.auth().currentUser?.uid else {return}
                         let key = FirebaseRef.databaseRoot.child("Vendor").childByAutoId().key
                         let values = ["vendor": self.first.text!,
                                       "address": self.address.text!,
@@ -1071,6 +1153,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                                       "manager": self.company.text!,
                                       "profession": self.date.text!,
                                       "webpage": self.last.text!,
+                                      "photo": self.photo.text!,
                                       "zip": myZip ?? NSNumber(value:-1) as! Int,
                                       "vendNo": key!,
                                       "creationDate": Date().timeIntervalSince1970,
@@ -1080,10 +1163,10 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                         let childUpdates = ["/Vendor/\(String(key!))": values]
                         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
                             if err != nil {
-                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
-                            self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                            self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                         }
                     }
                 }
@@ -1127,11 +1210,11 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                                 updateEmploy!.setObject(self.comment.text ?? NSNull(), forKey:"Comments")
                                 updateEmploy!.saveEventually()
                                 
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                                 
                             } else {
                                 
-                                self.simpleAlert(title: "Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title: "Upload Failure", message: "Failure updating the data")
                             }
                         }
                     } else {
@@ -1156,16 +1239,17 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                                       "department": self.amount.text!,
                                       "country": self.date.text!,
                                       "zip": myZip ?? NSNumber(value:-1) as! Int,
-                                      //"employeeNo": myLead!,
+                                      "photo": self.photo.text!,
                                       "lastUpdate": Date().timeIntervalSince1970,
+                                      "uid": uid,
                                       "employeeId": self.objectId ?? ""] as [String: Any]
                         
                         userRef.updateChildValues(values) { (err, ref) in
                             if err != nil {
-                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
-                            self.simpleAlert(title: "update Complete", message: "Successfully updated the data")
+                            self.showAlert(title: "update Complete", message: "Successfully updated the data")
                         }
                     }
                 } else { //Save Employee
@@ -1197,16 +1281,16 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                         saveEmploy.saveInBackground { (success: Bool, error: Error?) in
                             if success == true {
                                 
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                                 
                             } else {
                                 
-                                self.simpleAlert(title: "Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title: "Upload Failure", message: "Failure updating the data")
                             }
                         }
                     } else {
                         //firebase
-                        guard let uid = Auth.auth().currentUser?.uid else {return}
+                        //guard let uid = Auth.auth().currentUser?.uid else {return}
                         let key = FirebaseRef.databaseRoot.child("Employee").childByAutoId().key
                         let values = ["lastname": self.last.text!,
                                       "address": self.address.text!,
@@ -1226,6 +1310,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                                       "middle": self.aptDate.text!,
                                       "manager": self.callback.text!,
                                       "department": self.amount.text!,
+                                      "photo": self.photo.text!,
                                       "country": self.date.text!,
                                       "zip": myZip ?? NSNumber(value:-1) as! Int,
                                       "employeeNo": key!,
@@ -1236,10 +1321,10 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                         let childUpdates = ["/Employee/\(String(key!))": values]
                         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
                             if err != nil {
-                                self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
+                                self.showAlert(title:"Upload Failure", message: "Failure updating the data")
                                 return
                             }
-                            self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                            self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                         }
                     }
                 }
@@ -1294,9 +1379,9 @@ extension EditData: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if (self.formController == "Customer") {
-            return 17
+            return 18
         } else {
-            return 15
+            return 16
         }
     }
     
@@ -1313,7 +1398,7 @@ extension EditData: UITableViewDataSource {
         
         let textframe: UITextField?
         let textviewframe: UITextView?
-        let aptframe: UITextField?
+        let aptframe: UITextField? //zip field
         
         let dateFormatter = DateFormatter()
         
@@ -1339,7 +1424,7 @@ extension EditData: UITableViewDataSource {
             
         } else {
             
-            textframe = UITextField(frame: .init(x: 118, y: 7, width: 205, height: 30))
+            textframe = UITextField(frame: .init(x: 118, y: 7, width: 225, height: 30))
             textviewframe = UITextView(frame: .init(x: 118, y: 7, width: 240, height: 85))
             activeImage.frame = .init(x: 118, y: 10, width: 18, height: 22)
             textframe!.font = Font.celltitle20l
@@ -1363,7 +1448,7 @@ extension EditData: UITableViewDataSource {
             self.callback?.keyboardType = .decimalPad
         }
         if (formController == "Vendor") {
-            self.last?.keyboardType = .URL
+            self.last.keyboardType = .URL
             self.salesman?.keyboardType = .numbersAndPunctuation
             self.jobName?.keyboardType = .numbersAndPunctuation
             self.adName?.keyboardType = .numbersAndPunctuation
@@ -1375,7 +1460,6 @@ extension EditData: UITableViewDataSource {
         }
         self.email?.keyboardType = .emailAddress
         self.phone?.keyboardType = .numbersAndPunctuation
-        
         self.email?.returnKeyType = UIReturnKeyType.next
         
         if (indexPath.row == 0) {
@@ -1582,16 +1666,13 @@ extension EditData: UITableViewDataSource {
             
         } else if (indexPath.row == 9) {
             self.adName = textframe
-            self.adName!.placeholder = "Advertiser"
+            //self.adName!.placeholder = "Advertiser"
             if self.frm23 == nil {
                 self.adName!.text = ""
             } else {
                 self.adName!.text = self.frm23
             }
-            
-            if ((self.formController == "Leads") || (self.formController == "Customer")) {
-                cell.accessoryType = .disclosureIndicator
-            }
+
             if (self.formController == "Vendor") {
                 self.adName!.placeholder = "Phone 3"
                 cell.textLabel!.text = "phone 3"
@@ -1607,7 +1688,11 @@ extension EditData: UITableViewDataSource {
             } else {
                 cell.textLabel!.text = "Advertiser"
             }
-            
+
+            if ((self.formController == "Leads") || (self.formController == "Customer")) {
+                cell.accessoryType = .disclosureIndicator
+            }
+
             cell.contentView.addSubview(self.adName!)
             
         } else if(indexPath.row == 10) {
@@ -1733,17 +1818,29 @@ extension EditData: UITableViewDataSource {
             cell.contentView.addSubview(self.comment!)
             
         } else if(indexPath.row == 15) {
-            self.start = textframe
-            self.start!.placeholder = "Start Date"
-            if self.frm31 == nil {
-                self.start!.text = ""
+            if (self.formController == "Customer") {
+                self.start = textframe
+                self.start!.placeholder = "Start Date"
+                if self.frm31 == nil {
+                    self.start!.text = ""
+                } else {
+                    self.start!.text = self.frm31
+                }
+                self.start!.inputView = datePickerView
+                datePickerView.addTarget(self, action: #selector(EditData.handleDatePicker), for: .valueChanged)
+                cell.textLabel!.text = "Start Date"
+                cell.contentView.addSubview(self.start!)
             } else {
-                self.start!.text = self.frm31
+                self.photo = textframe
+                self.photo!.placeholder = "Photo"
+                if self.frm29 == nil {
+                    self.photo!.text = ""
+                } else {
+                    self.photo!.text = self.frm29
+                }
+                cell.textLabel!.text = "Photo"
+                cell.contentView.addSubview(self.photo!)
             }
-            self.start!.inputView = datePickerView
-            datePickerView.addTarget(self, action: #selector(EditData.handleDatePicker), for: .valueChanged)
-            cell.textLabel!.text = "Start Date"
-            cell.contentView.addSubview(self.start!)
             
         } else if(indexPath.row == 16) {
             self.complete = textframe
@@ -1758,7 +1855,18 @@ extension EditData: UITableViewDataSource {
             datePickerView.addTarget(self, action: #selector(EditData.handleDatePicker), for: .valueChanged)
             cell.textLabel!.text = "End Date"
             cell.contentView.addSubview(self.complete!)
+        } else if(indexPath.row == 17) {
+            self.photo = textframe
+            self.photo!.placeholder = "Photo"
+            if self.frm29 == nil {
+                self.photo!.text = ""
+            } else {
+                self.photo!.text = self.frm29
+            }
+            cell.textLabel!.text = "Photo"
+            cell.contentView.addSubview(self.photo!)
         }
+
         
         return cell
     }
@@ -1767,16 +1875,15 @@ extension EditData: UITableViewDataSource {
 extension EditData: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 20.0
+        return 0.0
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 40.0
+        return 0.0
     }
     
     // MARK: - Content Menu
     func tableView(_ tableView: UITableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {
-        
         return true
     }
     

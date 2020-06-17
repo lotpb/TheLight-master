@@ -15,6 +15,7 @@ import FirebaseFirestore
 //import FirebaseAuth
 import SwiftUI
 
+
 @available(iOS 13.0, *)
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
@@ -46,14 +47,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             "mileIQKey": "0.545",
         ])
 
-        //Firebase
-        FirebaseApp.configure()
-
         //Firestore
         let settings = FirestoreSettings()
         Firestore.firestore().settings = settings
-
-        customizeAppearance()
 
         /// MARK: - prevent Autolock
         if (defaults.bool(forKey: "autolockKey"))  {
@@ -102,6 +98,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
          splitViewController.viewControllers = [homeNavigationController, secondNavigationController]
          //splitViewController.preferredDisplayMode = .allVisible */
+
+        customizeAppearance()
     }
 
     /// MARK: - App Theme Customization
@@ -116,7 +114,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         app.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.label]
         app.largeTitleTextAttributes = [
             NSAttributedString.Key.foregroundColor:UIColor.label,
-            NSAttributedString.Key.font:UIFont.boldSystemFont(ofSize: 24)]
+            NSAttributedString.Key.font:UIFont.boldSystemFont(ofSize: 32)]
 
         UINavigationBar.appearance().standardAppearance = app
         UINavigationBar.appearance().scrollEdgeAppearance = app
@@ -135,9 +133,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         ]
         UITabBarItem.appearance().setTitleTextAttributes(attrsNormal, for: .normal)
         UITabBarItem.appearance().setTitleTextAttributes(attrsSelected, for: .selected)
+        //UITabBar.appearance().barStyle = .black
         UITabBar.appearance().barTintColor = .systemBackground
         UITabBar.appearance().tintColor = ColorX.twitterBlue
-        UITabBar.appearance().isTranslucent = false
+        UITabBar.appearance().isTranslucent = true
 
         UIToolbar.appearance().barTintColor = ColorX.toolbarColor //Color.DGrayColor
         UIToolbar.appearance().tintColor = .secondarySystemGroupedBackground

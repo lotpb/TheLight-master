@@ -90,7 +90,7 @@ final class ProductVC: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newData))
         navigationItem.title = "Products"
-        //self.navigationItem.largeTitleDisplayMode = .always
+        self.navigationItem.largeTitleDisplayMode = .always
         
         searchController = UISearchController(searchResultsController: resultsController)
         navigationItem.searchController = searchController
@@ -276,7 +276,7 @@ final class ProductVC: UIViewController {
                     //search
                     let indexPath = resultsController.tableView!.indexPathForSelectedRow!.row
                     
-                    VC.objectId = filteredTitles[indexPath].productNo
+                    VC.objectId = filteredTitles[indexPath].prodId
                     VC.frm11 = filteredTitles[indexPath].active
                     VC.frm12 = filteredTitles[indexPath].productNo
                     VC.frm13 = filteredTitles[indexPath].products
@@ -294,11 +294,12 @@ final class ProductVC: UIViewController {
                         VC.image = self.selectedImage
                     } else {
                         //firebase
-                        VC.objectId = prodlist[indexPath].productNo
+                        VC.objectId = prodlist[indexPath].prodId
                         VC.frm11 = prodlist[indexPath].active
                         VC.frm12 = prodlist[indexPath].productNo
                         VC.frm13 = prodlist[indexPath].products
                         VC.frm14 = prodlist[indexPath].price
+                        VC.photo = prodlist[indexPath].photo
                         VC.imageUrl = prodlist[indexPath].imageUrl
                     }
                 }

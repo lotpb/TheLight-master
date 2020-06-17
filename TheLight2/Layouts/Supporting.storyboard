@@ -10,7 +10,7 @@
         <!--User Detail Controller-->
         <scene sceneID="GTH-W6-v0P">
             <objects>
-                <viewController storyboardIdentifier="userDetailVC" automaticallyAdjustsScrollViewInsets="NO" id="vz4-zR-tF0" customClass="UserDetailController" customModule="TheLight2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="UserDetailVC" automaticallyAdjustsScrollViewInsets="NO" id="vz4-zR-tF0" customClass="UserDetailController" customModule="TheLight2" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vi3-Sq-MD6">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -237,16 +237,6 @@
             </objects>
             <point key="canvasLocation" x="-7352" y="4867"/>
         </scene>
-        <!--MeProfileID-->
-        <scene sceneID="Yc4-DR-dwC">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Me" referencedIdentifier="MeProfileID" id="0I4-dU-E3n" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="M1t-DK-gg7"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2wk-sQ-d95" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-8748" y="4792"/>
-        </scene>
         <!--User ViewVC-->
         <scene sceneID="Ly7-aL-bMa">
             <objects>
@@ -411,7 +401,6 @@
                         <outlet property="scrollView" destination="1K6-3Q-EmO" id="Wl1-Zx-8Jf"/>
                         <outlet property="tableView" destination="NVJ-LN-fdO" id="xls-vW-iNv"/>
                         <segue destination="vz4-zR-tF0" kind="show" identifier="userdetailSegue" id="h52-Wd-eJb"/>
-                        <segue destination="0I4-dU-E3n" kind="show" identifier="meProfileSegue" id="yB1-NF-hcL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UaT-86-rnI" userLabel="First Responder" sceneMemberID="firstResponder"/>

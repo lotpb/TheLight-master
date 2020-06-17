@@ -70,7 +70,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
         setupNavigation()
         setupTableView()
         loadData()
-        scrollView.backgroundColor = .systemGroupedBackground
+        view.backgroundColor = .systemGroupedBackground
         self.scrollView!.addSubview(refreshControl)
     }
     
@@ -97,7 +97,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
         } else {
             navigationItem.title = "Current Users"
         }
-        self.navigationItem.largeTitleDisplayMode = .never
+        self.navigationItem.largeTitleDisplayMode = .always
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newData))
         let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: nil)
         navigationItem.rightBarButtonItems = [addButton, searchButton]
@@ -334,6 +334,8 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
         let updated: Date?
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM dd, yyyy"
+
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         
         if segue.identifier == "userdetailSegue" {
             guard let VC = segue.destination as? UserDetailController else { return }

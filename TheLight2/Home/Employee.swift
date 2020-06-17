@@ -265,11 +265,11 @@ final class Employee: UIViewController {
             let formatter = NumberFormatter()
             formatter.numberStyle = .none
             
-            let controller = (segue.destination as! UINavigationController).topViewController as! LeadDetail
-            controller.formController = "Employee"
+            let VC = (segue.destination as! UINavigationController).topViewController as! LeadDetail
+            VC.formController = "Employee"
             navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
             
             var LeadNo:Int?
             var Zip:Int?
@@ -316,105 +316,114 @@ final class Employee: UIViewController {
             }
             let dateFormat = DateFormatter()
             dateFormat.dateFormat = "MMM dd yy"
-            controller.tbl16 = String(format: "%@", dateFormat.string(from: dateUpdated)) as String
+            VC.tbl16 = String(format: "%@", dateFormat.string(from: dateUpdated)) as String
             
             if navigationItem.searchController?.isActive == true {
                 //search
                 let employ: EmployModel
                 employ = filteredTitles[indexPath!]
                 
-                controller.leadNo =  formatter.string(from: LeadNo! as NSNumber)
-                controller.active = formatter.string(from: Active! as NSNumber)
-                controller.zip = formatter.string(from: Zip! as NSNumber)
-                controller.objectId = employlist[indexPath!].employeeId
-                controller.date = employlist[indexPath!].email
-                controller.name = String(format: "%@ %@ %@", employ.first, employ.lastname, employ.company).removeWhiteSpace()
-                controller.address = employ.address
-                controller.city = employ.city
-                controller.state = employ.state
-                controller.amount = employ.country
-                controller.tbl11 = employ.homephone
-                controller.tbl12 = employ.workphone
-                controller.tbl13 = employ.cellphone
-                controller.tbl14 = employ.ss
-                controller.tbl15 = employ.middle as NSString
-                controller.tbl21 = employ.email as NSString
-                controller.tbl22 = employ.department
-                controller.tbl23 = employ.title
-                controller.tbl24 = employ.manager
-                controller.tbl25 = employ.country
-                controller.tbl26 = employ.first as NSString
-                controller.tbl27 = employ.company
-                controller.custNo = employ.lastname
-                controller.comments = employ.comments
+                VC.leadNo =  formatter.string(from: LeadNo! as NSNumber)
+                VC.active = formatter.string(from: Active! as NSNumber)
+                VC.zip = formatter.string(from: Zip! as NSNumber)
+                VC.objectId = employlist[indexPath!].employeeId
+                VC.date = employlist[indexPath!].email
+                VC.name = String(format: "%@ %@ %@", employ.first, employ.lastname, employ.company).removeWhiteSpace()
+                VC.address = employ.address
+                VC.city = employ.city
+                VC.state = employ.state
+                VC.amount = employ.country
+                VC.tbl11 = employ.homephone
+                VC.tbl12 = employ.workphone
+                VC.tbl13 = employ.cellphone
+                VC.tbl14 = employ.ss
+                VC.tbl15 = employ.middle as NSString
+                VC.tbl21 = employ.email as NSString
+                VC.tbl22 = employ.department
+                VC.tbl23 = employ.title
+                VC.tbl24 = employ.manager
+                VC.tbl25 = employ.country
+                VC.tbl26 = employ.first as NSString
+                VC.tbl27 = employ.company
+                VC.custNo = employ.lastname
+                VC.comments = employ.comments
                 
             } else {
                 
                 if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     
-                    controller.leadNo =  formatter.string(from: LeadNo! as NSNumber)
-                    controller.active = formatter.string(from: Active! as NSNumber)
-                    controller.objectId = (_feedItems[indexPath!] as AnyObject).value(forKey: "objectId") as? String
-                    controller.date = (_feedItems[indexPath!] as AnyObject).value(forKey: "Email") as? String
-                    controller.name = String(format: "%@ %@ %@", ((_feedItems[indexPath!] as AnyObject).value(forKey: "First") as? String)!, ((_feedItems[indexPath!] as AnyObject).value(forKey: "Last") as? String)!, ((_feedItems[indexPath!] as AnyObject).value(forKey: "Company") as? String)!).removeWhiteSpace()
-                    controller.address = (_feedItems[indexPath!] as AnyObject).value(forKey: "Street") as? String
-                    controller.city = (_feedItems[indexPath!] as AnyObject).value(forKey: "City") as? String
-                    controller.state = (_feedItems[indexPath!] as AnyObject).value(forKey: "State") as? String
-                    controller.zip = (_feedItems[indexPath!] as AnyObject).value(forKey: "Zip") as? String
-                    controller.amount = (_feedItems[indexPath!] as AnyObject).value(forKey: "Title") as? String
-                    controller.tbl11 = (_feedItems[indexPath!] as AnyObject).value(forKey: "HomePhone") as? String
-                    controller.tbl12 = (_feedItems[indexPath!] as AnyObject).value(forKey: "WorkPhone") as? String
-                    controller.tbl13 = (_feedItems[indexPath!] as AnyObject).value(forKey: "CellPhone") as? String
-                    controller.tbl14 = (_feedItems[indexPath!] as AnyObject).value(forKey: "SS") as? String
-                    controller.tbl15 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Middle") as? NSString
-                    controller.tbl21 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Email") as? NSString
-                    controller.tbl22 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Department") as? String
-                    controller.tbl23 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Title") as? String
-                    controller.tbl24 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Manager") as? String
-                    controller.tbl25 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Country") as? String
-                    controller.tbl26 = (_feedItems[indexPath!] as AnyObject).value(forKey: "First") as? NSString
-                    controller.tbl27 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Company") as? String
-                    controller.custNo = (_feedItems[indexPath!] as AnyObject).value(forKey: "Last") as? String
-                    controller.comments = (_feedItems[indexPath!] as AnyObject).value(forKey: "Comments") as? String
+                    VC.leadNo =  formatter.string(from: LeadNo! as NSNumber)
+                    VC.active = formatter.string(from: Active! as NSNumber)
+                    VC.objectId = (_feedItems[indexPath!] as AnyObject).value(forKey: "objectId") as? String
+                    VC.date = (_feedItems[indexPath!] as AnyObject).value(forKey: "Email") as? String
+                    VC.name = String(format: "%@ %@ %@", ((_feedItems[indexPath!] as AnyObject).value(forKey: "First") as? String)!, ((_feedItems[indexPath!] as AnyObject).value(forKey: "Last") as? String)!, ((_feedItems[indexPath!] as AnyObject).value(forKey: "Company") as? String)!).removeWhiteSpace()
+                    VC.address = (_feedItems[indexPath!] as AnyObject).value(forKey: "Street") as? String
+                    VC.city = (_feedItems[indexPath!] as AnyObject).value(forKey: "City") as? String
+                    VC.state = (_feedItems[indexPath!] as AnyObject).value(forKey: "State") as? String
+                    VC.zip = (_feedItems[indexPath!] as AnyObject).value(forKey: "Zip") as? String
+                    VC.amount = (_feedItems[indexPath!] as AnyObject).value(forKey: "Title") as? String
+                    VC.tbl11 = (_feedItems[indexPath!] as AnyObject).value(forKey: "HomePhone") as? String
+                    VC.tbl12 = (_feedItems[indexPath!] as AnyObject).value(forKey: "WorkPhone") as? String
+                    VC.tbl13 = (_feedItems[indexPath!] as AnyObject).value(forKey: "CellPhone") as? String
+                    VC.tbl14 = (_feedItems[indexPath!] as AnyObject).value(forKey: "SS") as? String
+                    VC.tbl15 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Middle") as? NSString
+                    VC.tbl21 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Email") as? NSString
+                    VC.tbl22 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Department") as? String
+                    VC.tbl23 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Title") as? String
+                    VC.tbl24 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Manager") as? String
+                    VC.tbl25 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Country") as? String
+                    VC.tbl26 = (_feedItems[indexPath!] as AnyObject).value(forKey: "First") as? NSString
+                    VC.tbl27 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Company") as? String
+                    VC.custNo = (_feedItems[indexPath!] as AnyObject).value(forKey: "Last") as? String
+                    VC.comments = (_feedItems[indexPath!] as AnyObject).value(forKey: "Comments") as? String
                     
                 } else {
                     
                     //firebase
-                    controller.leadNo =  formatter.string(from: LeadNo! as NSNumber)
-                    controller.active = formatter.string(from: Active! as NSNumber)
-                    controller.zip = formatter.string(from: Zip! as NSNumber)
-                    controller.objectId = employlist[indexPath!].employeeId
-                    controller.date = employlist[indexPath!].email
-                    controller.name = String(format: "%@ %@ %@", employlist[indexPath!].first, employlist[indexPath!].lastname, employlist[indexPath!].company).removeWhiteSpace()
-                    controller.address = employlist[indexPath!].address
-                    controller.city = employlist[indexPath!].city
-                    controller.state = employlist[indexPath!].state
-                    controller.amount = employlist[indexPath!].title
-                    controller.tbl11 = employlist[indexPath!].homephone
-                    controller.tbl12 = employlist[indexPath!].workphone
-                    controller.tbl13 = employlist[indexPath!].cellphone
-                    controller.tbl14 = employlist[indexPath!].ss
-                    controller.tbl15 = employlist[indexPath!].middle as NSString
-                    controller.tbl21 = employlist[indexPath!].email as NSString
-                    controller.tbl22 = employlist[indexPath!].department
-                    controller.tbl23 = employlist[indexPath!].title
-                    controller.tbl24 = employlist[indexPath!].manager
-                    controller.tbl25 = employlist[indexPath!].country
-                    controller.tbl26 = employlist[indexPath!].first as NSString
-                    controller.tbl27 = employlist[indexPath!].company
-                    controller.custNo = employlist[indexPath!].lastname
-                    controller.comments = employlist[indexPath!].comments
+                    VC.leadNo =  formatter.string(from: LeadNo! as NSNumber)
+                    VC.active = formatter.string(from: Active! as NSNumber)
+                    VC.zip = formatter.string(from: Zip! as NSNumber)
+                    VC.objectId = employlist[indexPath!].employeeId
+                    VC.leadNo = employlist[indexPath!].employeeId
+                    VC.date = employlist[indexPath!].email
+                    VC.first = employlist[indexPath!].first
+                    VC.lastname = employlist[indexPath!].lastname
+                    VC.company = employlist[indexPath!].company
+                    VC.name = String(format: "%@ %@ %@", employlist[indexPath!].first, employlist[indexPath!].lastname, employlist[indexPath!].company).removeWhiteSpace()
+                    VC.address = employlist[indexPath!].address
+                    VC.city = employlist[indexPath!].city
+                    VC.state = employlist[indexPath!].state
+                    VC.amount = employlist[indexPath!].title
+                    VC.tbl11 = employlist[indexPath!].homephone
+                    VC.tbl12 = employlist[indexPath!].workphone
+                    VC.tbl13 = employlist[indexPath!].cellphone
+                    VC.tbl14 = employlist[indexPath!].ss
+                    VC.tbl15 = employlist[indexPath!].middle as NSString
+                    VC.tbl16 = dateFormat.string(from: employlist[indexPath!].lastUpdate as Date) as String
+                    VC.tbl17 = employlist[indexPath!].photo
+                    VC.tbl21 = employlist[indexPath!].email as NSString
+                    VC.tbl22 = employlist[indexPath!].department
+                    VC.tbl23 = employlist[indexPath!].title
+                    VC.tbl24 = employlist[indexPath!].manager
+                    VC.tbl25 = employlist[indexPath!].country
+                    VC.tbl26 = employlist[indexPath!].first as NSString
+                    VC.tbl27 = employlist[indexPath!].uid
+                    VC.custNo = employlist[indexPath!].lastname
+                    VC.imageUrl = employlist[indexPath!].imageUrl
+                    VC.photo = employlist[indexPath!].photo
+                    VC.comments = employlist[indexPath!].comments
                 }
             }
             
-            controller.l11 = "Home"; controller.l12 = "Work"
-            controller.l13 = "Mobile"; controller.l14 = "Social"
-            controller.l15 = "Middle"; controller.l21 = "Email"
-            controller.l22 = "Department"; controller.l23 = "Title"
-            controller.l24 = "Manager"; controller.l25 = "Country"
-            controller.l16 = "Last Updated"; controller.l26 = "First"
-            controller.l1datetext = "Email:"
-            controller.lnewsTitle = "Employee News: Health benifits cancelled immediately, ineffect starting today."
+            VC.l11 = "Home"; VC.l12 = "Work"
+            VC.l13 = "Mobile"; VC.l14 = "Social"
+            VC.l15 = "Middle"; VC.l21 = "Email"
+            VC.l22 = "Department"; VC.l23 = "Title"
+            VC.l24 = "Manager"; VC.l25 = "Country"
+            VC.l16 = "Last Updated"; VC.l26 = "First"
+            VC.l17 = "photo"; VC.l27 = "uid"
+            VC.l1datetext = "Email:"
+            VC.lnewsTitle = "Employee News: Health benifits cancelled immediately, ineffect starting today."
         }
         
         if segue.identifier == "newemploySegue" {
@@ -505,6 +514,7 @@ extension Employee: UITableViewDataSource {
             cell.employreplyButton.tintColor = .lightGray
             cell.employreplyButton.setImage(UIImage(systemName: "bubble.left.fill"), for: .normal)
             cell.employreplyLabel.text! = ""
+            
             
             cell.employlikeButton.tintColor = .lightGray
             cell.employlikeButton.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)

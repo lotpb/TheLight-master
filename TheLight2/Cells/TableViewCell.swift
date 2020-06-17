@@ -8,41 +8,14 @@
 
 import UIKit
 import FirebaseDatabase
+import SDWebImage
 //import Parse
 
 
 @available(iOS 13.0, *)
 final class TableViewCell: UITableViewCell {
     var defaults = UserDefaults.standard
-    //var _feedItems = NSMutableArray()
 
-/*
-    var feedItems: Database! { //parse not working
-        didSet {
-
-            leadtitleLabel!.text = _feedItems.value(forKey: "LastName") as? String ?? ""
-            leadsubtitleLabel!.text = _feedItems.value(forKey: "City") as? String ?? ""
-            myLabel10.text = _feedItems.value(forKey: "Date") as? String ?? ""
-            myLabel20.text = _feedItems.value(forKey: "CallBack") as? String ?? ""
-
-            if (_feedItems.value(forKey: "Coments") as? String == nil) || (_feedItems.value(forKey: "Coments") as? String == "") {
-
-                leadreplyButton!.tintColor = .lightGray
-            } else {
-                leadreplyButton!.tintColor = Color.Lead.buttonColor
-            }
-
-            if (_feedItems.value(forKey: "Active") as? Int == 1 ) {
-                leadlikeButton!.tintColor = Color.Lead.buttonColor
-                leadlikeLabel.text! = "Active"
-                leadlikeLabel.adjustsFontSizeToFitWidth = true
-            } else {
-                leadlikeButton!.tintColor = .lightGray
-                leadlikeLabel.text! = ""
-            }
-
-        }
-    } */
     
     //firebase
     var blogpost: BlogModel? {
@@ -71,7 +44,8 @@ final class TableViewCell: UITableViewCell {
                             let userSnap = snap as! DataSnapshot
                             let userDict = userSnap.value as! [String: Any]
                             let profileImageUrl = userDict["profileImageUrl"] as? String
-                            self.customImageView.loadImage(urlString: profileImageUrl!)
+                            guard let imageUrl:URL = URL(string: profileImageUrl!) else { return }
+                            self.customImageView.sd_setImage(with: imageUrl, completed: nil)
                         }
                     })
             }
@@ -173,6 +147,7 @@ final class TableViewCell: UITableViewCell {
     
     var vendpost: VendModel? {
         didSet {
+            vendlikeLabel!.textColor = ColorX.Vend.buttonColor
             vendtitleLabel.textColor = .label
             vendtitleLabel.text = vendpost?.vendor
             
@@ -194,7 +169,7 @@ final class TableViewCell: UITableViewCell {
             
             if vendpost?.active as? Int == 1 {
                 vendlikeButton!.tintColor = ColorX.Vend.buttonColor
-                vendlikeLabel.text! = "Active"
+                vendlikeLabel.text! = " Active"
                 vendlikeLabel.sizeToFit()
             } else {
                 vendlikeButton!.tintColor = .lightGray
@@ -205,6 +180,7 @@ final class TableViewCell: UITableViewCell {
     
     var employpost: EmployModel? {
         didSet {
+            employlikeLabel!.textColor = ColorX.Employ.buttonColor
             employtitleLabel.textColor = .label
             employtitleLabel.text = String(format: "%@ %@ %@", (employpost?.first)!,
                                            (employpost?.lastname)!,
@@ -228,7 +204,7 @@ final class TableViewCell: UITableViewCell {
             
             if employpost?.active as? Int == 1 {
                 employlikeButton!.tintColor = ColorX.Employ.buttonColor
-                employlikeLabel.text! = "Active"
+                employlikeLabel.text! = " Active"
                 employlikeLabel.sizeToFit()
             } else {
                 employlikeButton!.tintColor = .lightGray
@@ -249,27 +225,39 @@ final class TableViewCell: UITableViewCell {
     
     var salespost: SalesModel? {
         didSet {
-            customImageView.frame = .init(x: 0, y: 0, width: 0, height: 0)
-            //customImageView.frame = .init(x: 10, y: 10, width: 40, height: 40)
-            customImageView.layer.cornerRadius = (customImageView.frame.size.width) / 2
-            customImageView.image = #imageLiteral(resourceName: "profile-rabbit-toy")
             customtitleLabel.text = salespost?.salesman
+            customImageView.frame = .init(x: 0, y: 0, width: 0, height: 0)
+            customImageView.layer.cornerRadius = (customImageView.frame.size.width) / 2
+            guard let newsImageUrl = salespost?.imageUrl else {
+                //customImageView.image = #imageLiteral(resourceName: "profile-rabbit-toy")
+                return
+            }
+            guard let imageUrl:URL = URL(string: newsImageUrl) else { return }
+            self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+            self.plusPhotoButton.setImage(self.customImageView.image?.withRenderingMode(.alwaysOriginal), for: .normal)
         }
     }
     
     var prodpost: ProdModel? {
         didSet {
-            customImageView.frame = .init(x: 0, y: 0, width: 0, height: 0)
-            //customImageView.frame = .init(x: 10, y: 10, width: 40, height: 40)
-            customImageView.image = #imageLiteral(resourceName: "profile-rabbit-toy")
             customtitleLabel.text = prodpost?.products
+            customImageView.frame = .init(x: 0, y: 0, width: 0, height: 0)
+            customImageView.image = #imageLiteral(resourceName: "profile-rabbit-toy")
+            guard let newsImageUrl = prodpost?.photo else { return }
+            guard let imageUrl:URL = URL(string: newsImageUrl) else { return }
+            self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+            self.plusPhotoButton.setImage(self.customImageView.image?.withRenderingMode(.alwaysOriginal), for: .normal)
         }
     }
     
     var jobpost: JobModel? {
         didSet {
-            customImageView.frame = .init(x: 0, y: 0, width: 0, height: 0)
             customtitleLabel.text = jobpost?.description
+            customImageView.frame = .init(x: 0, y: 0, width: 0, height: 0)
+            guard let newsImageUrl = prodpost?.imageUrl else { return }
+            guard let imageUrl:URL = URL(string: newsImageUrl) else { return }
+            self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+            self.plusPhotoButton.setImage(self.customImageView.image?.withRenderingMode(.alwaysOriginal), for: .normal)
         }
     }
     
@@ -277,15 +265,29 @@ final class TableViewCell: UITableViewCell {
         didSet {
             customImageView.frame = .init(x: 0, y: 0, width: 0, height: 0)
             customtitleLabel.text = adpost?.advertiser
+            guard let newsImageUrl = prodpost?.imageUrl else { return }
+            guard let imageUrl:URL = URL(string: newsImageUrl) else { return }
+            self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+            self.plusPhotoButton.setImage(self.customImageView.image?.withRenderingMode(.alwaysOriginal), for: .normal)
         }
     }
     
     var zippost: ZipModel? {
         didSet {
-            customImageView.frame = .init(x: 0, y: 0, width: 0, height: 0)
             customtitleLabel.text = String(format: "%@, %@", (zippost?.city)!, (zippost?.state)!).removeWhiteSpace()
+            customImageView.frame = .init(x: 0, y: 0, width: 0, height: 0)
+
         }
     }
+
+    let plusPhotoButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysTemplate), for: .normal)
+        //button.addTarget(self, action: #selector(handlePlusPhoto), for: .touchUpInside)
+        //button.contentMode = .scaleAspectFill
+        return button
+    }()
     
     let customImageView: CustomImageView = {
         let imageView = CustomImageView()

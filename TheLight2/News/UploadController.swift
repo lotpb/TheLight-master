@@ -35,6 +35,7 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
     
     var formState : String?
     var objectId : String?
+    var storageID : String?
     var newstitle : String?
     var newsdetail : String?
     var newsStory : String?
@@ -43,7 +44,8 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
     var newsImage : UIImage!
     
     //firebase
-    var picImage : UIImage!
+    var filename: String?
+    //var picImage : UIImage!
     var newsvideourl : String?
     
     // Parse
@@ -282,7 +284,7 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
         guard let commentText = self.commentTitle.text else { return }
         
         if commentText == "" {
-            self.simpleAlert(title: "Oops!", message: "No text entered.")
+            self.showAlert(title: "Oops!", message: "No text entered.")
         } else {
             
             self.navigationItem.rightBarButtonItem!.isEnabled = false
@@ -332,17 +334,17 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
                                         updateNews!.setObject(self.file!, forKey:"imageFile")
                                         updateNews!.saveInBackground { (success: Bool, error: Error?) in
                                             
-                                            self.simpleAlert(title: "Image Upload Complete", message: "Successfully updated the image")
+                                            self.showAlert(title: "Image Upload Complete", message: "Successfully updated the image")
                                             self.gotoHome()
                                         }
                                     }
                                 }
                             } else {
-                                self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                                self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                             }
                             self.navigationItem.rightBarButtonItem!.isEnabled = true
                         } else {
-                            self.simpleAlert(title: "Upload Failure", message: "Failure updated the data")
+                            self.showAlert(title: "Upload Failure", message: "Failure updated the data")
                         }
                     }
                 } else {
@@ -362,7 +364,7 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
                             saveNews.setObject(PFUser.current()!.username ?? NSNull(), forKey:"username")
                             saveNews.saveInBackground { (success: Bool, error: Error?) in
                                 if success {
-                                    self.simpleAlert(title: "Upload Complete", message: "Successfully saved the data")
+                                    self.showAlert(title: "Upload Complete", message: "Successfully saved the data")
                                     self.newsNotification()
                                     self.gotoHome()
                                     
@@ -371,7 +373,7 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
                                 }
                             }
                         } else {
-                            self.simpleAlert(title: "Upload Failure", message: "Failure updated the data")
+                            self.showAlert(title: "Upload Failure", message: "Failure updated the data")
                         }
                     }
                 } else {
@@ -478,7 +480,7 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
             imagePicker.showsCameraControls = true
             self.present(imagePicker, animated: true)
         } else{
-            self.simpleAlert(title: "Alert!", message: "Camera not available")
+            self.showAlert(title: "Alert!", message: "Camera not available")
         }
     }
     //-----------------------------------------------------------------------------
@@ -534,148 +536,46 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
         newsImageView.clipsToBounds = true
         newsImageView.image = selectedImageFromPicker
         
-        picImage = selectedImageFromPicker
+        //picImage = selectedImageFromPicker
     }
-    
-    fileprivate func handleVideoSelectedForUrl(_ url: URL) {
-        
-        let filename = UUID().uuidString + ".mov"
-        
-        let metadata = StorageMetadata()
-        metadata.contentType = "video/quicktime"
-        
-        let ref = Storage.storage().reference().child("News_movies").child(filename)
 
-        let videoData = (NSData(contentsOf: url) as Data?)!
-        let uploadTask = ref.putData(videoData, metadata: nil, completion: {(metadata, error) in
-            
-            if error != nil {
-                print("CRAP Failed upload of video:", error!)
-                return
-            }
-            
-            ref.downloadURL( completion: { (downloadUrl, error) in
-                if let err = error {
-                    print("CRAP Failed to get download url:", err)
-                    return
-                }
-                
-                guard let downloadURL = downloadUrl?.absoluteString else { return}
-                
-                 self.newsvideourl = downloadURL
-                
-                if let thumbnailImage = self.thumbnailImageForFileUrl(fileUrl: url) {
-                    
-                    self.uploadToFirebaseStorageUsingImage(image: thumbnailImage, completion: { (imageUrl) in
-                        let properties: [String: AnyObject] = ["imageUrl": imageUrl as AnyObject, "imageWidth": thumbnailImage.size.width as AnyObject, "imageHeight": thumbnailImage.size.height as AnyObject, "videoUrl": downloadURL as AnyObject]
-                        self.sendMessageWithProperties(properties: properties)
-                    })
-                    
-                }
-            })
-        })
-        
-        uploadTask.observe(.resume) { snapshot in
-          // Upload resumed, also fires when the upload starts
-        }
-
-        uploadTask.observe(.pause) { snapshot in
-          // Upload paused
-        }
-        
-        uploadTask.observe(.progress) { (snapshot) in
-            let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount)
-                / Double(snapshot.progress!.totalUnitCount)
-            self.progressView.setProgress(Float(percentComplete), animated: true)
-            self.navigationItem.title = String("\(percentComplete) %")
-        }
-        
-        uploadTask.observe(.success) { (snapshot) in
-            self.progressView.isHidden = true
-            self.progressView.progress = 0.0
-        }
-        
-        uploadTask.observe(.failure) { snapshot in
-            if let error = snapshot.error as NSError? {
-                switch (StorageErrorCode(rawValue: error.code)!) {
-                case .objectNotFound:
-                    // File doesn't exist
-                    break
-                case .unauthorized:
-                    // User doesn't have permission to access file
-                    print("User doesn't have permission to access file")
-                    break
-                case .cancelled:
-                    // User canceled the upload
-                    break
-                    
-                    /* ... */
-                    
-                case .unknown:
-                    // Unknown error occurred, inspect the server response
-                    break
-                default:
-                    // A separate error occurred. This is a good place to retry the upload.
-                    break
-                }
-            }
-        }
-    }
-    
     private func uploadToFirebaseStorageUsingImage(image: UIImage, completion: @escaping (_ imageUrl: String) -> ()) {
-        
-        let filename: String
-        if !(self.formState == "Update") { //New
-            filename = NSUUID().uuidString
+
+        if (self.formState == "Update") {
+            updateNews()
         } else {
-            filename = (Auth.auth().currentUser?.uid)!
-        }
-        
-        if let uploadData = image.jpegData(compressionQuality: 0.9) {
-            
+            filename = UUID.init().uuidString
+
+            guard let uploadData = image.jpegData(compressionQuality: 0.9) else { return }  //0.75
+
+            let storageItem = Storage.storage().reference().child("News").child(filename!)
             let metadata = StorageMetadata()
             metadata.contentType = "image/jpeg"
-            
-            let storageItem = Storage.storage().reference().child("News").child(filename)
-            storageItem.putData(uploadData, metadata: metadata) { (metadata, error) in
-                
+            let uploadTask = storageItem.putData(uploadData, metadata: metadata) { (metadata, error) in
                 if error != nil {
                     self.navigationItem.rightBarButtonItem?.isEnabled = true
-                    print("Failed to upload image:", error!)
+                    print("Failed to upload image:", error!.localizedDescription)
                     return
-                    
                 } else {
-                    
                     storageItem.downloadURL(completion: { (url, error) in
                         if error != nil {
                             print(error!)
                             return
                         }
-                        if !(self.formState == "Update") { //New
-                            self.saveToDatabaseWithImageUrl(imageUrl: (url?.absoluteString)!)
-                            
-                        } else { //Update
-                            
-                            let userRef = FirebaseRef.databaseRoot.child("News").child(self.objectId!)
-                            let values = ["newsTitle": self.commentTitle.text ?? "",
-                                          "newsDetail": self.commentSorce.text ?? "",
-                                          //"imageUrl": self.imageDetailurl ?? "",
-                                          //"videoUrl": self.videoDetailurl ?? "",
-                                          "storyText": self.commentDetail.text ?? ""
-                                          ] as [String: Any]
-                            
-                            userRef.updateChildValues(values) { (err, ref) in
-                                if err != nil {
-                                    self.simpleAlert(title: "Upload Failure", message: "Failure updating the data")
-                                    return
-                                }
-                                self.simpleAlert(title: "update Complete", message: "Successfully updated the data")
-                                self.navigationItem.rightBarButtonItem?.isEnabled = true
-                                self.gotoHome()
-                            }
-                        }
+                        self.saveToDatabaseWithImageUrl(imageUrl: (url?.absoluteString)!)
                     })
                 }
+            }
+            uploadTask.observe(.progress) { [weak self] (snapshot) in
+
+                guard let pctThere = snapshot.progress?.fractionCompleted else { return }
+                print("You are \(pctThere) complete")
+                self?.progressView.progress = Float(pctThere)
+            }
+
+            uploadTask.observe(.success) { (snapshot) in
+                //self.progressView.isHidden = true
+                //self.progressView.progress = 0.0
             }
         }
     }
@@ -695,21 +595,118 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
                       "storyText": detailText,
                       "liked": 0,
                       "newsId": key!,
+                      "storageID": filename!,
                       "creationDate" : Date().timeIntervalSince1970,
-                      //"imageWidth": postImage.size.width,
-                      //"imageHeight": postImage.size.height,
+                      "lastUpdate": Date().timeIntervalSince1970,
                       "uid": uid] as [String : Any]
         let childUpdates = ["/News/\(String(key!))": values]
         
         FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
             if err != nil {
                 self.navigationItem.rightBarButtonItem?.isEnabled = true
-                self.simpleAlert(title:"Upload Failure", message:"Failure updating the data")
+                self.showAlert(title:"Upload Failure", message:"Failure updating the data")
                 return
             }
             
-            self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+            self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
             self.gotoHome()
         }
     }
+
+    func updateNews() {
+        //firebase
+        /*
+         guard case self.objectId = Auth.auth().currentUser?.uid else {
+         self.simpleAlert(title: "Alert!", message: "Updates not allowed for this member")
+         return
+         } */
+
+        guard let userID = self.objectId else { return }
+        
+        if let storID = self.storageID {
+            let storageItem = Storage.storage().reference().child("News").child(storID)
+            guard  let imageData = newsImageView.image?.jpegData(compressionQuality: 0.9) else {return}
+            let metadata = StorageMetadata.init()
+            metadata.contentType = "image/jpeg"
+            storageItem.putData(imageData, metadata: metadata) { (metadata, error) in
+                if error != nil{
+                    print(error!.localizedDescription)
+                    return
+                }
+                storageItem.downloadURL(completion: { (url, error) in
+                    if error != nil{
+                        print(error!.localizedDescription)
+                        return
+                    }
+
+                    if let profilePhotoURL = url?.absoluteString {
+                        let userRef = FirebaseRef.databaseUsers.child(userID)
+                        let values = ["storageID": self.filename!,
+                                      "newsTitle": self.commentTitle.text ?? "",
+                                      "newsDetail": self.commentSorce.text ?? "",
+                                      "imageUrl": profilePhotoURL,
+                                      //"videoUrl": self.videoDetailurl ?? "",
+                            "storyText": self.commentDetail.text ?? "",
+                            "lastUpdate": Date().timeIntervalSince1970
+                            ] as [String: Any]
+
+                        userRef.updateChildValues(values) { (error, ref) in
+                            if error != nil {
+                                self.showAlert(title:"Update Failure", message: "Failure updating the data")
+                                return
+                            } else {
+                                self.showAlert(title: "Update Complete", message: "Successfully updated the data")
+                            }
+                        }
+                    }
+                })
+
+            }
+        }
+    }
+
+    fileprivate func handleVideoSelectedForUrl(_ url: URL) {
+
+        let filename = UUID().uuidString + ".mov"
+
+        let ref = Storage.storage().reference().child("News_movies").child(filename)
+
+        let videoData = (NSData(contentsOf: url) as Data?)!
+        let metadata = StorageMetadata.init()
+        metadata.contentType = "video/quicktime"
+        let uploadTask = ref.putData(videoData, metadata: metadata, completion: {(metadata, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+                return
+            }
+
+            ref.downloadURL( completion: { (downloadUrl, error) in
+                if let error = error {
+                    print(error.localizedDescription)
+                    return
+                }
+
+                guard let downloadURL = downloadUrl?.absoluteString else { return}
+
+                 self.newsvideourl = downloadURL
+
+                if let thumbnailImage = self.thumbnailImageForFileUrl(fileUrl: url) {
+
+                    self.uploadToFirebaseStorageUsingImage(image: thumbnailImage, completion: { (imageUrl) in
+                        let properties: [String: AnyObject] = ["imageUrl": imageUrl as AnyObject, "imageWidth": thumbnailImage.size.width as AnyObject, "imageHeight": thumbnailImage.size.height as AnyObject, "videoUrl": downloadURL as AnyObject]
+                        self.sendMessageWithProperties(properties: properties)
+                    })
+
+                }
+            })
+        })
+
+        uploadTask.observe(.progress) { [weak self] (snapshot) in
+
+            guard let pctThere = snapshot.progress?.fractionCompleted else { return }
+            print("You are \(pctThere) complete")
+            self?.progressView.progress = Float(pctThere)
+        }
+    }
+
 }

@@ -8,39 +8,44 @@
 
 import UIKit
 import MapKit
-import CoreLocation
 import FirebaseDatabase
 import FirebaseAuth
+//import CoreLocation
 //import UserNotifications
 
 struct PreferencesKeys {
     static let savedItems = "savedItems"
 }
 
-@available(iOS 13.0, *)
-final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, RegionsProtocol {
+protocol RegionsProtocol{
+    func loadOverlayForRegionWithLatitude(_ latitude:Double, andLongitude longitude:Double)
+}
 
-     // MARK: - Card Setup
+@available(iOS 13.0, *)
+final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, UIGestureRecognizerDelegate, RegionsProtocol {
+
+    // MARK: - Card Setup
     enum CardState {
         case expanded
         case collapsed
     }
 
-    var cardViewController: CardViewController!
-    var visualEffectView: UIVisualEffectView!
-
-    let cardHeight:CGFloat = 780//600
-    let cardHandleAreaHeight:CGFloat = 130 //65
-
-    var cardVisible = false
     var nextState:CardState {
         return cardVisible ? .collapsed : .expanded
     }
 
+    var cardViewController: CardViewController!
+    var visualEffectView: UIVisualEffectView!
+
+    var endCardHeight:CGFloat = 0 //700
+    var startCardHeight:CGFloat = 0
+
+    var cardVisible = false
     var runningAnimations = [UIViewPropertyAnimator]()
     var animationProgressWhenInterrupted:CGFloat = 0
- //--------------------------------------------------------------------------------
-    //@IBOutlet weak var mapView: MKMapView!
+    //--------------------------------------------------------------------------------
+
+    var delegate:RegionsProtocol!
     
     // MARK: NavigationController Hidden
     private var lastContentOffset: CGFloat = 0.0
@@ -80,7 +85,7 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.borderWidth = 3.0
         button.setTitleColor(UIColor.label, for: .normal)
-        //button.addTarget(self, action: #selector(), for: .touchUpInside)
+        button.addTarget(self, action: #selector(addGeotifation), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -109,12 +114,14 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
     
     lazy var floatingBtn: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = .secondarySystemGroupedBackground
-        button.setTitle("+", for: .normal)
-        button.setTitleColor(.systemBlue, for: .normal)
-        button.titleEdgeInsets = .init(top: 0, left: 0, bottom: 6, right: 0)
-        button.layer.borderColor = UIColor.secondarySystemGroupedBackground.cgColor
-        button.layer.borderWidth = 1.0
+        button.backgroundColor = UIColor.white.withAlphaComponent(0.8)
+        button.tintColor = .black
+        //button.setTitle("+", for: .normal)
+        //button.setTitleColor(.black, for: .normal)
+        //button.titleEdgeInsets = .init(top: 0, left: 0, bottom: 6, right: 0)
+        button.layer.borderColor = UIColor.white.cgColor
+        button.layer.borderWidth = 2.0
+        button.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
         button.addTarget(self, action: #selector(maptype), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -122,10 +129,10 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
     
     lazy var floatingZoomBtn: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = .secondarySystemGroupedBackground
-        button.tintColor = .systemBlue
-        button.layer.borderColor = UIColor.secondarySystemGroupedBackground.cgColor
-        button.layer.borderWidth = 1.0
+        button.backgroundColor = UIColor.white.withAlphaComponent(0.8)
+        button.tintColor = .black
+        button.layer.borderColor = UIColor.white.cgColor
+        button.layer.borderWidth = 2.0
         button.setImage(UIImage(systemName: "location.fill"), for: .normal)
         button.addTarget(self, action: #selector(zoomToCurrentLocation), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -134,12 +141,12 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
 
     lazy var floatingSearchBtn: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = .secondarySystemGroupedBackground
-        button.tintColor = .label
+        button.backgroundColor = UIColor.white.withAlphaComponent(0.8)
+        button.tintColor = .black
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.borderWidth = 2.0
-        button.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
-        button.addTarget(self, action: #selector(zoomToCurrentLocation), for: .touchUpInside)
+        button.setImage(UIImage(systemName: "line.horizontal.3"), for: .normal)
+        button.addTarget(self, action: #selector(handleOpen), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -193,6 +200,7 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
             buttonSize = 50
             goBtnSize = 80
         }
+
         floatingBtn.titleLabel?.font = UIFont(name: floatingBtn.titleLabel!.font.familyName , size: buttonSize)
         goBtn.titleLabel?.font = UIFont(name: goBtn.titleLabel!.font.familyName , size: 32)
 
@@ -220,7 +228,6 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
     override func viewDidLoad() {
         super.viewDidLoad()
 
-
         //UIToolbar.appearance().barTintColor = .red
         self.extendedLayoutIncludesOpaqueBars = true
         UIApplication.shared.isIdleTimerDisabled = true //added
@@ -244,32 +251,28 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
         setupUserImage()
         floatButton()
         setupConstraints() //below floatbutton
-        loadAllGeotifications()
         setupCard()
+
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        view.addGestureRecognizer(panGesture)
+
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapDismiss))
+        view.addGestureRecognizer(tapGesture)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = false
-
-        //UIToolbar.appearance().barTintColor = .red //Color.toolbarColor
         
         locationManager.requestAlwaysAuthorization()
         // Setup GetAddress
         locationManager.startUpdatingLocation()
 
+        loadAllGeotifications()
         setupMap()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = false
-        
-        // MARK: NavigationController Hidden
-        NotificationCenter.default.addObserver(self, selector: #selector(GeotificationVC.hideBar(notification:)), name: NSNotification.Name("hide"), object: nil)
 
         setMainNavItems()
     }
@@ -277,8 +280,6 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
-        //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = true
     }
     
     override func didReceiveMemoryWarning() {
@@ -289,47 +290,39 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
     private func setupNavigation() {
         if UIDevice.current.userInterfaceIdiom == .pad  {
             self.navigationItem.largeTitleDisplayMode = .always
+            navigationItem.title = "TheLight Software - Geotify: \(geotifications.count)"
         } else {
             self.navigationItem.largeTitleDisplayMode = .never
+            navigationItem.title = "Geotify"
         }
+
+        let shareBtn = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareButton))
+        let addBtn = UIBarButtonItem(title: "📌", style: .plain, target: self, action: #selector(addItemBtn))
+        navigationItem.rightBarButtonItems = [shareBtn, addBtn]
     }
 
     func setupMap() {
 
-        self.mapView.delegate = self //added
-        self.mapView.userTrackingMode = .follow //.followWithHeading //added
+        self.mapView.delegate = self
+        self.mapView.showsUserLocation = true
+        self.mapView.userTrackingMode = .follow //.followWithHeading
         self.mapView.alpha = 0.8
         self.mapView.isZoomEnabled = true
         self.mapView.isScrollEnabled = true
         self.mapView.isRotateEnabled = true
-        //self.mapViewshowsPointsOfInterest = true
-        //self.mapView.showsCompass = true
+        self.mapView.showsCompass = false
         self.mapView.showsScale = true
+        let filter = MKPointOfInterestFilter(including: [.gasStation, .cafe, .police, .bank])
+        mapView.pointOfInterestFilter = filter
     }
-    
-    // MARK: - NavigationController Hidden
-    @objc func hideBar(notification: NSNotification)  {
-        
-        if UIDevice.current.userInterfaceIdiom == .phone  {
-            let state = notification.object as! Bool
-            self.navigationController?.setNavigationBarHidden(state, animated: true)
-            UIView.animate(withDuration: 0.2, animations: {
-                self.tabBarController?.hideTabBarAnimated(hide: state) //added
-            }, completion: nil)
-        }
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        if (self.lastContentOffset > scrollView.contentOffset.y) {
-            NotificationCenter.default.post(name: NSNotification.Name("hide"), object: false)
+
+    @objc func maptype() {
+
+        if self.mapView.mapType == MKMapType.standard {
+            self.mapView.mapType = MKMapType.hybridFlyover
         } else {
-            NotificationCenter.default.post(name: NSNotification.Name("hide"), object: true)
+            self.mapView.mapType = MKMapType.standard
         }
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        self.lastContentOffset = scrollView.contentOffset.y;
     }
 
     func setupUserImage() {
@@ -350,15 +343,15 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
     func setupConstraints() {
 
         self.view.addSubview(mapView)
-        self.view.addSubview(titleBtn)
-        self.view.addSubview(userImageview)
-        self.view.addSubview(altitudeLabel)
-        self.view.addSubview(speedLabel)
-        self.view.addSubview(coarseLabel)
-        self.view.addSubview(floatingBtn)
-        self.view.addSubview(floatingZoomBtn)
-        self.view.addSubview(floatingSearchBtn)
-        self.view.addSubview(goBtn)
+        mapView.addSubview(titleBtn)
+        mapView.addSubview(userImageview)
+        mapView.addSubview(altitudeLabel)
+        mapView.addSubview(speedLabel)
+        mapView.addSubview(coarseLabel)
+        mapView.addSubview(floatingBtn)
+        mapView.addSubview(floatingZoomBtn)
+        mapView.addSubview(floatingSearchBtn)
+        mapView.addSubview(goBtn)
         
         let guide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
@@ -366,7 +359,7 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
             mapView.topAnchor.constraint(equalTo: guide.topAnchor, constant: 0),
             mapView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 0),
             mapView.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: 0),
-            mapView.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -40),
+            mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
 
             titleBtn.topAnchor.constraint(equalTo: guide.topAnchor, constant: 20),
             titleBtn.centerXAnchor.constraint(equalTo: guide.centerXAnchor),
@@ -384,12 +377,10 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
             floatingSearchBtn.heightAnchor.constraint(equalToConstant: buttonSize),
             
             floatingBtn.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 15),
-            floatingBtn.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -60),
             floatingBtn.widthAnchor.constraint(equalToConstant: buttonSize),
             floatingBtn.heightAnchor.constraint(equalToConstant: buttonSize),
             
             floatingZoomBtn.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -15),
-            floatingZoomBtn.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -60),
             floatingZoomBtn.widthAnchor.constraint(equalToConstant: buttonSize),
             floatingZoomBtn.heightAnchor.constraint(equalToConstant: buttonSize),
 
@@ -406,22 +397,27 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
             coarseLabel.heightAnchor.constraint(equalToConstant: 25),
 
             goBtn.centerXAnchor.constraint(equalTo: guide.centerXAnchor),
-            goBtn.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -60),
             goBtn.widthAnchor.constraint(equalToConstant: 80),
             goBtn.heightAnchor.constraint(equalToConstant: 80)
+        ])
+
+        if UIDevice.current.userInterfaceIdiom == .pad  {
+            NSLayoutConstraint.activate([
+                floatingZoomBtn.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -95),
+                floatingBtn.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -95),
+                goBtn.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -95),
             ])
-    }
-    
-    @objc func maptype() {
-        
-        if self.mapView.mapType == MKMapType.standard {
-            self.mapView.mapType = MKMapType.hybridFlyover
         } else {
-            self.mapView.mapType = MKMapType.standard
+            NSLayoutConstraint.activate([
+                floatingZoomBtn.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -65),
+                floatingBtn.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -65),
+                goBtn.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -65),
+            ])
         }
     }
     
-    // Get Address Button
+    // MARK: - Get Address
+
     func displayLocationInfo(_ placemark: CLPlacemark?) {
         if let containsPlacemark = placemark {
             //stop updating location to save battery life
@@ -439,143 +435,173 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
         }
     }
 
-        // MARK: - Card Setup
-        func setupCard() {
-            visualEffectView = UIVisualEffectView()
-            visualEffectView.frame = self.view.frame
-            self.view.addSubview(visualEffectView)
+    // MARK: - Side Menu
 
-            cardViewController = CardViewController(nibName:"CardViewController", bundle:nil)
-            self.addChild(cardViewController)
-            self.view.addSubview(cardViewController.view)
+    @objc private func handleTapDismiss() {
+        handleHide()
+    }
 
-            cardViewController.view.frame = CGRect(x: 0, y: self.view.frame.height - cardHandleAreaHeight, width: self.view.bounds.width, height: cardHeight)
+    let menuController = GeoMenuController()
+    fileprivate let menuWidth: CGFloat = 300.0
 
-            cardViewController.view.clipsToBounds = true
+    @objc func handleOpen() {
 
-            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(GeotificationVC.handleCardTap(recognzier:)))
-            let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(GeotificationVC.handleCardPan(recognizer:)))
+        menuController.view.frame = .init(x: -300, y: 55, width: 300, height: self.view.frame.height)
+        let windows = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+        windows?.addSubview(menuController.view)
 
-            cardViewController.handleArea.addGestureRecognizer(tapGestureRecognizer)
-            cardViewController.handleArea.addGestureRecognizer(panGestureRecognizer)
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.menuController.view.transform = CGAffineTransform(translationX: 300, y: 0)
+        }, completion: nil)
+        addChild(menuController)
+    }
+
+    @objc func handleHide() {
+
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.menuController.view.transform = .identity
+        }, completion: nil)
+    }
+
+    @objc func handlePan(gesture: UIPanGestureRecognizer) {
+        if gesture.state == .changed {
+
+        } else if gesture.state == .ended {
+            handleHide()
         }
+    }
 
-        @objc
-        func handleCardTap(recognzier:UITapGestureRecognizer) {
-            switch recognzier.state {
-            case .ended:
-                animateTransitionIfNeeded(state: nextState, duration: 0.9)
-            default:
-                break
-            }
+    // MARK: - Card Setup
+
+    func setupCard() {
+
+        endCardHeight = self.view.frame.height * 0.9 - 20
+        startCardHeight = self.view.frame.height * 0.1 + 44
+
+        visualEffectView = UIVisualEffectView()
+        visualEffectView.frame = self.view.frame
+
+        cardViewController = CardViewController(nibName:"CardViewController", bundle:nil)
+        self.addChild(cardViewController)
+        self.view.addSubview(cardViewController.view)
+
+        cardViewController.view.frame = CGRect(x: 0, y: self.view.frame.height - startCardHeight, width: self.view.bounds.width, height: endCardHeight)
+
+        cardViewController.view.clipsToBounds = true
+
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(GeotificationVC.handleCardTap(recognzier:)))
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(GeotificationVC.handleCardPan(recognizer:)))
+
+        cardViewController.handleArea.addGestureRecognizer(tapGestureRecognizer)
+        cardViewController.handleArea.addGestureRecognizer(panGestureRecognizer)
+    }
+
+    @objc func handleCardTap(recognzier:UITapGestureRecognizer) {
+        switch recognzier.state {
+        case .ended:
+            animateTransitionIfNeeded(state: nextState, duration: 0.9)
+        default:
+            break
         }
+    }
 
-        @objc
-        func handleCardPan (recognizer:UIPanGestureRecognizer) {
-            switch recognizer.state {
-            case .began:
-                startInteractiveTransition(state: nextState, duration: 0.9)
-            case .changed:
-                let translation = recognizer.translation(in: self.cardViewController.handleArea)
-                var fractionComplete = translation.y / cardHeight
-                fractionComplete = cardVisible ? fractionComplete : -fractionComplete
-                updateInteractiveTransition(fractionCompleted: fractionComplete)
-            case .ended:
-                continueInteractiveTransition()
-            default:
-                break
-            }
+    @objc func handleCardPan (recognizer:UIPanGestureRecognizer) {
+        switch recognizer.state {
+        case .began:
+            startInteractiveTransition(state: nextState, duration: 0.9)
+
+        case .changed:
+            let translation = recognizer.translation(in: self.cardViewController.handleArea)
+            var fractionComplete = translation.y / endCardHeight
+            fractionComplete = cardVisible ? fractionComplete : -fractionComplete
+            updateInteractiveTransition(fractionCompleted: fractionComplete)
+
+        case .ended:
+            continueInteractiveTransition()
+        default:
+            break
         }
+    }
 
-        func animateTransitionIfNeeded (state:CardState, duration:TimeInterval) {
-            if runningAnimations.isEmpty {
-                let frameAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1) {
-                    switch state {
-                    case .expanded:
-                        self.mapView.isHidden = true
-                        self.cardViewController.titleLabel.text = "Trip Planner"
-                        self.cardViewController.view.frame.origin.y = self.view.frame.height - self.cardHeight
-                        self.altitudeLabel.isHidden = true
-                        self.speedLabel.isHidden = true
-                        self.coarseLabel.isHidden = true
-                        self.floatingBtn.isHidden = true
-                        self.floatingZoomBtn.isHidden = true
-                        self.goBtn.isHidden = true
-                        self.titleBtn.isHidden = true
-                    case .collapsed:
-                        self.mapView.isHidden = false
-                        self.cardViewController.titleLabel.text = "You're offline"
-                        self.cardViewController.view.frame.origin.y = self.view.frame.height - 75 //- self.cardHandleAreaHeight
-                        self.altitudeLabel.isHidden = false
-                        self.speedLabel.isHidden = false
-                        self.coarseLabel.isHidden = false
-                        self.floatingBtn.isHidden = false
-                        self.floatingZoomBtn.isHidden = false
-                        self.goBtn.isHidden = false
-                        self.titleBtn.isHidden = false
-                    }
+    func animateTransitionIfNeeded (state:CardState, duration:TimeInterval) {
+
+        let boldFont = UIFont.boldSystemFont(ofSize: 20)
+        let configuration = UIImage.SymbolConfiguration(font: boldFont)
+
+        if runningAnimations.isEmpty {
+            let frameAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1) {
+                switch state {
+                case .expanded:
+
+                    self.cardViewController.chevronBtn.setImage(UIImage(systemName: "chevron.compact.down", withConfiguration: configuration), for: .normal)
+                    self.cardViewController.titleLabel.text = "Trip Planner"
+
+                    self.cardViewController.view.frame.origin.y = self.view.frame.height - self.endCardHeight + 55
+                    self.visualEffectView.effect = UIBlurEffect(style: .dark)
+                    self.mapView.addSubview(self.visualEffectView)
+
+                case .collapsed:
+
+                    self.visualEffectView.removeFromSuperview()
+                    self.cardViewController.chevronBtn.setImage(UIImage(systemName: "chevron.compact.up", withConfiguration: configuration), for: .normal)
+                    self.cardViewController.titleLabel.text = "You're offline"
+                    
+                    self.cardViewController.view.frame.origin.y = self.view.frame.height - self.startCardHeight + 55
+                    self.visualEffectView.effect = nil
                 }
+            }
 
-                frameAnimator.addCompletion { _ in
-                    self.cardVisible = !self.cardVisible
-                    self.runningAnimations.removeAll()
+            frameAnimator.addCompletion { _ in
+                self.cardVisible = !self.cardVisible
+                self.runningAnimations.removeAll()
+            }
+
+            frameAnimator.startAnimation()
+
+            runningAnimations.append(frameAnimator)
+
+            let cornerRadiusAnimator = UIViewPropertyAnimator(duration: duration, curve: .linear) {
+                switch state {
+                case .expanded:
+                    self.cardViewController.view.layer.cornerRadius = 12
+                case .collapsed:
+                    self.cardViewController.view.layer.cornerRadius = 0
                 }
-
-                frameAnimator.startAnimation()
-                runningAnimations.append(frameAnimator)
-
-
-                let cornerRadiusAnimator = UIViewPropertyAnimator(duration: duration, curve: .linear) {
-                    switch state {
-                    case .expanded:
-                        self.cardViewController.view.layer.cornerRadius = 12
-                    case .collapsed:
-                        self.cardViewController.view.layer.cornerRadius = 0
-                    }
-                }
-
-                cornerRadiusAnimator.startAnimation()
-                runningAnimations.append(cornerRadiusAnimator)
-
-                let blurAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1) {
-                    switch state {
-                    case .expanded:
-                        self.visualEffectView.effect = UIBlurEffect(style: .dark)
-                    case .collapsed:
-                        self.visualEffectView.effect = nil
-                    }
-                }
-
-                blurAnimator.startAnimation()
-                runningAnimations.append(blurAnimator)
             }
+
+            cornerRadiusAnimator.startAnimation()
+
+            runningAnimations.append(cornerRadiusAnimator)
+        }
+    }
+
+    func startInteractiveTransition(state:CardState, duration:TimeInterval) {
+
+        if runningAnimations.isEmpty {
+            animateTransitionIfNeeded(state: state, duration: duration)
         }
 
-        func startInteractiveTransition(state:CardState, duration:TimeInterval) {
-            if runningAnimations.isEmpty {
-                animateTransitionIfNeeded(state: state, duration: duration)
-            }
-            for animator in runningAnimations {
-                animator.pauseAnimation()
-                animationProgressWhenInterrupted = animator.fractionComplete
-            }
+        for animator in runningAnimations {
+            animator.pauseAnimation()
+            animationProgressWhenInterrupted = animator.fractionComplete
         }
+    }
 
-        func updateInteractiveTransition(fractionCompleted:CGFloat) {
-            for animator in runningAnimations {
-                animator.fractionComplete = fractionCompleted + animationProgressWhenInterrupted
-            }
+    func updateInteractiveTransition(fractionCompleted:CGFloat) {
+        for animator in runningAnimations {
+            animator.fractionComplete = fractionCompleted + animationProgressWhenInterrupted
         }
+    }
 
-        func continueInteractiveTransition (){
-            for animator in runningAnimations {
-                animator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
-            }
+    func continueInteractiveTransition (){
+        for animator in runningAnimations {
+            animator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
         }
+    }
+
     //--------------------------------------------------------------------------------
-    
     // MARK: - AddGeotification
-    // MARK: Loading and saving functions
+
     func loadAllGeotifications() {
         geotifications.removeAll()
         let allGeotifications = Geotification.allGeotifications()
@@ -591,8 +617,7 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
             print("error encoding geotifications")
         }
     }
-    
-    // MARK: Functions that update the model/associated views with geotification changes
+
     func add(geotification: Geotification) {
         geotifications.append(geotification)
         mapView.addAnnotation(geotification)
@@ -609,17 +634,13 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
     }
     
     func updateGeotificationsCount() {
-        if UIDevice.current.userInterfaceIdiom == .pad  {
-            navigationItem.title = "TheLight Software - Geotify: \(geotifications.count)"
-        } else {
-            navigationItem.title = "Geotify"
-        }
+
         //limit the number of geotifications user can set, disables the Add button in the navigation bar whenever the app reaches the limit.
         navigationItem.rightBarButtonItem?.isEnabled = (geotifications.count < 20)
         self.titleBtn.setTitle("Geotify: \(geotifications.count)", for: .normal)
     }
     
-    // MARK: Map overlay functions
+    // MARK: - Map overlay
     func addRadiusOverlay(forGeotification geotification: Geotification) {
         mapView.addOverlay(MKCircle(center: geotification.coordinate, radius: geotification.radius))
     }
@@ -642,6 +663,7 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
     }
     
     // MARK: - Monitoring
+
     func region(with geotification: Geotification) -> CLCircularRegion {
         let region = CLCircularRegion(center: geotification.coordinate, radius: geotification.radius, identifier: geotification.identifier)
         region.notifyOnEntry = (geotification.eventType == .onEntry)
@@ -651,7 +673,7 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
     
     func startMonitoring(geotification: Geotification) {
         if !CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self) {
-            showAlert(withTitle:"Error", message: "Geofencing is not supported on this device!")
+            showAlert(title:"Error", message: "Geofencing is not supported on this device!")
             return
         }
         
@@ -660,7 +682,7 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
       Your geotification is saved but will only be activated once you grant
       Geotify permission to access the device location.
       """
-            showAlert(withTitle:"Warning", message: message)
+            showAlert(title:"Warning", message: message)
         }
         
         let fenceRegion = region(with: geotification)
@@ -674,8 +696,8 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
         }
     }
     
-    //MARK:  RegionsProtocol
-    //setup GetRegion
+    //MARK: - Regions
+
     func loadOverlayForRegionWithLatitude(_ latitude: Double, andLongitude longitude: Double) {
         
         let coordinates = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
@@ -684,7 +706,20 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
         self.mapView.addOverlay(circle)
     }
 
+    @objc func addGeotifation() {
+        self.performSegue(withIdentifier: "addGeotification", sender: self)
+    }
+
+    func openRegion() {
+        self.performSegue(withIdentifier: "getregionSegue", sender: self)
+    }
+
+    func openAddress() {
+        self.performSegue(withIdentifier: "getaddressSegue", sender: self)
+    }
+
     // MARK: - Segues
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "addGeotification" {
@@ -712,9 +747,10 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
             regionsController.delegate = self
         }
     }
-//---------------------------------------------------------------------
-    //added Journal
-    @IBAction func addItemPressed(_ sender: Any) {
+
+    // MARK: - Journal
+
+    @objc func addItemBtn(_ sender: Any) {
         guard let currentLocation = mapView.userLocation.location else {
             return
         }
@@ -736,10 +772,60 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, Re
         let annotation = annotationForLocation(location)
         mapView.addAnnotation(annotation)
     }
-}
-//---------------------------------------------------------------------
 
-//AddGeotification
+    // MARK: - UIAlertController
+
+    @objc func shareButton(_ sender: AnyObject) {
+
+        let alertController = UIAlertController(title:"", message:"Menu", preferredStyle: .actionSheet)
+
+        let buttonOne = UIAlertAction(title: "Show Traffic", style: .default, handler: { (action) in
+            //self.trafficBtnTapped(self)
+        })
+        let buttonTwo = UIAlertAction(title: "Show Scale", style: .default, handler: { (action) in
+            //self.scaleBtnTapped()
+        })
+        let buttonThree = UIAlertAction(title: "Show Compass", style: .default, handler: { (action) in
+            //self.compassBtnTapped()
+        })
+        let buttonFour = UIAlertAction(title: "Show Buildings", style: .default, handler: { (action) in
+            //self.buildingBtnTapped()
+        })
+        let buttonFive = UIAlertAction(title: "Show User Location", style: .default, handler: { (action) in
+            //self.userlocationBtnTapped()
+        })
+        let buttonSix = UIAlertAction(title: "Show Points of Interest", style: .default, handler: { (action) in
+            //self.pointsofinterestBtnTapped()
+        })
+        let buttonSeven = UIAlertAction(title: "Alternate Routes", style: .default, handler: { (action) in
+            //self.requestsAlternateRoutesBtnTapped()
+        })
+        let buttonEight = UIAlertAction(title: "Show Call Out", style: .default, handler: { (action) in
+            //self.displayInFlyoverMode()
+        })
+        let buttonCancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+        }
+
+        alertController.addAction(buttonOne)
+        alertController.addAction(buttonTwo)
+        alertController.addAction(buttonThree)
+        alertController.addAction(buttonFour)
+        alertController.addAction(buttonFive)
+        alertController.addAction(buttonSix)
+        alertController.addAction(buttonSeven)
+        alertController.addAction(buttonEight)
+        alertController.addAction(buttonCancel)
+
+        if let popoverController = alertController.popoverPresentationController {
+            popoverController.barButtonItem = sender as? UIBarButtonItem
+        }
+        self.present(alertController, animated: true)
+    }
+
+}
+
+//---------------------------------------------------------------------
+// MARK: - AddGeotification
 @available(iOS 13.0, *)
 extension GeotificationVC: AddGeotificationsViewControllerDelegate {
     
@@ -752,6 +838,7 @@ extension GeotificationVC: AddGeotificationsViewControllerDelegate {
         saveAllGeotifications()
     }
 }
+
 // MARK: - Location Manager Delegate
 //AddGeotification and GetAddress
 @available(iOS 13.0, *)
@@ -773,23 +860,14 @@ extension GeotificationVC: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateHeading locations: CLHeading) {
         coarseLabel.text = "\(locations.magneticHeading)˚"
     }
-    
-    //Get Address Button
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-//--------------------------------------------------------------------------------
-        
-        if let location = locations.last { //locations.first
-            altitudeLabel.text = String(format: "Alt: %.2f", location.altitude)
-            speedLabel.text = String(format: "Speed: %.0f", location.speed)
-            coarseLabel.text = String(format: "Course: %.0f", location.course) //"\(location.course)˚"
-        }
 
-        //Get Address Button
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+
+        // MARK: - getAddress
         CLGeocoder().reverseGeocodeLocation(manager.location!, completionHandler: {(placemarks, error)->Void in
             
             if (error != nil) {
-                self.simpleAlert(title: "Alert", message: "Reverse geocoder failed with error" + error!.localizedDescription)
+                self.showAlert(title: "Alert", message: "Reverse geocoder failed with error" + error!.localizedDescription)
                 return
             }
             
@@ -797,9 +875,16 @@ extension GeotificationVC: CLLocationManagerDelegate {
                 let pm = placemarks![0]
                 self.displayLocationInfo(pm)
             } else {
-                self.simpleAlert(title: "Alert", message: "Problem with the data received from geocoder")
+                self.showAlert(title: "Alert", message: "Problem with the data received from geocoder")
             }
         })
+
+        // MARK: - Map Info
+        if let location = locations.last { //locations.first
+            altitudeLabel.text = String(format: "Alt: %.2f", location.altitude)
+            speedLabel.text = String(format: "Speed: %.0f", location.speed)
+            coarseLabel.text = String(format: "Course: %.0f", location.course) //"\(location.course)˚"
+        }
     }
 }
 
@@ -808,25 +893,28 @@ extension GeotificationVC: CLLocationManagerDelegate {
 extension GeotificationVC: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        let identifier = "myGeotification"
+        let reuseId = "pin"
         if annotation is Geotification {
-            var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKPinAnnotationView
-            if annotationView == nil {
-                annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-                annotationView?.canShowCallout = true
-                annotationView?.pinTintColor = .systemBlue
-                annotationView?.isMultipleTouchEnabled = false
-                annotationView?.isDraggable = true
-                annotationView?.animatesDrop = true
-                
+            var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+            if pinView == nil {
+                pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+                pinView?.image = #imageLiteral(resourceName: "AddPin")
+                pinView?.animatesDrop = true
+                pinView?.pinTintColor = .systemBlue
+                pinView?.canShowCallout = true
+                pinView?.isSelected = false
+                //pinView?.isMultipleTouchEnabled = false
+                pinView?.isDraggable = true
+
                 let removeButton = UIButton(type: .custom)
                 removeButton.frame = .init(x: 0, y: 0, width: 23, height: 23)
-                removeButton.setImage(UIImage(systemName: "x.circle"), for: .normal)
-                annotationView?.leftCalloutAccessoryView = removeButton
+                removeButton.setImage(UIImage(systemName: "x.circle"), for: .normal) //x.circle
+                pinView?.leftCalloutAccessoryView = removeButton
+
             } else {
-                annotationView?.annotation = annotation
+                pinView?.annotation = annotation
             }
-            return annotationView
+            return pinView
         }
         return nil
     }
@@ -848,7 +936,8 @@ extension GeotificationVC: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        // Delete geotification
+
+        // MARK: - Delete Geotification
         let geotification = view.annotation as! Geotification
         stopMonitoring(geotification: geotification)
         remove(geotification: geotification)

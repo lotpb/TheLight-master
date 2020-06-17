@@ -89,7 +89,7 @@ final class JobVC: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newData))
         navigationItem.title = "Jobs"
-        //self.navigationItem.largeTitleDisplayMode = .always
+        self.navigationItem.largeTitleDisplayMode = .always
         
         searchController = UISearchController(searchResultsController: resultsController)
         navigationItem.searchController = searchController
@@ -275,7 +275,7 @@ final class JobVC: UIViewController {
                     //search
                     let indexPath = resultsController.tableView!.indexPathForSelectedRow!.row
                     
-                    VC.objectId = filteredTitles[indexPath].jobNo
+                    VC.objectId = filteredTitles[indexPath].jobId
                     VC.frm11 = filteredTitles[indexPath].active
                     VC.frm12 = filteredTitles[indexPath].jobNo
                     VC.frm13 = filteredTitles[indexPath].description
@@ -291,7 +291,7 @@ final class JobVC: UIViewController {
                         VC.image = self.selectedImage
                     } else {
                         //firebase
-                        VC.objectId = joblist[indexPath].jobNo
+                        VC.objectId = joblist[indexPath].jobId
                         VC.frm11 = joblist[indexPath].active
                         VC.frm12 = joblist[indexPath].jobNo
                         VC.frm13 = joblist[indexPath].description

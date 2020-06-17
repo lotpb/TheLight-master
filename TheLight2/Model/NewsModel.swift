@@ -21,12 +21,14 @@ struct NewsModel {
     let viewCount: NSNumber
     let creationDate: Date
     var videoUrl: String?
+    var storageID: String?
     
     
     init(dictionary: [String: Any]) {
         
         self.uid = dictionary["uid"] as? String ?? ""
         self.newsId = dictionary["newsId"] as? String ?? ""
+        self.storageID = dictionary["storageID"] as? String ?? ""
         self.imageUrl = dictionary["imageUrl"] as? String ?? ""
         self.videoUrl = dictionary["videoUrl"] as? String ?? ""
         self.newsTitle = dictionary["newsTitle"] as? String ?? ""

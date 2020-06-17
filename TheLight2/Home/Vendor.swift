@@ -264,11 +264,11 @@ final class Vendor: UIViewController {
             let formatter = NumberFormatter()
             formatter.numberStyle = .none
             
-            let controller = (segue.destination as! UINavigationController).topViewController as! LeadDetail
-            controller.formController = "Vendor"
+            let VC = (segue.destination as! UINavigationController).topViewController as! LeadDetail
+            VC.formController = "Vendor"
             navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
             
             var LeadNo:Int?
             var Zip:Int?
@@ -314,106 +314,113 @@ final class Vendor: UIViewController {
             }
             let dateFormat = DateFormatter()
             dateFormat.dateFormat = "MMM dd yy"
-            controller.tbl16 = String(format: "%@", dateFormat.string(from: dateUpdated)) as String
+            VC.tbl16 = String(format: "%@", dateFormat.string(from: dateUpdated)) as String
             
             if navigationItem.searchController?.isActive == true {
                 //search
                 let vend: VendModel
                 vend = filteredTitles[indexPath!]
                 
-                controller.leadNo =  formatter.string(from: LeadNo! as NSNumber)
-                controller.active = formatter.string(from: Active! as NSNumber)
-                controller.objectId = vend.vendId
-                controller.date = vend.webpage
-                controller.name = vend.vendor
-                controller.address = vend.address
-                controller.city = vend.city
-                controller.state = vend.state
-                controller.zip = formatter.string(from: Zip! as NSNumber)
-                controller.amount = vend.profession
-                controller.tbl11 = vend.phone
-                controller.tbl12 = vend.phone1
-                controller.tbl13 = vend.phone2
-                controller.tbl14 = vend.phone3
-                controller.tbl15 = vend.assistant as NSString
-                controller.tbl21 = vend.email as NSString
-                controller.tbl22 = vend.department
-                controller.tbl23 = vend.office
-                controller.tbl24 = vend.manager
-                controller.tbl25 = vend.profession
-                controller.tbl26 = vend.webpage as NSString
-                controller.comments = vend.comments
+                VC.leadNo =  formatter.string(from: LeadNo! as NSNumber)
+                VC.active = formatter.string(from: Active! as NSNumber)
+                VC.objectId = vend.vendId
+                VC.date = vend.webpage
+                VC.name = vend.vendor
+                VC.address = vend.address
+                VC.city = vend.city
+                VC.state = vend.state
+                VC.zip = formatter.string(from: Zip! as NSNumber)
+                VC.amount = vend.profession
+                VC.tbl11 = vend.phone
+                VC.tbl12 = vend.phone1
+                VC.tbl13 = vend.phone2
+                VC.tbl14 = vend.phone3
+                VC.tbl15 = vend.assistant as NSString
+                VC.tbl21 = vend.email as NSString
+                VC.tbl22 = vend.department
+                VC.tbl23 = vend.office
+                VC.tbl24 = vend.manager
+                VC.tbl25 = vend.profession
+                VC.tbl26 = vend.webpage as NSString
+                VC.comments = vend.comments
+                VC.photo = vend.photo
                 
             } else {
                 
                 if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     
-                    controller.leadNo =  formatter.string(from: LeadNo! as NSNumber)
-                    controller.active = formatter.string(from: Active! as NSNumber)
-                    controller.objectId = (_feedItems[indexPath!] as AnyObject).value(forKey: "objectId") as? String
-                    controller.date = (_feedItems[indexPath!] as AnyObject).value(forKey: "WebPage") as? String
-                    controller.name = (_feedItems[indexPath!] as AnyObject).value(forKey: "Vendor") as? String
-                    controller.address = (_feedItems[indexPath!] as AnyObject).value(forKey: "Address") as? String
-                    controller.city = (_feedItems[indexPath!] as AnyObject).value(forKey: "City") as? String
-                    controller.state = (_feedItems[indexPath!] as AnyObject).value(forKey: "State") as? String
-                    controller.zip = (_feedItems[indexPath!] as AnyObject).value(forKey: "Zip") as? String
-                    controller.amount = (_feedItems[indexPath!] as AnyObject).value(forKey: "Profession") as? String
-                    controller.tbl11 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Phone") as? String
-                    controller.tbl12 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Phone1") as? String
-                    controller.tbl13 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Phone2") as? String
-                    controller.tbl14 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Phone3") as? String
-                    controller.tbl15 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Assistant") as? NSString
-                    controller.tbl21 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Email") as? NSString
-                    controller.tbl22 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Department") as? String
-                    controller.tbl23 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Office") as? String
-                    controller.tbl24 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Manager") as? String
-                    controller.tbl25 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Profession") as? String
-                    controller.tbl26 = (_feedItems[indexPath!] as AnyObject).value(forKey: "WebPage") as? NSString
-                    controller.comments = (_feedItems[indexPath!] as AnyObject).value(forKey: "Comments") as? String
+                    VC.leadNo =  formatter.string(from: LeadNo! as NSNumber)
+                    VC.active = formatter.string(from: Active! as NSNumber)
+                    VC.objectId = (_feedItems[indexPath!] as AnyObject).value(forKey: "objectId") as? String
+                    VC.date = (_feedItems[indexPath!] as AnyObject).value(forKey: "WebPage") as? String
+                    VC.name = (_feedItems[indexPath!] as AnyObject).value(forKey: "Vendor") as? String
+                    VC.address = (_feedItems[indexPath!] as AnyObject).value(forKey: "Address") as? String
+                    VC.city = (_feedItems[indexPath!] as AnyObject).value(forKey: "City") as? String
+                    VC.state = (_feedItems[indexPath!] as AnyObject).value(forKey: "State") as? String
+                    VC.zip = (_feedItems[indexPath!] as AnyObject).value(forKey: "Zip") as? String
+                    VC.amount = (_feedItems[indexPath!] as AnyObject).value(forKey: "Profession") as? String
+                    VC.tbl11 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Phone") as? String
+                    VC.tbl12 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Phone1") as? String
+                    VC.tbl13 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Phone2") as? String
+                    VC.tbl14 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Phone3") as? String
+                    VC.tbl15 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Assistant") as? NSString
+                    VC.tbl21 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Email") as? NSString
+                    VC.tbl22 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Department") as? String
+                    VC.tbl23 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Office") as? String
+                    VC.tbl24 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Manager") as? String
+                    VC.tbl25 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Profession") as? String
+                    VC.tbl26 = (_feedItems[indexPath!] as AnyObject).value(forKey: "WebPage") as? NSString
+                    VC.comments = (_feedItems[indexPath!] as AnyObject).value(forKey: "Comments") as? String
                 } else {
                     
                     //firebase
-                    controller.leadNo =  formatter.string(from: LeadNo! as NSNumber)
-                    controller.active = formatter.string(from: Active! as NSNumber)
-                    controller.objectId = vendlist[indexPath!].vendId
-                    controller.date = vendlist[indexPath!].webpage
-                    controller.name = vendlist[indexPath!].vendor
-                    controller.address = vendlist[indexPath!].address
-                    controller.city = vendlist[indexPath!].city
-                    controller.state = vendlist[indexPath!].state
-                    controller.zip = formatter.string(from: Zip! as NSNumber)
-                    controller.amount = vendlist[indexPath!].profession
-                    controller.tbl11 = vendlist[indexPath!].phone
-                    controller.tbl12 = vendlist[indexPath!].phone1
-                    controller.tbl13 = vendlist[indexPath!].phone2
-                    controller.tbl14 = vendlist[indexPath!].phone3
-                    controller.tbl15 = vendlist[indexPath!].assistant as NSString
-                    controller.tbl21 = vendlist[indexPath!].email as NSString
-                    controller.tbl22 = vendlist[indexPath!].department
-                    controller.tbl23 = vendlist[indexPath!].office
-                    controller.tbl24 = vendlist[indexPath!].manager
-                    controller.tbl25 = vendlist[indexPath!].profession
-                    controller.tbl26 = vendlist[indexPath!].webpage as NSString
-                    controller.comments = vendlist[indexPath!].comments
+                    VC.leadNo =  formatter.string(from: LeadNo! as NSNumber)
+                    VC.active = formatter.string(from: Active! as NSNumber)
+                    VC.leadNo = vendlist[indexPath!].vendId
+                    VC.objectId = vendlist[indexPath!].vendId
+                    VC.date = vendlist[indexPath!].webpage
+                    VC.name = vendlist[indexPath!].vendor
+                    VC.address = vendlist[indexPath!].address
+                    VC.city = vendlist[indexPath!].city
+                    VC.state = vendlist[indexPath!].state
+                    VC.zip = formatter.string(from: Zip! as NSNumber)
+                    VC.amount = vendlist[indexPath!].profession
+                    VC.tbl11 = vendlist[indexPath!].phone
+                    VC.tbl12 = vendlist[indexPath!].phone1
+                    VC.tbl13 = vendlist[indexPath!].phone2
+                    VC.tbl14 = vendlist[indexPath!].phone3
+                    VC.tbl15 = vendlist[indexPath!].assistant as NSString
+                    VC.tbl16 = dateFormat.string(from: vendlist[indexPath!].lastUpdate as Date) as String
+                    VC.tbl21 = vendlist[indexPath!].email as NSString
+                    VC.tbl22 = vendlist[indexPath!].department
+                    VC.tbl23 = vendlist[indexPath!].office
+                    VC.tbl24 = vendlist[indexPath!].manager
+                    VC.tbl25 = vendlist[indexPath!].profession
+                    VC.tbl26 = vendlist[indexPath!].webpage as NSString
+                    VC.tbl17 = vendlist[indexPath!].photo
+                    VC.tbl27 = vendlist[indexPath!].uid
+                    VC.photo = vendlist[indexPath!].photo
+                    VC.comments = vendlist[indexPath!].comments
                 }
             }
 
-            controller.l11 = "Phone"; controller.l12 = "Phone1"
-            controller.l13 = "Phone2"; controller.l14 = "Phone3"
-            controller.l15 = "Assistant"; controller.l21 = "Email"
-            controller.l22 = "Department"; controller.l23 = "Office"
-            controller.l24 = "Manager"; controller.l25 = "Profession"
-            controller.l16 = "Last Updated"; controller.l26 = "Web Page"
-            controller.l1datetext = "Web Page:"
-            controller.lnewsTitle = Config.NewsVend
+            VC.l11 = "Phone"; VC.l12 = "Phone1"
+            VC.l13 = "Phone2"; VC.l14 = "Phone3"
+            VC.l15 = "Assistant"; VC.l21 = "Email"
+            VC.l22 = "Department"; VC.l23 = "Office"
+            VC.l24 = "Manager"; VC.l25 = "Profession"
+            VC.l16 = "Last Updated"; VC.l26 = "Web Page"
+            VC.l17 = "Photo"; VC.l27 = "uid"
+            VC.l1datetext = "Web Page:"
+            VC.lnewsTitle = Config.NewsVend
         }
         
         if segue.identifier == "newvendSegue" {
-            let controller = (segue.destination as! UINavigationController).topViewController as! EditData
-            controller.formController = "Vendor"
-            controller.status = "New"
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            let VC = (segue.destination as! UINavigationController).topViewController as! EditData
+            VC.formController = "Vendor"
+            VC.status = "New"
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
         }
         
     }

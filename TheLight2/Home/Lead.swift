@@ -110,6 +110,7 @@ final class Lead: UIViewController {
         bgView.backgroundColor = .secondarySystemGroupedBackground
         tableView!.backgroundView = bgView
         self.tableView!.tableFooterView = UIView(frame: .zero)
+        self.tableView!.reloadData()
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
         resultsController.tableView.backgroundColor = ColorX.LGrayColor
@@ -201,7 +202,6 @@ final class Lead: UIViewController {
                     self.leadlist.sort(by: { (p1, p2) -> Bool in
                         return p1.creationDate.compare(p2.creationDate) == .orderedDescending
                     })
-                    
                     DispatchQueue.main.async(execute: {
                         self.tableView?.reloadData()
                     })
@@ -282,11 +282,11 @@ final class Lead: UIViewController {
             let formatter = NumberFormatter()
             formatter.numberStyle = .none
             
-            let controller = (segue.destination as! UINavigationController).topViewController as! LeadDetail
-            controller.formController = "Leads"
+            let VC = (segue.destination as! UINavigationController).topViewController as! LeadDetail
+            VC.formController = "Leads"
             navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
             
             var LeadNo:Int?
             var Zip:Int?
@@ -356,116 +356,124 @@ final class Lead: UIViewController {
             }
             let dateFormat = DateFormatter()
             dateFormat.dateFormat = "MMM dd yy"
-            controller.tbl16 = String(format: "%@", dateFormat.string(from: dateUpdated)) as String
+            VC.tbl16 = String(format: "%@", dateFormat.string(from: dateUpdated)) as String
             
             if navigationItem.searchController?.isActive == true {
                 //search
                 let lead: LeadModel
                 lead = filteredTitles[indexPath!]
                 
-                controller.objectId = lead.leadId
-                controller.leadNo = formatter.string(from: LeadNo! as NSNumber)
-                controller.zip = formatter.string(from: Zip! as NSNumber)
-                controller.amount = formatter.string(from: Amount! as NSNumber)
-                controller.tbl22 = formatter.string(from: SalesNo! as NSNumber)
-                controller.tbl23 = formatter.string(from: JobNo! as NSNumber)
-                controller.tbl24 = formatter.string(from: AdNo! as NSNumber)
-                controller.active = formatter.string(from: Active! as NSNumber)
-                controller.tbl25 = formatter.string(from: Active! as NSNumber)
-                controller.tbl21 = dateFormat.string(from: lead.aptdate as Date) as NSString
-                controller.date = dateFormat.string(from: lead.creationDate as Date)
-                controller.name = lead.lastname
-                controller.address = lead.address
-                controller.city = lead.city
-                controller.state = lead.state
-                controller.tbl11 = lead.callback
-                controller.tbl12 = lead.phone
-                controller.tbl13 = lead.first
-                controller.tbl14 = lead.spouse
-                controller.tbl15 = lead.email as NSString
-                controller.tbl26 = lead.photo as NSString
-                controller.comments = lead.comments
+                VC.objectId = lead.leadId
+                VC.leadNo = formatter.string(from: LeadNo! as NSNumber)
+                VC.zip = formatter.string(from: Zip! as NSNumber)
+                VC.amount = formatter.string(from: Amount! as NSNumber)
+                VC.tbl22 = formatter.string(from: SalesNo! as NSNumber)
+                VC.tbl23 = formatter.string(from: JobNo! as NSNumber)
+                VC.tbl24 = formatter.string(from: AdNo! as NSNumber)
+                VC.active = formatter.string(from: Active! as NSNumber)
+                VC.tbl25 = formatter.string(from: Active! as NSNumber)
+                VC.tbl21 = dateFormat.string(from: lead.aptdate as Date) as NSString
+                VC.date = dateFormat.string(from: lead.creationDate as Date)
+                VC.name = lead.lastname
+                VC.address = lead.address
+                VC.city = lead.city
+                VC.state = lead.state
+                VC.tbl11 = lead.callback
+                VC.tbl12 = lead.phone
+                VC.tbl13 = lead.first
+                VC.tbl14 = lead.spouse
+                VC.tbl15 = lead.email as NSString
+                VC.tbl26 = lead.photo as NSString
+                VC.photo = lead.photo
+                VC.comments = lead.comments
                 
             } else {
                 
                 if ((defaults.string(forKey: "backendKey")) == "Parse") {
-                    controller.leadNo = formatter.string(from: LeadNo! as NSNumber)
-                    controller.zip = formatter.string(from: Zip! as NSNumber)
-                    controller.amount = formatter.string(from: Amount! as NSNumber)
-                    controller.tbl22 = formatter.string(from: SalesNo! as NSNumber)
-                    controller.tbl23 = formatter.string(from: JobNo! as NSNumber)
-                    controller.tbl24 = formatter.string(from: AdNo! as NSNumber)
-                    controller.active = formatter.string(from: Active! as NSNumber)
-                    controller.tbl25 = formatter.string(from: Active! as NSNumber)
-                    controller.tbl21 = (_feedItems[indexPath!] as AnyObject).value(forKey: "AptDate") as? NSString
-                    controller.objectId = (_feedItems[indexPath!] as AnyObject).value(forKey: "objectId") as? String
-                    controller.date = (_feedItems[indexPath!] as AnyObject).value(forKey: "Date") as? String
-                    controller.name = (_feedItems[indexPath!] as AnyObject).value(forKey: "LastName") as? String
-                    controller.address = (_feedItems[indexPath!] as AnyObject).value(forKey: "Address") as? String
-                    controller.city = (_feedItems[indexPath!] as AnyObject).value(forKey: "City") as? String
-                    controller.state = (_feedItems[indexPath!] as AnyObject).value(forKey: "State") as? String
-                    controller.tbl11 = (_feedItems[indexPath!] as AnyObject).value(forKey: "CallBack") as? String
-                    controller.tbl12 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Phone") as? String
-                    controller.tbl13 = (_feedItems[indexPath!] as AnyObject).value(forKey: "First") as? String
-                    controller.tbl14 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Spouse") as? String
-                    controller.tbl15 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Email") as? NSString
-                    controller.tbl26 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Photo") as? NSString
-                    controller.comments = (_feedItems[indexPath!] as AnyObject).value(forKey: "Coments") as? String
+                    VC.leadNo = formatter.string(from: LeadNo! as NSNumber)
+                    VC.zip = formatter.string(from: Zip! as NSNumber)
+                    VC.amount = formatter.string(from: Amount! as NSNumber)
+                    VC.tbl22 = formatter.string(from: SalesNo! as NSNumber)
+                    VC.tbl23 = formatter.string(from: JobNo! as NSNumber)
+                    VC.tbl24 = formatter.string(from: AdNo! as NSNumber)
+                    VC.active = formatter.string(from: Active! as NSNumber)
+                    VC.tbl25 = formatter.string(from: Active! as NSNumber)
+                    VC.tbl21 = (_feedItems[indexPath!] as AnyObject).value(forKey: "AptDate") as? NSString
+                    VC.objectId = (_feedItems[indexPath!] as AnyObject).value(forKey: "objectId") as? String
+                    VC.date = (_feedItems[indexPath!] as AnyObject).value(forKey: "Date") as? String
+                    VC.name = (_feedItems[indexPath!] as AnyObject).value(forKey: "LastName") as? String
+                    VC.address = (_feedItems[indexPath!] as AnyObject).value(forKey: "Address") as? String
+                    VC.city = (_feedItems[indexPath!] as AnyObject).value(forKey: "City") as? String
+                    VC.state = (_feedItems[indexPath!] as AnyObject).value(forKey: "State") as? String
+                    VC.tbl11 = (_feedItems[indexPath!] as AnyObject).value(forKey: "CallBack") as? String
+                    VC.tbl12 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Phone") as? String
+                    VC.tbl13 = (_feedItems[indexPath!] as AnyObject).value(forKey: "First") as? String
+                    VC.tbl14 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Spouse") as? String
+                    VC.tbl15 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Email") as? NSString
+                    VC.tbl26 = (_feedItems[indexPath!] as AnyObject).value(forKey: "Photo") as? NSString
+                    VC.comments = (_feedItems[indexPath!] as AnyObject).value(forKey: "Coments") as? String
                     
                 } else {
                     //firebase
-                    controller.objectId = leadlist[indexPath!].leadId
-                    controller.leadNo = leadlist[indexPath!].leadId
-                    controller.zip = formatter.string(from: Zip! as NSNumber)
-                    controller.amount = formatter.string(from: Amount! as NSNumber)
-                    controller.tbl22 = formatter.string(from: SalesNo! as NSNumber)
-                    controller.tbl23 = formatter.string(from: JobNo! as NSNumber)
-                    controller.tbl24 = formatter.string(from: AdNo! as NSNumber)
-                    controller.active = formatter.string(from: Active! as NSNumber)
-                    controller.tbl25 = formatter.string(from: Active! as NSNumber)
-                    controller.tbl21 = dateFormat.string(from: leadlist[indexPath!].aptdate as Date) as NSString
-                    controller.date = dateFormat.string(from: leadlist[indexPath!].creationDate as Date)
-                    controller.name = leadlist[indexPath!].lastname
-                    controller.address = leadlist[indexPath!].address
-                    controller.city = leadlist[indexPath!].city
-                    controller.state = leadlist[indexPath!].state
-                    controller.tbl11 = leadlist[indexPath!].callback
-                    controller.tbl12 = leadlist[indexPath!].phone
-                    controller.tbl13 = leadlist[indexPath!].first
-                    controller.tbl14 = leadlist[indexPath!].spouse
-                    controller.tbl15 = leadlist[indexPath!].email as NSString
-                    controller.tbl26 = leadlist[indexPath!].photo as NSString
-                    controller.comments = leadlist[indexPath!].comments
+                    VC.objectId = leadlist[indexPath!].leadId
+                    VC.leadNo = leadlist[indexPath!].leadId
+                    VC.zip = formatter.string(from: Zip! as NSNumber)
+                    VC.amount = formatter.string(from: Amount! as NSNumber)
+                    VC.date = dateFormat.string(from: leadlist[indexPath!].creationDate as Date)
+                    VC.lastname = leadlist[indexPath!].lastname
+                    VC.name = String(format: "%@ %@", leadlist[indexPath!].first, leadlist[indexPath!].lastname).removeWhiteSpace()
+                    //controller.name = leadlist[indexPath!].lastname
+                    VC.address = leadlist[indexPath!].address
+                    VC.city = leadlist[indexPath!].city
+                    VC.state = leadlist[indexPath!].state
+                    VC.active = formatter.string(from: Active! as NSNumber)
+                    VC.tbl11 = leadlist[indexPath!].callback
+                    VC.tbl12 = leadlist[indexPath!].phone
+                    VC.tbl13 = leadlist[indexPath!].first
+                    VC.tbl14 = leadlist[indexPath!].spouse
+                    VC.tbl15 = leadlist[indexPath!].email as NSString
+                    VC.tbl17 = leadlist[indexPath!].photo
+
+                    VC.tbl21 = dateFormat.string(from: leadlist[indexPath!].aptdate as Date) as NSString
+                    VC.tbl22 = formatter.string(from: SalesNo! as NSNumber)
+                    VC.tbl23 = formatter.string(from: JobNo! as NSNumber)
+                    VC.tbl24 = formatter.string(from: AdNo! as NSNumber)
+                    VC.tbl25 = formatter.string(from: Active! as NSNumber)
+                    VC.tbl26 = leadlist[indexPath!].leadId as NSString?
+                    VC.tbl27 = leadlist[indexPath!].uid
+                    VC.photo = leadlist[indexPath!].photo
+                    VC.comments = leadlist[indexPath!].comments
                 }
             }
             
-            controller.l11 = "Call Back"; controller.l12 = "Phone"
-            controller.l13 = "First"; controller.l14 = "Spouse"
-            controller.l15 = "Email"; controller.l21 = "Apt Date"
-            controller.l22 = "Salesman"; controller.l23 = "Job"
-            controller.l24 = "Advertiser"; controller.l25 = "Active"
-            controller.l16 = "Last Updated"; controller.l26 = "Photo"
-            controller.l1datetext = "Lead Date:"
-            controller.lnewsTitle = Config.NewsLead
+            VC.l11 = "Call Back"; VC.l12 = "Phone"
+            VC.l13 = "First"; VC.l14 = "Spouse"
+            VC.l15 = "Email"; VC.l21 = "Apt Date"
+            VC.l22 = "Salesman"; VC.l23 = "Job"
+            VC.l24 = "Advertiser"; VC.l25 = "Active"
+            VC.l16 = "Last Updated"; VC.l26 = "LeadID"
+            VC.l17 = "Photo"; VC.l27 = "uid"
+            VC.l1datetext = "Lead Date:"
+            VC.lnewsTitle = Config.NewsLead
         }
 
         if segue.identifier == "leaduserSegue" { // FIXME:
             //guard let controller = (segue.destination as! UINavigationController).topViewController as? LeadUserVC else { return }
-            guard let controller = segue.destination as? LeadUserVC else { return }
-            controller.formController = "Leads"
-            controller.objectId = objectIdLabel
-            controller.postBy = titleLabel
-            controller.leadDate = dateLabel
+            guard let VC = segue.destination as? LeadUserVC else { return }
+            VC.formController = "Leads"
+            VC.objectId = objectIdLabel
+            VC.postBy = titleLabel
+            VC.leadDate = dateLabel
             //controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
             //controller.navigationItem.leftItemsSupplementBackButton = true
         }
         
         if segue.identifier == "newleadSegue" {
-            let controller = (segue.destination as! UINavigationController).topViewController as! EditData
-            controller.formController = "Leads"
-            controller.status = "New"
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            let VC = (segue.destination as! UINavigationController).topViewController as! EditData
+            VC.formController = "Leads"
+            VC.status = "New"
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
         }
     }
 }

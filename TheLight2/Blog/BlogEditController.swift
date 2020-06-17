@@ -39,6 +39,7 @@ final class BlogEditController: UIViewController {
     var uid : String?
     var liked : Int?
     var commentNum : Int?
+    //var profileImage : UIImage?
     
     // listTableView Reply
     var posttoIndex: String?
@@ -213,7 +214,7 @@ final class BlogEditController: UIViewController {
         if (commentNum == nil || commentNum == 0) {
             deleteBlog(name: self.objectId!)
         } else {
-            self.simpleAlert(title: "Oops!", message: "Record can't be deleted.")
+            self.showAlert(title: "Oops!", message: "Record can't be deleted.")
         }
     }
     
@@ -506,6 +507,8 @@ extension BlogEditController: UITableViewDataSource {
                 
             } else {
                 //firebase
+                //cell.customImageView.image = self.profileImage
+
                 FirebaseRef.databaseRoot.child("users")
                     .queryOrdered(byChild: "uid")
                     .queryEqual(toValue: self.msgNo)

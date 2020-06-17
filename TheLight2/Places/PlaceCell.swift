@@ -8,13 +8,13 @@
 
 import UIKit
 import MapKit
-import CoreLocation
+//import CoreLocation
 
 
 @available(iOS 13.0, *)
 class PlaceCell: UICollectionViewCell {
     
-    let geoCoder = CLGeocoder()
+    //let geoCoder = CLGeocoder()
     var destLocation: CLLocation? // for distance calculation
     var startLocation: CLLocation? // for distance calculation
     var distance = 0.0
@@ -24,32 +24,61 @@ class PlaceCell: UICollectionViewCell {
     let defaults = UserDefaults.standard
     var startCoordinates = CLLocationCoordinate2D()
     var endCoordinates = CLLocationCoordinate2D()
-    
-    var streetNumber: String?
-    var streetName: String?
-    var cityName: String?
 
-    //var mapStart: VisitModel? {
-    var mapStart: Location? {
+    var cityStart: String?
+    var cityDest: String?
+
+    var mapStart: VisitModel? {
+    ///var mapStart: Location? {
         didSet {
-            
-            let s = mapStart!.description
-            let firstWord = s.components(separatedBy: ",")
-            titleLabelnew.text = firstWord[2].removingWhitespaces()
-            
-            dateFormatter.timeStyle = .medium
-            dateFormatter.dateStyle = .medium
-            //let date1 = mapStart?.arrival_date
-            let date1 = dateFormatter.date(from: (mapStart?.dateString)!)
+            //let s = mapStart!.desciption
+            //let firstWord = s.components(separatedBy: ",")
+            //titleLabelnew.text = firstWord[2].removingWhitespaces()
+            //let date2 = dateFormatter.date(from: (mapStart?.dateString)!)
+
+            //get city data
+            let location = CLLocation(latitude: mapStart!.latitude, longitude: mapStart!.longitude)
+            FetchCity(location) { code in
+                if let code = code {
+                    self.titleLabelnew.text = code
+                }
+            }
+
+            //dateFormatter.timeStyle = .medium
+            //dateFormatter.dateStyle = .medium
+            //dateFormatter.dateFormat = "h:mm a"
+            dateFormatter.timeZone = .current
+            dateFormatter.locale = Locale.current
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+            ///dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+            //dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+            //dateFormatter.isLenient = true
+            //dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss +zz:zz"
+
+
+            let date = mapStart!.arrivaldate
+            let date1 = dateFormatter.date(from: date)
+
+            dateFormatter.timeStyle = .short
+            dateFormatter.dateStyle = .none
+            titleTimeLabel.text = dateFormatter.string(from: date1 ?? Date())
+            //titleTimeLabel.text = String(format: "%@", dateFormatter.string(from: date1!)) as String
+
+            //let date1 = mapStart!.arrivaldate
+
+            //let date1 = dateFormatter.date(from: "\(mapStart!.arrivaldate)")
+            print(date)
+
+
             let calendar = Calendar.current
-            let time = calendar.dateComponents([.month,.weekday,.day,.hour,.minute,.second], from: date1!)
-            //cell header
+            let time = calendar.dateComponents([.month,.weekday,.day,.hour,.minute,.second], from: date1 ?? Date()) //cell header
             dayLabel.text = dateFormatter.shortWeekdaySymbols![time.weekday!-1]
             dayTextLabel.text = "\(time.day!)"
             
-            dateFormatter.timeStyle = .short
-            dateFormatter.dateStyle = .none
-            titleTimeLabel.text = dateFormatter.string(from: date1!)
+            //dateFormatter.timeStyle = .short
+            //dateFormatter.dateStyle = .none
+            //titleTimeLabel.text = dateFormatter.string(from: date1 ?? Date())
+
             
             //mapView
             mapViewStart.removeAnnotations(mapViewStart.annotations)
@@ -68,18 +97,25 @@ class PlaceCell: UICollectionViewCell {
             startLocation = getCenterLocation(for: mapViewStart)
         }
     }
-    //var mapDest: VisitModel? {
-    var mapDest: Location? {
+    var mapDest: VisitModel? {
+    //var mapDest: Location? {
         didSet {
-            
+
+            let location = CLLocation(latitude: mapDest!.latitude, longitude: mapDest!.longitude)
+            FetchCity(location) { code in
+                if let code = code {
+                    self.subtitleLabel.text = code
+                }
+            }
             dateFormatter.timeStyle = .medium
             dateFormatter.dateStyle = .medium
-            //let date2 = mapDest?.arrival_date
-            let date2 = dateFormatter.date(from: (mapDest?.dateString)!)
-            
+            //let date2 = dateFormatter.date(from: (mapDest?.dateString)!)
+            let date1 = mapDest?.arrivaldate
+
             dateFormatter.timeStyle = .short
             dateFormatter.dateStyle = .none
-            subtitleTimeLabel.text = dateFormatter.string(from: date2!)
+            //subtitleTimeLabel.text = dateFormatter.string(from: date2!)
+            subtitleTimeLabel.text = date1
             
             mapViewDest.removeAnnotations(mapViewStart.annotations)
             endCoordinates = CLLocationCoordinate2D(latitude: mapDest!.latitude, longitude: mapDest!.longitude)
@@ -151,15 +187,18 @@ class PlaceCell: UICollectionViewCell {
     lazy var mapViewView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        //view.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)     //Color.LGrayColor.cgColor
-        //view.layer.borderWidth = 1.5
-        //view.layer.masksToBounds = true
+        view.layer.borderColor = UIColor.opaqueSeparator.cgColor
+        view.layer.borderWidth = 0.5
+        view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     var mapViewStart: MKMapView = {
         let view = MKMapView()
+        view.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)   
+        view.layer.borderWidth = 0.5
+        view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -172,10 +211,14 @@ class PlaceCell: UICollectionViewCell {
     
     var toolBar: UIToolbar = {
         let toolBar = UIToolbar()
+
         toolBar.barStyle = .default
         toolBar.isTranslucent = false
         toolBar.tintColor = .white
         toolBar.barTintColor = .red //Color.Mile.toolbarColor
+        //toolBar.clipsToBounds = true
+        //toolBar.sizeToFit()
+        //toolBar.autoresizesSubviews = false
         toolBar.translatesAutoresizingMaskIntoConstraints = false
         return toolBar
     }()
@@ -328,7 +371,7 @@ class PlaceCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         layer.shadowColor = UIColor.lightGray.cgColor
         layer.shadowOffset = .init(width: 0, height: 2.0)
         layer.shadowRadius = 5.0
@@ -346,6 +389,21 @@ class PlaceCell: UICollectionViewCell {
         self.mapViewDest.delegate = self
         self.mapViewDest.isZoomEnabled = true //make map clickable
         self.mapViewDest.isScrollEnabled = false
+
+        //toolBar
+
+        //toolBar.frame = CGRect(x: 0,y: 0,width: self.bounds.width,height: 50)
+//        var homeButton, infoButton, vehicleButton, doneButton, fixedSpace, flexibleSpace: UIBarButtonItem!
+//
+//        homeButton = UIBarButtonItem(image: UIImage(systemName: "mappin.and.ellipse"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
+//        infoButton = UIBarButtonItem(image: UIImage(systemName: "info.circle"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
+//        vehicleButton = UIBarButtonItem(image: UIImage(systemName: "car.fill"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
+//        doneButton = UIBarButtonItem(image: UIImage(systemName: "trash"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
+//        fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+//        fixedSpace.width = 20.0
+//        flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+//
+//        toolBar.items = [homeButton, fixedSpace, infoButton, fixedSpace, vehicleButton, flexibleSpace, doneButton]
         
         addSubview(mapViewView)
         addSubview(mileLabel)
@@ -356,7 +414,7 @@ class PlaceCell: UICollectionViewCell {
         addSubview(costTextLabel)
         addSubview(titleView)
         addSubview(subtitleView)
-        self.contentView.addSubview(toolBar)
+        addSubview(toolBar)
         
         mapViewView.addSubview(mapViewStart)
         mapViewView.addSubview(mapViewDest)
@@ -368,118 +426,105 @@ class PlaceCell: UICollectionViewCell {
         subtitleView.addSubview(subtitleTimeLabel)
         
         //if UI_USER_INTERFACE_IDIOM() == .pad {
-            
+
         //} else {
-            //header
-            let height = ((self.frame.width) * 9 / 16) + 18
-            let width = ((self.frame.width) / 2) - 25
-            NSLayoutConstraint.activate([
-                mileLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
-                mileLabel.leftAnchor.constraint(equalTo: mapViewDest.leftAnchor, constant: 0),
-                mileLabel.widthAnchor.constraint(equalToConstant: 80),
-                mileLabel.heightAnchor.constraint(equalToConstant: 20),
-                
-                miletextLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 30),
-                miletextLabel.leftAnchor.constraint(equalTo: mapViewDest.leftAnchor, constant: 0),
-                miletextLabel.widthAnchor.constraint(equalToConstant: 50),
-                miletextLabel.heightAnchor.constraint(equalToConstant: 20),
-                
-                dayLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
-                dayLabel.heightAnchor.constraint(equalToConstant: 20),
-                dayLabel.widthAnchor.constraint(equalToConstant: 40),
-                dayLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-                
-                dayTextLabel.topAnchor.constraint(equalTo: dayLabel.bottomAnchor, constant: 0),
-                dayTextLabel.heightAnchor.constraint(equalToConstant: 20),
-                dayTextLabel.widthAnchor.constraint(equalToConstant: 40),
-                dayTextLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-                
-                costLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
-                costLabel.rightAnchor.constraint(equalTo: mapViewStart.rightAnchor, constant: 0),
-                costLabel.widthAnchor.constraint(equalToConstant: 80),
-                costLabel.heightAnchor.constraint(equalToConstant: 20),
-                
-                costTextLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 30),
-                costTextLabel.rightAnchor.constraint(equalTo: mapViewStart.rightAnchor, constant: 0),
-                costTextLabel.widthAnchor.constraint(equalToConstant: 80),
-                costTextLabel.heightAnchor.constraint(equalToConstant: 20),
-                
-                //collectionCell
-                mapViewView.topAnchor.constraint(equalTo: self.topAnchor, constant: 58),
-                mapViewView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 25),
-                mapViewView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -25),
-                mapViewView.heightAnchor.constraint(equalToConstant: height),
-                
-                //right map
-                
-                mapViewStart.topAnchor.constraint(equalTo: mapViewView.topAnchor, constant: 0),
-                mapViewStart.trailingAnchor.constraint(equalTo: mapViewView.trailingAnchor, constant: 0),
-                mapViewStart.bottomAnchor.constraint(equalTo: mapViewView.bottomAnchor, constant: 0),
-                mapViewStart.widthAnchor.constraint(equalToConstant: width),
-                
-                //left map
-                mapViewDest.topAnchor.constraint(equalTo: mapViewView.topAnchor, constant: 0),
-                mapViewDest.leadingAnchor.constraint(equalTo: mapViewView.leadingAnchor, constant: 0),
-                mapViewDest.bottomAnchor.constraint(equalTo: mapViewView.bottomAnchor, constant: 0),
-                mapViewDest.rightAnchor.constraint(equalTo: mapViewStart.leftAnchor, constant: 0),
-                //title
-                titleView.topAnchor.constraint(equalTo: mapViewStart.bottomAnchor, constant: 15),
-                titleView.leftAnchor.constraint(equalTo: mapViewDest.leftAnchor, constant: 0),
-                titleView.rightAnchor.constraint(equalTo: mapViewStart.rightAnchor, constant: 0),
-                titleView.heightAnchor.constraint(equalToConstant: 30),
-                
-                titleBtn.topAnchor.constraint(equalTo: titleView.topAnchor, constant: 7),
-                titleBtn.leftAnchor.constraint(equalTo: mapViewDest.leftAnchor, constant: 5),
-                titleBtn.widthAnchor.constraint(equalToConstant: 15),
-                titleBtn.heightAnchor.constraint(equalToConstant: 15),
-                
-                titleLabelnew.topAnchor.constraint(equalTo: titleView.topAnchor, constant: 1),
-                titleLabelnew.leftAnchor.constraint(equalTo: titleBtn.rightAnchor, constant: 7),
-                titleLabelnew.rightAnchor.constraint(equalTo: mapViewStart.rightAnchor, constant: 0),
-                titleLabelnew.heightAnchor.constraint(equalToConstant: 28),
-                
-                titleTimeLabel.topAnchor.constraint(equalTo: titleView.topAnchor, constant: 1),
-                titleTimeLabel.rightAnchor.constraint(equalTo: mapViewStart.rightAnchor, constant: -10),
-                titleTimeLabel.heightAnchor.constraint(equalToConstant: 28),
-                //subtitle
-                subtitleView.topAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 15),
-                subtitleView.leftAnchor.constraint(equalTo: mapViewDest.leftAnchor, constant: 0),
-                subtitleView.rightAnchor.constraint(equalTo: mapViewStart.rightAnchor, constant: 0),
-                subtitleView.heightAnchor.constraint(equalToConstant: 30),
-                
-                subtitleBtn.topAnchor.constraint(equalTo: subtitleView.topAnchor, constant: 7),
-                subtitleBtn.leftAnchor.constraint(equalTo: mapViewDest.leftAnchor, constant: 5),
-                subtitleBtn.widthAnchor.constraint(equalToConstant: 15),
-                subtitleBtn.heightAnchor.constraint(equalToConstant: 15),
-                
-                subtitleLabel.topAnchor.constraint(equalTo: subtitleView.topAnchor, constant: 1),
-                subtitleLabel.leftAnchor.constraint(equalTo: subtitleBtn.rightAnchor, constant: 7),
-                subtitleLabel.rightAnchor.constraint(equalTo: mapViewStart.rightAnchor, constant: 0),
-                subtitleLabel.heightAnchor.constraint(equalToConstant: 28),
-                
-                subtitleTimeLabel.topAnchor.constraint(equalTo: subtitleView.topAnchor, constant: 1),
-                subtitleTimeLabel.rightAnchor.constraint(equalTo: mapViewStart.rightAnchor, constant: -10),
-                subtitleTimeLabel.heightAnchor.constraint(equalToConstant: 28)
-                ])
-            
-            //toolBar
-            var homeButton, infoButton, vehicleButton, doneButton, fixedSpace, flexibleSpace: UIBarButtonItem!
-            homeButton = UIBarButtonItem(image: UIImage(systemName: "mappin.and.ellipse"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
-            infoButton = UIBarButtonItem(image: UIImage(systemName: "info.circle"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
-            vehicleButton = UIBarButtonItem(image: UIImage(systemName: "car.fill"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
-            doneButton = UIBarButtonItem(image: UIImage(systemName: "trash"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
-            fixedSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.fixedSpace, target: nil, action: nil)
-            fixedSpace.width = 15.0
-            flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-            toolBar.items = [homeButton, fixedSpace, infoButton, fixedSpace, vehicleButton, flexibleSpace, doneButton]
-            
-            NSLayoutConstraint.activate([
-                toolBar.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
-                toolBar.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
-                toolBar.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -1),
-                toolBar.heightAnchor.constraint(equalToConstant: 50)
-                ]) 
-       // }
+        //header
+        let height = ((self.frame.width) * 9 / 16) + 18
+        let width = ((self.frame.width) / 2) - 25
+        NSLayoutConstraint.activate([
+            mileLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
+            mileLabel.leftAnchor.constraint(equalTo: mapViewDest.leftAnchor, constant: 0),
+            mileLabel.widthAnchor.constraint(equalToConstant: 80),
+            mileLabel.heightAnchor.constraint(equalToConstant: 20),
+
+            miletextLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 30),
+            miletextLabel.leftAnchor.constraint(equalTo: mapViewDest.leftAnchor, constant: 0),
+            miletextLabel.widthAnchor.constraint(equalToConstant: 50),
+            miletextLabel.heightAnchor.constraint(equalToConstant: 20),
+
+            dayLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
+            dayLabel.heightAnchor.constraint(equalToConstant: 20),
+            dayLabel.widthAnchor.constraint(equalToConstant: 40),
+            dayLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+
+            dayTextLabel.topAnchor.constraint(equalTo: dayLabel.bottomAnchor, constant: 0),
+            dayTextLabel.heightAnchor.constraint(equalToConstant: 20),
+            dayTextLabel.widthAnchor.constraint(equalToConstant: 40),
+            dayTextLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+
+            costLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
+            costLabel.rightAnchor.constraint(equalTo: mapViewStart.rightAnchor, constant: 0),
+            costLabel.widthAnchor.constraint(equalToConstant: 80),
+            costLabel.heightAnchor.constraint(equalToConstant: 20),
+
+            costTextLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 30),
+            costTextLabel.rightAnchor.constraint(equalTo: mapViewStart.rightAnchor, constant: 0),
+            costTextLabel.widthAnchor.constraint(equalToConstant: 80),
+            costTextLabel.heightAnchor.constraint(equalToConstant: 20),
+
+            //collectionCell
+            mapViewView.topAnchor.constraint(equalTo: self.topAnchor, constant: 58),
+            mapViewView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 25),
+            mapViewView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -25),
+            mapViewView.heightAnchor.constraint(equalToConstant: height),
+
+            //right map
+
+            mapViewStart.topAnchor.constraint(equalTo: mapViewView.topAnchor, constant: 0),
+            mapViewStart.trailingAnchor.constraint(equalTo: mapViewView.trailingAnchor, constant: 0),
+            mapViewStart.bottomAnchor.constraint(equalTo: mapViewView.bottomAnchor, constant: 0),
+            mapViewStart.widthAnchor.constraint(equalToConstant: width),
+
+            //left map
+            mapViewDest.topAnchor.constraint(equalTo: mapViewView.topAnchor, constant: 0),
+            mapViewDest.leadingAnchor.constraint(equalTo: mapViewView.leadingAnchor, constant: 0),
+            mapViewDest.bottomAnchor.constraint(equalTo: mapViewView.bottomAnchor, constant: 0),
+            mapViewDest.rightAnchor.constraint(equalTo: mapViewStart.leftAnchor, constant: 0),
+            //title
+            titleView.topAnchor.constraint(equalTo: mapViewStart.bottomAnchor, constant: 15),
+            titleView.leftAnchor.constraint(equalTo: mapViewDest.leftAnchor, constant: 0),
+            titleView.rightAnchor.constraint(equalTo: mapViewStart.rightAnchor, constant: 0),
+            titleView.heightAnchor.constraint(equalToConstant: 30),
+
+            titleBtn.topAnchor.constraint(equalTo: titleView.topAnchor, constant: 7),
+            titleBtn.leftAnchor.constraint(equalTo: mapViewDest.leftAnchor, constant: 5),
+            titleBtn.widthAnchor.constraint(equalToConstant: 15),
+            titleBtn.heightAnchor.constraint(equalToConstant: 15),
+
+            titleLabelnew.topAnchor.constraint(equalTo: titleView.topAnchor, constant: 1),
+            titleLabelnew.leftAnchor.constraint(equalTo: titleBtn.rightAnchor, constant: 7),
+            titleLabelnew.rightAnchor.constraint(equalTo: mapViewStart.rightAnchor, constant: 0),
+            titleLabelnew.heightAnchor.constraint(equalToConstant: 28),
+
+            titleTimeLabel.topAnchor.constraint(equalTo: titleView.topAnchor, constant: 1),
+            titleTimeLabel.rightAnchor.constraint(equalTo: mapViewStart.rightAnchor, constant: -10),
+            titleTimeLabel.heightAnchor.constraint(equalToConstant: 28),
+            //subtitle
+            subtitleView.topAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 15),
+            subtitleView.leftAnchor.constraint(equalTo: mapViewDest.leftAnchor, constant: 0),
+            subtitleView.rightAnchor.constraint(equalTo: mapViewStart.rightAnchor, constant: 0),
+            subtitleView.heightAnchor.constraint(equalToConstant: 30),
+
+            subtitleBtn.topAnchor.constraint(equalTo: subtitleView.topAnchor, constant: 7),
+            subtitleBtn.leftAnchor.constraint(equalTo: mapViewDest.leftAnchor, constant: 5),
+            subtitleBtn.widthAnchor.constraint(equalToConstant: 15),
+            subtitleBtn.heightAnchor.constraint(equalToConstant: 15),
+
+            subtitleLabel.topAnchor.constraint(equalTo: subtitleView.topAnchor, constant: 1),
+            subtitleLabel.leftAnchor.constraint(equalTo: subtitleBtn.rightAnchor, constant: 7),
+            subtitleLabel.rightAnchor.constraint(equalTo: mapViewStart.rightAnchor, constant: 0),
+            subtitleLabel.heightAnchor.constraint(equalToConstant: 28),
+
+            subtitleTimeLabel.topAnchor.constraint(equalTo: subtitleView.topAnchor, constant: 1),
+            subtitleTimeLabel.rightAnchor.constraint(equalTo: mapViewStart.rightAnchor, constant: -10),
+            subtitleTimeLabel.heightAnchor.constraint(equalToConstant: 28),
+
+            toolBar.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 0),
+            toolBar.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0),
+            toolBar.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0),
+            toolBar.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        // }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -515,32 +560,51 @@ extension PlaceCell: MKMapViewDelegate {
         }
         return pinView
     }
+
+    
+
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        
-        let center = getCenterLocation(for: mapView)
-        guard let destLocation = self.destLocation else { return }
-        
-        guard center.distance(from: destLocation) > 50 else { return }
-        self.destLocation = center
-        
-        geoCoder.cancelGeocode()
-        geoCoder.reverseGeocodeLocation(center) { [weak self] (placemarks, error) in
-            guard let self = self else { return }
-            
-            if let _ = error {return}
-            
-            guard let placemark = placemarks?.first else {return}
-            
-            self.streetNumber = placemark.subThoroughfare ?? ""
-            self.streetName = placemark.thoroughfare ?? ""
-            self.cityName = placemark.locality ?? ""
-            
-            DispatchQueue.main.async {
-                //self.subtitleLabel.text = "\(self.streetNumber ?? "") \(self.streetName ?? "") \(self.cityName ?? "")"
-                self.subtitleLabel.text = "\(self.cityName ?? "")"
-            }
-        }
+
+//        let startcenter = getCenterLocation(for: mapViewStart)
+//        guard let startLocation = self.startLocation else { return }
+//
+//        guard startcenter.distance(from: startLocation) > 50 else { return }
+//        self.startLocation = startcenter
+//
+//        geoCoder.cancelGeocode()
+//        geoCoder.reverseGeocodeLocation(startcenter) { [weak self] (placemarks, error) in
+//            guard let self = self else { return }
+//            if let _ = error {return}
+//            guard let placemark = placemarks?.first else {return}
+//
+//            self.cityStart = placemark.locality ?? ""
+//
+//            DispatchQueue.main.async {
+//                //self.subtitleLabel.text = "\(self.streetNumber ?? "") \(self.streetName ?? "") \(self.cityName ?? "")"
+//                self.titleLabelnew.text = "\(self.cityStart ?? "")"
+//            }
+//        }
+//
+//        let destcenter = getCenterLocation(for: mapViewDest)
+//        guard let destLocation = self.destLocation else { return }
+//
+//        guard destcenter.distance(from: destLocation) > 50 else { return }
+//        self.destLocation = destcenter
+//
+//        //geoCoder1.cancelGeocode()
+//        geoCoder.reverseGeocodeLocation(destcenter) { [weak self] (placemarks, error) in
+//            guard let self = self else { return }
+//            if let _ = error {return}
+//            guard let placemark = placemarks?.first else {return}
+//
+//            self.cityDest = placemark.locality ?? ""
+//
+//            DispatchQueue.main.async {
+//                //self.subtitleLabel.text = "\(self.streetNumber ?? "") \(self.streetName ?? "") \(self.cityName ?? "")"
+//                self.subtitleLabel.text = "\(self.cityDest ?? "")"
+//            }
+//        }
     }
     
     //Launches driving directions with AppleMaps //dont work

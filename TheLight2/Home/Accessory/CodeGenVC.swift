@@ -123,15 +123,16 @@ final class CodeGenVC: UIViewController {
         
         view.addSubview(self.imageProfile)
         view.addSubview(self.generateBtn)
-        
+
+        let guide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
-            self.imageProfile.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 50),
+            self.imageProfile.topAnchor.constraint(equalTo: guide.topAnchor, constant: 50),
             self.imageProfile.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             self.imageProfile.widthAnchor.constraint(equalToConstant: 85),
             self.imageProfile.heightAnchor.constraint(equalToConstant: 85),
             
             self.generateBtn.topAnchor.constraint(equalTo: textField.topAnchor, constant: 50),
-            self.generateBtn.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: 0),
+            self.generateBtn.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -20),
             self.generateBtn.widthAnchor.constraint(equalToConstant: 85),
             self.generateBtn.heightAnchor.constraint(equalToConstant: 32)
             ])

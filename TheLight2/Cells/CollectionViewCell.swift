@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 import FirebaseDatabase
 import MapKit
+import SDWebImage
 
 @available(iOS 13.0, *)
 class CollectionViewCell: UICollectionViewCell {
@@ -26,7 +27,6 @@ class CollectionViewCell: UICollectionViewCell {
     
     // UserView Controller
     @IBOutlet weak var user2ImageView: CustomImageView?
-    
     
     //-----------youtube/SnapshotController---------
     
@@ -139,7 +139,8 @@ class VideoCell: CollectionViewCell {
                 })
             
             guard let newsImageUrl = news?.imageUrl else {return}
-            customImageView.loadImage(urlString: newsImageUrl)
+            guard let imageUrl:URL = URL(string: newsImageUrl) else { return }
+            self.customImageView.sd_setImage(with: imageUrl, completed: nil)
             
             titleLabelnew.text = news?.newsTitle
             subtitleLabel.text = String(format: "%@, %@", (news?.newsDetail)!, "\(news?.viewCount ?? 0) views")

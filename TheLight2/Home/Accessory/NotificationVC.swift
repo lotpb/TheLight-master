@@ -88,7 +88,7 @@ final class NotificationVC: UIViewController {
     
     @IBAction func sendNotification(_ sender:AnyObject) {
         
-        if #available(iOS 10.0, *) {
+       // if #available(iOS 10.0, *) {
             
             let content = UNMutableNotificationContent()
             content.title = "Message from TheLight 🏀"
@@ -120,39 +120,39 @@ final class NotificationVC: UIViewController {
             
             self.customMessage.text! = ""
             
-        } else {
-        
-        let notifications:UILocalNotification = UILocalNotification()
-        notifications.timeZone = .current
-        notifications.fireDate = fixedNotificationDate(datePicker.date)
-        
-        switch(frequencySegmentedControl.selectedSegmentIndex){
-        case 0:
-            //notifications.repeatInterval = NSCalendar.Unit.
-            break;
-        case 1:
-            notifications.repeatInterval = .day
-            break;
-        case 2:
-            notifications.repeatInterval = .weekday
-            break;
-        case 3:
-            notifications.repeatInterval = .year
-            break;
-        default:
-            //notifications.repeatInterval = Calendar.init(identifier: 0)
-            break;
-        }
-        
-        notifications.alertBody = customMessage.text
-        notifications.alertAction = "Hey you! Yeah you! Swipe to unlock!"
-        notifications.category = "status"
-        notifications.userInfo = [ "value": "inactiveMembership"]
-        notifications.applicationIconBadgeNumber = UIApplication.shared.applicationIconBadgeNumber + 1
-        notifications.soundName = "Tornado.caf"
-        UIApplication.shared.scheduleLocalNotification(notifications)
-        self.customMessage.text = ""
-        }
+//        } else {
+//
+//        let notifications:UILocalNotification = UILocalNotification()
+//        notifications.timeZone = .current
+//        notifications.fireDate = fixedNotificationDate(datePicker.date)
+//
+//        switch(frequencySegmentedControl.selectedSegmentIndex){
+//        case 0:
+//            //notifications.repeatInterval = NSCalendar.Unit.
+//            break;
+//        case 1:
+//            notifications.repeatInterval = .day
+//            break;
+//        case 2:
+//            notifications.repeatInterval = .weekday
+//            break;
+//        case 3:
+//            notifications.repeatInterval = .year
+//            break;
+//        default:
+//            //notifications.repeatInterval = Calendar.init(identifier: 0)
+//            break;
+//        }
+//
+//        notifications.alertBody = customMessage.text
+//        notifications.alertAction = "Hey you! Yeah you! Swipe to unlock!"
+//        notifications.category = "status"
+//        notifications.userInfo = [ "value": "inactiveMembership"]
+//        notifications.applicationIconBadgeNumber = UIApplication.shared.applicationIconBadgeNumber + 1
+//        notifications.soundName = "Tornado.caf"
+//        UIApplication.shared.scheduleLocalNotification(notifications)
+//        self.customMessage.text = ""
+//        }
     }
     
     
@@ -177,7 +177,6 @@ final class NotificationVC: UIViewController {
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
 
         center.add(request, withCompletionHandler: nil)
-        
     }
     
     
@@ -230,16 +229,12 @@ final class NotificationVC: UIViewController {
     
     //Here we are going to set the value of second to zero
     func fixedNotificationDate(_ dateToFix: Date) -> Date {
-        
         let calendar = Calendar.current
         var dateComponents = calendar.dateComponents([.day, .month, .year, .hour, .minute], from: dateToFix)
-        
         dateComponents.second = 0
-        
         let fixedDate: Date = Calendar.current.date(from: dateComponents)!
         
         return fixedDate
-        
     }
     
     // MARK: - Button

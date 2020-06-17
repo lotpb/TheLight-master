@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 
 @available(iOS 13.0, *)
@@ -14,16 +15,19 @@ final class MeProfileGridCell: UICollectionViewCell {
     
     var post: NewsModel? {
         didSet {
-            guard let imageUrl = post?.imageUrl else {return}
-            photoImageView.loadImage(urlString: imageUrl)
+
+            let imageUrlString = post?.imageUrl
+            guard let imageUrl:URL = URL(string: imageUrlString!) else { return }
+            self.photoImageView.sd_setImage(with: imageUrl, completed: nil)
+            
             self.playButton.isHidden = post?.videoUrl == ""
         }
     }
     
     var MeProfileController: MeProfileVC?
     
-    lazy var photoImageView: CustomImageView = {
-        let iv = CustomImageView()
+    lazy var photoImageView: UIImageView = {
+        let iv = UIImageView()
         iv.backgroundColor = .lightGray
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
@@ -60,13 +64,6 @@ final class MeProfileGridCell: UICollectionViewCell {
             playButton.heightAnchor.constraint(equalToConstant: 30)
             ])
     }
-    /*
-    @objc private func handleZoomTap(tapGesture: UITapGestureRecognizer) {
-        print("Grid crap")
-        guard let imageView = tapGesture.view as? UIImageView else { return }
-        // PRO tip: don't perform a lot of custom logic inside of a view class
-        self.userProfileController?.performZoomInForStartingImageView(startingImageView: imageView)
-    } */
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

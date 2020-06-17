@@ -27,8 +27,11 @@ final class MeProfileListCell: UICollectionViewCell {
                     }
                 })
 
-            guard let imageUrl = post?.imageUrl else {return}
-            photoImageView.loadImage(urlString: imageUrl)
+            let imageUrlString = (post?.imageUrl)!
+            guard let imageUrl:URL = URL(string: imageUrlString) else {
+                return
+            }
+            self.photoImageView.load(url: imageUrl)
             
             self.playButton.isHidden = post?.videoUrl == ""
 
@@ -42,10 +45,10 @@ final class MeProfileListCell: UICollectionViewCell {
         }
     }
     
-    var userProfileController: MeProfileVC?
+    //var userProfileController: MeProfileVC?
     
-    let photoImageView: CustomImageView = {
-        let iv = CustomImageView()
+    let photoImageView: UIImageView = {
+        let iv = UIImageView()
         iv.backgroundColor = .secondarySystemGroupedBackground
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
@@ -194,14 +197,7 @@ final class MeProfileListCell: UICollectionViewCell {
             viewsLabel.heightAnchor.constraint(equalToConstant: 20)
             ])
     }
-    /*
-    @objc func handleZoomTap(tapGesture: UITapGestureRecognizer) {
-        print("List crap")
-        if let imageView = tapGesture.view as? UIImageView {
-            // PRO tip: don't perform a lot of custom logic inside of a view class
-            self.userProfileController?.performZoomInForStartingImageView(startingImageView: imageView)
-        }
-    } */
+
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

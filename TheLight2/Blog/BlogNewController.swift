@@ -246,6 +246,7 @@ final class BlogNewController: UIViewController, UITextFieldDelegate, UITextView
         
         if (self.formStatus == "Reply") {
             //Change font and color @links in TextView
+            self.subject?.textColor = ColorX.twitterline
             let attrStr = NSMutableAttributedString(string:(self.subject?.text)!)
             let inputLength = attrStr.string.count
             let searchString = String(format: "%@", "\(self.textcontentsubject!.removingWhitespaces())")
@@ -539,7 +540,7 @@ final class BlogNewController: UIViewController, UITextFieldDelegate, UITextView
         guard let text = self.subject?.text else { return }
         
         if text == "" {
-            self.simpleAlert(title: "Oops!", message: "No text entered.")
+            self.showAlert(title: "Oops!", message: "No text entered.")
         } else {
             if (self.formStatus == "None") {
                 
@@ -556,9 +557,9 @@ final class BlogNewController: UIViewController, UITextFieldDelegate, UITextView
                             updateblog!.setObject(self.replyId ?? NSNull(), forKey:"ReplyId")
                             updateblog!.saveEventually()
                             
-                            self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                            self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                         } else {
-                            self.simpleAlert(title: "Upload Failure", message: "Failure updated the data")
+                            self.showAlert(title: "Upload Failure", message: "Failure updated the data")
                         }
                     }
                 } else {
@@ -576,10 +577,10 @@ final class BlogNewController: UIViewController, UITextFieldDelegate, UITextView
                     
                     userRef.updateChildValues(values) { (err, ref) in
                         if err != nil {
-                            self.simpleAlert(title: "Upload Failure", message: "Failure updating the data")
+                            self.showAlert(title: "Upload Failure", message: "Failure updating the data")
                             return
                         }
-                        self.simpleAlert(title: "update Complete", message: "Successfully updated the data")
+                        self.showAlert(title: "update Complete", message: "Successfully updated the data")
                     }
                 }
                 
@@ -609,9 +610,9 @@ final class BlogNewController: UIViewController, UITextFieldDelegate, UITextView
                     
                     saveblog.saveInBackground { (success: Bool, error: Error?) in
                         if success == true {
-                            self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                            self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                         } else {
-                            self.simpleAlert(title: "Upload Failure", message: "Failure updated the data")
+                            self.showAlert(title: "Upload Failure", message: "Failure updated the data")
                         }
                     }
                     
@@ -631,7 +632,7 @@ final class BlogNewController: UIViewController, UITextFieldDelegate, UITextView
                     let childUpdates = ["/Blog/\(String(key!))": values]
                     FirebaseRef.databaseRoot.updateChildValues(childUpdates) { (err, ref) in
                         if err != nil {
-                            self.simpleAlert(title:"Upload Failure", message: "Failure updating the data")
+                            self.showAlert(title:"Upload Failure", message: "Failure updating the data")
                             return
                         }
                         
@@ -648,7 +649,7 @@ final class BlogNewController: UIViewController, UITextFieldDelegate, UITextView
                                 return TransactionResult.success(withValue: currentData)
                             }
                         }
-                        self.simpleAlert(title: "Upload Complete", message: "Successfully updated the data")
+                        self.showAlert(title: "Upload Complete", message: "Successfully updated the data")
                     }
                 }
             }

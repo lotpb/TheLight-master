@@ -7,19 +7,19 @@
 //
 
 import UIKit
-import YouTubePlayer
-//import YouTubePlayerSwift
+import YoutubePlayerView
+
 
 final class PlayerViewController: UIViewController {
 
-    @IBOutlet var videoPlayer: YouTubePlayerView!
+    @IBOutlet var videoPlayer: YoutubePlayerView!
     
-    var videoID: String!
+    var videoID: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        videoPlayer?.loadVideoID(videoID)
+        videoPlayer.loadWithVideoId(videoID!)
     }
 
     override func didReceiveMemoryWarning() {

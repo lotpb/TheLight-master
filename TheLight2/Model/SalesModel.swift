@@ -15,6 +15,7 @@ struct SalesModel {
     let salesman: String
     let active: String
     let imageUrl: String
+    let photo: String
 
     init(dictionary: [String: Any]) {
         
@@ -23,5 +24,6 @@ struct SalesModel {
         self.salesman = dictionary["salesman"] as? String ?? ""
         self.active = dictionary["active"] as? String ?? ""
         self.imageUrl = dictionary["imageUrl"] as? String ?? ""
+        self.photo = dictionary["photo"] as? String ?? ""
     }
 }

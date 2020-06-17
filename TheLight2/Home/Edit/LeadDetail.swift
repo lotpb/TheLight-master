@@ -15,6 +15,7 @@ import MessageUI
 import FirebaseAuth
 import FirebaseStorage
 import MobileCoreServices //kUTTypeImage
+import SDWebImage
 
 @available(iOS 13.0, *)
 final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -45,6 +46,9 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
     var custNo : String?
     var leadNo : String?
     var date : String?
+    var first : String?
+    var lastname : String?
+    var company : String?
     var name : String?
     var address : String?
     var city : String?
@@ -57,6 +61,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
     var tbl14 : String?
     var tbl15 : NSString?
     var tbl16 : String?
+    var tbl17 : String?
     var tbl21 : NSString?
     var tbl22 : String?
     var tbl23 : String!
@@ -65,6 +70,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
     var tbl26 : NSString?
     var tbl27 : String? //employee company
     var photo : String?
+    var imageUrl : String?
     var comments : String?
     var active : String?
     
@@ -74,12 +80,14 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
     var t14 : String?
     var t15 : NSString?
     var t16 : String?
+    var t17 : String?
     var t21 : NSString?
     var t22 : String?
     var t23 : String!
     var t24 : String?
     var t25 : String?
     var t26 : NSString?
+    var t27 : NSString?
     
     var l1datetext : String?
     var lnewsTitle : String?
@@ -90,6 +98,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
     var l14 : String?
     var l15 : String?
     var l16 : String?
+    var l17 : String?
     
     var l21 : String?
     var l22 : String?
@@ -97,6 +106,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
     var l24 : String?
     var l25 : String?
     var l26 : String?
+    var l27 : String?
     
     var p1 : String?
     var p12 : String?
@@ -192,17 +202,15 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
     let plusPhotoButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysTemplate), for: .normal)
         button.addTarget(self, action: #selector(handlePlusPhoto), for: .touchUpInside)
-        button.contentMode = .scaleAspectFill
+        //button.contentMode = .scaleAspectFill
         return button
     }()
 
-    let customImageView: CustomImageView = { //firebase
-        let imageView = CustomImageView()
+    let customImageView: UIImageView = { //firebase
+        let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        //imageView.contentMode = .scaleAspectFit
-        //imageView.clipsToBounds = true
         return imageView
     }()
 
@@ -264,6 +272,14 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         super.viewDidLoad()
         self.extendedLayoutIncludesOpaqueBars = true
 
+        //-----------------------------------
+                if (self.tbl17 == nil) || (self.tbl17 == "") {
+                    self.tbl17 = imageUrl
+                } else {
+                    self.tbl17 = photo
+                }
+        //-----------------------------------
+
         setupNavigationButtons()
         //Leave this setup below
         setupConstraints()
@@ -274,13 +290,12 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         loadData()
         followButton()
 
-        
         if UIDevice.current.userInterfaceIdiom == .pad  {
             navigationItem.title = String(format: "%@ %@", "TheLight Software - \(self.formController!)", "Profile")
         } else {
             navigationItem.title = String(format: "%@ %@", "\(self.formController!)", "Profile")
         }
-        self.navigationItem.largeTitleDisplayMode = .always
+        self.navigationItem.largeTitleDisplayMode = .never
         self.mainView!.addSubview(self.refreshControl)
     }
     
@@ -317,7 +332,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
     private func setupNavigationButtons() {
         let editBtn = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButton))
         let actionBtn = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(actionButton))
-        navigationItem.rightBarButtonItems = [editBtn,actionBtn]
+        navigationItem.rightBarButtonItems = [actionBtn,editBtn]
     }
     
     func setupTableView() {
@@ -329,7 +344,6 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
     }
     
     func setupForm() {
-        //loadAvatarImage()
         mainView?.backgroundColor = .secondarySystemGroupedBackground
         contentView?.backgroundColor = .secondarySystemGroupedBackground
         tableView?.backgroundColor = .secondarySystemGroupedBackground
@@ -402,17 +416,17 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         
         NSLayoutConstraint.activate([
 
-            labelname.topAnchor.constraint(equalTo: mainView!.topAnchor, constant: 4),
+            labelname.topAnchor.constraint(equalTo: mainView!.topAnchor, constant: 12),
             labelname.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 15),
             labelname.rightAnchor.constraint(equalTo: following.leftAnchor, constant: 1),
             labelname.heightAnchor.constraint(equalToConstant: 30),
 
-            activebutton.topAnchor.constraint(equalTo: mainView!.topAnchor, constant: 9),
+            activebutton.topAnchor.constraint(equalTo: mainView!.topAnchor, constant: 15),
             activebutton.trailingAnchor.constraint(equalTo: mainView!.trailingAnchor, constant: -15),
             activebutton.widthAnchor.constraint(equalToConstant: 20),
             activebutton.heightAnchor.constraint(equalToConstant: 20),
 
-            following.topAnchor.constraint(equalTo: mainView!.topAnchor, constant: 9),
+            following.topAnchor.constraint(equalTo: mainView!.topAnchor, constant: 15),
             following.rightAnchor.constraint(equalTo: activebutton.leftAnchor, constant: -5),
             following.heightAnchor.constraint(equalToConstant: 20),
 
@@ -440,7 +454,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
             mySwitch.topAnchor.constraint(equalTo: labeldate.bottomAnchor, constant: 15),
             mySwitch.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 15),
 
-            plusPhotoButton.topAnchor.constraint(equalTo: (mainView?.topAnchor)!, constant: +55),
+            plusPhotoButton.topAnchor.constraint(equalTo: (mainView?.topAnchor)!, constant: +60),
             plusPhotoButton.trailingAnchor.constraint( equalTo: (mainView?.trailingAnchor)!, constant: -15),
 
             labelNo.topAnchor.constraint(equalTo: plusPhotoButton.bottomAnchor, constant: 5),
@@ -449,8 +463,8 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
             labelNo.heightAnchor.constraint(equalToConstant: 20),
             
             mapButton.topAnchor.constraint(equalTo: (labelNo.bottomAnchor), constant: 15),
-            mapButton.trailingAnchor.constraint( equalTo: (mainView?.trailingAnchor)!, constant: -13),
-            mapButton.widthAnchor.constraint(equalToConstant: 75),
+            mapButton.centerXAnchor.constraint(equalTo: plusPhotoButton.centerXAnchor),
+            mapButton.widthAnchor.constraint(equalTo: plusPhotoButton.widthAnchor),
             mapButton.heightAnchor.constraint(equalToConstant: 30),
             ])
         
@@ -475,6 +489,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
     }
     
     @objc func refreshData() {
+        //loadAvatarImage()
         loadData()
         self.listTableView!.reloadData()
         self.listTableView2!.reloadData()
@@ -551,7 +566,11 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
     
     // MARK: - LoadFieldData
     func fieldData() {
-        
+
+        if (self.customImageView.image == nil) {
+            self.customImageView.image = self.plusPhotoButton.imageView?.image
+        }
+
         if self.leadNo != nil {
             self.labelNo.text = leadNo
         } else {
@@ -618,6 +637,13 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         } else {
             t16 = "None"
         }
+
+        if self.tbl17 != nil {
+            t17 = self.tbl17
+        } else {
+            t17 = "None"
+        }
+
         if self.tbl21 != nil {
             t21 = self.tbl21
         } else {
@@ -632,6 +658,11 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
             t26 = self.tbl26
         } else {
             t26 = "None"
+        }
+        if self.tbl27 != nil {
+            t27 = self.tbl27 as NSString?
+        } else {
+            t27 = "None"
         }
     
         if (self.formController == "Leads" || self.formController == "Customer") {
@@ -661,11 +692,11 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
             } else {
                 t24 = "None"
             }
-            if self.photo != nil {
-                t24 = self.photo
-            } else {
-                t24 = "None"
-            }
+//            if self.photo != nil {
+//                t17 = self.photo
+//            } else {
+//                t17 = "None"
+//            }
             
         } else {
             
@@ -694,19 +725,18 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
             }
         }
         
-        tableData = [t11!, t12!, t13!, t14!, t15!, t16!]
+        tableData = [t11!, t12!, t13!, t14!, t15!, t16!, t17!]
         
-        tableData2 = [t21!, t22!, t23!, t24!, t25!, t26!]
+        tableData2 = [t21!, t22!, t23!, t24!, t25!, t26!, t27!]
         
-        tableData4 = [l11!, l12!, l13!, l14!, l15!, l16!]
+        tableData4 = [l11!, l12!, l13!, l14!, l15!, l16!, l17!]
         
-        tableData3 = [l21!, l22!, l23!, l24!, l25!, l26!]
+        tableData3 = [l21!, l22!, l23!, l24!, l25!, l26!, l27!]
     }
     
     // MARK: - Parse
     func loadData() {
 
-        loadAvatarImage()
         if (formController == "Leads" || formController == "Customer") {
             
             if ((defaults.string(forKey: "backendKey")) == "Parse") {
@@ -837,7 +867,6 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
             self.getBirthday()
         })
         let buttonCancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
-            //print("Cancel Button Pressed")
         }
         
         alertController.addAction(phone)
@@ -882,11 +911,11 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
                 }
             } else {
                 
-                self.simpleAlert(title: "Alert", message: "Call facility is not available!!!")
+                self.showAlert(title: "Alert", message: "Call facility is not available!!!")
             }
         } else {
             
-            self.simpleAlert(title: "Alert", message: "Your device doesn't support this feature.")
+            self.showAlert(title: "Alert", message: "Your device doesn't support this feature.")
         }
     }
     
@@ -903,12 +932,12 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
                 
             } else {
                 
-                self.simpleAlert(title: "Invalid URL", message: "Your field doesn't have valid URL.")
+                self.showAlert(title: "Invalid URL", message: "Your field doesn't have valid URL.")
             }
             
         } else {
             
-            self.simpleAlert(title: "Invalid URL", message: "Your field doesn't have valid URL.")
+            self.showAlert(title: "Invalid URL", message: "Your field doesn't have valid URL.")
             
         }
     }
@@ -922,7 +951,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
                 
             } else {
                 
-                self.simpleAlert(title: "Alert", message: "Your field doesn't have valid email.")
+                self.showAlert(title: "Alert", message: "Your field doesn't have valid email.")
             }
         }
         if (formController == "Vendor") || (formController == "Employee") {
@@ -932,7 +961,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
                 
             } else {
                 
-                self.simpleAlert(title: "Alert", message: "Your field doesn't have valid email.")
+                self.showAlert(title: "Alert", message: "Your field doesn't have valid email.")
             }
         }
     }
@@ -983,7 +1012,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
             try eventStore.save(event, span: .thisEvent)
             savedEventId = event.eventIdentifier
             
-            self.simpleAlert(title: "Event", message: "Event successfully saved.")
+            self.showAlert(title: "Event", message: "Event successfully saved.")
             
         } catch {
             print("An error occurred")
@@ -1142,7 +1171,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
             
             guard matchingContacts.isEmpty else {
                 DispatchQueue.main.async {
-                    self.simpleAlert(title: "Name already exists", message: "There can only be one\n \(nameStr)")
+                    self.showAlert(title: "Name already exists", message: "There can only be one\n \(nameStr)")
                 }
                 return
             }
@@ -1155,9 +1184,9 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
             
             try contactStore.execute(saveRequest)
             
-            self.simpleAlert(title: "Contact", message: "Contact successfully saved.")
+            self.showAlert(title: "Contact", message: "Contact successfully saved.")
         } catch {
-            self.simpleAlert(title: "Contact", message: "Failed to add the contact.")
+            self.showAlert(title: "Contact", message: "Failed to add the contact.")
         }
     }
     
@@ -1184,9 +1213,9 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
             formatter.dateFormat = "MMM-dd-yyyy"
             let stringDate = formatter.string(from: contact.birthday!.date!)
 
-            self.simpleAlert(title: "\(nameStr) Birthday", message: stringDate)
+            self.showAlert(title: "\(nameStr) Birthday", message: stringDate)
         } else {
-            self.simpleAlert(title: "Info", message: "No Birthdays for \(nameStr) ")
+            self.showAlert(title: "Info", message: "No Birthdays for \(nameStr) ")
         }
     }
 
@@ -1196,167 +1225,175 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         
         if segue.identifier == "showmapSegue" {
-            guard let controller = segue.destination as? MapViewVC else { return }
-            controller.formController = "CustMap"
-            controller.mapaddress = self.address! as NSString
-            controller.mapcity = self.city! as NSString
-            controller.mapstate = self.state! as NSString
-            controller.mapzip = self.zip! as NSString
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            guard let VC = segue.destination as? MapViewVC else { return }
+            VC.formController = "CustMap"
+            VC.mapaddress = self.address! as NSString
+            VC.mapcity = self.city! as NSString
+            VC.mapstate = self.state! as NSString
+            VC.mapzip = self.zip! as NSString
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
         }
         
         if segue.identifier == "editFormSegue" {
-            guard let controller = segue.destination as? EditData else { return }
+            guard let VC = segue.destination as? EditData else { return }
 
             if (formController == "Leads") {
                 
                 if (self.status == "Edit") {
                     
-                    controller.formController = self.formController
-                    controller.status = "Edit"
-                    controller.objectId = self.objectId //Parse Only
-                    controller.leadNo = self.leadNo
-                    controller.frm11 = self.tbl13 //first
-                    controller.frm12 = self.name
-                    controller.frm13 = nil
-                    controller.frm14 = self.address
-                    controller.frm15 = self.city
-                    controller.frm16 = self.state
-                    controller.frm17 = self.zip
-                    controller.frm18 = self.date
-                    controller.frm19 = self.tbl21 as String? //aptdate
-                    controller.frm20 = self.tbl12 //phone
-                    controller.frm21 = self.tbl22 //salesNo
-                    controller.frm22 = self.tbl23 //jobNo
-                    controller.frm23 = self.tbl24 //adNo
-                    controller.frm24 = self.amount
-                    controller.frm25 = self.tbl15 as String?//email
-                    controller.frm26 = self.tbl14 //spouse
-                    controller.frm27 = self.tbl11 //callback
-                    controller.frm28 = self.comments
-                    controller.frm29 = self.photo
-                    controller.frm30 = self.active as NSString?
-                    controller.saleNo = self.tbl22
-                    controller.jobNo = self.tbl23
-                    controller.adNo = self.tbl24
+                    VC.formController = self.formController
+                    VC.status = "Edit"
+                    VC.objectId = self.objectId //Parse Only
+                    VC.leadNo = self.leadNo
+                    VC.frm11 = self.tbl13 //first
+                    VC.frm12 = self.lastname
+                    VC.frm13 = nil
+                    VC.frm14 = self.address
+                    VC.frm15 = self.city
+                    VC.frm16 = self.state
+                    VC.frm17 = self.zip
+                    VC.frm18 = self.date
+                    VC.frm19 = self.tbl21 as String? //aptdate
+                    VC.frm20 = self.tbl12 //phone
+                    VC.frm21 = self.tbl22 //salesNo
+                    VC.frm22 = self.tbl23 //jobNo
+                    VC.frm23 = self.tbl24 //adNo
+                    VC.frm24 = self.amount
+                    VC.frm25 = self.tbl15 as String?//email
+                    VC.frm26 = self.tbl14 //spouse
+                    VC.frm27 = self.tbl11 //callback
+                    VC.frm28 = self.comments
+                    VC.frm29 = self.photo
+                    VC.frm30 = self.active as NSString?
+                    VC.saleNo = self.tbl22
+                    VC.jobNo = self.tbl23
+                    VC.adNo = self.tbl24
+                    VC.profileImage = self.customImageView.image!
+                    //controller.photo.text = self.photo
                     
                 } else if (self.status == "New") { //new Customer from Lead
                     
-                    controller.formController = "Customer"
-                    controller.status = "New"
-                    controller.custNo = self.custNo
-                    controller.frm11 = self.tbl13 //first
-                    controller.frm12 = self.name
-                    controller.frm13 = nil
-                    controller.frm14 = self.address
-                    controller.frm15 = self.city
-                    controller.frm16 = self.state
-                    controller.frm17 = self.zip
-                    controller.frm18 = nil //date
-                    controller.frm19 = nil //aptdate
-                    controller.frm20 = self.tbl12 //phone
-                    controller.frm21 = self.salesman
-                    controller.frm22 = self.jobdescription
-                    controller.frm23 = nil //adNo
-                    controller.frm24 = self.amount
-                    controller.frm25 = self.tbl15 as String? //email
-                    controller.frm26 = self.tbl14 //spouse
-                    controller.frm27 = nil //callback
-                    controller.frm28 = self.comments
-                    controller.frm29 = self.photo
-                    controller.frm30 = self.active as NSString?
-                    controller.frm31 = nil //start
-                    controller.frm32 = nil //completion
+                    VC.formController = "Customer"
+                    VC.status = "New"
+                    VC.custNo = self.custNo
+                    VC.frm11 = self.tbl13 //first
+                    VC.frm12 = self.lastname
+                    VC.frm13 = nil
+                    VC.frm14 = self.address
+                    VC.frm15 = self.city
+                    VC.frm16 = self.state
+                    VC.frm17 = self.zip
+                    VC.frm18 = nil //date
+                    VC.frm19 = nil //aptdate
+                    VC.frm20 = self.tbl12 //phone
+                    VC.frm21 = self.salesman
+                    VC.frm22 = self.jobdescription
+                    VC.frm23 = nil //adNo
+                    VC.frm24 = self.amount
+                    VC.frm25 = self.tbl15 as String? //email
+                    VC.frm26 = self.tbl14 //spouse
+                    VC.frm27 = nil //callback
+                    VC.frm28 = self.comments
+                    VC.frm29 = self.photo
+                    VC.frm30 = self.active as NSString?
+                    VC.frm31 = nil //start
+                    VC.frm32 = nil //completion
+                    VC.profileImage = self.customImageView.image!
+                    VC.photo.text = self.photo
                 }
                 
             } else if (formController == "Customer") {
                 
-                controller.formController = self.formController
-                controller.status = "Edit"
-                controller.objectId = self.objectId //Parse Only
-                controller.custNo = self.custNo
-                controller.leadNo = self.leadNo
-                controller.frm11 = self.tbl11 //first
-                controller.frm12 = self.name
-                controller.frm13 = self.tbl13
-                controller.frm14 = self.address
-                controller.frm15 = self.city
-                controller.frm16 = self.state
-                controller.frm17 = self.zip
-                controller.frm18 = self.date
-                controller.frm19 = self.tbl26 as String? //rate
-                controller.frm20 = self.tbl12 //phone
-                controller.frm21 = self.tbl22 //salesNo
-                controller.frm22 = self.tbl23 //jobNo
-                controller.frm23 = self.tbl24 //prodNo
-                controller.frm24 = self.amount
-                controller.frm25 = self.tbl15 as String? //email
-                controller.frm26 = self.tbl14 //spouse
-                controller.frm27 = self.tbl25 //quan
-                controller.frm28 = self.comments
-                controller.frm29 = self.photo
-                controller.frm30 = self.active as NSString?
-                controller.frm31 = self.tbl21 as String? //start
-                controller.frm32 = self.complete
-                controller.saleNo = self.tbl22
-                controller.jobNo = self.tbl23
-                controller.adNo = self.tbl24
-                controller.time = self.tbl16
-              //controller.frm33 = self.photo1
+                VC.formController = self.formController
+                VC.status = "Edit"
+                VC.objectId = self.objectId //Parse Only
+                VC.custNo = self.custNo
+                VC.leadNo = self.leadNo
+                VC.frm11 = self.tbl11 //first
+                VC.frm12 = self.lastname //last
+                VC.frm13 = self.tbl13 //contractor
+                VC.frm14 = self.address
+                VC.frm15 = self.city
+                VC.frm16 = self.state
+                VC.frm17 = self.zip
+                VC.frm18 = self.date
+                VC.frm19 = self.tbl21 as String? //rate
+                VC.frm20 = self.tbl12 //phone
+                VC.frm21 = self.tbl22 //salesNo
+                VC.frm22 = self.tbl23 //jobNo
+                VC.frm23 = self.tbl24 //prodNo
+                VC.frm24 = self.amount
+                VC.frm25 = self.tbl15 as String? //email
+                VC.frm26 = self.tbl14 //spouse
+                VC.frm27 = self.tbl25 //quan
+                VC.frm28 = self.comments
+                VC.frm29 = self.photo
+                VC.frm30 = self.active as NSString?
+                VC.frm31 = self.tbl26 as String? //start
+                VC.frm32 = self.tbl27 as String? //complete
+                //controller.frm33 = self.photo
+                VC.saleNo = self.tbl22
+                VC.jobNo = self.tbl23
+                VC.adNo = self.tbl24
+                VC.profileImage = self.customImageView.image!
+                VC.time = self.tbl16
+
               //controller.frm34 = self.photo2
                 
             } else if (formController == "Vendor") {
-                controller.formController = self.formController
-                controller.status = "Edit"
-                controller.objectId = self.objectId //Parse Only
-                controller.leadNo = self.leadNo //vendorNo
-                controller.frm11 = self.name //vendorname
-                controller.frm12 = self.date //webpage
-                controller.frm13 = self.tbl24 //manager
-                controller.frm14 = self.address
-                controller.frm15 = self.city
-                controller.frm16 = self.state
-                controller.frm17 = self.zip
-                controller.frm18 = self.tbl25 //profession
-                controller.frm19 = self.tbl15 as String? //assistant
-                controller.frm20 = self.tbl11 //phone
-                controller.frm21 = self.tbl12 //phone1
-                controller.frm22 = self.tbl13 //phone2
-                controller.frm23 = self.tbl14 //phone3
-                controller.frm24 = self.tbl22 //department
-                controller.frm25 = self.tbl21 as String? //email
-                controller.frm26 = self.tbl23 //office
-                controller.frm27 = nil
-                controller.frm28 = self.comments
-                controller.frm29 = nil
-                controller.frm30 = self.active as NSString?
+                VC.formController = self.formController
+                VC.status = "Edit"
+                VC.objectId = self.objectId //Parse Only
+                VC.leadNo = self.leadNo //vendorNo
+                VC.frm11 = self.name //vendorname
+                VC.frm12 = self.date //webpage
+                VC.frm13 = self.tbl24 //manager
+                VC.frm14 = self.address
+                VC.frm15 = self.city
+                VC.frm16 = self.state
+                VC.frm17 = self.zip
+                VC.frm18 = self.tbl25 //profession
+                VC.frm19 = self.tbl15 as String? //assistant
+                VC.frm20 = self.tbl11 //phone
+                VC.frm21 = self.tbl12 //phone1
+                VC.frm22 = self.tbl13 //phone2
+                VC.frm23 = self.tbl14 //phone3
+                VC.frm24 = self.tbl22 //department
+                VC.frm25 = self.tbl21 as String? //email
+                VC.frm26 = self.tbl23 //office
+                VC.frm27 = nil
+                VC.frm28 = self.comments
+                VC.frm29 = self.photo
+                VC.profileImage = self.customImageView.image!
+                VC.frm30 = self.active as NSString?
 
             } else if (formController == "Employee") {
-                controller.formController = self.formController
-                controller.status = "Edit"
-                controller.objectId = self.objectId //Parse Only
-                controller.leadNo = self.leadNo //employeeNo
-                controller.frm11 = self.tbl26 as String? //first
-                controller.frm12 = self.custNo //lastname
-                controller.frm13 = self.tbl27 //company
-                controller.frm14 = self.address
-                controller.frm15 = self.city
-                controller.frm16 = self.state
-                controller.frm17 = self.zip
-                controller.frm18 = self.tbl23 //title
-                controller.frm19 = self.tbl15 as String? //middle
-                controller.frm20 = self.tbl11 //homephone
-                controller.frm21 = self.tbl12 //workphone
-                controller.frm22 = self.tbl13 //cellphone
-                controller.frm23 = self.tbl14 //social
-                controller.frm24 = self.tbl22 //department
-                controller.frm25 = self.tbl21 as String?//email
-                controller.frm26 = self.tbl25 //manager
-                controller.frm27 = self.tbl24
-                controller.frm28 = self.comments
-                controller.frm29 = nil
-                controller.frm30 = self.active! as NSString
+                VC.formController = self.formController
+                VC.status = "Edit"
+                VC.objectId = self.objectId //Parse Only
+                VC.leadNo = self.leadNo //employeeNo
+                VC.frm11 = self.first as String?  //first
+                VC.frm12 = self.lastname //lastname
+                VC.frm13 = self.company //company
+                VC.frm14 = self.address
+                VC.frm15 = self.city
+                VC.frm16 = self.state
+                VC.frm17 = self.zip
+                VC.frm18 = self.tbl23 //title
+                VC.frm19 = self.tbl15 as String? //middle
+                VC.frm20 = self.tbl11 //homephone
+                VC.frm21 = self.tbl12 //workphone
+                VC.frm22 = self.tbl13 //cellphone
+                VC.frm23 = self.tbl14 //social
+                VC.frm24 = self.tbl22 //department
+                VC.frm25 = self.tbl21 as String?//email
+                VC.frm26 = self.tbl25 //manager
+                VC.frm27 = self.tbl24
+                VC.frm28 = self.comments
+                VC.frm29 = self.photo
+                VC.profileImage = self.customImageView.image!
+                VC.frm30 = self.active! as NSString
             }
         }
     }
@@ -1477,6 +1514,8 @@ extension LeadDetail: UITableViewDataSource {
             cell.leadsubtitleDetail.textColor = .systemBlue
             cell.leadreadDetail.textColor = .systemGray
             cell.leadnewsDetail.textColor = .label
+
+            loadAvatarImage()
             
             return cell
             
@@ -1489,26 +1528,20 @@ extension LeadDetail: UITableViewDataSource {
 
  @objc func handlePlusPhoto() {
 
-         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-             imagePicker = UIImagePickerController()
-             imagePicker.sourceType = .photoLibrary
-             imagePicker.mediaTypes = [kUTTypeImage as String]
-             imagePicker.allowsEditing = true
-             imagePicker.delegate = self
-             self.present(imagePicker, animated: false)
-         } else {
-             self.simpleAlert(title: "Alert!", message: "you are not authorize")
-         }
+         let imagePickerController = UIImagePickerController()
+         imagePickerController.delegate = self
+         imagePickerController.allowsEditing = true
+         present(imagePickerController, animated: true, completion: nil)
      }
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
 
-        guard let image = info[.originalImage] as? UIImage else { return }
-        self.plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width / 2
-        self.plusPhotoButton.layer.masksToBounds = true
-        self.plusPhotoButton.layer.borderColor = UIColor.systemBlue.cgColor
-        self.plusPhotoButton.layer.borderWidth = 3
-        self.plusPhotoButton.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
+        guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else { return }
+        plusPhotoButton.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
+        plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width / 2
+        plusPhotoButton.layer.masksToBounds = true
+        plusPhotoButton.layer.borderColor = UIColor.darkGray.cgColor
+        plusPhotoButton.layer.borderWidth = 3
         setupAvatarImage()
         dismiss(animated: true, completion: nil)
     }
@@ -1519,104 +1552,79 @@ extension LeadDetail: UITableViewDataSource {
 
     func setupAvatarImage() { //dont work
 
+        guard let userID = self.objectId else {return}
+
+        var storageItem1: StorageReference?
+        var userRef1: DatabaseReference?
+
+        if (formController == "Leads") {
+            storageItem1 = Storage.storage().reference().child("Lead_images").child(userID)
+            userRef1 = FirebaseRef.databaseLeads.child(userID)
+
+        } else if (formController == "Customer") {
+            storageItem1 = Storage.storage().reference().child("Customer_images").child(userID)
+            userRef1 = FirebaseRef.databaseCust.child(userID)
+
+        } else if (formController == "Vendor") {
+            storageItem1 = Storage.storage().reference().child("Vendor_images").child(userID)
+            userRef1 = FirebaseRef.databaseVendor.child(userID)
+
+        } else if (formController == "Employee") {
+            storageItem1 = Storage.storage().reference().child("Employee_images").child(userID)
+            userRef1 = FirebaseRef.databaseEmply.child(userID)
+        }
+
         let metadata = StorageMetadata()
         metadata.contentType = "image/jpeg"
 
-        guard let userID = self.objectId else {return}
-
-
-            if (formController == "Customer") {
-
-                let storageItem = Storage.storage().reference().child("Customer_images").child(userID)
-                guard let image = self.plusPhotoButton.imageView?.image else {return}
-                if let newImage = image.jpegData(compressionQuality: 0.3)  {
-                    storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
-                        if error != nil{
-                            print(error!)
-                            return
-                        }
-                        storageItem.downloadURL(completion: { (url, error) in
-                            if error != nil{
-                                print(error!)
-                                return
-                            }
-
-                            if let profilePhotoURL = url?.absoluteString {
-                                let userRef = FirebaseRef.databaseCust.child(userID)
-                                let values = [
-                                    "photo": profilePhotoURL] as [String: Any]
-                                userRef.updateChildValues(values) { (error, ref) in
-                                    if error != nil {
-                                        self.simpleAlert(title:"Update Failure", message: "Failure updating the data")
-                                        return
-                                    } else {
-                                        self.simpleAlert(title: "Update Complete", message: "Successfully updated the data")
-                                    }
-                                }
-                            }
-                        })
-                    }
+        guard let image = self.plusPhotoButton.imageView?.image else {return}
+        if let newImage = image.jpegData(compressionQuality: 0.3)  {
+            storageItem1!.putData(newImage, metadata: metadata) { (metadata, error) in
+                if error != nil{
+                    print(error!.localizedDescription)
+                    return
                 }
-
-
-            } else if (formController == "Employee") {
-
-                let storageItem = Storage.storage().reference().child("Employee_images").child(userID)
-                guard let image = self.plusPhotoButton.imageView?.image else {return}
-                if let newImage = image.jpegData(compressionQuality: 0.3)  {
-                    storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
-                        if error != nil{
-                            print(error!)
-                            return
-                        }
-                        storageItem.downloadURL(completion: { (url, error) in
-                            if error != nil{
-                                print(error!)
-                                return
-                            }
-
-                            if let profilePhotoURL = url?.absoluteString {
-                                let userRef = FirebaseRef.databaseEmply.child(userID)
-                                let values = [
-                                    "photo": profilePhotoURL] as [String: Any]
-                                userRef.updateChildValues(values) { (error, ref) in
-                                    if error != nil {
-                                        self.simpleAlert(title:"Update Failure", message: "Failure updating the data")
-                                        return
-                                    } else {
-                                        self.simpleAlert(title: "Update Complete", message: "Successfully updated the data")
-                                    }
-                                }
-                            }
-                        })
+                storageItem1!.downloadURL(completion: { (url, error) in
+                    if error != nil{
+                        print(error!.localizedDescription)
+                        return
                     }
-                }
-
+                    if let profilePhotoURL = url?.absoluteString {
+                        let values = [
+                            "photo": profilePhotoURL] as [String: Any]
+                        userRef1!.updateChildValues(values) { (error, ref) in
+                            if error != nil {
+                                self.showAlert(title:"Update Failure", message: "Failure updating the data")
+                                return
+                            } else {
+                                self.showAlert(title: "Update Complete", message: "Successfully updated the data")
+                            }
+                        }
+                    }
+                })
             }
-
-
+        }
     }
 
     // MARK: - create AvatarImage
     func loadAvatarImage() {
+        if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
 
-        if (formController == "Customer") {
-            if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
-
-            } else {
-                //firebase
-                self.plusPhotoButton.layer.cornerRadius = self.plusPhotoButton.frame.width / 2
-                self.plusPhotoButton.layer.masksToBounds = true
-                self.plusPhotoButton.layer.borderColor = UIColor.systemBlue.cgColor
-                self.plusPhotoButton.layer.borderWidth = 3
-
-                guard let imageUrl = self.photo else { return }
-                self.customImageView.loadImage(urlString: imageUrl)
-                self.plusPhotoButton.setImage(self.customImageView.image?.withRenderingMode(.alwaysOriginal), for: .normal)
+        } else {
+            //firebase
+            if (self.photo == nil) || (self.photo == "") {
+                self.photo = imageUrl
             }
+
+            guard let temp = self.photo else {return}
+            guard let imageUrl:URL = URL(string: temp) else { return }
+            self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+
+            self.plusPhotoButton.setImage(self.customImageView.image?.withRenderingMode(.alwaysOriginal), for: .normal)
+            self.plusPhotoButton.layer.cornerRadius = self.plusPhotoButton.frame.width / 2
+            self.plusPhotoButton.layer.masksToBounds = true
+            self.plusPhotoButton.layer.borderColor = UIColor.systemBlue.cgColor
+            self.plusPhotoButton.layer.borderWidth = 3
         }
     }
 }
-
-
-

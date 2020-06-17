@@ -14,6 +14,8 @@ struct AdModel {
     let adNo: String?
     let advertiser: String
     let active: String
+    let imageUrl: String
+    let photo: String
     
     init(dictionary: [String: Any]) {
         
@@ -21,5 +23,7 @@ struct AdModel {
         self.adNo = dictionary["adNo"] as? String ?? ""
         self.advertiser = dictionary["advertiser"] as? String ?? ""
         self.active = dictionary["active"] as? String ?? ""
+        self.imageUrl = dictionary["imageUrl"] as? String ?? ""
+        self.photo = dictionary["photo"] as? String ?? ""
     }
 }

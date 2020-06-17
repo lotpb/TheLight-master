@@ -107,6 +107,7 @@ static NSString *const kFirebaseAuthUIFrameworkMarker = @"FirebaseUI-iOS";
   self = [super init];
   if (self) {
     _auth = auth;
+    _interactiveDismissEnabled = YES;
   }
   return self;
 }
@@ -178,7 +179,7 @@ static NSString *const kFirebaseAuthUIFrameworkMarker = @"FirebaseUI-iOS";
     if (self.auth.currentUser.isAnonymous && !credential) {
       if (result) {
         result(self.auth.currentUser, nil);
-      };
+      }
       // Hide Auth Picker Controller which was presented modally.
       if (isAuthPickerShown && presentingViewController.presentingViewController) {
         [presentingViewController dismissViewControllerAnimated:YES completion:nil];
@@ -236,15 +237,11 @@ static NSString *const kFirebaseAuthUIFrameworkMarker = @"FirebaseUI-iOS";
     if (error) {
       // Check for "credential in use" conflict error and handle appropriately.
       if (error.code == FIRAuthErrorCodeCredentialAlreadyInUse) {
-        FIRAuthCredential *newCredential = credential;
-        // Check for and handle special case for Phone Auth Provider.
-        if (providerUI.providerID == FIRPhoneAuthProviderID) {
-          // Obtain temporary Phone Auth credential.
-          newCredential = error.userInfo[FIRAuthErrorUserInfoUpdatedCredentialKey];
+        FIRAuthCredential *newCredential = error.userInfo[FIRAuthErrorUserInfoUpdatedCredentialKey];
+        NSDictionary *userInfo = @{ };
+        if (newCredential) {
+          userInfo = @{ FUIAuthCredentialKey : newCredential };
         }
-        NSDictionary *userInfo = @{
-          FUIAuthCredentialKey : newCredential,
-        };
         NSError *mergeError = [FUIAuthErrorUtils mergeConflictErrorWithUserInfo:userInfo
                                                                 underlyingError:error];
         [self completeSignInWithResult:authResult

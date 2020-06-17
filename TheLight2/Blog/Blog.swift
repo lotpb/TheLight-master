@@ -43,6 +43,7 @@ final class Blog: UIViewController {
     var posttoIndex: String?
     var userIndex: String?
     var titleLabel = String()
+    var profileImageView : UIImageView?
 
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -445,6 +446,7 @@ final class Blog: UIViewController {
                     VC.liked = bloglist[indexPath].liked as? Int
                     VC.commentNum = bloglist[indexPath].commentCount as? Int
                     VC.replyId = bloglist[indexPath].replyId
+                    //VC.profileImage = profileImageView?.image
                 }
             }
         }
@@ -468,11 +470,11 @@ final class Blog: UIViewController {
             }
         }
         if segue.identifier == "bloguserSegue" { //fix
-            guard let controller = segue.destination as? LeadUserVC else { return }
-            controller.formController = "Blog"
-            controller.postBy = titleLabel
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            guard let VC = segue.destination as? LeadUserVC else { return }
+            VC.formController = "Blog"
+            VC.postBy = titleLabel
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
         }
     }
 }
@@ -577,6 +579,7 @@ extension Blog: UITableViewDataSource {
             } else {
                 //firebase
                 cell.blogpost = bloglist[indexPath.row]
+                //self.profileImageView = cell.customImageView
             }
             
             cell.replyButton.tintColor = .lightGray
@@ -759,7 +762,7 @@ extension Blog: UITableViewDelegate {
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 
             } else {
-                self.simpleAlert(title: "Oops!", message: "Record can't be deleted.")
+                self.showAlert(title: "Oops!", message: "Record can't be deleted.")
             }
             
         } else if editingStyle == .insert {

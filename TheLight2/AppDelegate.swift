@@ -10,9 +10,13 @@ import UIKit
 import FirebaseCore
 import FBSDKCoreKit
 import GoogleSignIn
-import UserNotifications
 import CoreLocation
+import UserNotifications
 import BackgroundTasks
+
+let primaryColor = UIColor(red: 210/255, green: 109/255, blue: 180/255, alpha: 1)
+let secondaryColor = UIColor(red: 52/255, green: 148/255, blue: 230/255, alpha: 1)
+
 
 fileprivate let backgroundTaskIdentifier = "com.PeterBalsamo.apprefresh"
 
@@ -35,45 +39,62 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     @available(iOS 13.0, *)
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
 
-        /// MARK: -  BackGround Tasks
-        if UserDefaults.standard.bool(forKey: "AllowBackgroundFetch") {
-            registerBackgroundTaks()
-            print("Background task called...")
-            print("\(Date()): notification posted, running background if available")
-        } else {
-            print("Background task disabled")
-        }
+        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+    }
 
-        /// MARK: - Google Sign-in
-        //GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         registerCategories()
         registerLocalNotification()
         set3DTouch()
-        
+
         // MileIQ
         if (defaults.bool(forKey: "geotifyKey"))  {
-            center.requestAuthorization(options: [.badge, .alert, .sound]) { granted, error in }
-            locationManager.requestAlwaysAuthorization()
-            locationManager.startMonitoringVisits()
-            locationManager.delegate = self
-            locationManager.allowsBackgroundLocationUpdates = true
-            locationManager.pausesLocationUpdatesAutomatically = false
-            locationManager.startUpdatingLocation()  // 2
+            center.requestAuthorization(options: [.badge, .alert, .sound]) { granted, error in
+                if granted {
+                    self.locationManager.requestAlwaysAuthorization()
+                    self.locationManager.startMonitoringVisits()
+                    self.locationManager.delegate = self
+                    self.locationManager.allowsBackgroundLocationUpdates = true
+                    //self.locationManager.pausesLocationUpdatesAutomatically = false
+                    self.locationManager.startUpdatingLocation()  // 2
+                }
+            }
         }
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
-    }
 
-    /// MARK: - Google/Facebook
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
+        /// MARK: -  BackGround Tasks
+        if UserDefaults.standard.bool(forKey: "AllowBackgroundFetch") {
+
+            let dispatch = DispatchQueue.global()
+            BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.PeterBalsamo.imagefetcher", using: dispatch) { task in
+                self.fireBackgrounfNotification()
+            }
+
+            BGTaskScheduler.shared.register(forTaskWithIdentifier: backgroundTaskIdentifier, using: dispatch) { task in
+                self.handleAppRefresh(task: task as! BGAppRefreshTask)
+            }
+            print("Background task called...")
+            print("\(Date()): notification posted, running background if available")
+
+        } else {
+            print("Background task disabled")
+        }
+
+        //Firebase
+        FirebaseApp.configure()
+        //Google/Facebook
+        ApplicationDelegate.shared.application(application,didFinishLaunchingWithOptions: launchOptions)
+        //Google
+        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
 
         return true
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        let facebookDidHandle = ApplicationDelegate.shared.application(app, open: url, sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String, annotation: options[UIApplication.OpenURLOptionsKey.annotation])
+        let facebookDidHandle = ApplicationDelegate.shared.application(app,
+                                                                       open: url,
+                                                                       sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
+                                                                       annotation: options[UIApplication.OpenURLOptionsKey.annotation])
         let googleDidhandle = GIDSignIn.sharedInstance().handle(url)
         return googleDidhandle || facebookDidHandle
     }
@@ -81,7 +102,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Facebook
     func applicationDidBecomeActive(_ application: UIApplication) {
         AppEvents.activateApp()
-        //application.applicationIconBadgeNumber = 0 //dont work anymore
+        application.applicationIconBadgeNumber = 0 //dont work anymore
         center.removeAllPendingNotificationRequests()
         center.removeAllDeliveredNotifications()
     }
@@ -120,19 +141,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         center.delegate = self
         center.add(request)
     }
-//----------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------
     /// MARK: - Register BackGround Tasks
-    private func registerBackgroundTaks() {
-
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.PeterBalsamo.apprefresh", using: DispatchQueue.global()) { (task) in
-            task.setTaskCompleted(success: true)
-        }
-
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.PeterBalsamo.imagefetcher", using: nil) { task in
-            self.fireBackgrounfNotification()
-            self.handleAppRefresh(task: task as! BGAppRefreshTask)
-        }
-    }
 
     @available(iOS 13.0, *)
     func handleAppRefresh(task: BGAppRefreshTask) {
@@ -144,9 +154,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func scheduleAppRefresh() {
+
         fireBackgrounfNotification()
+
         let request = BGAppRefreshTaskRequest(identifier: backgroundTaskIdentifier)
-        request.earliestBeginDate = Date(timeIntervalSinceNow: 2 * 60) // App Refresh after 2 minute.
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 60 * 10)
 
         do {
             try BGTaskScheduler.shared.submit(request)
@@ -168,10 +180,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         center.delegate = self
         center.add(request)
     }
+
 }
 @available(iOS 13.0, *)
 extension AppDelegate {
-    
+    //BackGround Tasks
     func cancelAllPandingBGTask() {
         BGTaskScheduler.shared.cancelAllTaskRequests()
     }
@@ -248,36 +261,34 @@ extension AppDelegate {
     }
     
     /// Geotify
-    func handleEvent(forRegion region: CLRegion!, didEnter: Bool) {
+    //func handleEvent(forRegion region: CLRegion!, didEnter: Bool) {
+    func handleEvent(forRegion region: CLRegion) {
         
-        let message = didEnter ? "Alert! You have entered the region" : "Alert! You have exited the region ⚾️"
-        let geoTitle = note(from: region.identifier)
+        //let message = didEnter ? "Alert! You have entered the region" : "Alert! You have exited the region ⚾️"
+        //let geoTitle = note(from: region.identifier)
+        guard let message = note(from: region.identifier) else { return }
         
         if UIApplication.shared.applicationState == .active {
 
-            guard let message = note(from: region.identifier) else { return }
-            window?.rootViewController?.showAlert(withTitle: geoTitle, message: message)
+            //guard let message = note(from: region.identifier) else { return }
+            window?.rootViewController?.showAlert(title: nil, message: message)
             
         } else {
-            
+
+            guard let body = note(from: region.identifier) else { return }
             let content = UNMutableNotificationContent()
             content.title = message
-            //content.subtitle = geoTitle
-            content.body = geoTitle!
-            content.badge = (UIApplication.shared.applicationIconBadgeNumber + 1) as NSNumber
+            content.body = body
+            content.badge = UIApplication.shared.applicationIconBadgeNumber + 1 as NSNumber
             content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "Tornado.caf")) //UNNotificationSound.default()
             content.categoryIdentifier = "myCategory"
             
-            //let trigger = UNLocationNotificationTrigger.init(region: region, repeats: false)
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+            let trigger = UNLocationNotificationTrigger(region: region, repeats: false)
+            //let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
             let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
 
-            /// Remove pending notifications to avoid duplicates.
-            center.add(request) { error in
-                if let error = error {
-                    print("Error: \(error)")
-                }
-            }
+            //UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+            center.add(request, withCompletionHandler: nil)
         }
     }
     
@@ -306,7 +317,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     public func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
 
         if response.actionIdentifier == "remindLater" {
-            let newDate = Date(timeInterval: 60, since: Date())
+            let newDate = Date(timeInterval: 1, since: Date())
             scheduleNotification(at: newDate)
         }
         
@@ -326,7 +337,8 @@ extension AppDelegate: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         
         if region is CLCircularRegion {
-            handleEvent(forRegion: region, didEnter: true)
+            //handleEvent(forRegion: region, didEnter: true)
+            handleEvent(forRegion: region)
             UserWarningSpeakManager.warning.startSpeaking("Alert! You have entered the region")
             let FeedbackGenerator = UINotificationFeedbackGenerator()
             FeedbackGenerator.notificationOccurred(.warning)
@@ -338,7 +350,8 @@ extension AppDelegate: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         
         if region is CLCircularRegion {
-            handleEvent(forRegion: region, didEnter: false)
+            //handleEvent(forRegion: region, didEnter: false)
+            handleEvent(forRegion: region)
             UserWarningSpeakManager.warning.startSpeaking("Alert! You have exited the region")
             let FeedbackGenerator = UINotificationFeedbackGenerator()
             FeedbackGenerator.notificationOccurred(.warning)
@@ -349,10 +362,8 @@ extension AppDelegate: CLLocationManagerDelegate {
     //journal
     func locationManager(_ manager: CLLocationManager, didVisit visit: CLVisit) {
 
-  //mileIQ------------------------------------------------------------------------------
-
+        //mileIQ------------------------------------------------------------------------------
         let recordVisitReference = FirebaseRef.databaseVisits.child("test")
-
         let object: [String: Any] = [
             "coordinate": [
                 "latitude": visit.coordinate.latitude,
@@ -362,17 +373,13 @@ extension AppDelegate: CLLocationManagerDelegate {
             "departure_date": "\(visit.departureDate)",
             "horizontal_accuracy": visit.horizontalAccuracy,
             "description": visit.description
-           // "distance": "\(distance)",
-            //"previousLocation": self.previousLocation! //[self dictionaryFromVisit:_visits[[_visits count]-1]];
-
+            // "distance": "\(distance)",
         ]
         recordVisitReference
-            //.child("\(visit.arrivalDate)_" + DemoItems.visit.rawValue)
             .child("\(visit.arrivalDate)")
             .setValue(object)
-   //----------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------
 
-        // create CLLocation from the coordinates of CLVisit
         let clLocation = CLLocation(latitude: visit.coordinate.latitude, longitude: visit.coordinate.longitude)
         
         // Get location description
@@ -385,6 +392,7 @@ extension AppDelegate: CLLocationManagerDelegate {
     }
     
     func newVisitReceived(_ visit: CLVisit, description: String) {
+
         let location = Location(visit: visit, descriptionString: description)
         LocationsStorage.shared.saveLocationOnDisk(location)
         
@@ -398,14 +406,5 @@ extension AppDelegate: CLLocationManagerDelegate {
         
         center.add(request, withCompletionHandler: nil)
     }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
 
-    }
 }
-
- 
-
-
-
-

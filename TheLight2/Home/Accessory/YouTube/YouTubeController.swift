@@ -18,7 +18,7 @@ final class YouTubeController: UIViewController {
     private var searchController: UISearchController!
     private var resultsController = UITableViewController()
     
-    var apiKey = "AIzaSyB11hJ5EOIBKeaeRPeRXK5eEA0pYMndcVw"
+    var apiKey = "AIzaSyC-_pCbYwqSIckw4E180Fajj-RycvbKtS8"
     
     var desiredChannelsArray = ["lotpb", "Apple", "CaseyNeistat", "MarkDice", "ESPN", "HOWARDTV", "CodeWithChris", "SergeyKargopolov", "Lifehacker", "JimmyKimmelLive", "latenight", "Microsoft"]
     
@@ -31,6 +31,7 @@ final class YouTubeController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = .secondarySystemGroupedBackground
         self.extendedLayoutIncludesOpaqueBars = true
         
         getChannelDetails(false)
@@ -85,7 +86,7 @@ final class YouTubeController: UIViewController {
     }
     
     private func setupNavigation() {
-        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.prefersLargeTitles = false
         if UIDevice.current.userInterfaceIdiom == .pad  {
             navigationItem.title = "TheLight - YouTube"
         } else {

@@ -13,36 +13,33 @@ import AVFoundation
 
 @available(iOS 13.0, *)
 final class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDelegate, UISplitViewControllerDelegate {
-    
-    
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var detailLabel: UILabel!
-    @IBOutlet weak var newsTextview: UITextView!
-    
+
     var defaults = UserDefaults.standard
     var SnapshotBool = false //hide leftBarButtonItems
     
     var image: UIImage?
     var objectId: String?
+    var storageID: String?
     var newsTitle: String?
     var newsDetail: String?
+    //var viewCount: String?
     var newsStory: String?
     var newsDate: Date?
     var imageUrl: String?
     //firebase
     var videoURL: String?
-    
-    let faceLabel: UILabel = {
-        let label = UILabel()
-        label.text = "---"
-        label.font = Font.celltitle14r
-        label.backgroundColor = UIColor.black.withAlphaComponent(0.3)
-        label.textColor = .white
-        label.sizeToFit()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+
+    let scrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    lazy var contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        return view
     }()
     
     let newsImageview: CustomImageView = {
@@ -53,6 +50,52 @@ final class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDele
         imageView.isUserInteractionEnabled = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
+    }()
+
+    lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .label
+        label.numberOfLines = 2
+        return label
+    }()
+
+    lazy var detailLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .secondaryLabel
+        label.sizeToFit()
+        return label
+    }()
+
+//    lazy var viewCount: UILabel = {
+//        let label = UILabel()
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//        label.textColor = .secondaryLabel
+//        label.sizeToFit()
+//        return label
+//    }()
+
+    let newsTextview: UITextView = {
+        let textView = UITextView()
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.textColor = .label
+        textView.textContainerInset = .init(top: 0, left: -4, bottom: 0, right: 0)
+        textView.backgroundColor = .clear
+        textView.autocorrectionType = .yes
+        textView.dataDetectorTypes = .all
+        return textView
+    }()
+
+    let faceLabel: UILabel = {
+        let label = UILabel()
+        label.text = "---"
+        label.font = Font.celltitle14r
+        label.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        label.textColor = .white
+        label.sizeToFit()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     lazy var titleButton: UIButton = {
@@ -106,7 +149,8 @@ final class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        newsTextview.backgroundColor = .clear
+        view.backgroundColor = .systemBackground
+
         setupNavigation()
         setupConstraints()
         setupForm()
@@ -114,7 +158,7 @@ final class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDele
         setupFonts()
         setupTextView()
         findFace()  //fix
-        //setupViewCounter() set up in FeedCell
+        setupScrollView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -159,18 +203,15 @@ final class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDele
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.newsImageview
     }
+
+    func setupScrollView() {
+        self.scrollView.delegate = self
+        self.scrollView.minimumZoomScale = 1
+        self.scrollView.maximumZoomScale = 4
+        self.scrollView.zoomScale = 1.0
+    }
     
     func setupImageView() {
-        
-        self.scrollView.delegate = self
-        self.scrollView.minimumZoomScale = 1.0
-        self.scrollView.maximumZoomScale = 5.0
-        
-        //self.scrollView.contentOffset = CGPoint(x: 500, y: 200)
-        //self.scrollView.zoomScale = 1.0
-        //self.scrollView.contentOffset = CGPoint(x: 1000, y: 450)
-        //self.scrollView.contentSize = newsImageview.bounds.size
-        //self.scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         UIView.transition(with: self.newsImageview, duration: 0.5, options: .transitionCrossDissolve, animations: {
             if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
@@ -196,11 +237,8 @@ final class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDele
     
     func setupForm() {
 
-        contentView.backgroundColor = .systemBackground
-        self.titleLabel.textColor = .label
         self.titleLabel.text = self.newsTitle
-        self.titleLabel.numberOfLines = 2
-        
+
         let date1 = self.newsDate ?? Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "h:mm a"
@@ -215,17 +253,15 @@ final class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDele
         
         let dateString = dateFormatter.string(from: date1)
         self.detailLabel.text = String(format: "%@ %@ %@", "\(String(describing: self.newsDetail!))", "Uploaded", "\(dateString)")
-        self.detailLabel.textColor = .secondaryLabel
-        self.detailLabel.sizeToFit() 
     }
     
     func setupFonts() {
         
         if UIDevice.current.userInterfaceIdiom == .pad  {
-            self.titleLabel.font = Font.celltitle36r
-            self.detailLabel.font = Font.celltitle20r
+            self.titleLabel.font = Font.celltitle26r
+            self.detailLabel.font = Font.celltitle18r
             self.newsTextview.isEditable = true //bug fix
-            self.newsTextview.font = Font.celltitle26l
+            self.newsTextview.font = Font.celltitle18l
         } else {
             self.titleLabel.font = Font.celltitle20r
             self.detailLabel.font = Font.celltitle16r
@@ -237,9 +273,7 @@ final class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDele
     func setupTextView() {
         
         self.newsTextview.text = self.newsStory
-        self.newsTextview.textColor = .secondaryLabel
         self.newsTextview.delegate = self
-        self.newsTextview.textContainerInset = .init(top: 0, left: -4, bottom: 0, right: 0)
         // Make web links clickable
         self.newsTextview.isSelectable = true
         self.newsTextview.isEditable = false
@@ -247,18 +281,52 @@ final class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDele
     }
     
     func setupConstraints() {
-      //view.addSubview(newsImageview)
+
+        self.view.addSubview(scrollView)
         scrollView.addSubview(newsImageview)
+        view.addSubview(contentView)
+        view.addSubview(titleLabel)
+        view.addSubview(detailLabel)
+        view.addSubview(newsTextview)
         newsImageview.addSubview(faceLabel)
         newsImageview.addSubview(playButton)
         newsImageview.addSubview(activityIndicator)
-        
+
+        let guide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
-            newsImageview.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 0),
-            newsImageview.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            newsImageview.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            newsImageview.bottomAnchor.constraint(equalTo: titleLabel.topAnchor, constant: -10),
+
+            //newsImageview.centerXAnchor.constraint(equalTo: scrollView.contentLayoutGuide.centerXAnchor),
+            //newsImageview.centerYAnchor.constraint(equalTo: scrollView.contentLayoutGuide.centerYAnchor),
+
+            scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+
+            newsImageview.topAnchor.constraint(equalTo: guide.topAnchor),
+            newsImageview.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            newsImageview.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            //newsImageview.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             newsImageview.heightAnchor.constraint(equalTo: newsImageview.widthAnchor, multiplier: 9/16),
+
+            contentView.topAnchor.constraint(equalTo: newsImageview.bottomAnchor, constant: 0),
+            contentView.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 0),
+            contentView.rightAnchor.constraint(equalTo: scrollView.rightAnchor, constant: 0),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0),
+
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            titleLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            titleLabel.heightAnchor.constraint(equalToConstant: 25),
+
+            detailLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 1),
+            detailLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
+            detailLabel.heightAnchor.constraint(equalToConstant: 25),
+
+            newsTextview.topAnchor.constraint(equalTo: detailLabel.bottomAnchor, constant: 10),
+            newsTextview.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            newsTextview.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            newsTextview.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -20),
 
             playButton.centerXAnchor.constraint(equalTo: newsImageview.centerXAnchor),
             playButton.centerYAnchor.constraint(equalTo: newsImageview.centerYAnchor),
@@ -266,7 +334,7 @@ final class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDele
             playButton.heightAnchor.constraint(equalToConstant: 50),
             
             faceLabel.topAnchor.constraint(equalTo: newsImageview.topAnchor, constant: 7),
-            faceLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor, constant: 0),
+            faceLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 0),
             faceLabel.heightAnchor.constraint(equalToConstant: 25),
             
             activityIndicator.centerXAnchor.constraint(equalTo: newsImageview.centerXAnchor),
@@ -288,32 +356,32 @@ final class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDele
     // MARK: - FaceDetector
     func findFace() {
         
-        guard let faceImage = CIImage(image: self.newsImageview.image!) else { return }
-        
-        let accuracy = [CIDetectorAccuracy: CIDetectorAccuracyHigh]
-        let faceDetector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: accuracy)
-        let faces = faceDetector?.features(in: faceImage, options: [CIDetectorSmile: true, CIDetectorEyeBlink: true])
-        
-        for face in faces as! [CIFaceFeature] {
-            
-            if face.hasSmile {
-                print("😁")
-            }
-            
-            if face.leftEyeClosed {
-                print("Left: 😉")
-            }
-            
-            if face.rightEyeClosed {
-                print("Right: 😉")
-            }
-        }
-        
-        if faces!.count != 0 {
-            self.faceLabel.text = "Faces: \(faces!.count)"
-        } else {
-            self.faceLabel.text = "No Faces 😢"
-        }
+//        guard let faceImage = CIImage(image: self.newsImageview.image!) else { return }
+//        
+//        let accuracy = [CIDetectorAccuracy: CIDetectorAccuracyHigh]
+//        let faceDetector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: accuracy)
+//        let faces = faceDetector?.features(in: faceImage, options: [CIDetectorSmile: true, CIDetectorEyeBlink: true])
+//        
+//        for face in faces as! [CIFaceFeature] {
+//            
+//            if face.hasSmile {
+//                print("😁")
+//            }
+//            
+//            if face.leftEyeClosed {
+//                print("Left: 😉")
+//            }
+//            
+//            if face.rightEyeClosed {
+//                print("Right: 😉")
+//            }
+//        }
+//        
+//        if faces!.count != 0 {
+//            self.faceLabel.text = "Faces: \(faces!.count)"
+//        } else {
+//            self.faceLabel.text = "No Faces 😢"
+//        }
     }
     
     // MARK: - Segue
@@ -321,16 +389,17 @@ final class NewsDetailVC: UIViewController, UITextViewDelegate, UIScrollViewDele
         
         if segue.identifier == "uploadSegue"
         {
-            guard let photo = segue.destination as? UploadController else { return }
+            guard let VC = segue.destination as? UploadController else { return }
             
-            photo.formState = "Update"
-            photo.objectId = self.objectId
-            photo.newsImage = self.newsImageview.image
-            photo.newstitle = self.titleLabel.text
-            photo.newsdetail = self.newsDetail
-            photo.newsStory = self.newsStory
-            photo.imageDetailurl = self.imageUrl
-            photo.videoDetailurl = self.videoURL
+            VC.formState = "Update"
+            VC.objectId = self.objectId
+            VC.storageID = self.storageID
+            VC.newsImage = self.newsImageview.image
+            VC.newstitle = self.titleLabel.text
+            VC.newsdetail = self.newsDetail
+            VC.newsStory = self.newsStory
+            VC.imageDetailurl = self.imageUrl
+            VC.videoDetailurl = self.videoURL
         }
     }
 }

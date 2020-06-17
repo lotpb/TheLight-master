@@ -21,7 +21,7 @@ struct TweetUI: View {
 
             TabView{
 
-                HomeTweet().tabItem {
+                HomeTweetUI().tabItem {
 
                     Image("Home")
 
@@ -91,7 +91,7 @@ import SwiftUI
 import Firebase
 import SDWebImageSwiftUI
 
-struct HomeTweet : View {
+struct HomeTweetUI : View {
 
     @EnvironmentObject var observedData : getData
 

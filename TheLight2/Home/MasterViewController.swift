@@ -8,14 +8,12 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseAnalytics
+import FirebaseCore
 import Parse
 import AVFoundation
-import FirebaseAnalytics
-
-import FirebaseCore
-import FirebaseFirestore
-import FirebaseFirestoreSwift
-
+//import FirebaseFirestore
+//import FirebaseFirestoreSwift
 //import SwiftKeychainWrapper
 
 
@@ -28,7 +26,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     //firebase
     var currentUser: UserModel?
 
-    private var menuItems = ["Snapshot","Statistics","Leads","Customers","Vendors","Employee","Advertising","Product","Job","Salesman", "Zip","Geotify","Search Places","Music","YouTube","Contacts","Spot Beacon","Transmit Beacon", "Show Detail"]
+    private var menuItems = ["Snapshot","Statistics","Leads","Customers","Vendors","Employee","Sub Data","Geotify","Search Places","Music","YouTube","Contacts","Spot Beacon","Transmit Beacon", "Show Detail"]
     //search
     private var searchController: UISearchController!
     private var resultsController = UITableViewController()
@@ -92,7 +90,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             if (severeYQL.contains("Rain") || severeYQL.contains("Snow") || severeYQL.contains("Thunderstorms") || severeYQL.contains("Showers")) {
                 
                 DispatchQueue.main.async {
-                    self.simpleAlert(title: severeYQL, message: "Bad weather today!")
+                    self.showAlert(title: severeYQL, message: "Bad weather today!")
                 }
             }
         }
@@ -144,10 +142,12 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     func registerLogin() {
         /// MARK: - Register login
         if (!(defaults.bool(forKey: "registerKey")) || defaults.bool(forKey: "loginKey")) {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let initialViewController : UIViewController = storyboard.instantiateViewController(withIdentifier: "loginIDController") as UIViewController
-            initialViewController.modalPresentationStyle = .fullScreen
-            self.present(initialViewController, animated: true)
+            if FirebaseAuth.Auth.auth().currentUser == nil {
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let VC : UIViewController = storyboard.instantiateViewController(withIdentifier: "loginIDController") as UIViewController
+                VC.modalPresentationStyle = .fullScreen
+                self.present(VC, animated: true)
+            }
         }
     }
 
@@ -189,7 +189,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     
     @objc func refreshData() {
         if UIDevice.current.userInterfaceIdiom == .phone {
-            self.updateYahoo()
+            //self.updateYahoo()
         }
         self.tableView.reloadData()
         self.refreshControl?.endRefreshing()
@@ -197,7 +197,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
 
     // MARK: - Button
     @objc func actionButton(_ sender: AnyObject) {
- 
+
         let alertController = UIAlertController(title:nil, message:nil, preferredStyle: .actionSheet)
         
         let setting = UIAlertAction(title: "Settings", style: .default, handler: { (action) in
@@ -240,7 +240,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             player = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: audioPath!))
         }
         catch {
-            self.simpleAlert(title: "Alert", message: "Something bad happened. Try catching specific errors to narrow things down")
+            self.showAlert(title: "Alert", message: "Something bad happened. Try catching specific errors to narrow things down")
         }
         player.play()
     }
@@ -287,7 +287,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
                     
                     if snapshot.exists() {
                         DispatchQueue.main.async {
-                            self.simpleAlert(title: "New Version!", message: "A new version of app is available to download")
+                            self.showAlert(title: "New Version!", message: "A new version of app is available to download")
                         }
                         
                     } else {
@@ -343,7 +343,8 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             PFUser.logInWithUsername(inBackground: userId, password:userpassword) { (user, error) in
                 if error != nil {
                     print("Error: \(String(describing: error)) \(String(describing: error!._userInfo))")
-                    self.simpleAlert(title: "Oooops", message: "Your username and password does not match")
+                    self.handleLogout()
+                    //self.simpleAlert(title: "Oooops", message: "Your username and password does not match")
                     return
                 }
             }
@@ -352,7 +353,8 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             Auth.auth().signIn(withEmail: useremail, password: userpassword, completion: { (user, err) in
                 if let err = err {
                     print("Failed to login:", err)
-                    self.simpleAlert(title: "Oooops", message: "Your username and password does not match")
+                    self.handleLogout()
+                    //self.simpleAlert(title: "Oooops", message: "Your username and password does not match")
                     return
                 }
                 print("Succesfully logged back in with user:", user?.user.uid ?? "")
@@ -362,19 +364,18 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     
     @objc func handleLogout() {
         self.defaults.set(false, forKey: "registerKey")
-            do {
-                try
-                    Auth.auth().signOut()
-            } catch let error as NSError {
-                print(error.localizedDescription)
-            }
+        do {
+            try Auth.auth().signOut()
 
-        UIApplication.shared.applicationIconBadgeNumber = 0
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "loginIDController")
-        vc.modalPresentationStyle = .fullScreen
-        self.present(vc, animated: true)
-
+            UIApplication.shared.applicationIconBadgeNumber = 0
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "loginIDController")
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true)
+        }
+        catch let error as NSError {
+            print(error.localizedDescription)
+        }
     }
     
     // MARK: - Table View
@@ -394,7 +395,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             } else if (section == 1) {
                 return 4
             } else if (section == 2) {
-                return 5
+                return 1
             } else if (section == 3) {
                 return 2
             } else if (section == 4) {
@@ -452,39 +453,31 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
                 
                 if (indexPath.row == 0) {
                     cell.textLabel!.text = menuItems[6]
-                } else if (indexPath.row == 1) {
-                    cell.textLabel!.text = menuItems[7]
-                } else if (indexPath.row == 2) {
-                    cell.textLabel!.text = menuItems[8]
-                } else if (indexPath.row == 3) {
-                    cell.textLabel!.text = menuItems[9]
-                } else if (indexPath.row == 4) {
-                    cell.textLabel!.text = menuItems[10]
                 }
             } else if (indexPath.section == 3) {
 
                 if (indexPath.row == 0) {
-                    cell.textLabel!.text = menuItems[11]
+                    cell.textLabel!.text = menuItems[7]
                 } else if (indexPath.row == 1) {
-                    cell.textLabel!.text = menuItems[12]
+                    cell.textLabel!.text = menuItems[8]
                 }
             } else if (indexPath.section == 4) {
 
                 if (indexPath.row == 0) {
-                    cell.textLabel!.text = menuItems[13]
+                    cell.textLabel!.text = menuItems[9]
                 } else if (indexPath.row == 1) {
-                    cell.textLabel!.text = menuItems[14]
+                    cell.textLabel!.text = menuItems[10]
                 } else if (indexPath.row == 2) {
-                    cell.textLabel!.text = menuItems[15]
+                    cell.textLabel!.text = menuItems[11]
                 }
             } else if (indexPath.section == 5) {
 
                 if (indexPath.row == 0) {
-                    cell.textLabel!.text = menuItems[16]
+                    cell.textLabel!.text = menuItems[12]
                 } else if (indexPath.row == 1) {
-                    cell.textLabel!.text = menuItems[17]
+                    cell.textLabel!.text = menuItems[13]
                 } else if (indexPath.row == 2) {
-                    cell.textLabel!.text = menuItems[18]
+                    cell.textLabel!.text = menuItems[14]
                 }
             }
             return cell
@@ -647,16 +640,8 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             self.performSegue(withIdentifier: "showvendSegue", sender: self)
         } else if (currentItem.textLabel!.text! == "Employee") {
             self.performSegue(withIdentifier: "showemployeeSegue", sender: self)
-        } else if (currentItem.textLabel!.text! == "Advertising") {
-            self.performSegue(withIdentifier: "showadSegue", sender: self)
-        } else if (currentItem.textLabel!.text! == "Product") {
-            self.performSegue(withIdentifier: "showproductSegue", sender: self)
-        } else if (currentItem.textLabel!.text! == "Job") {
-            self.performSegue(withIdentifier: "showjobSegue", sender: self)
-        } else if (currentItem.textLabel!.text! == "Salesman") {
-            self.performSegue(withIdentifier: "showsalesmanSegue", sender: self)
-        } else if (currentItem.textLabel!.text! == "Zip") {
-            self.performSegue(withIdentifier: "showzipSegue", sender: self)
+        } else if (currentItem.textLabel!.text! == "Sub Data") {
+            self.performSegue(withIdentifier: "subdataSegue", sender: self)
         } else if (currentItem.textLabel!.text! == "Geotify") {
             self.performSegue(withIdentifier: "geotifySegue", sender: self)
         } else if (currentItem.textLabel!.text! == "Show Detail") {
@@ -681,56 +666,56 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         
         if segue.identifier == "geotifySegue" {
-            guard let controller = segue.destination as? GeotificationVC else { return }
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            guard let VC = segue.destination as? GeotificationVC else { return }
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
         }
         if segue.identifier == "searchMapSegue" {
-            guard let controller = segue.destination as? MapsearchVC else { return }
+            guard let VC = segue.destination as? MapsearchVC else { return }
             //navigationItem.backBarButtonItem = UIBarButtonItem(title: "back", style: .plain, target: nil, action: nil)
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
         }
         if segue.identifier == "snapshotSegue" {
-            guard let controller = segue.destination as? SnapshotVC else { return }
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            guard let VC = segue.destination as? SnapshotVC else { return }
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
         }
         if segue.identifier == "statisticSegue" {
-            guard let controller = segue.destination as? StatisticVC else { return }
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            guard let VC = segue.destination as? StatisticVC else { return }
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
         }
         if segue.identifier == "showDetail" {
-            guard let controller = segue.destination as? DetailViewVC else { return }
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            guard let VC = segue.destination as? DetailViewVC else { return }
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
         }
         if segue.identifier == "musicSegue" {
-            guard let controller = segue.destination as? MusicController else { return }
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            guard let VC = segue.destination as? MusicController else { return }
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
         }
         if segue.identifier == "youtubeSegue" {
-            guard let controller = segue.destination as? YouTubeController else { return }
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            guard let VC = segue.destination as? YouTubeController else { return }
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
         }
         if segue.identifier == "spotbeaconSegue" {
-            guard let controller = segue.destination as? SpotBeaconVC else { return }
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            guard let VC = segue.destination as? SpotBeaconVC else { return }
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
         }
         if segue.identifier == "transmitbeaconSegue" {
-            guard let controller = segue.destination as? TransmitBeaconVC else { return }
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            guard let VC = segue.destination as? TransmitBeaconVC else { return }
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
         }
         if segue.identifier == "contactSegue" {
-            guard let controller = segue.destination as? ContactVC else { return }
+            guard let VC = segue.destination as? FriendsViewController else { return }
             //let controller = (segue.destination as! UINavigationController).topViewController as! ContactVC
-            controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            controller.navigationItem.leftItemsSupplementBackButton = true
+            VC.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            VC.navigationItem.leftItemsSupplementBackButton = true
         }
     }
 }

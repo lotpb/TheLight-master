@@ -88,7 +88,7 @@ final class ZipcodeVC: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newData))
         navigationItem.title = "Zip Codes"
-        //self.navigationItem.largeTitleDisplayMode = .always
+        self.navigationItem.largeTitleDisplayMode = .always
         
         searchController = UISearchController(searchResultsController: resultsController)
         navigationItem.searchController = searchController

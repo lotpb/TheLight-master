@@ -8,6 +8,7 @@
 
 // MARK:, // TODO: and // FIXME:
 import UIKit
+import MapKit
 
 var searchController: UISearchController!
 
@@ -45,6 +46,7 @@ enum ColorX {
         static let emaillinkText = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
         static let phonelinkText = UIColor.systemGreen
     }
+    
     enum Lead {
         static let navColor = #colorLiteral(red: 0.07058823529, green: 0.07058823529, blue: 0.07058823529, alpha: 1)
         static let labelColor = ColorX.DGrayColor
@@ -179,7 +181,7 @@ struct Font {
         static let newslabel2Pad = Font.celltitle18r
         
         static let newstitle = Font.celltitle18l
-        static let newssource = Font.celltitle14l
+        static let newssource = Font.celltitle16l
         static let newslabel1 = celltitle16b
         static let newslabel2 = Font.celltitle14l
     }
@@ -227,14 +229,14 @@ struct Font {
     }
 }
 
-//declared in News search
+// declared in News search
 func requestSuggestionsURL(text: String) -> URL {
     let netText = text.addingPercentEncoding(withAllowedCharacters: CharacterSet())!
     let url = URL.init(string: "https://api.bing.com/osjson.aspx?query=\(netText)")!
     return url
 }
 
-//declared in CollectionViewCell
+// declared in CollectionViewCell
 var imageCache = [String: UIImage]()
 
 class CustomImageView: UIImageView {
@@ -271,11 +273,12 @@ class CustomImageView: UIImageView {
             DispatchQueue.main.async {
                 self.image = photoImage ?? #imageLiteral(resourceName: "profile-rabbit-toy")
             }
-            }.resume()
+        }.resume()
     }
 }
 
 // MARK: - PlayVC, NavVC
+
 enum stateOfVC {
     case minimized
     case fullScreen
@@ -309,49 +312,61 @@ public extension String {
 }
 
 // MARK: - AlertController
+
 public extension UIViewController {
-    
-    func simpleAlert(title:String?, message:String?) { //withTitle:
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        self.present(alertController, animated: true)
+
+    func showAlert(title: String?, message: String?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true)
     }
 }
 
-//--------------News youtube------------
-extension UIColor { //youtube red
+// MARK: - YouTube Red
+extension UIColor {
     static func rgb(red: CGFloat, green: CGFloat, blue: CGFloat) -> UIColor {
         return UIColor(red: red/255, green: green/255, blue: blue/255, alpha: 1)
     }
 }
 
-// UIImage with downloadable content
-extension UIImage {
-    class  func contentOfURL(link: String) -> UIImage {
-        let url = URL.init(string: link)!
-        var image = UIImage()
-        do {
-            let data = try Data.init(contentsOf: url)
-            image = UIImage.init(data: data)!
-        } catch _ {
-            print("error downloading images")
+extension UIImageView {
+    func load(url: URL) {
+        DispatchQueue.global().async { [weak self] in
+            if let data = try? Data(contentsOf: url) {
+                if let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self?.image = image
+                    }
+                }
+            }
         }
-        return image
     }
 }
 
 extension UIView {
 
-    ///testTable
-    func pin(to superView: UIView) {
-        translatesAutoresizingMaskIntoConstraints                              = false
-        topAnchor.constraint(equalTo: superView.topAnchor).isActive            = true
-        leadingAnchor.constraint(equalTo: superView.leadingAnchor).isActive    = true
-        trailingAnchor.constraint(equalTo: superView.trailingAnchor).isActive  = true
-        bottomAnchor.constraint(equalTo: superView.bottomAnchor).isActive      = true
-    }
+    //    func addShadow() {
+    //        layer.shadowColor = UIColor.black.cgColor
+    //        layer.shadowOpacity = 0.55
+    //        layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
+    //        layer.masksToBounds = false
+    //    }
 
-    //News - youtube
+    // loginVC
+    func addVerticalGradientLayer(topColor:UIColor, bottomColor:UIColor) {
+        let gradient = CAGradientLayer()
+        gradient.frame = self.bounds
+        gradient.colors = [
+            topColor.cgColor,
+            bottomColor.cgColor
+        ]
+        gradient.locations = [0.0, 1.0]
+        gradient.startPoint = CGPoint(x: 0, y: 0)
+        gradient.endPoint = CGPoint(x: 0, y: 1)
+        self.layer.insertSublayer(gradient, at: 0)
+    }
+    // News - youtube
     func addConstraintsWithFormat(format: String, views: UIView...) {
         var viewsDictionary = [String: UIView]()
         for (index, view) in views.enumerated() {
@@ -361,8 +376,7 @@ extension UIView {
         }
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: viewsDictionary))
     }
-    
-    //SharePhotoController
+    // SharePhotoController
     func anchor(top: NSLayoutYAxisAnchor?, left: NSLayoutXAxisAnchor?, bottom: NSLayoutYAxisAnchor?, right:NSLayoutXAxisAnchor?, paddingTop: CGFloat, paddingLeft: CGFloat, paddingBottom: CGFloat, paddingRight: CGFloat, width: CGFloat, height: CGFloat) {
         
         translatesAutoresizingMaskIntoConstraints = false
@@ -397,7 +411,7 @@ extension UITableView { // MusicController
 
 // MARK: - detect a URL in a String using NSDataDetector
 extension NSRange {
-    //NSRange rather than a Swift string range.
+    // NSRange rather than a Swift string range.
     func range(for str: String) -> Range<String.Index>? {
         guard location != NSNotFound else { return nil }
         
@@ -410,8 +424,6 @@ extension NSRange {
     }
 }
 
-//------------------------------------
-
 extension UISplitViewController: UISplitViewControllerDelegate {
     
     open override func viewDidLoad() { // FIX - remove bottom bar
@@ -420,21 +432,43 @@ extension UISplitViewController: UISplitViewControllerDelegate {
 } 
 
 extension UITabBarController {
-    /*
-    func increaseBadge(indexOfTab: Int, num: String) {
-        let tabItem = tabBar.items![indexOfTab]
-        tabItem.badgeValue = num
-    } */
-    
     //hide TabBar
     func hideTabBarAnimated(hide:Bool) {
         UIView.animate(withDuration: 0.3, animations: {
             if hide {
-                self.tabBar.transform = CGAffineTransform(translationX: 0, y: 50)
+                self.tabBar.transform = CGAffineTransform(translationX: 0, y: 0)
             } else {
-                self.tabBar.transform = CGAffineTransform.identity
+                self.tabBar.transform = CGAffineTransform(translationX: 0, y: 100)
             }
         })
+    }
+
+//    func increaseBadge(indexOfTab: Int, num: String) {
+//        let tabItem = tabBar.items![indexOfTab]
+//        tabItem.badgeValue = num
+//    }
+}
+
+extension MKMapView {
+    func zoomToUserLocation() {
+        guard let coordinate = userLocation.location?.coordinate else { return }
+        let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 500, longitudinalMeters: 500)
+        setRegion(region, animated: true)
+    }
+}
+
+extension MKMapViewDelegate {
+    // placeCell
+    func FetchCity(_ coordinate : CLLocation, completion: @escaping (String?)->()){
+        CLGeocoder().reverseGeocodeLocation(coordinate) { (placemarks, error) in
+
+            if let placemarks = placemarks{
+                let placemark = placemarks.first
+                if let city = placemark?.locality {
+                    completion(city)
+                }
+            }
+        }
     }
 }
 
@@ -475,4 +509,7 @@ extension Date {
     }
 }
 
+extension Notification.Name {
+    static let didLoginNotification = Notification.Name("didLoginNotification")
+}
 
