@@ -129,10 +129,10 @@ final class ContactVC: UIViewController {
     
     func setupTableView() {
         
-        self.tableView.register(UINib(nibName: "ContactTableViewCell", bundle: nil), forCellReuseIdentifier: "ContactTableViewCell")
+        tableView.register(UINib(nibName: "ContactTableViewCell", bundle: nil), forCellReuseIdentifier: "ContactTableViewCell")
 
-        self.tableView!.backgroundColor = .systemGray4
-        self.tableView!.tableFooterView = UIView(frame: .zero)
+        tableView!.backgroundColor = .systemGray4
+        tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
         resultsController.tableView.backgroundColor = ColorX.LGrayColor

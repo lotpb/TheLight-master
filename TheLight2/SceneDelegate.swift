@@ -123,21 +123,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         UINavigationBar.appearance().tintColor = .systemGray //text color
         UINavigationBar.appearance().prefersLargeTitles = true
 
-        let attrsNormal = [
-            NSAttributedString.Key.foregroundColor: UIColor.label,
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12.0)
-        ]
-        let attrsSelected = [
-            NSAttributedString.Key.foregroundColor: ColorX.twitterBlue,
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12.0)
-        ]
-        UITabBarItem.appearance().setTitleTextAttributes(attrsNormal, for: .normal)
-        UITabBarItem.appearance().setTitleTextAttributes(attrsSelected, for: .selected)
-        //UITabBar.appearance().barStyle = .black
-        UITabBar.appearance().barTintColor = .systemBackground
-        UITabBar.appearance().tintColor = ColorX.twitterBlue
-        UITabBar.appearance().isTranslucent = true
-
         UIToolbar.appearance().barTintColor = ColorX.toolbarColor //Color.DGrayColor
         UIToolbar.appearance().tintColor = .secondarySystemGroupedBackground
         UIToolbar.appearance().isTranslucent = false

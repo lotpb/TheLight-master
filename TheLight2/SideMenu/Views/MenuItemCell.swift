@@ -16,14 +16,14 @@ class IconImageView: UIImageView {
 
 class MenuItemCell: UITableViewCell {
 
-    let iconImageView: IconImageView = {
+    public let iconImageView: IconImageView = {
         let iv = IconImageView()
         iv.contentMode = .scaleAspectFit
         iv.image = #imageLiteral(resourceName: "follow")
         return iv
     }()
 
-    let titleLabel: UILabel = {
+    public let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20, weight: .medium)
         return label

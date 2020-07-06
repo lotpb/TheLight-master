@@ -59,7 +59,7 @@ final class AccountCell: UICollectionViewCell, UITableViewDelegate, UITableViewD
         }
         
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 22
+        imageView.layer.cornerRadius = imageView.width/2
         imageView.layer.borderColor = UIColor.lightGray.cgColor
         imageView.layer.borderWidth = 0.5
         imageView.layer.masksToBounds = true
@@ -187,7 +187,7 @@ final class AccountCell: UICollectionViewCell, UITableViewDelegate, UITableViewD
         
         cell.selectionStyle = .none
         cell.detailLabel.textColor = .systemGray //UIColor(white: 0.5, alpha: 1)
-        self.tableView.separatorStyle = .none
+        tableView.separatorStyle = .none
         
         if UIDevice.current.userInterfaceIdiom == .pad  {
             

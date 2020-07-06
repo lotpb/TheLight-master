@@ -14,10 +14,10 @@ final class QRScannerController: UIViewController {
     @IBOutlet var messageLabel:UILabel!
     @IBOutlet var topbar: UIView!
     
-    var captureSession = AVCaptureSession()
+    private var captureSession = AVCaptureSession()
     
-    var videoPreviewLayer: AVCaptureVideoPreviewLayer?
-    var qrCodeFrameView: UIView?
+    private var videoPreviewLayer: AVCaptureVideoPreviewLayer?
+    private var qrCodeFrameView: UIView?
     
     private let supportedCodeTypes = [AVMetadataObject.ObjectType.upce,
                                       AVMetadataObject.ObjectType.code39,
@@ -97,7 +97,7 @@ final class QRScannerController: UIViewController {
     
     // MARK: - Helper methods
     
-    func launchApp(decodedURL: String) {
+    private func launchApp(decodedURL: String) {
         
         if presentedViewController != nil {
             return

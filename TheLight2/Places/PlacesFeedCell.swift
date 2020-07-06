@@ -14,12 +14,12 @@ class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
     
     fileprivate let cellId = "cellId"
     //firebase
-    var visitlist = [VisitModel]()
-    var fetchingMore = false
-    var endReached = false
-    let leadingScreensForBatching:CGFloat = 3.0
+    private var visitlist = [VisitModel]()
+    private var fetchingMore = false
+    private var endReached = false
+    private let leadingScreensForBatching:CGFloat = 3.0
 
-    var defaults = UserDefaults.standard
+    private var defaults = UserDefaults.standard
     
     // MARK: NavigationController Hidden
     private var lastContentOffset: CGFloat = 0.0
@@ -53,9 +53,9 @@ class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
         addConstraintsWithFormat(format: "H:|[v0]|", views: collectionView)
         addConstraintsWithFormat(format: "V:|[v0]|", views: collectionView)
 
-        self.collectionView.showsVerticalScrollIndicator = false
-        self.collectionView.register(PlaceCell.self, forCellWithReuseIdentifier: cellId)
-        self.collectionView.addSubview(self.refreshControl)
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.register(PlaceCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.addSubview(refreshControl)
     }
     
     override func layoutSubviews() {
@@ -73,14 +73,14 @@ class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
         DispatchQueue.main.async { //added
             self.collectionView.reloadData()
         }
-        self.refreshControl.endRefreshing()
+        refreshControl.endRefreshing()
     }
     
     // MARK: - NavigationController Hidden
     func fetchPosts(completion:@escaping (_ posts:[VisitModel])->()) {
         if ((defaults.string(forKey: "backendKey")) == "Firebase") {
             //firebase
-            FirebaseRef.databaseRoot.child("visits").child("test").queryLimited(toLast: 20)
+            FirebaseRef.databaseRoot.child("visits").child("test").queryLimited(toLast: 50)
                 .observe(.childAdded , with:{ (snapshot) in
 
                     guard let dictionary = snapshot.value as? [String: Any] else {return}
@@ -101,7 +101,7 @@ class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
 
     func beginBatchFetch() {
         fetchingMore = true
-        self.collectionView.reloadSections(IndexSet(integer: 0))
+        collectionView.reloadSections(IndexSet(integer: 0))
 
         fetchPosts { newPosts in
             self.visitlist.append(contentsOf: newPosts)
@@ -124,7 +124,7 @@ class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
         }
 
         //hidden tabBar
-        if (self.lastContentOffset > scrollView.contentOffset.y) {
+        if (lastContentOffset > scrollView.contentOffset.y) {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: false)
         } else {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: true)
@@ -132,7 +132,7 @@ class PlaceFeedCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        self.lastContentOffset = scrollView.contentOffset.y;
+        lastContentOffset = scrollView.contentOffset.y;
     }
     
 }
@@ -177,8 +177,8 @@ extension PlaceFeedCell: UICollectionViewDataSource {
         cell.costTextLabel.font = Font.celltitle12r
         cell.titleLabelnew.font = Font.celltitle14r
         cell.subtitleLabel.font = Font.celltitle14r
-        cell.titleTimeLabel.font = Font.celltitle12m
-        cell.subtitleTimeLabel.font = Font.celltitle12m
+        cell.titleTimeLabel.font = Font.celltitle14m
+        cell.subtitleTimeLabel.font = Font.celltitle14m
         
         //Cell-----------------------------------------------------------------
         //cell.mapStart = LocationsStorage.shared.locations[indexPath.row]

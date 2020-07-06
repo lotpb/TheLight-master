@@ -24,23 +24,24 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var mainView: UIView!
     
-    var defaults = UserDefaults.standard
+    private var defaults = UserDefaults.standard
     
-    var formController: String?
-    var isFormStat = false
-    var selectedImage: UIImage?
+    private var formController: String?
+    private var isFormStat = false
+    private var selectedImage: UIImage?
     private let cellId = "Cell"
 
     //parse
-    var _feedItems = NSMutableArray()
-    var filteredString = NSMutableArray()
-    var user: PFUser?
+    private var _feedItems = NSMutableArray()
+    private var filteredString = NSMutableArray()
+    private var user: PFUser?
     
     //firebase
-    var userlist = [UserModel]()
+    private var userlist = [UserModel]()
 
-    var objects = [AnyObject]()
-    var pasteBoard = UIPasteboard.general
+    private var objects = [AnyObject]()
+    private var pasteBoard = UIPasteboard.general
+
     
     let userImageview: CustomImageView = { //firebase
         let imageView = CustomImageView()
@@ -71,7 +72,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
         setupTableView()
         loadData()
         view.backgroundColor = .systemGroupedBackground
-        self.scrollView!.addSubview(refreshControl)
+        scrollView!.addSubview(refreshControl)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -97,7 +98,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
         } else {
             navigationItem.title = "Current Users"
         }
-        self.navigationItem.largeTitleDisplayMode = .always
+        navigationItem.largeTitleDisplayMode = .always
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newData))
         let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: nil)
         navigationItem.rightBarButtonItems = [addButton, searchButton]
@@ -156,24 +157,24 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
     }
     
     func setupTableView() {
-        self.tableView.delegate = self
-        self.tableView!.dataSource = self
-        self.tableView!.estimatedRowHeight = 110
-        self.tableView!.rowHeight = UITableView.automaticDimension
-        self.tableView!.backgroundColor = .systemGroupedBackground
-        self.tableView!.tableFooterView = UIView(frame: .zero)
+        tableView.delegate = self
+        tableView!.dataSource = self
+        tableView!.estimatedRowHeight = 110
+        tableView!.rowHeight = UITableView.automaticDimension
+        tableView!.backgroundColor = .systemGroupedBackground
+        tableView!.tableFooterView = UIView(frame: .zero)
         
-        self.collectionView.register(UserViewCell.self, forCellWithReuseIdentifier: cellId)
-        self.collectionView!.dataSource = self
-        self.collectionView!.delegate = self
-        self.collectionView!.backgroundColor = .systemGroupedBackground
+        collectionView.register(UserViewCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView!.dataSource = self
+        collectionView!.delegate = self
+        collectionView!.backgroundColor = .systemGroupedBackground
     }
     
     // MARK: - Refresh
     @objc func refreshData(_ sender:AnyObject) {
         userlist.removeAll()
         loadData()
-        self.refreshControl.endRefreshing()
+        refreshControl.endRefreshing()
     }
     
     // MARK: - RefreshMap
@@ -332,8 +333,8 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
         
         let create: Date?
         let updated: Date?
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM dd, yyyy"
+
+        MasterViewController.dateFormatter.dateFormat = "MMM dd, yyyy"
 
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         
@@ -345,7 +346,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
                     VC.status = "New"
                 } else {
                     VC.status = "Edit"
-                    let indexPath = (self.tableView!.indexPathForSelectedRow! as NSIndexPath).row
+                    let indexPath = (tableView!.indexPathForSelectedRow! as NSIndexPath).row
                     
                     if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         create = ((self._feedItems[indexPath] as AnyObject).value(forKey: "createdAt") as? Date)!
@@ -365,9 +366,9 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
                         VC.phone = userlist[indexPath].phone
                         VC.userimage = self.selectedImage
                     }
-                    let createString = dateFormatter.string(from: create!)
+                    let createString = MasterViewController.dateFormatter.string(from: create!)
                     VC.create = createString
-                    let updatedString = dateFormatter.string(from: updated!)
+                    let updatedString = MasterViewController.dateFormatter.string(from: updated!)
                     VC.update = updatedString
                 }
             } else if self.formController == "CollectionView" {
@@ -396,7 +397,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
             self.userImageview.loadImage(urlString: newsImageUrl)
             self.selectedImage = self.userImageview.image
         }
-        self.performSegue(withIdentifier: "userdetailSegue", sender: self.tableView)
+        self.performSegue(withIdentifier: "userdetailSegue", sender: tableView)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -420,7 +421,7 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
         cell.usertitleLabel!.textColor = .label
         
         cell.usersubtitleLabel!.textColor = .systemGray
-        cell.customImagelabel.backgroundColor = .clear //fix
+        cell.customImagelabel.backgroundColor = .clear // FIXME: shouldn't crash
         
         if UIDevice.current.userInterfaceIdiom == .pad  {
             cell.usertitleLabel!.font = Font.celltitle20r
@@ -443,11 +444,11 @@ final class UserViewVC: UIViewController, UICollectionViewDelegate,  UICollectio
             }
             
             let dateUpdated = (_feedItems[indexPath.row] as AnyObject).value(forKey: "createdAt") as! Date
-            let dateFormat = DateFormatter()
-            dateFormat.dateFormat = "EEE, MMM d, h:mm a"
+
+            MasterViewController.dateFormatter.dateFormat = "EEE, MMM d, h:mm a"
             
             cell.usertitleLabel!.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "username") as? String
-            cell.usersubtitleLabel!.text = String(format: "%@", dateFormat.string(from: dateUpdated)) as String
+            cell.usersubtitleLabel!.text = String(format: "%@", MasterViewController.dateFormatter.string(from: dateUpdated)) as String
             
         } else {
             //firebase

@@ -18,14 +18,14 @@ final class YouTubeController: UIViewController {
     private var searchController: UISearchController!
     private var resultsController = UITableViewController()
     
-    var apiKey = "AIzaSyC-_pCbYwqSIckw4E180Fajj-RycvbKtS8"
+    private var apiKey = "AIzaSyC-_pCbYwqSIckw4E180Fajj-RycvbKtS8"
     
-    var desiredChannelsArray = ["lotpb", "Apple", "CaseyNeistat", "MarkDice", "ESPN", "HOWARDTV", "CodeWithChris", "SergeyKargopolov", "Lifehacker", "JimmyKimmelLive", "latenight", "Microsoft"]
+    private var desiredChannelsArray = ["lotpb", "Apple", "CaseyNeistat", "MarkDice", "ESPN", "HOWARDTV", "CodeWithChris", "SergeyKargopolov", "Lifehacker", "JimmyKimmelLive", "latenight", "Microsoft"]
     
-    var channelIndex = 0
-    var channelsDataArray: Array<Dictionary<String, AnyObject>> = []
-    var videosArray: Array<Dictionary<String, AnyObject>> = []
-    var selectedVideoIndex: Int!
+    private var channelIndex = 0
+    private var channelsDataArray: Array<Dictionary<String, AnyObject>> = []
+    private var videosArray: Array<Dictionary<String, AnyObject>> = []
+    private var selectedVideoIndex: Int!
     
     
     override func viewDidLoad() {
@@ -69,7 +69,7 @@ final class YouTubeController: UIViewController {
         
         let searchBar = searchController!.searchBar
         searchBar.sizeToFit()
-        searchBar.placeholder = "Search for videos"
+        searchBar.placeholder = "Search for videos..."
         
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -94,18 +94,18 @@ final class YouTubeController: UIViewController {
         }
     }
     
-    func setupTableView() {
+    private func setupTableView() {
         
         tableView.delegate = self
         tableView.dataSource = self
-        self.tableView!.sizeToFit()
-        self.tableView!.clipsToBounds = true
+        tableView!.sizeToFit()
+        tableView!.clipsToBounds = true
         if #available(iOS 13.0, *) {
-            self.tableView!.backgroundColor = .systemGray4
+            tableView!.backgroundColor = .systemGray4
         } else {
-            self.tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
+            tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
         }
-        self.tableView!.tableFooterView = UIView(frame: .zero)
+        tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
         resultsController.tableView.dataSource = self
@@ -122,7 +122,7 @@ final class YouTubeController: UIViewController {
     }
 
     // MARK: UITextFieldDelegate method implementation
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    private func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         textField.resignFirstResponder()
         viewWait.isHidden = false
@@ -197,7 +197,7 @@ final class YouTubeController: UIViewController {
     }
     
     // MARK: Custom method implementation
-    func performGetRequest(_ targetURL: URL!, completion: @escaping (_ data: Data?, _ HTTPStatusCode: Int, _ error: NSError?) -> Void) {
+    private func performGetRequest(_ targetURL: URL!, completion: @escaping (_ data: Data?, _ HTTPStatusCode: Int, _ error: NSError?) -> Void) {
         
         var request = URLRequest(url: targetURL)
         request.httpMethod = "GET"
@@ -211,10 +211,9 @@ final class YouTubeController: UIViewController {
         }
         
         task.resume()
-        
     }
 
-    func getChannelDetails(_ useChannelIDParam: Bool) {
+    private func getChannelDetails(_ useChannelIDParam: Bool) {
         
         var urlString: String!
         if !useChannelIDParam {

@@ -21,40 +21,40 @@ import MessageUI
 @available(iOS 13.0, *)
 final class UploadController: UIViewController, UITextViewDelegate, MFMailComposeViewControllerDelegate {
     
-   fileprivate let addText = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."
+    fileprivate let addText = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."
     
     @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var commentTitle: UITextField!
     @IBOutlet weak var commentSorce: UITextField!
     
-    var playerViewController = AVPlayerViewController()
-    var imagePicker = UIImagePickerController()
-    var isPickImage = false
-    var isEditImage = false
+    private var playerViewController = AVPlayerViewController()
+    private var imagePicker = UIImagePickerController()
+    private var isPickImage = false
+    private var isEditImage = false
     
-    var formState : String?
-    var objectId : String?
-    var storageID : String?
-    var newstitle : String?
-    var newsdetail : String?
-    var newsStory : String?
-    var imageDetailurl : String?
-    var videoDetailurl : String?
-    var newsImage : UIImage!
+    public var formState : String?
+    public var objectId : String?
+    public var storageID : String?
+    public var newstitle : String?
+    public var newsdetail : String?
+    public var newsStory : String?
+    public var imageDetailurl : String?
+    public var videoDetailurl : String?
+    public var newsImage : UIImage!
     
     //firebase
-    var filename: String?
+    private var filename: String?
     //var picImage : UIImage!
-    var newsvideourl : String?
+    private var newsvideourl : String?
     
     // Parse
-    var file : PFFileObject!
-    var uploadData : Data!
+    private var file : PFFileObject!
+    private var uploadData : Data!
     
-    var videoURL : URL?
-    let defaults = UserDefaults.standard
-    let progress = Progress(totalUnitCount: 1)
+    private var videoURL : URL?
+    private let defaults = UserDefaults.standard
+    private let progress = Progress(totalUnitCount: 1)
     
     let activityIndicator: UIActivityIndicatorView = {
         let aiv = UIActivityIndicatorView(style: .medium)
@@ -123,7 +123,6 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
         super.viewDidLoad()
         
         setupNavigationButtons()
-        setupConstraints()
         setupForm()
         setupFonts()
         self.navigationItem.titleView = self.titleButton
@@ -160,7 +159,7 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
     }
     
     func setupForm() {
-
+        
         self.mainView.backgroundColor = .secondarySystemGroupedBackground
         //self.activityIndicator.isHidden = true
         self.commentDetail.delegate = self
@@ -198,7 +197,9 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
         }
     }
     
-    func setupConstraints() {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
         mainView.addSubview(newsImageView)
         mainView.addSubview(commentDetail)
         mainView.addSubview(selectPic)
@@ -229,7 +230,7 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
             
             activityIndicator.centerXAnchor.constraint(equalTo: newsImageView.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: newsImageView.centerYAnchor)
-            ])
+        ])
         
         commentTitle.translatesAutoresizingMaskIntoConstraints = false
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -252,7 +253,7 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
     }
     
     private func sendMessageWithProperties(properties: [String:AnyObject]) {
-        // fix
+        // FIXME:
     }
     
     private func thumbnailImageForFileUrl(fileUrl: URL) -> UIImage? {
@@ -385,22 +386,22 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
         }
     }
     
-    func gotoHome() {
+    private func gotoHome() {
         
         let FeedbackGenerator = UINotificationFeedbackGenerator()
         FeedbackGenerator.notificationOccurred(.success)
-
+        
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "Home", bundle: nil)
             let vc = storyboard.instantiateViewController(withIdentifier: "homeId")
             self.show(vc, sender: self)
-       }
+        }
         self.newsNotification()
         self.newsEmail()
     }
     
     // MARK: - News Notification
-    func newsNotification() {
+    private func newsNotification() {
         
         guard self.defaults.bool(forKey: "pushnotifyKey") == true else { return }
         
@@ -408,7 +409,7 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
         content.title = "Breaking News 🏀"
         content.body = "News Posted by \(defaults.object(forKey: "usernameKey") ?? "Pete") at TheLight"
         content.badge = (UIApplication.shared.applicationIconBadgeNumber + 1) as NSNumber
-        content.sound = UNNotificationSound.default
+        content.sound = .default
         content.categoryIdentifier = "status"
         
         let imageName = "applelogo"
@@ -422,7 +423,7 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
     }
     
-    func newsEmail() {
+    private func newsEmail() {
         
         guard ProcessInfo.processInfo.isLowPowerModeEnabled == false else { return }
         guard self.defaults.bool(forKey: "emailnotifyKey") == true else { return }
@@ -439,7 +440,7 @@ final class UploadController: UIViewController, UITextViewDelegate, MFMailCompos
         self.present(mail, animated: true)
     }
     
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+    public func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true)
     }
     
@@ -472,13 +473,14 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
     @objc func shootPhoto(_ sender: AnyObject) {
         
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            let imagePicker = UIImagePickerController()
-            imagePicker.allowsEditing = true
-            imagePicker.sourceType = .camera
-            imagePicker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera)!
-            imagePicker.delegate = self
-            imagePicker.showsCameraControls = true
-            self.present(imagePicker, animated: true)
+            let picker = UIImagePickerController()
+            picker.allowsEditing = true
+            picker.sourceType = .camera
+            picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera)!
+            picker.delegate = self
+            picker.showsCameraControls = true
+            picker.videoQuality = .typeMedium
+            self.present(picker, animated: true)
         } else{
             self.showAlert(title: "Alert!", message: "Camera not available")
         }
@@ -486,11 +488,11 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
     //-----------------------------------------------------------------------------
     @IBAction func selectImage(_ sender: AnyObject) {
         
-        let imagePickerController = UIImagePickerController()
-        imagePickerController.allowsEditing = true
-        imagePickerController.delegate = self
-        imagePickerController.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
-        present(imagePickerController, animated: true)
+        let picker = UIImagePickerController()
+        picker.allowsEditing = true
+        picker.delegate = self
+        picker.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
+        present(picker, animated: true)
     }
     
     internal func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -538,16 +540,16 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
         
         //picImage = selectedImageFromPicker
     }
-
+    
     private func uploadToFirebaseStorageUsingImage(image: UIImage, completion: @escaping (_ imageUrl: String) -> ()) {
-
+        
         if (self.formState == "Update") {
             updateNews()
         } else {
             filename = UUID.init().uuidString
-
+            
             guard let uploadData = image.jpegData(compressionQuality: 0.9) else { return }  //0.75
-
+            
             let storageItem = Storage.storage().reference().child("News").child(filename!)
             let metadata = StorageMetadata()
             metadata.contentType = "image/jpeg"
@@ -567,12 +569,12 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
                 }
             }
             uploadTask.observe(.progress) { [weak self] (snapshot) in
-
+                
                 guard let pctThere = snapshot.progress?.fractionCompleted else { return }
                 print("You are \(pctThere) complete")
                 self?.progressView.progress = Float(pctThere)
             }
-
+            
             uploadTask.observe(.success) { (snapshot) in
                 //self.progressView.isHidden = true
                 //self.progressView.progress = 0.0
@@ -612,15 +614,15 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
             self.gotoHome()
         }
     }
-
-    func updateNews() {
+    
+    private func updateNews() {
         //firebase
         /*
          guard case self.objectId = Auth.auth().currentUser?.uid else {
          self.simpleAlert(title: "Alert!", message: "Updates not allowed for this member")
          return
          } */
-
+        
         guard let userID = self.objectId else { return }
         
         if let storID = self.storageID {
@@ -638,7 +640,7 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
                         print(error!.localizedDescription)
                         return
                     }
-
+                    
                     if let profilePhotoURL = url?.absoluteString {
                         let userRef = FirebaseRef.databaseUsers.child(userID)
                         let values = ["storageID": self.filename!,
@@ -649,7 +651,7 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
                             "storyText": self.commentDetail.text ?? "",
                             "lastUpdate": Date().timeIntervalSince1970
                             ] as [String: Any]
-
+                        
                         userRef.updateChildValues(values) { (error, ref) in
                             if error != nil {
                                 self.showAlert(title:"Update Failure", message: "Failure updating the data")
@@ -660,17 +662,17 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
                         }
                     }
                 })
-
+                
             }
         }
     }
-
+    
     fileprivate func handleVideoSelectedForUrl(_ url: URL) {
-
+        
         let filename = UUID().uuidString + ".mov"
-
+        
         let ref = Storage.storage().reference().child("News_movies").child(filename)
-
+        
         let videoData = (NSData(contentsOf: url) as Data?)!
         let metadata = StorageMetadata.init()
         metadata.contentType = "video/quicktime"
@@ -679,34 +681,34 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
                 print(error!.localizedDescription)
                 return
             }
-
+            
             ref.downloadURL( completion: { (downloadUrl, error) in
                 if let error = error {
                     print(error.localizedDescription)
                     return
                 }
-
+                
                 guard let downloadURL = downloadUrl?.absoluteString else { return}
-
-                 self.newsvideourl = downloadURL
-
+                
+                self.newsvideourl = downloadURL
+                
                 if let thumbnailImage = self.thumbnailImageForFileUrl(fileUrl: url) {
-
+                    
                     self.uploadToFirebaseStorageUsingImage(image: thumbnailImage, completion: { (imageUrl) in
                         let properties: [String: AnyObject] = ["imageUrl": imageUrl as AnyObject, "imageWidth": thumbnailImage.size.width as AnyObject, "imageHeight": thumbnailImage.size.height as AnyObject, "videoUrl": downloadURL as AnyObject]
                         self.sendMessageWithProperties(properties: properties)
                     })
-
+                    
                 }
             })
         })
-
+        
         uploadTask.observe(.progress) { [weak self] (snapshot) in
-
+            
             guard let pctThere = snapshot.progress?.fractionCompleted else { return }
             print("You are \(pctThere) complete")
             self?.progressView.progress = Float(pctThere)
         }
     }
-
+    
 }

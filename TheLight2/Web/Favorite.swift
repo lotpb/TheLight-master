@@ -21,7 +21,7 @@ class Favorite: UITableViewController {
     
     lazy var titleButton: UIButton = {
         let button = UIButton(type: .system)
-        button.frame = .init(x: 0, y: 0, width: 100, height: self.view.frame.height)
+        button.frame = .init(x: 0, y: 0, width: 100, height: view.frame.height)
         button.setTitle("Favorites", for: .normal)
         button.titleLabel?.font = Font.navlabel
         button.titleLabel?.textAlignment = .center
@@ -53,7 +53,7 @@ class Favorite: UITableViewController {
         } */
         
         setupTableView()
-        self.navigationItem.titleView = self.titleButton
+        navigationItem.titleView = self.titleButton
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,17 +62,17 @@ class Favorite: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.clearsSelectionOnViewWillAppear = self.splitViewController!.isCollapsed
+        clearsSelectionOnViewWillAppear = self.splitViewController!.isCollapsed
         super.viewWillAppear(animated)
     }
     
     func setupTableView() {
-        self.tableView!.delegate = self
-        self.tableView!.dataSource = self
-        self.tableView!.backgroundColor = ColorX.LGrayColor
-        self.tableView!.estimatedRowHeight = 100
-        self.tableView!.rowHeight = UITableView.automaticDimension
-        self.tableView!.tableFooterView = UIView(frame: .zero)
+        tableView!.delegate = self
+        tableView!.dataSource = self
+        tableView!.backgroundColor = ColorX.LGrayColor
+        tableView!.estimatedRowHeight = 100
+        tableView!.rowHeight = UITableView.automaticDimension
+        tableView!.tableFooterView = UIView(frame: .zero)
     }
     
     // MARK: - Table View
@@ -121,7 +121,7 @@ class Favorite: UITableViewController {
         
         if segue.identifier == "showDetail" {
             
-            if let indexPath = self.tableView?.indexPathForSelectedRow {
+            if let indexPath = tableView?.indexPathForSelectedRow {
                 let urlString = siteAddresses[indexPath.row]
                 
                 let controller = (segue.destination as! UINavigationController).topViewController as! Web

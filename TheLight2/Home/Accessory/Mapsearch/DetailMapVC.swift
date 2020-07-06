@@ -33,10 +33,10 @@ final class DetailedMapVC: UIViewController, MKMapViewDelegate, CLLocationManage
         fetchLocalData(category: "Coffee")
     }
     
-    var mapData: MKMapItem!
-    var selectedPin:MKPlacemark? = nil
-    var responseResult : [MKMapItem]! = nil
-    let locationManager = CLLocationManager()
+    public var mapData: MKMapItem!
+    private var selectedPin:MKPlacemark? = nil
+    private var responseResult : [MKMapItem]! = nil
+    private let locationManager = CLLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,9 +54,7 @@ final class DetailedMapVC: UIViewController, MKMapViewDelegate, CLLocationManage
         tableView.delegate = self
         tableView.dataSource = self
         //custom cell class for tableView cell
-        self.tableView.register(NearbyCell.self, forCellReuseIdentifier: "NearbyCell")
-
-        //setupConstraints()
+        tableView.register(NearbyCell.self, forCellReuseIdentifier: "NearbyCell")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -65,7 +63,7 @@ final class DetailedMapVC: UIViewController, MKMapViewDelegate, CLLocationManage
         setMainNavItems()
     }
     //creates a custom MKLocalSearchRequest and gets MKLocalSearchResponse
-    func fetchLocalData(category: String) {
+    private func fetchLocalData(category: String) {
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = category
         request.region = detailedMapView.region
@@ -120,7 +118,7 @@ final class DetailedMapVC: UIViewController, MKMapViewDelegate, CLLocationManage
         dismiss(animated: true)
     }
     
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView?{
+    public func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView?{
         if annotation is MKUserLocation {
             //return nil so map view draws "blue dot" for standard user location
             return nil

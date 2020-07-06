@@ -24,7 +24,7 @@ class CustomMenuHeaderView: UIView {
         let profileImageView = CustomImageView()
         profileImageView.image = UIImage(named: "profile-rabbit-toy")
         profileImageView.contentMode = .scaleAspectFit
-        profileImageView.layer.cornerRadius = 48 / 2
+        profileImageView.layer.cornerRadius = profileImageView.width/2
         profileImageView.clipsToBounds = true
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         return profileImageView

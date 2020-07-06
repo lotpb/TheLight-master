@@ -120,15 +120,14 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
         super.viewDidLoad()
         
         containView.backgroundColor = .clear
-        self.customization()
-        self.setupConstraints()
+        customization()
         fetchPlayVCVideos()
-        self.subscribeNumber = 0
+        subscribeNumber = 0
         
         if videoURL == nil {
             videoURL = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
         }
-        self.playVideo(videoURL: videoURL!)
+        playVideo(videoURL: videoURL!)
 
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationItem.title = "Video"
@@ -145,8 +144,8 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
     
     open func resetPlayer() {
         
-        self.player.pause()
-        self.playerLayer?.removeFromSuperlayer()
+        player.pause()
+        playerLayer?.removeFromSuperlayer()
         player.replaceCurrentItem(with: nil)
     }
     
@@ -185,8 +184,52 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        self.playerLayer?.frame = containView.bounds
-        self.gradientLayer.frame = containView.bounds
+        playerLayer?.frame = containView.bounds
+        gradientLayer.frame = containView.bounds
+        playerView.translatesAutoresizingMaskIntoConstraints = false
+        playerView.autoresizingMask = [.flexibleWidth, .flexibleHeight, .flexibleBottomMargin, .flexibleRightMargin, .flexibleLeftMargin, .flexibleTopMargin]
+
+        containView.addSubview(activityIndicator)
+        containView.addSubview(minimizeButton)
+        containView.addSubview(pausePlayButton)
+        containView.addSubview(videoLengthLabel)
+        containView.addSubview(currentTimeLabel)
+        containView.addSubview(videoSlider)
+        setupGradientLayer()
+
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: playerView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: playerView.centerYAnchor),
+
+            minimizeButton.topAnchor.constraint(equalTo: playerView.topAnchor, constant: 20),
+            minimizeButton.leftAnchor.constraint(equalTo: playerView.leftAnchor, constant: 20),
+            minimizeButton.widthAnchor.constraint(equalToConstant: 30),
+            minimizeButton.heightAnchor.constraint(equalToConstant: 30),
+
+            pausePlayButton.centerXAnchor.constraint(equalTo: playerView.centerXAnchor),
+            pausePlayButton.centerYAnchor.constraint(equalTo: playerView.centerYAnchor),
+            pausePlayButton.widthAnchor.constraint(equalToConstant: 30),
+            pausePlayButton.heightAnchor.constraint(equalToConstant: 30),
+
+            videoLengthLabel.rightAnchor.constraint(equalTo: playerView.rightAnchor, constant: -8),
+            videoLengthLabel.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -2),
+            videoLengthLabel.heightAnchor.constraint(equalToConstant: 24),
+
+            currentTimeLabel.leftAnchor.constraint(equalTo: playerView.leftAnchor, constant: 8),
+            currentTimeLabel.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -2),
+            currentTimeLabel.heightAnchor.constraint(equalToConstant: 24)
+            ])
+
+        for label in [pausePlayButton, videoLengthLabel, currentTimeLabel] as [Any] {
+            (label as AnyObject).widthAnchor.constraint(equalToConstant: 50).isActive = true
+        }
+
+        NSLayoutConstraint.activate([
+            videoSlider.rightAnchor.constraint(equalTo: videoLengthLabel.leftAnchor),
+            videoSlider.bottomAnchor.constraint(equalTo: playerView.bottomAnchor),
+            videoSlider.leftAnchor.constraint(equalTo: currentTimeLabel.rightAnchor),
+            videoSlider.heightAnchor.constraint(equalToConstant: 30)
+            ])
     }
     
     
@@ -194,61 +237,12 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
     
     func customization() {
         
-        self.view.backgroundColor = .clear
-        self.playerView.layer.anchorPoint.applying(CGAffineTransform.init(translationX: -0.5, y: -0.5))
-        self.tableView.tableFooterView = UIView.init(frame: .init(x: 0, y: 0, width: 0, height: 0))
-        self.containView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(PlayVC.tapPlayView)))
+        view.backgroundColor = .clear
+        playerView.layer.anchorPoint.applying(CGAffineTransform.init(translationX: -0.5, y: -0.5))
+        tableView.tableFooterView = UIView.init(frame: .init(x: 0, y: 0, width: 0, height: 0))
+        containView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(PlayVC.tapPlayView)))
         
         NotificationCenter.default.addObserver(self, selector: #selector(PlayVC.tapPlayView), name: NSNotification.Name("open"), object: nil)
-    }
-    
-    func setupConstraints() {
-
-        setupGradientLayer()
-        
-        playerView.translatesAutoresizingMaskIntoConstraints = false
-        playerView.autoresizingMask = [.flexibleWidth, .flexibleHeight, .flexibleBottomMargin, .flexibleRightMargin, .flexibleLeftMargin, .flexibleTopMargin]
-        
-        containView.addSubview(activityIndicator)
-        containView.addSubview(minimizeButton)
-        containView.addSubview(pausePlayButton)
-        containView.addSubview(videoLengthLabel)
-        containView.addSubview(currentTimeLabel)
-        containView.addSubview(videoSlider)
-        
-        NSLayoutConstraint.activate([
-            activityIndicator.centerXAnchor.constraint(equalTo: playerView.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: playerView.centerYAnchor),
-            
-            minimizeButton.topAnchor.constraint(equalTo: playerView.topAnchor, constant: 20),
-            minimizeButton.leftAnchor.constraint(equalTo: playerView.leftAnchor, constant: 20),
-            minimizeButton.widthAnchor.constraint(equalToConstant: 30),
-            minimizeButton.heightAnchor.constraint(equalToConstant: 30),
-            
-            pausePlayButton.centerXAnchor.constraint(equalTo: playerView.centerXAnchor),
-            pausePlayButton.centerYAnchor.constraint(equalTo: playerView.centerYAnchor),
-            pausePlayButton.widthAnchor.constraint(equalToConstant: 30),
-            pausePlayButton.heightAnchor.constraint(equalToConstant: 30),
-            
-            videoLengthLabel.rightAnchor.constraint(equalTo: playerView.rightAnchor, constant: -8),
-            videoLengthLabel.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -2),
-            videoLengthLabel.heightAnchor.constraint(equalToConstant: 24),
-            
-            currentTimeLabel.leftAnchor.constraint(equalTo: playerView.leftAnchor, constant: 8),
-            currentTimeLabel.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -2),
-            currentTimeLabel.heightAnchor.constraint(equalToConstant: 24)
-            ])
-        
-        for label in [pausePlayButton, videoLengthLabel, currentTimeLabel] as [Any] {
-            (label as AnyObject).widthAnchor.constraint(equalToConstant: 50).isActive = true
-        }
-        
-        NSLayoutConstraint.activate([
-            videoSlider.rightAnchor.constraint(equalTo: videoLengthLabel.leftAnchor),
-            videoSlider.bottomAnchor.constraint(equalTo: playerView.bottomAnchor),
-            videoSlider.leftAnchor.constraint(equalTo: currentTimeLabel.rightAnchor),
-            videoSlider.heightAnchor.constraint(equalToConstant: 30)
-            ])
     }
     
     func animate()  {
@@ -276,9 +270,9 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
     }
     
     func changeValues(scaleFactor: CGFloat) {
-        self.minimizeButton.alpha = 1 - scaleFactor
-        self.containView.alpha = 1 - scaleFactor
-        self.tableView.alpha = 1 - scaleFactor
+        minimizeButton.alpha = 1 - scaleFactor
+        containView.alpha = 1 - scaleFactor
+        tableView.alpha = 1 - scaleFactor
         let scale = CGAffineTransform.init(scaleX: (1 - 0.5 * scaleFactor), y: (1 - 0.5 * scaleFactor))
         let transform = scale.concatenating(CGAffineTransform.init(translationX: -(self.playerView.bounds.width / 4 * scaleFactor), y: -(self.playerView.bounds.height / 4 * scaleFactor)))
         self.playerView.transform = transform
@@ -378,7 +372,7 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
         
         //track player progress
         let interval = CMTime(value: 1, timescale: 2)
-        self.player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main, using: { (progressTime) in
+        player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main, using: { (progressTime) in
             let seconds = CMTimeGetSeconds(progressTime)
             let secondsString = String(format: "%02d", Int(seconds.truncatingRemainder(dividingBy: 60)))
             let minutesString = String(format: "%02d", Int(seconds / 60))
@@ -551,10 +545,10 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
             let cell = tableView.dequeueReusableCell(withIdentifier: "Header") as! headerCell
 
             cell.selectionStyle = .none
-            cell.title.text = self.titleLookup ?? "Big Buck Bunny"
-            cell.viewCount.text = self.viewLookup ?? "0 views"
-            cell.likes.text = self.likesLookup ?? "0"
-            cell.disLikes.text = self.dislikesLookup ?? "0"
+            cell.title.text = titleLookup ?? "Big Buck Bunny"
+            cell.viewCount.text = viewLookup ?? "0 views"
+            cell.likes.text = likesLookup ?? "0"
+            cell.disLikes.text = dislikesLookup ?? "0"
             cell.channelSubscribers.text = String(format: "%@ %@", "\(String(describing: subscribeNumber!))", " subscribers")
             
             cell.commentBtn.tag = indexPath.row
@@ -609,7 +603,7 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! videoCell
             
             if ((defaults.string(forKey: "backendKey")) == "Parse") {
-                // fix added - 1 to (indexPath).row - 1
+                // FIXME: added - 1 to (indexPath).row - 1
                 cell.title.text = (self._feedItems[(indexPath).row - 1] as AnyObject).value(forKey: "newsTitle") as? String
                 
                 var newsView:Int? = (_feedItems[(indexPath).row - 1] as AnyObject).value(forKey: "newsView")as? Int
@@ -637,7 +631,7 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
                 let newsImageUrl = self.newslist[(indexPath.row - 1)].imageUrl
                 cell.tumbnail.loadImage(urlString: newsImageUrl)
             }
-            self.selectedImage = cell.tumbnail.image //fix firebase actionView wrong image
+            self.selectedImage = cell.tumbnail.image // FIXME: firebase actionView wrong image
             
             returnCell = cell
         }
@@ -658,24 +652,24 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
-            // fix added - 1 to (indexPath).row - 1
-            self.idLookup = (self._feedItems[(indexPath).row - 1] as AnyObject).value(forKey: "objectId") as? String
+            // FIXME: added - 1 to (indexPath).row - 1
+            idLookup = (self._feedItems[(indexPath).row - 1] as AnyObject).value(forKey: "objectId") as? String
             
-            self.titleLookup = (self._feedItems[(indexPath).row - 1] as AnyObject).value(forKey: "newsTitle") as? String
+            titleLookup = (self._feedItems[(indexPath).row - 1] as AnyObject).value(forKey: "newsTitle") as? String
             
             var newsView:Int? = (_feedItems[(indexPath).row - 1] as AnyObject).value(forKey: "newsView")as? Int
             if newsView == nil { newsView = 0 }
-            self.viewLookup = "\(newsView!) views"
+            viewLookup = "\(newsView!) views"
             
             var Liked:Int? = (_feedItems[(indexPath).row - 1] as AnyObject).value(forKey: "Liked")as? Int
             if Liked == nil { Liked = 0 }
-            self.likesLookup = "\(Liked!)"
+            likesLookup = "\(Liked!)"
             
             var Disliked:Int? = (_feedItems[(indexPath).row - 1] as AnyObject).value(forKey: "Dislikes")as? Int
             if Disliked == nil { Disliked = 0 }
-            self.dislikesLookup = "\(Disliked!)"
+            dislikesLookup = "\(Disliked!)"
             
-            self.imageLookup = (self._feedItems[(indexPath).row - 1] as AnyObject).value(forKey: "username") as? String
+            imageLookup = (self._feedItems[(indexPath).row - 1] as AnyObject).value(forKey: "username") as? String
             
             imageObject = _feedItems.object(at: indexPath.row - 1) as? PFObject
             imageFile = imageObject.object(forKey: "imageFile") as? PFFileObject
@@ -688,25 +682,25 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
             }
         } else {
             //firebase
-            self.idLookup = self.newslist[(indexPath.row - 1)].newsId
-            self.uidLookup = self.newslist[(indexPath.row - 1)].uid
-            self.titleLookup = self.newslist[(indexPath.row - 1)].newsTitle 
+            idLookup = newslist[(indexPath.row - 1)].newsId
+            uidLookup = newslist[(indexPath.row - 1)].uid
+            titleLookup = newslist[(indexPath.row - 1)].newsTitle
             
-            var newsView:Int? = self.newslist[(indexPath.row - 1)].viewCount as? Int
+            var newsView:Int? = newslist[(indexPath.row - 1)].viewCount as? Int
             if newsView == nil { newsView = 0 }
-            self.viewLookup = "\(newsView!) views"
+            viewLookup = "\(newsView!) views"
             
-            var Liked:Int? = self.newslist[(indexPath.row - 1)].liked as? Int
+            var Liked:Int? = newslist[(indexPath.row - 1)].liked as? Int
             if Liked == nil { Liked = 0 }
-            self.likesLookup = "\(Liked!)"
+            likesLookup = "\(Liked!)"
             
-            var Disliked:Int? = self.newslist[(indexPath.row - 1)].dislikes as? Int
+            var Disliked:Int? = newslist[(indexPath.row - 1)].dislikes as? Int
             if Disliked == nil { Disliked = 0 }
-            self.dislikesLookup = "\(Disliked!)"
+            dislikesLookup = "\(Disliked!)"
             
-            let imageDetailurl = self.newslist[(indexPath.row - 1)].videoUrl
+            let imageDetailurl = newslist[(indexPath.row - 1)].videoUrl
             if !(imageDetailurl == "") {
-                self.playVideo(videoURL: imageDetailurl!)
+                playVideo(videoURL: imageDetailurl!)
             }
         }
         setupViewCounter(tableView)
@@ -716,7 +710,7 @@ class PlayVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGe
     
     func scrollToFirstRow() {
         let indexPath = IndexPath(row: 0, section: 0)
-        self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        tableView.scrollToRow(at: indexPath, at: .top, animated: true)
     }
     
     //MARK: - Fetch Data
@@ -893,7 +887,7 @@ class headerCell: UITableViewCell {
     private func setupEditFollowButton() {
         
         guard let currentLoggedInUserId = Auth.auth().currentUser?.uid else {return}
-        let userId = "Y4kfBJnneOMOYJLyDqGOfyrlYyQ2" //fix
+        let userId = "Y4kfBJnneOMOYJLyDqGOfyrlYyQ2" // FIXME:
         //guard let userId = uidLookup else {return}
         
         if currentLoggedInUserId == userId {
@@ -992,7 +986,7 @@ class headerCell: UITableViewCell {
         let imageView = CustomImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "")
-        imageView.layer.cornerRadius = 18
+        imageView.layer.cornerRadius = imageView.width/2
         imageView.layer.masksToBounds = true
         imageView.contentMode = .scaleAspectFill
         imageView.layer.borderColor = UIColor.lightGray.cgColor

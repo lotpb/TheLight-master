@@ -16,7 +16,6 @@ import SDWebImage
 final class TableViewCell: UITableViewCell {
     var defaults = UserDefaults.standard
 
-    
     //firebase
     var blogpost: BlogModel? {
         didSet {
@@ -45,7 +44,9 @@ final class TableViewCell: UITableViewCell {
                             let userDict = userSnap.value as! [String: Any]
                             let profileImageUrl = userDict["profileImageUrl"] as? String
                             guard let imageUrl:URL = URL(string: profileImageUrl!) else { return }
-                            self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+                            DispatchQueue.main.async {
+                                self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+                            }
                         }
                     })
             }
@@ -54,6 +55,8 @@ final class TableViewCell: UITableViewCell {
     
     var leadpost: LeadModel? {
         didSet {
+
+            MasterViewController.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss +zzzz"
             if ((defaults.string(forKey: "backendKey")) == "Parse") {
                
             } else {
@@ -63,9 +66,8 @@ final class TableViewCell: UITableViewCell {
                                                 (leadpost?.city)!,
                                                 (leadpost?.state)!,
                                                 (leadpost?.zip)!).removeWhiteSpace()
-                let dateFormat = DateFormatter()
-                dateFormat.dateFormat = "MMM dd yy"
-                myLabel10.text = dateFormat.string(from: (leadpost?.creationDate)!) as String
+
+                myLabel10.text = MasterViewController.dateFormatter.string(from: (leadpost?.creationDate)!) as String
                 myLabel20.text = leadpost?.callback
                 myLabel20.adjustsFontSizeToFitWidth = true
                 
@@ -111,10 +113,8 @@ final class TableViewCell: UITableViewCell {
                                             (custpost?.zip)!).removeWhiteSpace()
             
             custlikeLabel.text = custpost?.rate
-            
-            let dateFormat = DateFormatter()
-            dateFormat.dateFormat = "MMM dd yy"
-            myLabel10.text = dateFormat.string(from: (custpost?.creationDate)!) as String
+
+            myLabel10.text = MasterViewController.dateFormatter.string(from: (custpost?.creationDate)!) as String
             
             var Amount = custpost?.amount as? Int
             let formatter = NumberFormatter()
@@ -233,7 +233,9 @@ final class TableViewCell: UITableViewCell {
                 return
             }
             guard let imageUrl:URL = URL(string: newsImageUrl) else { return }
-            self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+            DispatchQueue.main.async {
+                self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+            }
             self.plusPhotoButton.setImage(self.customImageView.image?.withRenderingMode(.alwaysOriginal), for: .normal)
         }
     }
@@ -245,7 +247,9 @@ final class TableViewCell: UITableViewCell {
             customImageView.image = #imageLiteral(resourceName: "profile-rabbit-toy")
             guard let newsImageUrl = prodpost?.photo else { return }
             guard let imageUrl:URL = URL(string: newsImageUrl) else { return }
-            self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+            DispatchQueue.main.async {
+                self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+            }
             self.plusPhotoButton.setImage(self.customImageView.image?.withRenderingMode(.alwaysOriginal), for: .normal)
         }
     }
@@ -256,7 +260,9 @@ final class TableViewCell: UITableViewCell {
             customImageView.frame = .init(x: 0, y: 0, width: 0, height: 0)
             guard let newsImageUrl = prodpost?.imageUrl else { return }
             guard let imageUrl:URL = URL(string: newsImageUrl) else { return }
-            self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+            DispatchQueue.main.async {
+                self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+            }
             self.plusPhotoButton.setImage(self.customImageView.image?.withRenderingMode(.alwaysOriginal), for: .normal)
         }
     }
@@ -267,7 +273,9 @@ final class TableViewCell: UITableViewCell {
             customtitleLabel.text = adpost?.advertiser
             guard let newsImageUrl = prodpost?.imageUrl else { return }
             guard let imageUrl:URL = URL(string: newsImageUrl) else { return }
-            self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+            DispatchQueue.main.async {
+                self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+            }
             self.plusPhotoButton.setImage(self.customImageView.image?.withRenderingMode(.alwaysOriginal), for: .normal)
         }
     }
@@ -276,7 +284,6 @@ final class TableViewCell: UITableViewCell {
         didSet {
             customtitleLabel.text = String(format: "%@, %@", (zippost?.city)!, (zippost?.state)!).removeWhiteSpace()
             customImageView.frame = .init(x: 0, y: 0, width: 0, height: 0)
-
         }
     }
 
@@ -289,7 +296,7 @@ final class TableViewCell: UITableViewCell {
         return button
     }()
     
-    let customImageView: CustomImageView = {
+    public let customImageView: CustomImageView = {
         let imageView = CustomImageView()
         imageView.frame = .init(x: 10, y: 11, width: 50, height: 50)
         imageView.contentMode = .scaleAspectFill
@@ -301,7 +308,7 @@ final class TableViewCell: UITableViewCell {
         return imageView
     }()
     
-    let customImagelabel: UILabel = {
+    public let customImagelabel: UILabel = {
         let label = UILabel()
         label.frame = .init(x: 10, y: 10, width: 40, height: 40)
         label.text = ""
@@ -314,7 +321,7 @@ final class TableViewCell: UITableViewCell {
         return label
     }()
     
-    let myLabel10: UILabel = {
+    public let myLabel10: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
@@ -323,7 +330,7 @@ final class TableViewCell: UITableViewCell {
         return label
     }()
     
-    let myLabel20: UILabel = {
+    public let myLabel20: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .clear
@@ -334,7 +341,7 @@ final class TableViewCell: UITableViewCell {
         return label
     }()
 
-    let customtitleLabel: UILabel = {
+    public let customtitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = Font.celltitle20l

@@ -26,24 +26,24 @@ final class Blog: UIViewController {
     private let searchScope = ["subject", "date", "rating", "postby"]
 
     //firebase
-    var bloglist = [BlogModel]()
-    var userlist = [UserModel]()
-    var defaults = UserDefaults.standard
+    private var bloglist = [BlogModel]()
+    private var userlist = [UserModel]()
+    private var defaults = UserDefaults.standard
     private var userCount: Int?
     private var likeCount: Int?
     //parse
-    var _feedItems = NSMutableArray()
-    var _feedheadItems2 = NSMutableArray()
-    var _feedheadItems3 = NSMutableArray()
+    private var _feedItems = NSMutableArray()
+    private var _feedheadItems2 = NSMutableArray()
+    private var _feedheadItems3 = NSMutableArray()
     
-    var pasteBoard = UIPasteboard.general
-    var buttonView: UIView?
-    var likeButton: UIButton?
-    var isReplyClicked = true
-    var posttoIndex: String?
-    var userIndex: String?
-    var titleLabel = String()
-    var profileImageView : UIImageView?
+    private var pasteBoard = UIPasteboard.general
+    private var buttonView: UIView?
+    private var likeButton: UIButton?
+    private var isReplyClicked = true
+    private var posttoIndex: String?
+    private var userIndex: String?
+    private var titleLabel = String()
+    private var profileImageView : UIImageView?
 
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -54,7 +54,8 @@ final class Blog: UIViewController {
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         return refreshControl
     }()
-    
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.extendedLayoutIncludesOpaqueBars = true
@@ -62,20 +63,20 @@ final class Blog: UIViewController {
         setupNavigation()
         setupSearch()
         setupTableView()
-        self.tableView!.addSubview(self.refreshControl)
+        tableView!.addSubview(refreshControl)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         refreshData(self)
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
         // MARK: NavigationController Hidden
         NotificationCenter.default.addObserver(self, selector: #selector(Blog.hideBar(notification:)), name: NSNotification.Name("hide"), object: nil)
         
@@ -91,7 +92,7 @@ final class Blog: UIViewController {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = true
+        tabBarController?.tabBar.isHidden = true
     }
     
     override func didReceiveMemoryWarning() {
@@ -113,30 +114,30 @@ final class Blog: UIViewController {
         searchController.searchBar.scopeButtonTitles = searchScope
         
         searchController.obscuresBackgroundDuringPresentation = false
-        self.navigationController?.navigationBar.topItem?.searchController = searchController
+        navigationController?.navigationBar.topItem?.searchController = searchController
 
-        self.navigationItem.searchController = searchController
+        navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = true
         self.definesPresentationContext = true
     }
     
-    func setupNavigation() {
+    private func setupNavigation() {
         navigationItem.title = "Blog"
-        self.navigationItem.largeTitleDisplayMode = .never
+        navigationItem.largeTitleDisplayMode = .never
     }
     
-    func setupTableView() {
+    private func setupTableView() {
         // MARK: - TableHeader
         tableView.register(HeaderViewCell.self, forCellReuseIdentifier: "Header")
         
-        self.tableView!.delegate = self
-        self.tableView!.dataSource = self
-        self.tableView!.estimatedRowHeight = 110
-        self.tableView!.rowHeight = UITableView.automaticDimension
-        self.tableView!.sizeToFit()
-        self.tableView!.clipsToBounds = true
-        self.tableView!.backgroundColor = .systemGray4
-        self.tableView!.tableFooterView = UIView(frame: .zero)
+        tableView!.delegate = self
+        tableView!.dataSource = self
+        tableView!.estimatedRowHeight = 110
+        tableView!.rowHeight = UITableView.automaticDimension
+        tableView!.sizeToFit()
+        tableView!.clipsToBounds = true
+        tableView!.backgroundColor = .systemGray4
+        tableView!.tableFooterView = UIView(frame: .zero)
 
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
         resultsController.tableView.dataSource = self
@@ -151,7 +152,7 @@ final class Blog: UIViewController {
     @objc func hideBar(notification: NSNotification)  {
         if UIDevice.current.userInterfaceIdiom == .phone  {
             let state = notification.object as! Bool
-            self.navigationController?.setNavigationBarHidden(state, animated: true)
+            navigationController?.setNavigationBarHidden(state, animated: true)
             UIView.animate(withDuration: 0.2, animations: {
                 self.tabBarController?.hideTabBarAnimated(hide: state) //added
             }, completion: nil)
@@ -172,10 +173,10 @@ final class Blog: UIViewController {
     
     // MARK: - refresh
     @objc func refreshData(_ sender: AnyObject) {
-        bloglist.removeAll() //fix
-        userlist.removeAll() //fix
+        bloglist.removeAll() // FIXME: shouldn't crash
+        userlist.removeAll() // FIXME: shouldn't crash
         loadData()
-        self.refreshControl.endRefreshing()
+        refreshControl.endRefreshing()
     }
     
     // MARK: - Button
@@ -187,8 +188,8 @@ final class Blog: UIViewController {
     @objc func likeSetButton(_ sender: UIButton) {
         sender.isSelected = true
         sender.tintColor = ColorX.twitterBlue
-        let hitPoint = sender.convert(CGPoint.zero, to: self.tableView)
-        let indexPath = self.tableView!.indexPathForRow(at: hitPoint)
+        let hitPoint = sender.convert(CGPoint.zero, to: tableView)
+        let indexPath = tableView!.indexPathForRow(at: hitPoint)
         
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
@@ -218,8 +219,8 @@ final class Blog: UIViewController {
     @objc func replySetButton(_ sender:UIButton) {
  
         isReplyClicked = true
-        let hitPoint = sender.convert(CGPoint.zero, to: self.tableView)
-        let indexPath = self.tableView!.indexPathForRow(at: hitPoint)
+        let hitPoint = sender.convert(CGPoint.zero, to: tableView)
+        let indexPath = tableView!.indexPathForRow(at: hitPoint)
         
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
             posttoIndex = (_feedItems.object(at: (indexPath?.row)!) as AnyObject).value(forKey: "PostBy") as? String
@@ -326,7 +327,7 @@ final class Blog: UIViewController {
     }
     
     // MARK: - Delete
-    func deleteBlog(name: String) {
+    private func deleteBlog(name: String) {
         
         let alertController = UIAlertController(title: "Delete", message: "Confirm Delete", preferredStyle: .alert)
         let destroyAction = UIAlertAction(title: "Delete!", style: .destructive) { (action) in
@@ -371,8 +372,8 @@ final class Blog: UIViewController {
         
         let socialText: String?
         let url = URL.init(string: "http://lotpb.github.io/UnitedWebPage/index.html")!
-        let hitPoint = sender.convert(CGPoint.zero, to: self.tableView)
-        let indexPath = self.tableView!.indexPathForRow(at: hitPoint)
+        let hitPoint = sender.convert(CGPoint.zero, to: tableView)
+        let indexPath = tableView!.indexPathForRow(at: hitPoint)
         
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
             socialText = (self._feedItems[indexPath!.row] as AnyObject).value(forKey: "Subject") as? String
@@ -383,7 +384,7 @@ final class Blog: UIViewController {
         
         let share = [socialText!, url] as [Any]
         let activityViewController = UIActivityViewController(activityItems: share, applicationActivities: nil)
-        activityViewController.popoverPresentationController?.sourceView = self.view
+        activityViewController.popoverPresentationController?.sourceView = view
         self.present(activityViewController, animated: true)
     }
     
@@ -422,7 +423,7 @@ final class Blog: UIViewController {
                 VC.replyId = blog.replyId
             } else {
                 
-                let indexPath = self.tableView!.indexPathForSelectedRow!.row
+                let indexPath = tableView!.indexPathForSelectedRow!.row
                 if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     
                     VC.objectId = (_feedItems[indexPath] as AnyObject).value(forKey: "objectId") as? String
@@ -469,7 +470,7 @@ final class Blog: UIViewController {
                 VC.formStatus = "New"
             }
         }
-        if segue.identifier == "bloguserSegue" { //fix
+        if segue.identifier == "bloguserSegue" { // FIXME:
             guard let VC = segue.destination as? LeadUserVC else { return }
             VC.formController = "Blog"
             VC.postBy = titleLabel
@@ -516,7 +517,7 @@ extension Blog: UITableViewDataSource {
             cell.blogtitleLabel.textColor = .label
             cell.blogmsgDateLabel?.textColor = .systemGray
             cell.blogsubtitleLabel?.textColor = ColorX.twitterText
-            cell.customImagelabel.backgroundColor = .clear //fix
+            cell.customImagelabel.backgroundColor = .clear // FIXME: shouldn't crash
             
             if UIDevice.current.userInterfaceIdiom == .pad  {
                 
@@ -551,22 +552,22 @@ extension Blog: UITableViewDataSource {
                 } 
                 
                 let dateStr = (_feedItems[indexPath.row] as AnyObject).value(forKey: "MsgDate") as? String
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                let date:NSDate = (dateFormatter.date(from: dateStr!)as NSDate?)!
+
+                MasterViewController.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                let date:NSDate = (MasterViewController.dateFormatter.date(from: dateStr!)as NSDate?)!
                 
-                dateFormatter.dateFormat = "h:mm a"
+                MasterViewController.dateFormatter.dateFormat = "h:mm a"
                 let elapsedTimeInSeconds = NSDate().timeIntervalSince(date as Date)
                 let secondInDays: TimeInterval = 60 * 60 * 24
                 if elapsedTimeInSeconds > 7 * secondInDays {
-                    dateFormatter.dateFormat = "MMM-dd"
+                    MasterViewController.dateFormatter.dateFormat = "MMM-dd"
                 } else if elapsedTimeInSeconds > secondInDays {
-                    dateFormatter.dateFormat = "EEE"
+                    MasterViewController.dateFormatter.dateFormat = "EEE"
                 }
                 
                 cell.blogtitleLabel?.text = (_feedItems[indexPath.row] as AnyObject).value(forKey:"PostBy") as? String
                 cell.blogsubtitleLabel?.text = (_feedItems[indexPath.row] as AnyObject).value(forKey:"Subject") as? String
-                cell.blogmsgDateLabel?.text = dateFormatter.string(from: date as Date)as String?
+                cell.blogmsgDateLabel?.text = MasterViewController.dateFormatter.string(from: date as Date)as String?
                 
                 var Liked:Int? = (_feedItems[indexPath.row] as AnyObject).value(forKey:"Liked")as? Int
                 if Liked == nil { Liked = 0 }
@@ -616,7 +617,7 @@ extension Blog: UITableViewDataSource {
                 cell.replyButton.tintColor = ColorX.Blog.buttonColor
             }
             
-            //fix dont work
+            // FIXME: dont work
             let tap = UITapGestureRecognizer(target: self, action: #selector(imgLoadSegue))
             cell.customImageView.addGestureRecognizer(tap)
             
@@ -706,7 +707,7 @@ extension Blog: UITableViewDelegate {
                     header.separatorView2.backgroundColor = ColorX.Blog.borderColor
                     header.separatorView3.backgroundColor = ColorX.Blog.borderColor
                     header.contentView.backgroundColor = ColorX.Blog.navColor
-                    self.tableView!.tableHeaderView = nil //header.header
+                    tableView.tableHeaderView = nil //header.header
                     
                     return header.contentView
                     
@@ -728,9 +729,8 @@ extension Blog: UITableViewDelegate {
     }
     
     // MARK: - Content Menu
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -779,7 +779,7 @@ extension Blog: UITableViewDelegate {
             case "subject":
                 target = blog.subject
             case "date":
-                target = String(describing: blog.creationDate) //fix
+                target = String(describing: blog.creationDate) // FIXME:
             case "rating":
                 target = blog.rating
             case "postby":

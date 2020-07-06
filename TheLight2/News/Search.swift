@@ -47,7 +47,7 @@ final class Search: UIView, UITableViewDelegate, UITableViewDataSource, UITextFi
     
     lazy var searchField: UITextField = {
         let sf = UITextField.init(frame: .init(x: 48, y: 20, width: self.frame.width - 50, height: 48))
-        sf.placeholder = "Seach on Youtube"
+        sf.placeholder = "Seach on Youtube..."
         sf.keyboardAppearance = .dark
         return sf
     }()
@@ -66,14 +66,14 @@ final class Search: UIView, UITableViewDelegate, UITableViewDataSource, UITextFi
         self.addSubview(self.backgroundView)
         self.backgroundView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(Search.dismiss)))
         self.addSubview(self.searchView)
-        self.searchView.addSubview(self.searchField)
-        self.searchView.addSubview(self.backButton)
-        self.tableView.register(searchCell.self, forCellReuseIdentifier: "Cell")
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        self.tableView.tableFooterView = UIView()
-        self.tableView.backgroundColor = UIColor.clear
-        self.searchField.delegate = self
+        searchView.addSubview(self.searchField)
+        searchView.addSubview(self.backButton)
+        tableView.register(searchCell.self, forCellReuseIdentifier: "Cell")
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.tableFooterView = UIView()
+        tableView.backgroundColor = UIColor.clear
+        searchField.delegate = self
         self.addSubview(self.statusView)
     }
     
@@ -88,7 +88,7 @@ final class Search: UIView, UITableViewDelegate, UITableViewDataSource, UITextFi
     @objc func  dismiss()  {
         self.searchField.text = ""
         self.items.removeAll()
-        self.tableView.removeFromSuperview()
+        tableView.removeFromSuperview()
         UIView.animate(withDuration: 0.2, animations: {
             self.backgroundView.alpha = 0
             self.searchView.alpha = 0
@@ -102,7 +102,7 @@ final class Search: UIView, UITableViewDelegate, UITableViewDataSource, UITextFi
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if (self.searchField.text == "" || self.searchField.text == nil) {
             self.items = []
-            self.tableView.removeFromSuperview()
+            tableView.removeFromSuperview()
         } else {
             let _  = URLSession.shared.dataTask(with: requestSuggestionsURL(text: self.searchField.text!), completionHandler: { (data, response, error) in
                 if error == nil {
@@ -165,7 +165,7 @@ final class Search: UIView, UITableViewDelegate, UITableViewDataSource, UITextFi
     }
     
     override func layoutSubviews() {
-        self.tableView.separatorStyle = .none
+        tableView.separatorStyle = .none
     }
 }
 

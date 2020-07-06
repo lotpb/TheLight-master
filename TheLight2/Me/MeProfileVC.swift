@@ -29,44 +29,40 @@ final class MeProfileVC: UICollectionViewController, UICollectionViewDelegateFlo
         isGridView = true
         collectionView?.reloadData()
     }
+    public var isFormMe: Bool = true
+    public var objectId : String?
+    public var username : String?
+    public var create : String?
+    public var email : String?
+    public var phone : String?
+    private var uidStr: String?
     
     private let cellId = "cellId"
     private let mapId = "mapId"
-    var isGridView = true
+    private var isGridView = true
     
-    var defaults = UserDefaults.standard
-    
-    var selectedImage : UIImage? //sharebutton
-    var socialText: String = ""
+    private var defaults = UserDefaults.standard
+    private var selectedImage : UIImage? //sharebutton
+    private var socialText: String = ""
     
     // MARK: NavigationController Hidden
     private var lastContentOffset: CGFloat = 0.0
     
     //firebase
-    var userlist = [UserModel]()
-    var users: UserModel?
-    var posts = [NewsModel]()
-    
-    var isFormMe: Bool = true
-    var uidStr: String?
-
+    private var userlist = [UserModel]()
+    private var users: UserModel?
+    private var posts = [NewsModel]()
     //parse
-    var _feedItems = NSMutableArray()
-    var imageObject :PFObject!
-    var imageFile :PFFileObject!
-    var user : PFUser?
+    private var _feedItems = NSMutableArray()
+    private var imageObject :PFObject!
+    private var imageFile :PFFileObject!
+    private var user : PFUser?
     
-    var followingNumber: Int?
-    var followNumber: Int?
-    var status : String?
-    var objectId : String?
-    var username : String?
-    var create : String?
-    var email : String?
-    var phone : String?
+    private var followingNumber: Int?
+    private var followNumber: Int?
+    private var status : String?
 
-    
-    let userDetailImageview: CustomImageView = { //firebase only
+    private let userDetailImageview: CustomImageView = { //firebase only
         let imageView = CustomImageView()
         imageView.backgroundColor = .systemRed
         imageView.contentMode = .scaleAspectFill //.scaleAspectFill //.scaleAspectFit
@@ -76,7 +72,7 @@ final class MeProfileVC: UICollectionViewController, UICollectionViewDelegateFlo
         return imageView
     }()
     
-    let usernameLabel: UILabel = {
+    private let usernameLabel: UILabel = {
         let label = UILabel()
         label.text = ""
         label.font = UIFont.boldSystemFont(ofSize: 18)
@@ -173,7 +169,7 @@ final class MeProfileVC: UICollectionViewController, UICollectionViewDelegateFlo
     // MARK: - NavigationController Hidden
     @objc func hideBar(notification: NSNotification)  {
         let state = notification.object as! Bool
-        self.navigationController?.setNavigationBarHidden(state, animated: true)
+        navigationController?.setNavigationBarHidden(state, animated: true)
         UIView.animate(withDuration: 0.2, animations: {
             self.tabBarController?.hideTabBarAnimated(hide: state) //added
         }, completion: nil)
@@ -412,7 +408,7 @@ final class MeProfileVC: UICollectionViewController, UICollectionViewDelegateFlo
     }
     
     // FIXME: This needs to replaced next sprint
-    @objc func userDetailBtn() { //fix
+    @objc func userDetailBtn() { // FIXME:
         self.performSegue(withIdentifier: "userprofileDetailSegue", sender: self)
     }
     
@@ -423,8 +419,8 @@ final class MeProfileVC: UICollectionViewController, UICollectionViewDelegateFlo
     
     @objc func shareButton(sender: UIButton) {
         
-        let point : CGPoint = sender.convert(.zero, to: self.collectionView)
-        let indexPath = self.collectionView?.indexPathForItem(at: point)
+        let point : CGPoint = sender.convert(.zero, to: collectionView)
+        let indexPath = collectionView?.indexPathForItem(at: point)
         
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
@@ -507,8 +503,8 @@ final class MeProfileVC: UICollectionViewController, UICollectionViewDelegateFlo
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         let updated: Date?
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM dd, yyyy"
+
+        MasterViewController.dateFormatter.dateFormat = "MMM dd, yyyy"
         
         if segue.identifier == "userprofileDetailSegue" {
 
@@ -535,7 +531,7 @@ final class MeProfileVC: UICollectionViewController, UICollectionViewDelegateFlo
                     self.userDetailImageview.loadImage(urlString: profileImageUrl!)
                     VC.userimage = self.userDetailImageview.image
                     
-                    let createString = dateFormatter.string(from: (updated)!)
+                    let createString = MasterViewController.dateFormatter.string(from: (updated)!)
                     VC.create = createString
                 }
             }

@@ -11,17 +11,71 @@ import UIKit
 
 class CardViewController: UIViewController {
 
-    var homeController: GeotificationVC?
-
     @IBOutlet weak var handleArea: UIView!
-    @IBOutlet weak var topView: UIView!
-    @IBOutlet weak var centerView: UIView!
-    @IBOutlet weak var tableView: UIView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var toolbarView: UIView!
 
-    lazy var searchBtn: UIButton = {
+    private var homeController: GeotificationVC?
+
+    private let mainView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .red
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private let topView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .secondarySystemGroupedBackground
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private let centerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .secondarySystemFill
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private let driveView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .secondarySystemFill
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private let promoView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .secondarySystemFill
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private let toolbarView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .secondarySystemGroupedBackground
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private let promoBtn: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "cloud.sun.fill")?
+                            .withRenderingMode(.alwaysOriginal), for:.normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    private let driveBtn: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "cloud.sun.rain.fill")?
+                            .withRenderingMode(.alwaysOriginal), for:.normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    private let searchBtn: UIButton = {
         let button = UIButton(type: .system)
         button.tintColor = .label
         let boldFont = UIFont.boldSystemFont(ofSize: 24)
@@ -31,7 +85,7 @@ class CardViewController: UIViewController {
         return button
     }()
 
-    lazy var addBtn: UIButton = {
+    private let optionBtn: UIButton = {
         let button = UIButton(type: .system)
         button.tintColor = .label
         let boldFont = UIFont.boldSystemFont(ofSize: 24)
@@ -41,7 +95,7 @@ class CardViewController: UIViewController {
         return button
     }()
 
-    lazy var chevronBtn: UIButton = {
+    public let chevronBtn: UIButton = {
         let button = UIButton(type: .system)
         button.tintColor = .label
         let boldFont = UIFont.boldSystemFont(ofSize: 20)
@@ -51,7 +105,7 @@ class CardViewController: UIViewController {
         return button
     }()
 
-    lazy var listBtn: UIButton = {
+    public let listBtn: UIButton = {
         let button = UIButton(type: .system)
         button.tintColor = .label
         let boldFont = UIFont.boldSystemFont(ofSize: 20)
@@ -61,7 +115,7 @@ class CardViewController: UIViewController {
         return button
     }()
 
-    lazy var offLineBtn: UIButton = {
+    private let offLineBtn: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .systemOrange
         button.tintColor = .white
@@ -75,9 +129,31 @@ class CardViewController: UIViewController {
         return button
     }()
 
-    let offlineLabel: UILabel = {
+    private let offlineLabel: UILabel = {
         let label = UILabel()
         label.text = "GO OFFLINE"
+        label.font = Font.celltitle16r
+        label.backgroundColor = .clear
+        label.textColor = .label
+        label.sizeToFit()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let promoLabel: UILabel = {
+        let label = UILabel()
+        label.text = "See upcoming promotions"
+        label.font = Font.celltitle16r
+        label.backgroundColor = .clear
+        label.textColor = .label
+        label.sizeToFit()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let driveLabel: UILabel = {
+        let label = UILabel()
+        label.text = "See driving time"
         label.font = Font.celltitle16r
         label.backgroundColor = .clear
         label.textColor = .label
@@ -90,34 +166,44 @@ class CardViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .secondarySystemFill
-        topView.backgroundColor = .secondarySystemBackground
-        tableView.backgroundColor = .secondarySystemFill
-        centerView.backgroundColor = .secondarySystemFill
-
         titleLabel.textColor = .label
-        setupConstraints()
         floatButton()
     }
 
     private func floatButton() {
-
         let btnLayer2: CALayer = offLineBtn.layer
         btnLayer2.cornerRadius = 76 / 2
         btnLayer2.masksToBounds = true
     }
 
-    func setupConstraints() {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
 
-        self.view.addSubview(offLineBtn)
-        self.view.addSubview(searchBtn)
-        self.view.addSubview(addBtn)
-        self.view.addSubview(chevronBtn)
-        self.view.addSubview(listBtn)
-        self.view.addSubview(offlineLabel)
+        view.addSubview(mainView)
+        mainView.addSubview(topView)
+        mainView.addSubview(centerView)
+        mainView.addSubview(driveView)
+        mainView.addSubview(promoView)
+        mainView.addSubview(toolbarView)
+        mainView.addSubview(promoLabel)
+        mainView.addSubview(driveLabel)
+        mainView.addSubview(promoBtn)
+        mainView.addSubview(driveBtn)
+        mainView.addSubview(segmentedControl)
+
+        view.addSubview(offLineBtn)
+        view.addSubview(searchBtn)
+        view.addSubview(optionBtn)
+        view.addSubview(chevronBtn)
+        view.addSubview(listBtn)
+        view.addSubview(offlineLabel)
+
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
 
         let guide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
-            chevronBtn.topAnchor.constraint(equalTo: handleArea.topAnchor, constant: 10),
+
+            chevronBtn.topAnchor.constraint(equalTo: handleArea.topAnchor, constant: 15),
             chevronBtn.leadingAnchor.constraint(equalTo: handleArea.leadingAnchor, constant: 20),
             chevronBtn.widthAnchor.constraint(equalToConstant: 40),
             chevronBtn.heightAnchor.constraint(equalToConstant: 40),
@@ -127,15 +213,64 @@ class CardViewController: UIViewController {
             listBtn.widthAnchor.constraint(equalToConstant: 40),
             listBtn.heightAnchor.constraint(equalToConstant: 40),
 
+            mainView.topAnchor.constraint(equalTo: handleArea.bottomAnchor),
+            mainView.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+            mainView.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+            mainView.bottomAnchor.constraint(equalTo: guide.bottomAnchor),
+
+            topView.topAnchor.constraint(equalTo: mainView.topAnchor),
+            topView.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+            topView.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+            topView.heightAnchor.constraint(equalToConstant: 80),
+
+            segmentedControl.centerXAnchor.constraint(equalTo: topView.centerXAnchor),
+            segmentedControl.centerYAnchor.constraint(equalTo: topView.centerYAnchor),
+            segmentedControl.heightAnchor.constraint(equalToConstant: 40),
+            segmentedControl.widthAnchor.constraint(equalToConstant: 325),
+
+            centerView.topAnchor.constraint(equalTo: topView.bottomAnchor, constant: 10),
+            centerView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 10),
+            centerView.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -10),
+            centerView.heightAnchor.constraint(equalToConstant: 100),
+
+            promoView.topAnchor.constraint(equalTo: centerView.bottomAnchor, constant: 10),
+            promoView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 10),
+            promoView.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -10),
+            promoView.heightAnchor.constraint(equalToConstant: 60),
+
+            driveView.topAnchor.constraint(equalTo: promoView.bottomAnchor, constant: 10),
+            driveView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 10),
+            driveView.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -10),
+            driveView.heightAnchor.constraint(equalToConstant: 60),
+
+            toolbarView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            toolbarView.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+            toolbarView.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+            toolbarView.heightAnchor.constraint(equalToConstant: 125),
+
+            promoBtn.leadingAnchor.constraint(equalTo: promoView.leadingAnchor, constant: 10),
+            promoBtn.heightAnchor.constraint(equalToConstant: 30),
+            promoBtn.centerYAnchor.constraint(equalTo: promoView.centerYAnchor),
+
+            driveBtn.leadingAnchor.constraint(equalTo: driveView.leadingAnchor, constant: 10),
+            driveBtn.heightAnchor.constraint(equalToConstant: 30),
+            driveBtn.centerYAnchor.constraint(equalTo: driveView.centerYAnchor),
+
+            promoLabel.leftAnchor.constraint(equalTo: promoBtn.rightAnchor, constant: 10),
+            promoLabel.centerYAnchor.constraint(equalTo: promoView.centerYAnchor),
+
+            driveLabel.leftAnchor.constraint(equalTo: driveBtn.rightAnchor, constant: 10),
+            driveLabel.centerYAnchor.constraint(equalTo: driveView.centerYAnchor),
+
             searchBtn.topAnchor.constraint(equalTo: toolbarView.topAnchor, constant: 30),
             searchBtn.leadingAnchor.constraint(equalTo: toolbarView.leadingAnchor, constant: 30),
             searchBtn.widthAnchor.constraint(equalToConstant: 40),
             searchBtn.heightAnchor.constraint(equalToConstant: 40),
 
-            addBtn.topAnchor.constraint(equalTo: toolbarView.topAnchor, constant: 30),
-            addBtn.trailingAnchor.constraint(equalTo: toolbarView.trailingAnchor, constant: -30),
-            addBtn.widthAnchor.constraint(equalToConstant: 40),
-            addBtn.heightAnchor.constraint(equalToConstant: 40),
+            optionBtn.topAnchor.constraint(equalTo: toolbarView.topAnchor, constant: 30),
+            optionBtn.trailingAnchor.constraint(equalTo: toolbarView.trailingAnchor, constant: -30),
+            optionBtn.widthAnchor.constraint(equalToConstant: 40),
+            optionBtn.heightAnchor.constraint(equalToConstant: 40),
 
             offLineBtn.centerXAnchor.constraint(equalTo: guide.centerXAnchor),
             offLineBtn.topAnchor.constraint(equalTo: toolbarView.topAnchor, constant: 10),
@@ -155,11 +290,11 @@ class CardViewController: UIViewController {
 
         case 1:
             segmentedControl.selectedSegmentIndex = 1
-            self.homeController?.openRegion() //fix
+            self.homeController?.openRegion() // FIXME:
 
         case 2:
             segmentedControl.selectedSegmentIndex = 2
-            self.homeController?.openAddress() //fix
+            self.homeController?.openAddress() // FIXME:
 
         case 3:
             segmentedControl.selectedSegmentIndex = 3

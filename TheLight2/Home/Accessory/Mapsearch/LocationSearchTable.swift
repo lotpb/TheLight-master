@@ -12,11 +12,11 @@ import MapKit
 
 @available(iOS 13.0, *)
 final class LocationSearchTable: UITableViewController {
-    
-    var handleMapSearchDelegate:HandleMapSearch? = nil
-    var matchingItems:[MKMapItem] = []
-    var mapView: MKMapView? = nil
-    
+
+    public var mapView: MKMapView? = nil
+    public var handleMapSearchDelegate:HandleMapSearch? = nil
+    private var matchingItems:[MKMapItem] = []
+
     //Formats Address to Display
     func parseAddress(selectedItem:MKPlacemark) -> String {
         // put a space between "4" and "Melrose Place"
@@ -48,9 +48,9 @@ final class LocationSearchTable: UITableViewController {
         setupTableView()
     }
     
-    func setupTableView() {
-        self.tableView!.backgroundColor = .systemGray4
-        self.tableView!.tableFooterView = UIView(frame: .zero)
+    private func setupTableView() {
+        tableView!.backgroundColor = .systemGray4
+        tableView!.tableFooterView = UIView(frame: .zero)
     }
 
     //returns number of rows for the LocationSearchTable
@@ -80,7 +80,7 @@ final class LocationSearchTable: UITableViewController {
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
          if segue.identifier == "DetailedVC" ,
              let nextScene = segue.destination as? DetailedMapVC ,
-             let indexPath = self.tableView.indexPathForSelectedRow {
+             let indexPath = tableView.indexPathForSelectedRow {
              let selectedRow = matchingItems[indexPath.row]
              nextScene.mapData = selectedRow
          }

@@ -123,7 +123,6 @@ final class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollection
         
         collectionView.dataSource = self
         collectionView.delegate = self
-        
         collectionView.register(SettingCell.self, forCellWithReuseIdentifier: cellId)
     }
     

@@ -14,10 +14,6 @@ import CoreLocation
 import UserNotifications
 import BackgroundTasks
 
-let primaryColor = UIColor(red: 210/255, green: 109/255, blue: 180/255, alpha: 1)
-let secondaryColor = UIColor(red: 52/255, green: 148/255, blue: 230/255, alpha: 1)
-
-
 fileprivate let backgroundTaskIdentifier = "com.PeterBalsamo.apprefresh"
 
 @available(iOS 13.0, *)
@@ -32,7 +28,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     //mileIQ
     var destLocation: CLLocation? // for distance calculation
     var distance = 0.0
-    let dateFormatter = DateFormatter()
     //journal
     static let geoCoder = CLGeocoder()
 
@@ -44,105 +39,72 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        registerCategories()
-        registerLocalNotification()
-        set3DTouch()
+        // MARK: MileIQ
+        //if (defaults.bool(forKey: "geotifyKey"))  {
 
-        // MileIQ
-        if (defaults.bool(forKey: "geotifyKey"))  {
-            center.requestAuthorization(options: [.badge, .alert, .sound]) { granted, error in
+            let options: UNAuthorizationOptions = [.badge, .sound, .alert]
+            center.requestAuthorization(options: options) { granted, error in
                 if granted {
-                    self.locationManager.requestAlwaysAuthorization()
-                    self.locationManager.startMonitoringVisits()
                     self.locationManager.delegate = self
+
+                    self.locationManager.startMonitoringVisits()
                     self.locationManager.allowsBackgroundLocationUpdates = true
                     //self.locationManager.pausesLocationUpdatesAutomatically = false
                     self.locationManager.startUpdatingLocation()  // 2
                 }
             }
-        }
+        //}
 
-        /// MARK: -  BackGround Tasks
-        if UserDefaults.standard.bool(forKey: "AllowBackgroundFetch") {
-
-            let dispatch = DispatchQueue.global()
-            BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.PeterBalsamo.imagefetcher", using: dispatch) { task in
-                self.fireBackgrounfNotification()
-            }
-
-            BGTaskScheduler.shared.register(forTaskWithIdentifier: backgroundTaskIdentifier, using: dispatch) { task in
-                self.handleAppRefresh(task: task as! BGAppRefreshTask)
-            }
-            print("Background task called...")
-            print("\(Date()): notification posted, running background if available")
-
-        } else {
-            print("Background task disabled")
-        }
-
-        //Firebase
+        // MARK: Firebase
         FirebaseApp.configure()
-        //Google/Facebook
+        // MARK: Google/Facebook
         ApplicationDelegate.shared.application(application,didFinishLaunchingWithOptions: launchOptions)
-        //Google
+        // MARK: Google
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
+
+        registerLocalNotification()
+        registerCategories()
+        // MARK: BackGround Tasks
+               if UserDefaults.standard.bool(forKey: "AllowBackgroundFetch") {
+                   registerBackgroundTaks()
+               }
+        set3DTouch()
+        self.askAlwaysPermission()
 
         return true
     }
 
+    func askAlwaysPermission() {
+      locationManager.requestAlwaysAuthorization()
+    }
+
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        let facebookDidHandle = ApplicationDelegate.shared.application(app,
-                                                                       open: url,
-                                                                       sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
-                                                                       annotation: options[UIApplication.OpenURLOptionsKey.annotation])
-        let googleDidhandle = GIDSignIn.sharedInstance().handle(url)
-        return googleDidhandle || facebookDidHandle
-    }
-    
-    // MARK: - Facebook
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        AppEvents.activateApp()
-        application.applicationIconBadgeNumber = 0 //dont work anymore
-        center.removeAllPendingNotificationRequests()
-        center.removeAllDeliveredNotifications()
+
+        ApplicationDelegate.shared.application(
+            app,
+            open: url,
+            sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
+            annotation: options[UIApplication.OpenURLOptionsKey.annotation]
+        )
+
+        return GIDSignIn.sharedInstance().handle(url)
     }
 
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        cancelAllPandingBGTask()
-        fireBackgrounfNotification()
-        scheduleAppRefresh()
-    }
-    
-    func applicationWillTerminate(_ application: UIApplication) {
+    //MARK: - Regiater BackGround Tasks
+    private func registerBackgroundTaks() {
 
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.PeterBalsamo.imagefetcher", using: nil) { task in
+            //This task is cast with processing request (BGProcessingTask)
+            self.fireBackgrounfNotification()
+
+        }
+
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: backgroundTaskIdentifier, using: nil) { task in
+            //This task is cast with processing request (BGAppRefreshTask)
+            self.fireBackgrounfNotification()
+            self.handleAppRefresh(task: task as! BGAppRefreshTask)
+        }
     }
-    
-    /// MARK: - Schedule Notification set in NotificationController
-    func scheduleNotification(at date: Date) {
-        
-        let content = UNMutableNotificationContent()
-        content.title = "Tutorial Reminder 🏈"
-        content.body = "Just a reminder to read your tutorial over at appcoda.com!"
-        content.badge = (UIApplication.shared.applicationIconBadgeNumber + 1) as NSNumber
-        content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "Tornado.caf"))
-        content.categoryIdentifier = "myCategory"
-        
-        let imageName = "profile-rabbit-toy"
-        guard let imageURL = Bundle.main.url(forResource: imageName, withExtension: "png") else { return }
-        let attachment = try! UNNotificationAttachment(identifier: imageName, url: imageURL, options: .none)
-        content.attachments = [attachment]
-        
-        let calendar = Calendar(identifier: .gregorian)
-        let components = calendar.dateComponents(in: .current, from: date)
-        let newComponents = DateComponents(calendar: calendar, timeZone: .current, month: components.month, day: components.day, hour: components.hour, minute: components.minute)
-        
-        let trigger = UNCalendarNotificationTrigger(dateMatching: newComponents, repeats: false)
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-        center.delegate = self
-        center.add(request)
-    }
-    //----------------------------------------------------------------------------------------------------------
-    /// MARK: - Register BackGround Tasks
 
     @available(iOS 13.0, *)
     func handleAppRefresh(task: BGAppRefreshTask) {
@@ -169,10 +131,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func fireBackgrounfNotification() {
         let content = UNMutableNotificationContent()
-        content.title = "Background transfer! 🏈"
+        content.title = "Background transfer! 🌎"
         content.body = "Background transfer service: Download complete!"
         content.badge = (UIApplication.shared.applicationIconBadgeNumber + 1) as NSNumber
-        content.sound = UNNotificationSound.default
+        content.sound = .default
         content.categoryIdentifier = "myCategory"
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval:60, repeats: false)
@@ -180,16 +142,60 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         center.delegate = self
         center.add(request)
     }
+    
+    ///MARK: - Schedule Notification set in NotificationController
+    func scheduleNotification(at date: Date) {
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Tutorial Reminder 🏈"
+        content.body = "Just a reminder to read your tutorial over at appcoda.com!"
+        content.badge = (UIApplication.shared.applicationIconBadgeNumber + 1) as NSNumber
+        content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "Tornado.caf"))
+        content.categoryIdentifier = "myCategory"
+        
+        let imageName = "profile-rabbit-toy"
+        guard let imageURL = Bundle.main.url(forResource: imageName, withExtension: "png") else { return }
+        let attachment = try! UNNotificationAttachment(identifier: imageName, url: imageURL, options: .none)
+        content.attachments = [attachment]
+        
+        let calendar = Calendar(identifier: .gregorian)
+        let components = calendar.dateComponents(in: .current, from: date)
+        let newComponents = DateComponents(calendar: calendar, timeZone: .current, month: components.month, day: components.day, hour: components.hour, minute: components.minute)
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: newComponents, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        center.delegate = self
+        center.add(request)
+    }
+
+
+    // MARK: - System
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        AppEvents.activateApp()
+        application.applicationIconBadgeNumber = 0 //dont work anymore
+        center.removeAllPendingNotificationRequests()
+        center.removeAllDeliveredNotifications()
+    }
+
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        cancelAllPandingBGTask()
+        //fireBackgrounfNotification()
+        scheduleAppRefresh()
+    }
+
+    func applicationWillTerminate(_ application: UIApplication) {
+
+    }
 
 }
 @available(iOS 13.0, *)
 extension AppDelegate {
-    //BackGround Tasks
+    ///MARK: - BackGround Tasks
     func cancelAllPandingBGTask() {
         BGTaskScheduler.shared.cancelAllTaskRequests()
     }
 
-    /// MARK: - Register Notifications
+    ///MARK: - Register Notifications
     func registerLocalNotification() {
         let options: UNAuthorizationOptions = [.badge, .sound, .alert]
         center.requestAuthorization(options: options) { success, error in
@@ -198,7 +204,38 @@ extension AppDelegate {
             }
         }
     }
-    
+
+    func scheduleLocalNotification() {
+          let notificationCenter = UNUserNotificationCenter.current()
+          notificationCenter.getNotificationSettings { (settings) in
+              if settings.authorizationStatus == .authorized {
+                  self.fireNotification()
+              }
+          }
+      }
+
+    func fireNotification() {
+        // Create Notification Content
+        let notificationContent = UNMutableNotificationContent()
+
+        // Configure Notification Content
+        notificationContent.title = "Bg"
+        notificationContent.body = "BG Notifications."
+
+        // Add Trigger
+        let notificationTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 1.0, repeats: false)
+
+        // Create Notification Request
+        let notificationRequest = UNNotificationRequest(identifier: "local_notification", content: notificationContent, trigger: notificationTrigger)
+
+        // Add Request to User Notification Center
+        UNUserNotificationCenter.current().add(notificationRequest) { (error) in
+            if let error = error {
+                print("Unable to Add Notification Request (\(error), \(error.localizedDescription))")
+            }
+        }
+    }
+
     /// MARK: - Register Categories
     func registerCategories() {
         center.delegate = self
@@ -260,40 +297,46 @@ extension AppDelegate {
         return handled
     }
     
-    /// Geotify
-    //func handleEvent(forRegion region: CLRegion!, didEnter: Bool) {
-    func handleEvent(forRegion region: CLRegion) {
-        
-        //let message = didEnter ? "Alert! You have entered the region" : "Alert! You have exited the region ⚾️"
-        //let geoTitle = note(from: region.identifier)
-        guard let message = note(from: region.identifier) else { return }
-        
-        if UIApplication.shared.applicationState == .active {
+    /// MARK: - Geotify
+    func handleEvent(forRegion region: CLRegion!, didEnter: Bool) {
+        let message = didEnter ? "Alert! You have entered the region ⚾️" : "Alert! You have exited the region ⚾️"
+        //guard let message = note(from: region.identifier) else { return }
+        DispatchQueue.main.sync {
+            if UIApplication.shared.applicationState == .active {
 
-            //guard let message = note(from: region.identifier) else { return }
-            window?.rootViewController?.showAlert(title: nil, message: message)
-            
-        } else {
+                let view = window?.rootViewController
+                let alert = UIAlertController(title: "Geofence crossed", message: message, preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                alert.addAction(action)
+                view?.present(alert, animated: true, completion: nil)
 
-            guard let body = note(from: region.identifier) else { return }
-            let content = UNMutableNotificationContent()
-            content.title = message
-            content.body = body
-            content.badge = UIApplication.shared.applicationIconBadgeNumber + 1 as NSNumber
-            content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "Tornado.caf")) //UNNotificationSound.default()
-            content.categoryIdentifier = "myCategory"
-            
-            let trigger = UNLocationNotificationTrigger(region: region, repeats: false)
-            //let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+                //guard let message = note(from: region.identifier) else { return }
+                //window?.rootViewController?.showAlert(title: "Alert", message: message)
 
-            //UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-            center.add(request, withCompletionHandler: nil)
+            } else {
+
+                guard let body = note(from: region.identifier) else { return }
+                let content = UNMutableNotificationContent()
+                content.title = message
+                content.body = body
+                content.badge = UIApplication.shared.applicationIconBadgeNumber + 1 as NSNumber
+                content.sound = .default //UNNotificationSound(named: UNNotificationSoundName(rawValue: "Tornado.caf"))
+                content.categoryIdentifier = "myCategory"
+
+                let trigger = UNLocationNotificationTrigger(region: region, repeats: false)
+                //let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+
+                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                center.add(request)
+            }
         }
+        UserWarningSpeakManager.warning.startSpeaking(message)
+        let FeedbackGenerator = UINotificationFeedbackGenerator()
+        FeedbackGenerator.notificationOccurred(.warning)
     }
     
-    /// Method retrieves the geotification note from the persistent store, based on its identifier, and returns the note for that geotification.
-    
+    /// MARK: - Geotify Note
     func note(from identifier: String) -> String? {
         let geotifications = Geotification.allGeotifications()
         guard let matched = geotifications.filter({
@@ -303,14 +346,12 @@ extension AppDelegate {
     }
     
 }
-
 @available(iOS 13.0, *)
 extension AppDelegate: UNUserNotificationCenterDelegate {
     
     public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         
         completionHandler([.alert, .badge, .sound])
-        //print("Notification being triggered - willPresent")
     }
     
     /// Schedule Notification Action
@@ -337,11 +378,8 @@ extension AppDelegate: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         
         if region is CLCircularRegion {
-            //handleEvent(forRegion: region, didEnter: true)
-            handleEvent(forRegion: region)
-            UserWarningSpeakManager.warning.startSpeaking("Alert! You have entered the region")
-            let FeedbackGenerator = UINotificationFeedbackGenerator()
-            FeedbackGenerator.notificationOccurred(.warning)
+            self.handleEvent(forRegion: region, didEnter: true)
+
             //geoSubtitle = "enter \(region.notifyOnEntry), \(region.notifyOnExit)"
         }
     }
@@ -350,19 +388,18 @@ extension AppDelegate: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         
         if region is CLCircularRegion {
-            //handleEvent(forRegion: region, didEnter: false)
-            handleEvent(forRegion: region)
-            UserWarningSpeakManager.warning.startSpeaking("Alert! You have exited the region")
+            self.handleEvent(forRegion: region, didEnter: false)
             let FeedbackGenerator = UINotificationFeedbackGenerator()
             FeedbackGenerator.notificationOccurred(.warning)
+            UserWarningSpeakManager.warning.startSpeaking("Alert! You have exited the region")
             //geoSubtitle = "exit \(region.notifyOnEntry), \(region.notifyOnExit)"
             //UserWarningSpeakManager.warning.stopSpeaking()
         }
     }
     //journal
     func locationManager(_ manager: CLLocationManager, didVisit visit: CLVisit) {
-
         //mileIQ------------------------------------------------------------------------------
+        
         let recordVisitReference = FirebaseRef.databaseVisits.child("test")
         let object: [String: Any] = [
             "coordinate": [
@@ -383,7 +420,8 @@ extension AppDelegate: CLLocationManagerDelegate {
         let clLocation = CLLocation(latitude: visit.coordinate.latitude, longitude: visit.coordinate.longitude)
         
         // Get location description
-        AppDelegate.geoCoder.reverseGeocodeLocation(clLocation) { placemarks, _ in
+        AppDelegate.geoCoder.reverseGeocodeLocation(clLocation) { [weak self] placemarks, _ in
+            guard let self = self else { return }
             if let place = placemarks?.first {
                 let description = "\(place)"
                 self.newVisitReceived(visit, description: description)

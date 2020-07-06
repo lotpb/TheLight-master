@@ -23,33 +23,33 @@ final class BlogEditController: UIViewController {
     @IBOutlet weak var Like: UIButton?
     @IBOutlet weak var update: UIButton?
     
-    var _feedItems = NSMutableArray()
-    var _feedItems1 = NSMutableArray()
-    var filteredString = NSMutableArray()
-    var objects = [AnyObject]()
-    var pasteBoard = UIPasteboard.general
+    private var _feedItems = NSMutableArray()
+    private var _feedItems1 = NSMutableArray()
+    private var filteredString = NSMutableArray()
+    private var objects = [AnyObject]()
+    private var pasteBoard = UIPasteboard.general
  
-    var objectId : String?
-    var msgNo : String?
-    var postby : String?
-    var subject : String?
-    var msgDate : String?
-    var rating : String?
-    var replyId : String?
-    var uid : String?
-    var liked : Int?
-    var commentNum : Int?
+    public var objectId : String?
+    public var msgNo : String?
+    public var postby : String?
+    public var subject : String?
+    public var msgDate : String?
+    public var rating : String?
+    public var replyId : String?
+    public var uid : String?
+    public var liked : Int?
+    public var commentNum : Int?
     //var profileImage : UIImage?
     
     // listTableView Reply
-    var posttoIndex: String?
-    var userIndex: String?
-    var isReplyClicked = false
-    var defaults = UserDefaults.standard
+    private var posttoIndex: String?
+    private var userIndex: String?
+    private var isReplyClicked = false
+    private var defaults = UserDefaults.standard
     
     // listTableView NSDataDetector
-    var myText: NSString = ""
-    var myInput: String = ""
+    private var myText: NSString = ""
+    private var myInput: String = ""
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -67,22 +67,22 @@ final class BlogEditController: UIViewController {
         setupTableView()
         setupForm()
         loadData()
-        self.tableView!.addSubview(self.refreshControl)
-        self.listTableView!.register(ReplyTableCell.self, forCellReuseIdentifier: "ReplyCell")
+        tableView!.addSubview(refreshControl)
+        listTableView!.register(ReplyTableCell.self, forCellReuseIdentifier: "ReplyCell")
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         refreshData(sender: self)
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         setupTwitterNavigationBarItems()
-        self.tabBarController?.tabBar.isHidden = false
-        self.navigationController?.isNavigationBarHidden = false //fix
+        tabBarController?.tabBar.isHidden = false
+        navigationController?.isNavigationBarHidden = false // FIXME:
     }
 
     override func didReceiveMemoryWarning() {
@@ -96,28 +96,28 @@ final class BlogEditController: UIViewController {
         navigationItem.rightBarButtonItems = [actionBtn,trashBtn]
     }
     
-    func setupForm() {
+    private func setupForm() {
         
-        self.view.backgroundColor = .lightGray
-        self.toolBar!.barTintColor = .systemGray
+        view.backgroundColor = .lightGray
+        toolBar!.barTintColor = .systemGray
         //self.toolBar!.isTranslucent = false set in AppDelegate
-        self.toolBar!.layer.masksToBounds = true
+        toolBar!.layer.masksToBounds = true
         
-        self.Like!.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
-        self.Like!.setTitleColor(.label, for: .normal)
-        self.Like?.frame = .init(x: 0, y: 0, width: 90, height: 30)
-        if (self.liked == nil) || (self.liked == 0)  {
-            self.Like!.tintColor = .lightGray
-            self.Like!.setTitle(" Like", for: .normal)
+        Like!.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
+        Like!.setTitleColor(.label, for: .normal)
+        Like?.frame = .init(x: 0, y: 0, width: 90, height: 30)
+        if (liked == nil) || (liked == 0)  {
+            Like!.tintColor = .lightGray
+            Like!.setTitle(" Like", for: .normal)
         } else {
-            self.Like!.tintColor = ColorX.Blog.buttonColor
-            self.Like!.setTitle(" Likes \(liked!)", for: .normal)
+            Like!.tintColor = ColorX.Blog.buttonColor
+            Like!.setTitle(" Likes \(liked!)", for: .normal)
         }
         
-        self.update?.frame = .init(x: 0, y: 0, width: 60, height: 30)
-        self.update?.backgroundColor = ColorX.twitterBlue
-        self.update?.setTitleColor(.white, for: .normal)
-        let btnLayer: CALayer = self.update!.layer
+        update?.frame = .init(x: 0, y: 0, width: 60, height: 30)
+        update?.backgroundColor = ColorX.twitterBlue
+        update?.setTitleColor(.white, for: .normal)
+        let btnLayer: CALayer = update!.layer
         btnLayer.cornerRadius = 9.0
         btnLayer.masksToBounds = true
         
@@ -126,39 +126,38 @@ final class BlogEditController: UIViewController {
         topBorder.borderColor = UIColor.lightGray.cgColor
         topBorder.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 0.5)
         topBorder.borderWidth = width
-        self.toolBar!.layer.addSublayer(topBorder)
+        toolBar!.layer.addSublayer(topBorder)
         
         let bottomBorder = CALayer()
         bottomBorder.borderColor = UIColor.lightGray.cgColor
         bottomBorder.frame = .init(x: 0, y: 43, width: view.bounds.width, height: 0.5)
         bottomBorder.borderWidth = width
-        self.toolBar!.layer.addSublayer(bottomBorder)
+        toolBar!.layer.addSublayer(bottomBorder)
     }
     
-    func setupTableView() {
-        self.tableView!.delegate = self
-        self.tableView!.dataSource = self
-        self.tableView!.estimatedRowHeight = 110
+    private func setupTableView() {
+        tableView!.delegate = self
+        tableView!.dataSource = self
+        tableView!.estimatedRowHeight = 110
         let bgView = UIView()
         bgView.backgroundColor = .systemGroupedBackground
         tableView!.backgroundView = bgView
-        self.tableView!.rowHeight = UITableView.automaticDimension
-        
-        
-        self.listTableView!.delegate = self
-        self.listTableView!.dataSource = self
-        self.listTableView!.estimatedRowHeight = 75
-        self.listTableView!.rowHeight = UITableView.automaticDimension
-        self.listTableView!.tableFooterView = UIView(frame: .zero)
+        tableView!.rowHeight = UITableView.automaticDimension
 
-        self.tableView!.backgroundColor = .systemGray4
-        self.listTableView!.backgroundColor = .systemGray4
+        listTableView!.delegate = self
+        listTableView!.dataSource = self
+        listTableView!.estimatedRowHeight = 75
+        listTableView!.rowHeight = UITableView.automaticDimension
+        listTableView!.tableFooterView = UIView(frame: .zero)
+
+        tableView!.backgroundColor = .systemGray4
+        listTableView!.backgroundColor = .systemGray4
     }
     
     @objc func refreshData(sender:AnyObject) {
-        replylist.removeAll() //fix
+        replylist.removeAll() // FIXME: shouldn't crash
         loadData()
-        self.refreshControl.endRefreshing()
+        refreshControl.endRefreshing()
     }
 
     // MARK: - Button
@@ -171,7 +170,7 @@ final class BlogEditController: UIViewController {
         sender.isSelected = true
         sender.tintColor = ColorX.twitterBlue
         let hitPoint = sender.convert(CGPoint.zero, to: self.listTableView)
-        let indexPath = self.listTableView!.indexPathForRow(at: hitPoint)
+        let indexPath = listTableView!.indexPathForRow(at: hitPoint)
         
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
             let query = PFQuery(className:"Blog")
@@ -212,13 +211,13 @@ final class BlogEditController: UIViewController {
     @objc func deleteButton(_ sender: AnyObject) {
         
         if (commentNum == nil || commentNum == 0) {
-            deleteBlog(name: self.objectId!)
+            deleteBlog(name: objectId!)
         } else {
             self.showAlert(title: "Oops!", message: "Record can't be deleted.")
         }
     }
     
-    func deleteBlog(name: String) {
+    private func deleteBlog(name: String) {
         
         let alertController = UIAlertController(title: "Delete", message: "Confirm Delete", preferredStyle: .alert)
         let destroyAction = UIAlertAction(title: "Delete!", style: .destructive) { (action) in
@@ -347,7 +346,7 @@ final class BlogEditController: UIViewController {
     }
     
     // MARK: - Load Data
-    func loadData() {
+    private func loadData() {
         
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
             
@@ -383,7 +382,7 @@ final class BlogEditController: UIViewController {
     }
     
     // MARK: Deincrement Comment
-    func deincrementComment() {
+    private func deincrementComment() {
         
         if (commentNum == nil || commentNum == 0) { return }
         
@@ -447,7 +446,7 @@ extension BlogEditController: UITableViewDataSource {
         
         if (tableView == self.tableView) {
             return 1
-        } else if (tableView == self.listTableView) {
+        } else if (tableView == listTableView) {
             if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 return _feedItems1.count
             } else {
@@ -471,7 +470,7 @@ extension BlogEditController: UITableViewDataSource {
             cell.customImageView.frame = .init(x: 15, y: 11, width: 50, height: 50)
             cell.customImageView.layer.cornerRadius = 0
             cell.customImageView.layer.borderWidth = 0
-            cell.customImagelabel.backgroundColor = .clear //fix
+            cell.customImagelabel.backgroundColor = .clear // FIXME: shouldn't crash
             
             if UIDevice.current.userInterfaceIdiom == .pad  {
                 
@@ -485,9 +484,7 @@ extension BlogEditController: UITableViewDataSource {
                 cell.subtitleLabel!.font = Font.celltitle20r
                 cell.msgDateLabel.font = Font.Blog.celldate
             }
-            
-            let dateFormatter = DateFormatter()
-            
+
             if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 
                 let query:PFQuery = PFUser.query()!
@@ -503,7 +500,7 @@ extension BlogEditController: UITableViewDataSource {
                         }
                     }
                 }
-                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                MasterViewController.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
                 
             } else {
                 //firebase
@@ -520,7 +517,7 @@ extension BlogEditController: UITableViewDataSource {
                             cell.customImageView.loadImage(urlString: blogImageUrl!)
                         }
                     })
-                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss +zzzz"
+                MasterViewController.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss +zzzz"
             }
             
             

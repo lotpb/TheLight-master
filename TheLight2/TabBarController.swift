@@ -48,6 +48,24 @@ final class TabBarController: UITabBarController, UISplitViewControllerDelegate 
     
     func setupTabBar() {
 
+        let attrsNormal = [
+            NSAttributedString.Key.foregroundColor: UIColor.label,
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12.0)
+        ]
+        let attrsSelected = [
+            NSAttributedString.Key.foregroundColor: ColorX.twitterBlue,
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12.0)
+        ]
+        UITabBarItem.appearance().setTitleTextAttributes(attrsNormal, for: .normal)
+        UITabBarItem.appearance().setTitleTextAttributes(attrsSelected, for: .selected)
+        //UITabBar.appearance().barStyle = .black
+        UITabBar.appearance().barTintColor = .systemBackground
+        UITabBar.appearance().tintColor = ColorX.twitterBlue
+        UITabBar.appearance().isTranslucent = true
+
+        UITabBar.appearance().layer.borderWidth = 0.0
+        UITabBar.appearance().clipsToBounds = true
+
         let storyboard1 = UIStoryboard(name: "Home", bundle: nil)
         let myTab1 = storyboard1.instantiateViewController(withIdentifier: "homeId")
 
@@ -65,9 +83,11 @@ final class TabBarController: UITabBarController, UISplitViewControllerDelegate 
         let layout6 = UICollectionViewFlowLayout()
         let myTab6 = MeProfileVC(collectionViewLayout: layout6)
 
+        let storyboard7 = UIStoryboard(name: "Chat", bundle: nil)
+        let myTab7 = storyboard7.instantiateViewController(withIdentifier: "chatTabBarId")
+
         let navController1 = UINavigationController(rootViewController: myTab1)
         navController1.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 1)
-        //navController1.tabBarItem.selectedImage = #imageLiteral(resourceName: "home30sel")
         
         let navController2 = UINavigationController(rootViewController: myTab2)
         navController2.tabBarItem = UITabBarItem(title: "Blog", image: UIImage(systemName: "square.and.pencil"), tag: 2)
@@ -83,16 +103,19 @@ final class TabBarController: UITabBarController, UISplitViewControllerDelegate 
 
         let navController6 = UINavigationController(rootViewController: myTab6)
         navController6.tabBarItem = UITabBarItem(title: "Me", image: UIImage(systemName: "person.fill"), tag: 6)
+
+        let navController7 = myTab7
+        navController7.tabBarItem = UITabBarItem(title: "Chat", image: UIImage(systemName: "person.2.fill"), tag: 7)
         
-        viewControllers = [navController1, navController2, navController3, navController4, navController5, navController6]
+        viewControllers = [navController1, navController2, navController3, navController4, navController5, navController6, navController7]
         
         tabBarController?.viewControllers = viewControllers
 
-        /*
-         guard let items = tabBar.items else {return}
-         for item in items{
-         item.imageInsets = .init(top: 2, left: 0, bottom: 1, right: 0)
-         } */
+
+        guard let items = tabBar.items else {return}
+        for item in items{
+            item.imageInsets = .init(top: 8, left: 0, bottom: -8, right: 0)
+        }
     }
 }
 

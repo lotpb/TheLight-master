@@ -45,7 +45,7 @@ final class CreateContactVC: UIViewController, UIImagePickerControllerDelegate, 
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
+        view.endEditing(true)
     }
     
     // create contact

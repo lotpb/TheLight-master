@@ -2,21 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>BGTaskSchedulerPermittedIdentifiers</key>
-	<array>
-		<string>com.PeterBalsamo.apprefresh</string>
-		<string>com.PeterBalsamo.imagefetcher</string>
-	</array>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
-	<key>CFBundleDisplayName</key>
-	<string></string>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIcons</key>
-	<dict/>
-	<key>CFBundleIcons~ipad</key>
-	<dict/>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -24,7 +13,7 @@
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
-	<string>APPL</string>
+	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleURLTypes</key>
@@ -44,32 +33,8 @@
 			</array>
 		</dict>
 	</array>
-	<key>FacebookAppID</key>
-	<string>990654514310679</string>
-	<key>FacebookDisplayName</key>
-	<string>TheLight</string>
-	<key>FirebaseScreenReportingEnabled</key>
-	<false/>
-	<key>LSApplicationCategoryType</key>
-	<string></string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>fbapi</string>
-		<string>fbapi20130214</string>
-		<string>fbapi20130410</string>
-		<string>fbapi20130702</string>
-		<string>fbapi20131010</string>
-		<string>fbapi20131219</string>
-		<string>fbapi20140410</string>
-		<string>fbapi20140116</string>
-		<string>fbapi20150313</string>
-		<string>fbapi20150629</string>
-		<string>fbapi20160328</string>
-		<string>fbauth</string>
-		<string>fb-messenger-share-api</string>
-		<string>fbauth2</string>
-		<string>fbshareextension</string>
-	</array>
+	<key>CFBundleVersion</key>
+	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAllowsArbitraryLoadsInWebContent</key>
@@ -79,38 +44,6 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>BlueTooth</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Can we use your bluetooth?</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>Can we use your calender?</string>
-	<key>NSCameraUsageDescription</key>
-	<string>This app wants to take pictures &amp;amp; videos</string>
-	<key>NSContactsUsageDescription</key>
-	<string>Can we use to your contacts?</string>
-	<key>NSFaceIDUsageDescription</key>
-	<string>This allows you to securely sign into your app.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Can we use your location?</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>TheLight requires access to your location in order to automatically log your drives. Please tap “Allow” to continue using Geotify.</string>
-	<key>NSLocationUsageDescription</key>
-	<string>Can we use your location?</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>If you only allow access to your location while you are using the app, some features may not work in the background</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>This app wants to record sound</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>This app wants to save pictures &amp;amp; videos to your library.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app wants to use your picture &amp;amp; video library.</string>
-	<key>NSRemindersUsageDescription</key>
-	<string>Can we use your reminder?</string>
-	<key>NSSiriUsageDescription</key>
-	<string>Can we use your Siri?</string>
-	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>Can we use your Speech?</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -130,14 +63,6 @@
 			</array>
 		</dict>
 	</dict>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-		<string>fetch</string>
-		<string>location</string>
-		<string>processing</string>
-		<string>remote-notification</string>
-	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -174,5 +99,77 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>FacebookAppID</key>
+	<string>990654514310679</string>
+	<key>FacebookDisplayName</key>
+	<string>TheLight</string>
+	<key>FirebaseScreenReportingEnabled</key>
+	<false/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fbapi20130214</string>
+		<string>fbapi20130410</string>
+		<string>fbapi20130702</string>
+		<string>fbapi20131010</string>
+		<string>fbapi20131219</string>
+		<string>fbapi20140410</string>
+		<string>fbapi20140116</string>
+		<string>fbapi20150313</string>
+		<string>fbapi20150629</string>
+		<string>fbapi20160328</string>
+		<string>fbauth</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
+	<key>FacebookAutoLogAppEventsEnabled</key>
+	<string>TRUE</string>
+	<key>FacebookAdvertiserIDCollectionEnabled</key>
+	<string>TRUE</string>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.PeterBalsamo.apprefresh</string>
+		<string>com.PeterBalsamo.imagefetcher</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>fetch</string>
+		<string>location</string>
+		<string>processing</string>
+	</array>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>BlueTooth</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Can we use your bluetooth?</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Can we use your calender?</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app wants to take pictures &amp;amp; videos</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Can we use to your contacts?</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>This allows you to securely sign into your app.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Can we use your location?</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>TheLight requires access to your location in order to automatically log your drives. Please tap “Allow” to continue using Geotify.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Can we use your location?</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>If you only allow access to your location while you are using the app, some features may not work in the background</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app wants to record sound</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This app wants to save pictures &amp;amp; videos to your library.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app wants to use your picture &amp;amp; video library.</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>Can we use your reminder?</string>
+	<key>NSSiriUsageDescription</key>
+	<string>Can we use your Siri?</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Can we use your Speech?</string>
 </dict>
 </plist>

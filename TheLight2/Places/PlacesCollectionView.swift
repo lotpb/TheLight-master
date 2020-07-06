@@ -63,7 +63,7 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
         super.didReceiveMemoryWarning()
     }
     
-    func setupMenuBar() {
+    private func setupMenuBar() {
         
         view.addSubview(placeMenu)
 
@@ -76,9 +76,9 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
         ])
     }
 
-    func setupCollectionView() {
+    private func setupCollectionView() {
 
-        self.view.addSubview(collectionView!)
+        view.addSubview(collectionView!)
         collectionView?.contentInset = .init(top: 50,left: 0,bottom: 0,right: 0)
         collectionView?.scrollIndicatorInsets = .init(top: 50,left: 0,bottom: 0,right: 0)
         collectionView?.alwaysBounceVertical = true
@@ -87,7 +87,7 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
         collectionView?.register(PlaceFeedCell.self, forCellWithReuseIdentifier: cellId)
     }
     
-    func setupNavigation() {
+    private func setupNavigation() {
         
         navigationItem.title = "MileIQ"
         navigationController?.navigationBar.barTintColor = .systemBackground
@@ -108,7 +108,7 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
 
     @objc func hideBar(notification: NSNotification)  {
         let state = notification.object as! Bool
-        self.navigationController?.setNavigationBarHidden(state, animated: true)
+        navigationController?.setNavigationBarHidden(state, animated: true)
         UIView.animate(withDuration: 0.2, animations: {
             self.tabBarController?.hideTabBarAnimated(hide: state) //added
         }, completion: nil)
@@ -133,7 +133,7 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
     @objc func handleOpen() {
         isMenuOpened = true
         setupTouchGesture()
-        menuController.view.frame = .init(x: -300, y: 0, width: 300, height: self.view.frame.height)
+        menuController.view.frame = .init(x: -300, y: 0, width: 300, height: view.frame.height)
         let windows = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
         windows?.addSubview(menuController.view)
         

@@ -19,13 +19,13 @@ final class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerD
     // MARK: NavigationController Hidden
     private var lastContentOffset: CGFloat = 0.0 //added
     
-    var selectedPin:MKPlacemark? = nil
-    var mapHasCenteredOnce = false
-    var resultSearchController: UISearchController? = nil
-    let locationManager = CLLocationManager()
-    var buttonSize: CGFloat = 0.0
+    private var selectedPin:MKPlacemark? = nil
+    private var mapHasCenteredOnce = false
+    private var resultSearchController: UISearchController? = nil
+    private let locationManager = CLLocationManager()
+    private var buttonSize: CGFloat = 0.0
     
-    lazy var floatingBtn: UIButton = {
+    private let floatingBtn: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .secondarySystemGroupedBackground
         button.setTitle("+", for: .normal)
@@ -37,7 +37,7 @@ final class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerD
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    lazy var floatingZoomBtn: UIButton = {
+    private let floatingZoomBtn: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .secondarySystemGroupedBackground
         button.tintColor = .systemBlue
@@ -71,16 +71,14 @@ final class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerD
         super.viewDidLoad()
         self.extendedLayoutIncludesOpaqueBars = true
 
-        //fixed - remove bottom bar
+        // FIXME: remove bottom bar
         self.splitViewController?.delegate = self
         self.splitViewController?.preferredDisplayMode = .allVisible
 
         setupMap()
         setupNavigation()
         setupSearch()
-        
         floatButton()
-        setupConstraints()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -113,11 +111,11 @@ final class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerD
         // Dispose of any resources that can be recreated.
     }
 
-    func setupMap() {
+    private func setupMap() {
         // Track user location
         self.mapView.delegate = self
         self.mapView.userTrackingMode = .follow
-        self.mapView.alpha = 0.8
+        //self.mapView.alpha = 0.8
         self.mapView.isZoomEnabled = true
         self.mapView.isScrollEnabled = true
         self.mapView.isRotateEnabled = true
@@ -128,7 +126,7 @@ final class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerD
         mapView.pointOfInterestFilter = filter
     }
     
-    func setupSearch() {
+    private func setupSearch() {
 
         let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "LocationSearchTable") as! LocationSearchTable
         resultSearchController = UISearchController(searchResultsController: locationSearchTable)
@@ -136,7 +134,7 @@ final class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerD
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.hidesBackButton = true
         resultSearchController?.searchResultsUpdater = locationSearchTable
-        resultSearchController?.searchBar.placeholder = "Search for places"
+        resultSearchController?.searchBar.placeholder = "Search for places..."
         resultSearchController?.searchBar.isUserInteractionEnabled = true
         resultSearchController?.hidesNavigationBarDuringPresentation = false
         resultSearchController?.obscuresBackgroundDuringPresentation = false
@@ -148,7 +146,7 @@ final class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerD
         locationSearchTable.handleMapSearchDelegate = self
     }
     
-    func setupNavigation() {
+    private func setupNavigation() {
 
         navigationController?.navigationBar.prefersLargeTitles = true
         //navigationController?.navigationBar.tintColor = .white
@@ -158,7 +156,8 @@ final class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerD
         navigationItem.title = "Places"
     }
     
-    func setupConstraints() {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
 
         view.addSubview(floatingBtn)
         view.addSubview(floatingZoomBtn)
@@ -264,7 +263,7 @@ final class MapsearchVC: UIViewController, MKMapViewDelegate, CLLocationManagerD
     @objc func hideBar(notification: NSNotification)  {
         if UIDevice.current.userInterfaceIdiom == .phone  {
             let state = notification.object as! Bool
-            self.navigationController?.setNavigationBarHidden(state, animated: true)
+            navigationController?.setNavigationBarHidden(state, animated: true)
             UIView.animate(withDuration: 0.2, animations: {
                 self.tabBarController?.hideTabBarAnimated(hide: state) //added
             }, completion: nil)

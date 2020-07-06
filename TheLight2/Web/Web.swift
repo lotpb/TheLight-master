@@ -54,17 +54,15 @@ final class Web: UIViewController, UISplitViewControllerDelegate, SFSafariViewCo
             self.extendedLayoutIncludesOpaqueBars = true
         }
         self.splitViewController?.maximumPrimaryColumnWidth = 300
-        //fixed - remove bottom bar
+        // FIXME: - remove bottom bar
         self.splitViewController?.delegate = self
         self.splitViewController?.preferredDisplayMode = .primaryHidden
         
         self.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
         self.navigationItem.leftItemsSupplementBackButton = true
         self.navigationItem.largeTitleDisplayMode = .never
-        
-        //toolBar.barTintColor = .red
+
         toolBar.tintColor = .systemGray
-        
         backButton.isEnabled = false
         forwardButton.isEnabled = false
         recentPostsButton.isEnabled = false
@@ -76,23 +74,18 @@ final class Web: UIViewController, UISplitViewControllerDelegate, SFSafariViewCo
         super.viewDidAppear(animated)
         
         self.tabBarController?.tabBar.isHidden = false
-        
         webView.addObserver(self, forKeyPath: "loading", options: .new, context: nil)
         webView.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
-        
-        setupConstraints()
         configureWeb()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         setMainNavItems()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -121,7 +114,8 @@ final class Web: UIViewController, UISplitViewControllerDelegate, SFSafariViewCo
         webView.allowsBackForwardNavigationGestures = true
     }
     
-    func setupConstraints() {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
 
         view.insertSubview(webView, belowSubview: progressView)
         webView.translatesAutoresizingMaskIntoConstraints = false

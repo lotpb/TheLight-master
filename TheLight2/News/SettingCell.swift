@@ -33,14 +33,14 @@ class SettingCell: CollectionViewCell {
         }
     }
     
-    let nameLabel: UILabel = {
+    private let nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Setting"
         label.font = UIFont.systemFont(ofSize: 13)
         return label
     }()
     
-    let iconImageView: UIImageView = {
+    private let iconImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "gear"))
         imageView.contentMode = .scaleAspectFill
         return imageView

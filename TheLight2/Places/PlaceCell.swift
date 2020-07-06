@@ -14,19 +14,19 @@ import MapKit
 @available(iOS 13.0, *)
 class PlaceCell: UICollectionViewCell {
     
-    //let geoCoder = CLGeocoder()
-    var destLocation: CLLocation? // for distance calculation
-    var startLocation: CLLocation? // for distance calculation
-    var distance = 0.0
-    var selectedPin:MKPlacemark? = nil
-    var directionsArray: [MKDirections] = []
-    var route: MKRoute!
-    let defaults = UserDefaults.standard
-    var startCoordinates = CLLocationCoordinate2D()
-    var endCoordinates = CLLocationCoordinate2D()
+    private var destLocation: CLLocation? // for distance calculation
+    private var startLocation: CLLocation? // for distance calculation
+    private var distance = 0.0
+    private var selectedPin:MKPlacemark? = nil
+    private var directionsArray: [MKDirections] = []
+    private var route: MKRoute!
+    private let defaults = UserDefaults.standard
 
-    var cityStart: String?
-    var cityDest: String?
+    private var cityStart: String?
+    private var cityDest: String?
+
+    public var startCoordinates = CLLocationCoordinate2D()
+    public var endCoordinates = CLLocationCoordinate2D()
 
     var mapStart: VisitModel? {
     ///var mapStart: Location? {
@@ -36,7 +36,7 @@ class PlaceCell: UICollectionViewCell {
             //titleLabelnew.text = firstWord[2].removingWhitespaces()
             //let date2 = dateFormatter.date(from: (mapStart?.dateString)!)
 
-            //get city data
+            // Get city data
             let location = CLLocation(latitude: mapStart!.latitude, longitude: mapStart!.longitude)
             FetchCity(location) { code in
                 if let code = code {
@@ -44,43 +44,16 @@ class PlaceCell: UICollectionViewCell {
                 }
             }
 
-            //dateFormatter.timeStyle = .medium
-            //dateFormatter.dateStyle = .medium
-            //dateFormatter.dateFormat = "h:mm a"
-            dateFormatter.timeZone = .current
-            dateFormatter.locale = Locale.current
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-            ///dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-            //dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-            //dateFormatter.isLenient = true
-            //dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss +zz:zz"
-
-
-            let date = mapStart!.arrivaldate
-            let date1 = dateFormatter.date(from: date)
-
-            dateFormatter.timeStyle = .short
-            dateFormatter.dateStyle = .none
-            titleTimeLabel.text = dateFormatter.string(from: date1 ?? Date())
-            //titleTimeLabel.text = String(format: "%@", dateFormatter.string(from: date1!)) as String
-
-            //let date1 = mapStart!.arrivaldate
-
-            //let date1 = dateFormatter.date(from: "\(mapStart!.arrivaldate)")
-            print(date)
-
+            let dateStr = mapStart!.arrivaldate
+            let date = DateUtils.dateFromString(string: dateStr, format: "yyyy/MM/dd HH:mm:ss Z")
+            titleTimeLabel.text = DateUtils.stringFromDate(date: date, format: "h:mm a")
 
             let calendar = Calendar.current
-            let time = calendar.dateComponents([.month,.weekday,.day,.hour,.minute,.second], from: date1 ?? Date()) //cell header
-            dayLabel.text = dateFormatter.shortWeekdaySymbols![time.weekday!-1]
+            let time = calendar.dateComponents([.month,.weekday,.day,.hour,.minute,.second], from: date) //cell header
+            dayLabel.text = MasterViewController.dateFormatter.shortWeekdaySymbols![time.weekday!-1]
             dayTextLabel.text = "\(time.day!)"
-            
-            //dateFormatter.timeStyle = .short
-            //dateFormatter.dateStyle = .none
-            //titleTimeLabel.text = dateFormatter.string(from: date1 ?? Date())
 
-            
-            //mapView
+            // mapView
             mapViewStart.removeAnnotations(mapViewStart.annotations)
             startCoordinates = CLLocationCoordinate2D(latitude: mapStart!.latitude, longitude: mapStart!.longitude)
             let span = MKCoordinateSpan(latitudeDelta: 0.008, longitudeDelta: 0.008)
@@ -97,6 +70,7 @@ class PlaceCell: UICollectionViewCell {
             startLocation = getCenterLocation(for: mapViewStart)
         }
     }
+    
     var mapDest: VisitModel? {
     //var mapDest: Location? {
         didSet {
@@ -107,15 +81,10 @@ class PlaceCell: UICollectionViewCell {
                     self.subtitleLabel.text = code
                 }
             }
-            dateFormatter.timeStyle = .medium
-            dateFormatter.dateStyle = .medium
-            //let date2 = dateFormatter.date(from: (mapDest?.dateString)!)
-            let date1 = mapDest?.arrivaldate
 
-            dateFormatter.timeStyle = .short
-            dateFormatter.dateStyle = .none
-            //subtitleTimeLabel.text = dateFormatter.string(from: date2!)
-            subtitleTimeLabel.text = date1
+            let dateStr = mapDest?.arrivaldate
+            let date = DateUtils.dateFromString(string: dateStr!, format: "yyyy/MM/dd HH:mm:ss Z")
+            subtitleTimeLabel.text = DateUtils.stringFromDate(date: date, format: "h:mm a")
             
             mapViewDest.removeAnnotations(mapViewStart.annotations)
             endCoordinates = CLLocationCoordinate2D(latitude: mapDest!.latitude, longitude: mapDest!.longitude)
@@ -148,7 +117,7 @@ class PlaceCell: UICollectionViewCell {
         }
     }
     
-    func createDirectionsRequest(from coordinate: CLLocationCoordinate2D, destination: CLLocationCoordinate2D) -> MKDirections.Request {
+    private func createDirectionsRequest(from coordinate: CLLocationCoordinate2D, destination: CLLocationCoordinate2D) -> MKDirections.Request {
         //let destinationCoordinate       = getCenterLocation(for: mapView).coordinate
         let startingLocation            = MKPlacemark(coordinate: coordinate)
         let destination                 = MKPlacemark(coordinate: destination)
@@ -163,13 +132,13 @@ class PlaceCell: UICollectionViewCell {
         return request
     }
     
-    func resetMapView(withNew directions: MKDirections) {
+    private func resetMapView(withNew directions: MKDirections) {
         mapViewStart.removeOverlays(mapViewStart.overlays)
         directionsArray.append(directions)
         let _ = directionsArray.map { $0.cancel() }
     }
     
-    func showRoute(_ response: MKDirections.Response) {
+    private func showRoute(_ response: MKDirections.Response) {
         let mile = (defaults.object(forKey: "mileIQKey") as? String)!
         let temp: MKRoute = response.routes.first! as MKRoute
         self.route = temp
@@ -177,14 +146,14 @@ class PlaceCell: UICollectionViewCell {
         self.mileLabel.text = String(format:"%0.1f",route.distance/1609.344) as String
     }
     
-    func getCenterLocation(for mapView: MKMapView) -> CLLocation {
+    private func getCenterLocation(for mapView: MKMapView) -> CLLocation {
         let latitude = self.mapViewDest.centerCoordinate.latitude
         let longitude = self.mapViewDest.centerCoordinate.longitude
         
         return CLLocation(latitude: latitude, longitude: longitude)
     }
     
-    lazy var mapViewView: UIView = {
+    private let mapViewView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         view.layer.borderColor = UIColor.opaqueSeparator.cgColor
@@ -194,22 +163,22 @@ class PlaceCell: UICollectionViewCell {
         return view
     }()
     
-    var mapViewStart: MKMapView = {
-        let view = MKMapView()
-        view.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)   
-        view.layer.borderWidth = 0.5
-        view.layer.masksToBounds = true
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+    private let mapViewStart: MKMapView = {
+        let map = MKMapView()
+        map.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)   
+        map.layer.borderWidth = 0.5
+        map.layer.masksToBounds = true
+        map.translatesAutoresizingMaskIntoConstraints = false
+        return map
     }()
     
-    var mapViewDest: MKMapView = {
-        let view = MKMapView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+    private let mapViewDest: MKMapView = {
+        let map = MKMapView()
+        map.translatesAutoresizingMaskIntoConstraints = false
+        return map
     }()
     
-    var toolBar: UIToolbar = {
+    private let toolBar: UIToolbar = {
         let toolBar = UIToolbar()
 
         toolBar.barStyle = .default
@@ -223,7 +192,7 @@ class PlaceCell: UICollectionViewCell {
         return toolBar
     }()
     
-    let mileLabel: UILabel = {
+    public let mileLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "0.0"
@@ -231,7 +200,7 @@ class PlaceCell: UICollectionViewCell {
         return label
     }()
     
-    var miletextLabel: UILabel = {
+    public let miletextLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "MILES"
@@ -239,7 +208,7 @@ class PlaceCell: UICollectionViewCell {
         return label
     }()
     
-    let dayLabel: UILabel = {
+    public let dayLabel: UILabel = {
         let label = UILabel()
         label.text = "Sat"
         label.numberOfLines = 1
@@ -253,7 +222,7 @@ class PlaceCell: UICollectionViewCell {
         return label
     }()
     
-    let dayTextLabel: UILabel = {
+    public let dayTextLabel: UILabel = {
         let label = UILabel()
         label.text = "8"
         label.numberOfLines = 1
@@ -267,7 +236,7 @@ class PlaceCell: UICollectionViewCell {
         return label
     }()
     
-    let costLabel: UILabel = {
+    public let costLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "$0.00"
@@ -276,7 +245,7 @@ class PlaceCell: UICollectionViewCell {
         return label
     }()
     
-    let costTextLabel: UILabel = {
+    public let costTextLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "POTENTAL"
@@ -285,7 +254,7 @@ class PlaceCell: UICollectionViewCell {
         return label
     }()
     
-    lazy var titleView: UIView = {
+    public let titleView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray6
         view.layer.borderColor = UIColor.systemGray6.cgColor
@@ -295,7 +264,7 @@ class PlaceCell: UICollectionViewCell {
         return view
     }()
     
-    lazy var subtitleView: UIView = {
+    public let subtitleView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray6
         view.layer.borderColor = UIColor.systemGray6.cgColor
@@ -305,7 +274,7 @@ class PlaceCell: UICollectionViewCell {
         return view
     }()
     
-    let titleLabelnew: UILabel = {
+    public let titleLabelnew: UILabel = {
         let label = UILabel()
         label.text = ""
         label.numberOfLines = 1
@@ -314,26 +283,7 @@ class PlaceCell: UICollectionViewCell {
         return label
     }()
     
-    let titleTimeLabel: UILabel = {
-        let label = UILabel()
-        label.text = ""
-        label.numberOfLines = 1
-        label.backgroundColor = .clear
-        label.textAlignment = .right
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let subtitleLabel: UILabel = {
-        let label = UILabel()
-        label.text = ""
-        label.numberOfLines = 1
-        label.backgroundColor = .clear
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let subtitleTimeLabel: UILabel = {
+    public let titleTimeLabel: UILabel = {
         let label = UILabel()
         label.text = ""
         label.numberOfLines = 1
@@ -343,7 +293,26 @@ class PlaceCell: UICollectionViewCell {
         return label
     }()
     
-    let titleBtn: UIButton = {
+    public let subtitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        label.numberOfLines = 1
+        label.backgroundColor = .clear
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    public let subtitleTimeLabel: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        label.numberOfLines = 1
+        label.backgroundColor = .clear
+        label.textAlignment = .right
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let titleBtn: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
@@ -352,21 +321,13 @@ class PlaceCell: UICollectionViewCell {
         return button
     }()
     
-    let subtitleBtn: UIButton = {
+    private let subtitleBtn: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
         button.tintColor = .red
         button.setImage(UIImage(systemName: "smallcircle.fill.circle.fill"), for: .normal)
         return button
-    }()
-    
-    public let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .medium
-        formatter.timeZone = .current
-        return formatter
     }()
     
     override init(frame: CGRect) {
@@ -392,18 +353,18 @@ class PlaceCell: UICollectionViewCell {
 
         //toolBar
 
-        //toolBar.frame = CGRect(x: 0,y: 0,width: self.bounds.width,height: 50)
-//        var homeButton, infoButton, vehicleButton, doneButton, fixedSpace, flexibleSpace: UIBarButtonItem!
-//
-//        homeButton = UIBarButtonItem(image: UIImage(systemName: "mappin.and.ellipse"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
-//        infoButton = UIBarButtonItem(image: UIImage(systemName: "info.circle"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
-//        vehicleButton = UIBarButtonItem(image: UIImage(systemName: "car.fill"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
-//        doneButton = UIBarButtonItem(image: UIImage(systemName: "trash"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
-//        fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-//        fixedSpace.width = 20.0
-//        flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-//
-//        toolBar.items = [homeButton, fixedSpace, infoButton, fixedSpace, vehicleButton, flexibleSpace, doneButton]
+        toolBar.frame = CGRect(x: 0,y: 0,width: self.bounds.width,height: 50)
+        var homeButton, infoButton, vehicleButton, doneButton, fixedSpace, flexibleSpace: UIBarButtonItem!
+
+        homeButton = UIBarButtonItem(image: UIImage(systemName: "mappin.and.ellipse"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
+        infoButton = UIBarButtonItem(image: UIImage(systemName: "info.circle"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
+        vehicleButton = UIBarButtonItem(image: UIImage(systemName: "car.fill"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
+        doneButton = UIBarButtonItem(image: UIImage(systemName: "trash"), style: .plain, target: nil, action: #selector(PlacesCollectionView.alertButton))
+        fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        fixedSpace.width = 20.0
+        flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+
+        toolBar.items = [homeButton, fixedSpace, infoButton, fixedSpace, vehicleButton, flexibleSpace, doneButton]
         
         addSubview(mapViewView)
         addSubview(mileLabel)
@@ -469,7 +430,6 @@ class PlaceCell: UICollectionViewCell {
             mapViewView.heightAnchor.constraint(equalToConstant: height),
 
             //right map
-
             mapViewStart.topAnchor.constraint(equalTo: mapViewView.topAnchor, constant: 0),
             mapViewStart.trailingAnchor.constraint(equalTo: mapViewView.trailingAnchor, constant: 0),
             mapViewStart.bottomAnchor.constraint(equalTo: mapViewView.bottomAnchor, constant: 0),
@@ -560,52 +520,6 @@ extension PlaceCell: MKMapViewDelegate {
         }
         return pinView
     }
-
-    
-
-    
-    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-
-//        let startcenter = getCenterLocation(for: mapViewStart)
-//        guard let startLocation = self.startLocation else { return }
-//
-//        guard startcenter.distance(from: startLocation) > 50 else { return }
-//        self.startLocation = startcenter
-//
-//        geoCoder.cancelGeocode()
-//        geoCoder.reverseGeocodeLocation(startcenter) { [weak self] (placemarks, error) in
-//            guard let self = self else { return }
-//            if let _ = error {return}
-//            guard let placemark = placemarks?.first else {return}
-//
-//            self.cityStart = placemark.locality ?? ""
-//
-//            DispatchQueue.main.async {
-//                //self.subtitleLabel.text = "\(self.streetNumber ?? "") \(self.streetName ?? "") \(self.cityName ?? "")"
-//                self.titleLabelnew.text = "\(self.cityStart ?? "")"
-//            }
-//        }
-//
-//        let destcenter = getCenterLocation(for: mapViewDest)
-//        guard let destLocation = self.destLocation else { return }
-//
-//        guard destcenter.distance(from: destLocation) > 50 else { return }
-//        self.destLocation = destcenter
-//
-//        //geoCoder1.cancelGeocode()
-//        geoCoder.reverseGeocodeLocation(destcenter) { [weak self] (placemarks, error) in
-//            guard let self = self else { return }
-//            if let _ = error {return}
-//            guard let placemark = placemarks?.first else {return}
-//
-//            self.cityDest = placemark.locality ?? ""
-//
-//            DispatchQueue.main.async {
-//                //self.subtitleLabel.text = "\(self.streetNumber ?? "") \(self.streetName ?? "") \(self.cityName ?? "")"
-//                self.subtitleLabel.text = "\(self.cityDest ?? "")"
-//            }
-//        }
-    }
     
     //Launches driving directions with AppleMaps //dont work
     @objc func getAppleMaps() {
@@ -616,5 +530,21 @@ extension PlaceCell: MKMapViewDelegate {
             let launchOptions = [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving]
             mapItem.openInMaps(launchOptions: launchOptions)
         }
+    }
+}
+
+class DateUtils {
+    class func dateFromString(string: String, format: String) -> Date {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.dateFormat = format
+        return formatter.date(from: string)!
+    }
+
+    class func stringFromDate(date: Date, format: String) -> String {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.dateFormat = format
+        return formatter.string(from: date)
     }
 }

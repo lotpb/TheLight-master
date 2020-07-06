@@ -1,29 +1,35 @@
-platform :ios, '13.0'
+platform :ios, '14.0'
 
 target 'TheLight2' do
   use_frameworks!
 
+  # Parse
   pod 'Parse', '<1.17.3'
+  # Firebase
   pod 'Firebase'
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
   pod 'Firebase/Database'
   pod 'Firebase/Storage'
   pod 'FirebaseFirestoreSwift'
-
   pod 'FirebaseInstanceID'
-  pod 'FirebaseAnalytics'
+  pod 'Firebase/Analytics'
   pod 'Firebase/Performance'
+  pod 'Firebase/Crashlytics'
+
+  # Facebook
   pod 'FBSDKCoreKit'
   pod 'FBSDKLoginKit'
-  pod 'Crashlytics'
+  # Google Sign In
+  pod 'GoogleSignIn'
 
-  pod 'FirebaseUI/Facebook'
-  pod 'FirebaseUI/Google'
-
-  pod 'SwiftKeychainWrapper'
+  #pod 'SwiftKeychainWrapper'
   pod 'YoutubePlayerView'
   pod 'GeoFire', :git => 'https://github.com/firebase/geofire-objc.git'
+  # Chat App
+  pod 'MessageKit'
+  pod 'JGProgressHUD'
+  pod 'RealmSwift'
 
 end
 

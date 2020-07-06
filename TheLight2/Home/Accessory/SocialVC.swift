@@ -19,8 +19,8 @@ final class SocialVC: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.extendedLayoutIncludesOpaqueBars = true
-        self.view.backgroundColor = .secondarySystemGroupedBackground
-        self.noteTextview.backgroundColor = .systemBackground
+        view.backgroundColor = .secondarySystemGroupedBackground
+        noteTextview.backgroundColor = .systemBackground
         configureNoteTextView()
         noteTextview.delegate = self
         
@@ -58,7 +58,7 @@ final class SocialVC: UIViewController, UITextViewDelegate {
         
         let share = [self.noteTextview.text!, url] as [Any]
         let activityViewController = UIActivityViewController(activityItems: share, applicationActivities: nil)
-        activityViewController.popoverPresentationController?.sourceView = self.view
+        activityViewController.popoverPresentationController?.sourceView = view
         self.present(activityViewController, animated: true)
     }
 

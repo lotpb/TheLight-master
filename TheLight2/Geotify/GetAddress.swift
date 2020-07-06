@@ -14,18 +14,17 @@ import MapKit
 final class GetAddress: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView?
+    public var thoroughfare: String?
+    public var subThoroughfare: String?
+    public var locality: String?
+    public var sublocality: String?
+    public var postalCode: String?
+    public var administrativeArea: String?
+    public var subAdministrativeArea: String?
+    public var country: String?
+    public var ISOcountryCode: String?
     // MARK: NavigationController Hidden
     private var lastContentOffset: CGFloat = 0.0
-    
-    var thoroughfare: String?
-    var subThoroughfare: String?
-    var locality: String?
-    var sublocality: String?
-    var postalCode: String?
-    var administrativeArea: String?
-    var subAdministrativeArea: String?
-    var country: String?
-    var ISOcountryCode: String?
     
     
     override func viewDidLoad() {
@@ -37,18 +36,18 @@ final class GetAddress: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
         
         // MARK: NavigationController Hidden
         NotificationCenter.default.addObserver(self, selector: #selector(GetAddress.hideBar(notification:)), name: NSNotification.Name("hide"), object: nil)
         
-        self.navigationController?.navigationBar.tintColor = UIColor.white
+        navigationController?.navigationBar.tintColor = UIColor.white
         setMainNavItems()
     }
     
@@ -56,7 +55,7 @@ final class GetAddress: UIViewController, UITableViewDelegate, UITableViewDataSo
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = true
+        tabBarController?.tabBar.isHidden = true
     }
     
     
@@ -69,19 +68,19 @@ final class GetAddress: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         navigationItem.title = "Locate Address"
         if UIDevice.current.userInterfaceIdiom == .pad  {
-            self.navigationItem.largeTitleDisplayMode = .always
+            navigationItem.largeTitleDisplayMode = .always
         } else {
-            self.navigationItem.largeTitleDisplayMode = .never
+            navigationItem.largeTitleDisplayMode = .never
         }
     }
     
-    func setupTableView() {
+    private func setupTableView() {
         
-        self.tableView!.delegate = self
-        self.tableView!.dataSource = self
-        self.tableView!.rowHeight = 65
-        self.tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
-        self.tableView!.tableFooterView = UIView(frame: .zero)
+        tableView!.delegate = self
+        tableView!.dataSource = self
+        tableView!.rowHeight = 65
+        tableView!.backgroundColor = UIColor(white:0.90, alpha:1.0)
+        tableView!.tableFooterView = UIView(frame: .zero)
     }
     
     // MARK: - NavigationController Hidden
@@ -89,7 +88,7 @@ final class GetAddress: UIViewController, UITableViewDelegate, UITableViewDataSo
     @objc func hideBar(notification: NSNotification)  {
         if UIDevice.current.userInterfaceIdiom == .phone  {
             let state = notification.object as! Bool
-            self.navigationController?.setNavigationBarHidden(state, animated: true)
+            navigationController?.setNavigationBarHidden(state, animated: true)
             UIView.animate(withDuration: 0.2, animations: {
                 self.tabBarController?.hideTabBarAnimated(hide: state) //added
             }, completion: nil)
@@ -97,7 +96,7 @@ final class GetAddress: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if (self.lastContentOffset > scrollView.contentOffset.y) {
+        if (lastContentOffset > scrollView.contentOffset.y) {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: false)
         } else {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: true)
@@ -105,12 +104,11 @@ final class GetAddress: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        self.lastContentOffset = scrollView.contentOffset.y;
+        lastContentOffset = scrollView.contentOffset.y;
     }
     
-    
     // MARK: - Table View
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }

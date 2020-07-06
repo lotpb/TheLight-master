@@ -22,11 +22,11 @@ final class Geotification: NSObject, Codable, MKAnnotation {
         case latitude, longitude, radius, identifier, note, eventType
     }
     
-    var coordinate: CLLocationCoordinate2D
-    var radius: CLLocationDistance
-    var identifier: String
-    var note: String
-    var eventType: EventType
+    public var coordinate: CLLocationCoordinate2D
+    public var radius: CLLocationDistance
+    public var identifier: String
+    public var note: String
+    public var eventType: EventType
     
     var title: String? {
         if note.isEmpty {

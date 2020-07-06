@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1100"
+   LastUpgradeVersion = "1200"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "AF98971A1ED2146B00D14D7D"
-               BuildableName = "TheLight2.app"
+               BuildableName = "TheLight.app"
                BlueprintName = "TheLight2"
                ReferencedContainer = "container:TheLight2.xcodeproj">
             </BuildableReference>
@@ -56,15 +56,6 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       enableAddressSanitizer = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AF98971A1ED2146B00D14D7D"
-            BuildableName = "TheLight2.app"
-            BlueprintName = "TheLight2"
-            ReferencedContainer = "container:TheLight2.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <Testables>
       </Testables>
    </TestAction>
@@ -84,7 +75,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AF98971A1ED2146B00D14D7D"
-            BuildableName = "TheLight2.app"
+            BuildableName = "TheLight.app"
             BlueprintName = "TheLight2"
             ReferencedContainer = "container:TheLight2.xcodeproj">
          </BuildableReference>
@@ -127,7 +118,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AF98971A1ED2146B00D14D7D"
-            BuildableName = "TheLight2.app"
+            BuildableName = "TheLight.app"
             BlueprintName = "TheLight2"
             ReferencedContainer = "container:TheLight2.xcodeproj">
          </BuildableReference>

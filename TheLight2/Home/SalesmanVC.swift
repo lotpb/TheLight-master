@@ -24,16 +24,16 @@ final class SalesmanVC: UIViewController {
     private let searchScope = ["salesman", "salesNo", "active"]
     
     //firebase
-    var saleslist = [SalesModel]()
-    var activeCount: Int?
-    var defaults = UserDefaults.standard
+    private var saleslist = [SalesModel]()
+    private var activeCount: Int?
+    private var defaults = UserDefaults.standard
     //parse
-    var _feedItems = NSMutableArray()
-    var _feedheadItems = NSMutableArray()
+    private var _feedItems = NSMutableArray()
+    private var _feedheadItems = NSMutableArray()
     
-    var isFormStat = false
-    var selectedImage: UIImage?
-    var pasteBoard = UIPasteboard.general
+    private var isFormStat = false
+    private var selectedImage: UIImage?
+    private var pasteBoard = UIPasteboard.general
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -52,20 +52,20 @@ final class SalesmanVC: UIViewController {
         setupNavigation()
         loadData()
         setupTableView()
-        self.tableView!.addSubview(self.refreshControl)
+        tableView!.addSubview(refreshControl)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
         
         // MARK: NavigationController Hidden
         NotificationCenter.default.addObserver(self, selector: #selector(SalesmanVC.hideBar(notification:)), name: NSNotification.Name("hide"), object: nil)
@@ -82,7 +82,7 @@ final class SalesmanVC: UIViewController {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = true
+        tabBarController?.tabBar.isHidden = true
     }
     
     private func setupNavigation() {
@@ -104,16 +104,16 @@ final class SalesmanVC: UIViewController {
     
     func setupTableView() {
         // MARK: - TableHeader
-        self.tableView?.register(HeaderViewCell.self, forCellReuseIdentifier: "Header")
+        tableView?.register(HeaderViewCell.self, forCellReuseIdentifier: "Header")
         
-        self.tableView!.delegate = self
-        self.tableView!.dataSource = self
-        self.tableView!.sizeToFit()
-        self.tableView!.clipsToBounds = true
+        tableView!.delegate = self
+        tableView!.dataSource = self
+        tableView!.sizeToFit()
+        tableView!.clipsToBounds = true
         let bgView = UIView()
         bgView.backgroundColor = .secondarySystemGroupedBackground
         tableView!.backgroundView = bgView
-        self.tableView!.tableFooterView = UIView(frame: .zero)
+        tableView!.tableFooterView = UIView(frame: .zero)
 
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
         resultsController.tableView.backgroundColor = ColorX.LGrayColor
@@ -128,7 +128,7 @@ final class SalesmanVC: UIViewController {
     @objc func hideBar(notification: NSNotification)  {
         if UIDevice.current.userInterfaceIdiom == .phone  {
             let state = notification.object as! Bool
-            self.navigationController?.setNavigationBarHidden(state, animated: true)
+            navigationController?.setNavigationBarHidden(state, animated: true)
             UIView.animate(withDuration: 0.2, animations: {
                 self.tabBarController?.hideTabBarAnimated(hide: state) //added
             }, completion: nil)
@@ -136,7 +136,7 @@ final class SalesmanVC: UIViewController {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if (self.lastContentOffset > scrollView.contentOffset.y) {
+        if (lastContentOffset > scrollView.contentOffset.y) {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: false)
         } else {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: true)
@@ -144,14 +144,14 @@ final class SalesmanVC: UIViewController {
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        self.lastContentOffset = scrollView.contentOffset.y;
+        lastContentOffset = scrollView.contentOffset.y;
     }
 
     // MARK: - Refresh
     @objc func refreshData(_ sender: AnyObject) {
-        saleslist.removeAll() //fix
+        saleslist.removeAll() // FIXME: shouldn't crash
         loadData()
-        self.refreshControl.endRefreshing()
+        refreshControl.endRefreshing()
     }
     
     // MARK: - Button
@@ -282,7 +282,7 @@ final class SalesmanVC: UIViewController {
                     VC.frm13 = filteredTitles[indexPath].salesman
                     VC.imageUrl = filteredTitles[indexPath].imageUrl
                 } else {
-                    let indexPath = self.tableView!.indexPathForSelectedRow!.row
+                    let indexPath = tableView!.indexPathForSelectedRow!.row
                     
                     if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         VC.objectId = (_feedItems[indexPath] as AnyObject).value(forKey: "objectId") as? String
@@ -447,7 +447,7 @@ extension SalesmanVC: UITableViewDataSource {
                 header.myLabel3.text = String(format: "%@%d", "Event\n", 0)
             }
             header.contentView.backgroundColor = .systemPurple//Color.Table.labelColor
-            self.tableView!.tableHeaderView = nil //header.header
+            tableView.tableHeaderView = nil //header.header
             
             return header.contentView
         } else {
@@ -471,9 +471,8 @@ extension SalesmanVC: UITableViewDelegate {
         }
     }
     
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
     }
     
     internal func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

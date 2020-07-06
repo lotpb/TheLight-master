@@ -27,67 +27,68 @@ final class MapViewVC: UIViewController {
         return cardVisible ? .collapsed : .expanded
     }
 
-    var cardMapController: CardMapController!
-    var visualEffectView: UIVisualEffectView!
-
-    var endCardHeight:CGFloat = 0 //700
-    var startCardHeight:CGFloat = 0
-
-    var cardVisible = false
-    var runningAnimations = [UIViewPropertyAnimator]()
-    var animationProgressWhenInterrupted:CGFloat = 0
-    //--------------------------------------------------------------------------------
-
-    var formController : String?
-    
-    let locationManager = CLLocationManager()
-    let regionInMeters: Double = 10000
-    var previousLocation: CLLocation?
-    let geoCoder = CLGeocoder()
-    var directionsArray: [MKDirections] = []
-
-    var dest: String?
-    var startPoint: String?
-
-    var stepCounter = 0
-    var steps = [MKRoute.Step]()
-    var route: MKRoute!
-    var allSteps : String?
+    public var formController : String?
     //placesFeedCell
-    var startCoordinates: CLLocationCoordinate2D?
-    var endCoordinates: CLLocationCoordinate2D?
+    public var startCoordinates: CLLocationCoordinate2D?
+    public var endCoordinates: CLLocationCoordinate2D?
+
+    public var mapaddress : NSString?
+    public var mapcity : NSString?
+    public var mapstate : NSString?
+    public var mapzip : NSString?
+
+    private var cardMapController: CardMapController!
+    private var visualEffectView: UIVisualEffectView!
+
+    private var endCardHeight:CGFloat = 0 //700
+    private var startCardHeight:CGFloat = 0
+
+    private var cardVisible = false
+    private var runningAnimations = [UIViewPropertyAnimator]()
+    private var animationProgressWhenInterrupted:CGFloat = 0
+    //--------------------------------------------------------------------------------
+    
+    private let locationManager = CLLocationManager()
+    private let regionInMeters: Double = 10000
+    private var previousLocation: CLLocation?
+    private let geoCoder = CLGeocoder()
+    private var directionsArray: [MKDirections] = []
+
+    private var destStr: String?
+    private var startPoint: String?
+    private var startStr: String?
+
+    private var stepCounter = 0
+    private var steps = [MKRoute.Step]()
+    private var route: MKRoute!
+    private var allSteps : String?
     
     // MARK: NavigationController Hidden
     private var lastContentOffset: CGFloat = 0.0
     
-    let celllabel1 = UIFont.systemFont(ofSize: 18, weight: .medium)
-    let cellsteps = UIFont.systemFont(ofSize: 18, weight: .light)
-
-    var mapaddress : NSString?
-    var mapcity : NSString?
-    var mapstate : NSString?
-    var mapzip : NSString?
+    private let celllabel1 = UIFont.systemFont(ofSize: 18, weight: .medium)
+    private let cellsteps = UIFont.systemFont(ofSize: 18, weight: .light)
     //var locationManager: CLLocationManager!
-    var annotationPoint: MKPointAnnotation!
-    var buttonSize: CGFloat = 0.0
-    var selectedPin:MKPlacemark? = nil
+    private var annotationPoint: MKPointAnnotation!
+    private var buttonSize: CGFloat = 0.0
+    private var selectedPin:MKPlacemark? = nil
     
-    var routeviewHeight: CGFloat!
-    let speechSynthesizer = AVSpeechSynthesizer()
+    private var routeviewHeight: CGFloat!
+    private let speechSynthesizer = AVSpeechSynthesizer()
     
-    var activityIndicator: UIActivityIndicatorView = {
+    private var activityIndicator: UIActivityIndicatorView = {
         let aiv = UIActivityIndicatorView(style: .medium)
         aiv.hidesWhenStopped = true
         return aiv
     }()
     
-    lazy var mapView: MKMapView = {
-        let view = MKMapView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+    private let mapView: MKMapView = {
+        let map = MKMapView()
+        map.translatesAutoresizingMaskIntoConstraints = false
+        return map
     }()
 
-    lazy var titleBtn: UIButton = {
+    private let titleBtn: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Distance", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 18)
@@ -100,7 +101,7 @@ final class MapViewVC: UIViewController {
         return button
     }()
 
-    let userImageview: CustomImageView = { //firebase
+    private let userImageview: CustomImageView = { //firebase
         let imageView = CustomImageView()
         imageView.isUserInteractionEnabled = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -110,7 +111,7 @@ final class MapViewVC: UIViewController {
         return imageView
     }()
 
-    lazy var floatingSearchBtn: UIButton = {
+    private let floatingSearchBtn: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = UIColor.white.withAlphaComponent(0.8)
         button.tintColor = .black
@@ -122,7 +123,7 @@ final class MapViewVC: UIViewController {
         return button
     }()
     
-    lazy var floatingBtn: UIButton = {
+    private let floatingBtn: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = UIColor.white.withAlphaComponent(0.8)
         button.setTitle("+", for: .normal)
@@ -135,7 +136,7 @@ final class MapViewVC: UIViewController {
         return button
     }()
     
-    var floatingZoomBtn: UIButton = {
+    private let floatingZoomBtn: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = UIColor.white.withAlphaComponent(0.8)
         button.tintColor = .black
@@ -186,12 +187,12 @@ final class MapViewVC: UIViewController {
 
         self.extendedLayoutIncludesOpaqueBars = true
 
+        setupContraints()
         floatButton()
         setupNavigationButtons()
         setupUserImage()
         addActivityIndicator()
 
-        setupConstraints()
         if !(self.formController == "MileIQ") {
             checkLocationServices()
         }
@@ -248,33 +249,32 @@ final class MapViewVC: UIViewController {
         navigationItem.title = "Map"
     }
     
-    func setupMap() {
+    private func setupMap() {
         
-        self.mapView.delegate = self
-        if !(self.formController == "MileIQ") {
-            self.mapView.userTrackingMode = .follow //.followWithHeading
+        mapView.delegate = self
+        if !(formController == "MileIQ") {
+            mapView.userTrackingMode = .follow //.followWithHeading
         }
-        self.mapView.alpha = 0.8
-        self.mapView.isZoomEnabled = true
-        self.mapView.isScrollEnabled = true
-        self.mapView.isRotateEnabled = true
-        self.mapView.showsCompass = true
-        self.mapView.showsScale = true
-
-        //self.visualEffectView.removeFromSuperview() //fix
+        mapView.alpha = 0.8
+        mapView.isZoomEnabled = true
+        mapView.isScrollEnabled = true
+        mapView.isRotateEnabled = true
+        mapView.showsCompass = true
+        mapView.showsScale = true
+        //self.visualEffectView.removeFromSuperview() // FIXME: shouldn't crash
     }
     
-    func setupForm() {
+    private func setupForm() {
         self.allSteps = ""
-        self.cardMapController.textView.font = cellsteps
+        cardMapController.directionTextView.font = cellsteps
     }
 
     @objc func maptype() {
 
-        if self.mapView.mapType == MKMapType.standard {
-            self.mapView.mapType = MKMapType.hybridFlyover
+        if mapView.mapType == MKMapType.standard {
+            mapView.mapType = MKMapType.hybridFlyover
         } else {
-            self.mapView.mapType = MKMapType.standard
+            mapView.mapType = MKMapType.standard
         }
     }
     
@@ -282,7 +282,7 @@ final class MapViewVC: UIViewController {
     @objc func hideBar(notification: NSNotification)  {
         if UIDevice.current.userInterfaceIdiom == .phone  {
             let state = notification.object as! Bool
-            self.navigationController?.setNavigationBarHidden(state, animated: true)
+            navigationController?.setNavigationBarHidden(state, animated: true)
             UIView.animate(withDuration: 0.2, animations: {
                 self.tabBarController?.hideTabBarAnimated(hide: state) //added
             }, completion: nil)
@@ -290,20 +290,20 @@ final class MapViewVC: UIViewController {
     }
     
     // MARK: - SegmentedControl
-//    @IBAction func mapTypeChanged(_ sender: AnyObject) {
-//
-//        if(mapTypeSegmentedControl.selectedSegmentIndex == 0) {
-//            self.mapView.mapType = .standard
-//        }
-//        else if(mapTypeSegmentedControl.selectedSegmentIndex == 1) {
-//            self.mapView.mapType = .hybridFlyover
-//        }
-//        else if(mapTypeSegmentedControl.selectedSegmentIndex == 2) {
-//            self.mapView.mapType = .satellite
-//        }
-//    }
+    //    @IBAction func mapTypeChanged(_ sender: AnyObject) {
+    //
+    //        if(mapTypeSegmentedControl.selectedSegmentIndex == 0) {
+    //            self.mapView.mapType = .standard
+    //        }
+    //        else if(mapTypeSegmentedControl.selectedSegmentIndex == 1) {
+    //            self.mapView.mapType = .hybridFlyover
+    //        }
+    //        else if(mapTypeSegmentedControl.selectedSegmentIndex == 2) {
+    //            self.mapView.mapType = .satellite
+    //        }
+    //    }
 
-    func setupUserImage() {
+    private func setupUserImage() {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         FirebaseRef.databaseRoot.child("users")
             .queryOrdered(byChild: "uid")
@@ -318,13 +318,13 @@ final class MapViewVC: UIViewController {
             })
     }
     
-    func setupLocationManager() {
+    private func setupLocationManager() {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         //locationManager.requestAlwaysAuthorization()
     }
     
-    func checkLocationServices() {
+    private func checkLocationServices() {
         if CLLocationManager.locationServicesEnabled() {
             setupLocationManager()
             checkLocationAuthorization()
@@ -333,7 +333,7 @@ final class MapViewVC: UIViewController {
         }
     }
     
-    func checkLocationAuthorization() {
+    private func checkLocationAuthorization() {
         switch CLLocationManager.authorizationStatus() {
         case .authorizedWhenInUse:
             startTackingUserLocation()
@@ -349,11 +349,11 @@ final class MapViewVC: UIViewController {
             startTackingUserLocation()
             break
         @unknown default: break
-            //<#fatalError#>()
+        //<#fatalError#>()
         }
     }
     
-    func startTackingUserLocation() {
+    private func startTackingUserLocation() {
 
         mapView.showsUserLocation = true
         centerViewOnUserLocation()
@@ -362,7 +362,7 @@ final class MapViewVC: UIViewController {
         getDirections()
     }
     
-    func centerViewOnUserLocation() {
+    private func centerViewOnUserLocation() {
         if let location = locationManager.location?.coordinate {
             //let span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
             let region = MKCoordinateRegion.init(center: location, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
@@ -370,7 +370,7 @@ final class MapViewVC: UIViewController {
         }
     }
     
-    func getCenterLocation(for mapView: MKMapView) -> CLLocation {
+    private func getCenterLocation(for mapView: MKMapView) -> CLLocation {
         let latitude = mapView.centerCoordinate.latitude
         let longitude = mapView.centerCoordinate.longitude
         
@@ -415,15 +415,15 @@ final class MapViewVC: UIViewController {
     
     private func getDirections() {
 
-        if (self.formController == "CustMap") {
-            dest = String(format: "%@ %@ %@ %@", self.mapaddress!, self.mapcity!, self.mapstate!, self.mapzip!)
+        if (formController == "CustMap") {
+            destStr = String(format: "%@ %@ %@ %@", self.mapaddress!, self.mapcity!, self.mapstate!, self.mapzip!)
             startPoint = String(format: "%@ %@ %@", self.mapcity!, self.mapstate!, self.mapzip!)
         } else {
-            dest = ""
+            destStr = ""
             startPoint = ""
         }
         
-        geoCoder.geocodeAddressString(dest!) { (placemarks, error) in
+        geoCoder.geocodeAddressString(destStr!) { (placemarks, error) in
             
             guard placemarks != nil else {
                 return
@@ -462,8 +462,8 @@ final class MapViewVC: UIViewController {
                 guard let response = response else { return }
                 
                 for route in response.routes {
-                    self.mapView.addOverlay(route.polyline)
-                    self.mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
+                    mapView.addOverlay(route.polyline)
+                    mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
                 }
                 
                 self.showRoute(response)
@@ -472,7 +472,7 @@ final class MapViewVC: UIViewController {
         }
     }
     
-    func createDirectionsRequest(from coordinate: CLLocationCoordinate2D, destination: CLLocationCoordinate2D) -> MKDirections.Request {
+    private func createDirectionsRequest(from coordinate: CLLocationCoordinate2D, destination: CLLocationCoordinate2D) -> MKDirections.Request {
         //let destinationCoordinate       = getCenterLocation(for: mapView).coordinate
         let startingLocation            = MKPlacemark(coordinate: coordinate)
         let destination                 = MKPlacemark(coordinate: destination)
@@ -482,17 +482,17 @@ final class MapViewVC: UIViewController {
         request.destination             = MKMapItem(placemark: destination)
         request.transportType           = .automobile
 
-        if (self.formController == "MileIQ") {
+        if (formController == "MileIQ") {
             request.requestsAlternateRoutes = true
         } else {
             request.requestsAlternateRoutes = true
         }
-        self.selectedPin = destination
+        selectedPin = destination
         
         return request
     }
     
-    func resetMapView(withNew directions: MKDirections) {
+    private func resetMapView(withNew directions: MKDirections) {
         mapView.removeOverlays(mapView.overlays)
         directionsArray.append(directions)
         let _ = directionsArray.map { $0.cancel() }
@@ -501,7 +501,7 @@ final class MapViewVC: UIViewController {
     //====================================================================
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if (self.lastContentOffset > scrollView.contentOffset.y) {
+        if (lastContentOffset > scrollView.contentOffset.y) {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: false)
         } else {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: true)
@@ -509,12 +509,24 @@ final class MapViewVC: UIViewController {
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        self.lastContentOffset = scrollView.contentOffset.y;
+        lastContentOffset = scrollView.contentOffset.y;
+    }
+
+    func setupContraints() { // FIXME: Map Buttons
+
+        view.addSubview(mapView)
+        let guide = view.safeAreaLayoutGuide
+        NSLayoutConstraint.activate([
+            mapView.topAnchor.constraint(equalTo: guide.topAnchor, constant: 0),
+            mapView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 0),
+            mapView.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: 0),
+            mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
+        ])
     }
     
-    func setupConstraints() {
-        
-        self.view.addSubview(mapView)
+    override func viewDidLayoutSubviews() { // CardViewController dont work
+        super.viewDidLayoutSubviews()
+
         mapView.addSubview(titleBtn)
         mapView.addSubview(userImageview)
         mapView.addSubview(floatingBtn)
@@ -523,11 +535,6 @@ final class MapViewVC: UIViewController {
 
         let guide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
-
-            mapView.topAnchor.constraint(equalTo: guide.topAnchor, constant: 0),
-            mapView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 0),
-            mapView.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: 0),
-            mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
 
             titleBtn.topAnchor.constraint(equalTo: guide.topAnchor, constant: 20),
             titleBtn.centerXAnchor.constraint(equalTo: guide.centerXAnchor),
@@ -557,11 +564,11 @@ final class MapViewVC: UIViewController {
     }
     
     @IBAction func zoomToCurrentLocation(sender: AnyObject) {
-        self.mapView.zoomToUserLocation()
+        mapView.zoomToUserLocation()
     }
     
     // MARK: - ActivityIndicator
-    func addActivityIndicator() {
+    private func addActivityIndicator() {
         activityIndicator = UIActivityIndicatorView(frame: UIScreen.main.bounds)
         activityIndicator.autoresizingMask = [.flexibleWidth, .flexibleHeight, .flexibleBottomMargin, .flexibleRightMargin, .flexibleLeftMargin, .flexibleTopMargin]
         activityIndicator.hidesWhenStopped = true
@@ -571,21 +578,21 @@ final class MapViewVC: UIViewController {
         activityIndicator.startAnimating()
     }
     
-    func hideActivityIndicator() {
+    private func hideActivityIndicator() {
         
         activityIndicator.stopAnimating()
         activityIndicator.removeFromSuperview()
     }
     
     // MARK: - Routes
-    func showRoute(_ response: MKDirections.Response) {
+    private func showRoute(_ response: MKDirections.Response) {
         guard ProcessInfo.processInfo.isLowPowerModeEnabled == false else { return }
 
         let temp: MKRoute = response.routes.first! as MKRoute
-        self.route = temp
-        self.titleBtn.setTitle(String(format:"%0.1f miles", route.distance/1609.344) as String, for: .normal)
-        self.cardMapController.timeLabel.text = String(format:"Time: %0.1f min", route.expectedTravelTime/60) as String
-        self.cardMapController.distanceLabel.text = String(format:"Distance: %0.1f miles", route.distance/1609.344) as String
+        route = temp
+        titleBtn.setTitle(String(format:"%0.1f miles", route.distance/1609.344) as String, for: .normal)
+        cardMapController.timeLabel.text = String(format:"Time: %0.1f min", route.expectedTravelTime/60) as String
+        cardMapController.distanceLabel.text = String(format:"Distance: %0.1f miles", route.distance/1609.344) as String
 
         self.allSteps = ""
         for i in 0 ..< self.route.steps.count {
@@ -599,7 +606,7 @@ final class MapViewVC: UIViewController {
             self.allSteps = self.allSteps!.appending(distStep) as String?
             self.allSteps = self.allSteps!.appending("\n\n") as String?
         }
-        self.cardMapController.textView.text = self.allSteps
+        cardMapController.directionTextView.text = self.allSteps
 
         let speechUtterance = AVSpeechUtterance(string: String(format:"Time: %0.1f min", route.expectedTravelTime/60) as String)
         speechSynthesizer.speak(speechUtterance)
@@ -607,7 +614,7 @@ final class MapViewVC: UIViewController {
     }
     
     // MARK: - Map Annotation
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+    public func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
         let identifier = "pin"
         var pinView: MKPinAnnotationView
@@ -639,7 +646,7 @@ final class MapViewVC: UIViewController {
         }
     }
     
-    func trafficBtnTapped(_ sender: AnyObject) {
+    private func trafficBtnTapped(_ sender: AnyObject) {
         
         if mapView.showsTraffic == mapView.showsTraffic {
             mapView.showsTraffic = !mapView.showsTraffic
@@ -650,7 +657,7 @@ final class MapViewVC: UIViewController {
         }
     }
     
-    func scaleBtnTapped() {
+    private func scaleBtnTapped() {
         
         if mapView.showsScale == mapView.showsScale {
             mapView.showsScale = !mapView.showsScale
@@ -659,7 +666,7 @@ final class MapViewVC: UIViewController {
         }
     }
     
-    func compassBtnTapped() {
+    private func compassBtnTapped() {
         
         if mapView.showsCompass == mapView.showsCompass {
             mapView.showsCompass = !mapView.showsCompass
@@ -668,7 +675,7 @@ final class MapViewVC: UIViewController {
         }
     }
     
-    func buildingBtnTapped() {
+    private func buildingBtnTapped() {
         
         if mapView.showsBuildings == mapView.showsBuildings {
             mapView.showsBuildings = !mapView.showsBuildings
@@ -677,7 +684,7 @@ final class MapViewVC: UIViewController {
         }
     }
     
-    func userlocationBtnTapped() {
+    private func userlocationBtnTapped() {
         
         if mapView.showsUserLocation == mapView.showsUserLocation {
             mapView.showsUserLocation = !mapView.showsUserLocation
@@ -686,13 +693,13 @@ final class MapViewVC: UIViewController {
         }
     }
     
-    func pointsofinterestBtnTapped() {
+    private func pointsofinterestBtnTapped() {
 
         let filter = MKPointOfInterestFilter(including: [.gasStation, .cafe, .police, .bank])
         mapView.pointOfInterestFilter = filter
     }
     
-    func displayInFlyoverMode() {
+    private func displayInFlyoverMode() {
         
         if mapView.mapType == .satelliteFlyover {
             mapView.mapType = .standard
@@ -756,19 +763,19 @@ final class MapViewVC: UIViewController {
     }
 
     // MARK: - Card Setup
-    func setupCard() {
+    private func setupCard() {
 
-        endCardHeight = self.view.frame.height * 0.9 - 20
-        startCardHeight = self.view.frame.height * 0.1 + 44
+        endCardHeight = view.frame.height * 0.9 - 20
+        startCardHeight = view.frame.height * 0.1 + 44
 
         visualEffectView = UIVisualEffectView()
-        visualEffectView.frame = self.view.frame
+        visualEffectView.frame = view.frame
 
         cardMapController = CardMapController(nibName:"CardMapVC", bundle:nil)
         self.addChild(cardMapController)
-        self.view.addSubview(cardMapController.view)
+        view.addSubview(cardMapController.view)
 
-        cardMapController.view.frame = CGRect(x: 0, y: self.view.frame.height - startCardHeight, width: self.view.bounds.width, height: endCardHeight)
+        cardMapController.view.frame = CGRect(x: 0, y: view.frame.height - startCardHeight, width: view.bounds.width, height: endCardHeight)
 
         cardMapController.view.clipsToBounds = true
 
@@ -804,7 +811,7 @@ final class MapViewVC: UIViewController {
         }
     }
 
-    func animateTransitionIfNeeded (state:CardState, duration:TimeInterval) {
+    private func animateTransitionIfNeeded (state:CardState, duration:TimeInterval) {
 
         let boldFont = UIFont.boldSystemFont(ofSize: 20)
         let configuration = UIImage.SymbolConfiguration(font: boldFont)
@@ -814,8 +821,10 @@ final class MapViewVC: UIViewController {
                 switch state {
                 case .expanded:
 
+                    self.cardMapController.titleLabel.text = "Trip Planner"
                     self.cardMapController.chevronBtn.setImage(UIImage(systemName: "chevron.compact.down", withConfiguration: configuration), for: .normal)
-                    self.cardMapController.startLabel.text = self.dest
+                    self.cardMapController.startLabel.text = String(format: "%@ %@","Start:", self.startStr!)
+                    self.cardMapController.destLabel.text = String(format: "%@ %@","Dest:", self.destStr!)
 
                     self.cardMapController.view.frame.origin.y = self.view.frame.height - self.endCardHeight + 55
                     self.visualEffectView.effect = UIBlurEffect(style: .dark)
@@ -824,6 +833,7 @@ final class MapViewVC: UIViewController {
                 case .collapsed:
 
                     self.visualEffectView.removeFromSuperview()
+                    self.cardMapController.titleLabel.text = self.startStr
                     self.cardMapController.chevronBtn.setImage(UIImage(systemName: "chevron.compact.up", withConfiguration: configuration), for: .normal)
                     self.cardMapController.view.frame.origin.y = self.view.frame.height - self.startCardHeight + 55
                     self.visualEffectView.effect = nil
@@ -853,7 +863,7 @@ final class MapViewVC: UIViewController {
         }
     }
 
-    func startInteractiveTransition(state:CardState, duration:TimeInterval) {
+    private func startInteractiveTransition(state:CardState, duration:TimeInterval) {
         if runningAnimations.isEmpty {
             animateTransitionIfNeeded(state: state, duration: duration)
         }
@@ -863,13 +873,13 @@ final class MapViewVC: UIViewController {
         }
     }
 
-    func updateInteractiveTransition(fractionCompleted:CGFloat) {
+    private func updateInteractiveTransition(fractionCompleted:CGFloat) {
         for animator in runningAnimations {
             animator.fractionComplete = fractionCompleted + animationProgressWhenInterrupted
         }
     }
 
-    func continueInteractiveTransition (){
+    private func continueInteractiveTransition (){
         for animator in runningAnimations {
             animator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
         }
@@ -913,8 +923,9 @@ extension MapViewVC: MKMapViewDelegate {
             let streetName = placemark.thoroughfare ?? ""
             let cityName = placemark.locality ?? ""
             
-            DispatchQueue.main.async {
-                self.cardMapController.titleLabel.text = "\(streetNumber) \(streetName) \(cityName)"
+            DispatchQueue.main.async { [self] in
+                self.startStr = "\(streetNumber) \(streetName) \(cityName)"
+                self.cardMapController.titleLabel.text = self.startStr
             }
         }
     }

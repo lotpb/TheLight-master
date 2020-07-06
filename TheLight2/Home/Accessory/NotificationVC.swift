@@ -20,7 +20,7 @@ final class NotificationVC: UIViewController {
     @IBOutlet weak var saveButton: UIButton!
     
     private let celltitle = Font.celltitle18r
-    let center = UNUserNotificationCenter.current()
+    private let center = UNUserNotificationCenter.current()
 
 
     override func viewDidLoad() {
@@ -33,7 +33,7 @@ final class NotificationVC: UIViewController {
         
         self.customMessage.clearButtonMode = .always
         self.customMessage!.font = celltitle
-        self.customMessage.placeholder = "enter notification"
+        self.customMessage.placeholder = "enter notification..."
         
         self.saveButton.setTitleColor(.white, for: .normal)
         self.saveButton.backgroundColor = .systemOrange
@@ -94,7 +94,7 @@ final class NotificationVC: UIViewController {
             content.title = "Message from TheLight 🏀"
             content.body = customMessage.text!
             content.badge = (UIApplication.shared.applicationIconBadgeNumber + 1) as NSNumber
-            content.sound = UNNotificationSound.default
+            content.sound = .default
             content.categoryIdentifier = "myCategory"
             
             let imageName = "calendar"

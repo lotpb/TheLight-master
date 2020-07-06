@@ -16,14 +16,14 @@ import AVFoundation
 class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     //firebase
-    var newslist = [NewsModel]()
+    public var newslist = [NewsModel]()
     //parse
-    var _feedItems = NSMutableArray()
-    var imageObject :PFObject!
-    var imageFile :PFFileObject!
+    public var _feedItems = NSMutableArray()
+    private var imageObject :PFObject!
+    private var imageFile :PFFileObject!
     
     private var selectedImage : UIImage?
-    var defaults = UserDefaults.standard
+    public var defaults = UserDefaults.standard
     private var socialText: String = ""
     private let cellId = "cellId"
     
@@ -70,9 +70,8 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
         addConstraintsWithFormat(format: "H:|[v0]|", views: collectionView)
         addConstraintsWithFormat(format: "V:|[v0]|", views: collectionView)
         
-        self.collectionView.register(VideoCell.self, forCellWithReuseIdentifier: cellId)
-        self.collectionView.addSubview(self.refreshControl)
-
+        collectionView.register(VideoCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.addSubview(refreshControl)
     }
     
     // MARK: - Parse
@@ -123,12 +122,12 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
         DispatchQueue.main.async { //added
             self.collectionView.reloadData()
         }
-        self.refreshControl.endRefreshing()
+        refreshControl.endRefreshing()
     }
     
     // MARK: - NavigationController Hidden
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if (self.lastContentOffset > scrollView.contentOffset.y) {
+        if (lastContentOffset > scrollView.contentOffset.y) {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: false)
         } else {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: true)
@@ -136,7 +135,7 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        self.lastContentOffset = scrollView.contentOffset.y;
+        lastContentOffset = scrollView.contentOffset.y;
     }
     
     // MARK: - Button
@@ -144,8 +143,8 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
         
         sender.isSelected = true
         sender.tintColor = ColorX.BlueColor
-        let hitPoint = sender.convert(CGPoint.zero, to: self.collectionView)
-        let indexPath = self.collectionView.indexPathForItem(at: hitPoint)
+        let hitPoint = sender.convert(CGPoint.zero, to: collectionView)
+        let indexPath = collectionView.indexPathForItem(at: hitPoint)
         
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
             let query = PFQuery(className:"Newsios")
@@ -191,8 +190,8 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
     
     @objc func shareButton(sender: UIButton) {
         
-        let point : CGPoint = sender.convert(.zero, to: self.collectionView)
-        let indexPath = self.collectionView.indexPathForItem(at: point)
+        let point : CGPoint = sender.convert(.zero, to: collectionView)
+        let indexPath = collectionView.indexPathForItem(at: point)
         
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
             socialText = ((_feedItems.object(at: (indexPath! as NSIndexPath).row) as AnyObject).value(forKey: "newsTitle") as? String)!
@@ -290,16 +289,16 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
             cell.subtitleLabel.text = String(format: "%@, %@, %d%@", ((self._feedItems[(indexPath).row] as AnyObject).value(forKey: "newsDetail") as? String)!, "\(newsView!) views", diffDateComponents.day!," days ago" )
             
             let updated:Date = date1
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "h:mm a"
+
+            MasterViewController.dateFormatter.dateFormat = "h:mm a"
             let elapsedTimeInSeconds = NSDate().timeIntervalSince(date1 as Date)
             let secondInDays: TimeInterval = 60 * 60 * 24
             if elapsedTimeInSeconds > 7 * secondInDays {
-                dateFormatter.dateFormat = "MMM dd, yyyy"
+                MasterViewController.dateFormatter.dateFormat = "MMM dd, yyyy"
             } else if elapsedTimeInSeconds > secondInDays {
-                dateFormatter.dateFormat = "EEEE"
+                MasterViewController.dateFormatter.dateFormat = "EEEE"
             }
-            let createString = dateFormatter.string(from: updated)
+            let createString = MasterViewController.dateFormatter.string(from: updated)
             
             
             
@@ -423,7 +422,7 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
                     /*
                      let videoLauncher = NavVC()
                      videoLauncher.videoURL = imageDetailurl
-                     //self.navigationController?.pushViewController(videoLauncher, animated: true)
+                     //navigationController?.pushViewController(videoLauncher, animated: true)
                     present(videoLauncher, animated: true, completion: nil)
                     */
                     

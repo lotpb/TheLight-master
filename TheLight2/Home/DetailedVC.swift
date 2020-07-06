@@ -8,7 +8,6 @@
   
   import UIKit
   import ReplayKit
-  import UIKit
   import CoreLocation
   import CoreSpotlight //added CoreSpotlight
   import CoreBluetooth
@@ -21,12 +20,12 @@
     // MARK: NavigationController Hidden
     private var lastContentOffset: CGFloat = 0.0
     
-    let textviewText = "I know your works, that you are neither cold nor hot. I could wish you were cold or hot. So then, because you are lukewarm, and neither cold nor hot, I will vomit you out of My mouth."
+    private let textviewText = "I know your works, that you are neither cold nor hot. I could wish you were cold or hot. So then, because you are lukewarm, and neither cold nor hot, I will vomit you out of My mouth."
     
-    let languageList = ["Hindi", "Russian", "Greek", "United States", "United Kingdom", "Italy", "Israel", "Arabic", "China", "French", "German"]
-    let languageCodeList = ["hi-IN", "ru-RU", "el-GR", "en-US", "en-GB", "it-IT", "he-IL", "ar-SA", "zh-CN", "fr-FR", "de-DE"]
+    private let languageList = ["Hindi", "Russian", "Greek", "United States", "United Kingdom", "Italy", "Israel", "Arabic", "China", "French", "German"]
+    private let languageCodeList = ["hi-IN", "ru-RU", "el-GR", "en-US", "en-GB", "it-IT", "he-IL", "ar-SA", "zh-CN", "fr-FR", "de-DE"]
     
-    var langNum : Int!
+    private var langNum : Int!
     
     private let recorder = RPScreenRecorder.shared()
     private var locationManager = CLLocationManager()
@@ -34,40 +33,40 @@
     private let domainIdentifier = "com.lotpb.github.io/UnitedWebPage/index.html"
     private var activity: NSUserActivity!
     
-    var activityIndicator: UIActivityIndicatorView = {
+    private let activityIndicator: UIActivityIndicatorView = {
         let aiv = UIActivityIndicatorView(style: .medium)
         aiv.hidesWhenStopped = true
         return aiv
     }()
     
-    let languagePick: UIPickerView = {
+    private let languagePick: UIPickerView = {
         let picker = UIPickerView()
         picker.translatesAutoresizingMaskIntoConstraints = false
         return picker
     }()
     
-    lazy var topView: UIView = {
+    private let topView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .secondarySystemBackground
         return view
     }()
     
-    lazy var middleView: UIView = {
+    private let middleView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .secondarySystemBackground
         return view
     }()
     
-    lazy var pickView: UIView = {
+    private let pickView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .secondarySystemBackground
         return view
     }()
     
-    lazy var subject: UITextView = {
+    private let subject: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.autocorrectionType = .yes
@@ -75,7 +74,7 @@
         return textView
     }()
     
-    lazy var pitch: UITextField = {
+    private let pitch: UITextField = {
         let textField = UITextField()
         textField.text = "1.0"
         textField.keyboardAppearance = .dark
@@ -83,7 +82,7 @@
         return textField
     }()
     
-    lazy var rate: UITextField = {
+    private let rate: UITextField = {
         let textField = UITextField()
         textField.text = "0.3"
         textField.keyboardAppearance = .dark
@@ -91,7 +90,7 @@
         return textField
     }()
     
-    lazy var volume: UITextField = {
+    private let volume: UITextField = {
         let textField = UITextField()
         textField.text = "1.0"
         textField.keyboardAppearance = .dark
@@ -99,21 +98,21 @@
         return textField
     }()
     
-    let pitchLabel: UILabel = {
+    private let pitchLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Pitch"
         return label
     }()
     
-    let rateLabel: UILabel = {
+    private let rateLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Rate"
         return label
     }()
     
-    let volumeLabel: UILabel = {
+    private let volumeLabel: UILabel = {
         let label = UILabel()
         label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -121,7 +120,7 @@
         return label
     }()
     
-    let latitudeLabel: UILabel = {
+    private let latitudeLabel: UILabel = {
         let label = UILabel()
         label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -129,7 +128,7 @@
         return label
     }()
     
-    let longitudeLabel: UILabel = {
+    private let longitudeLabel: UILabel = {
         let label = UILabel()
         label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -137,7 +136,7 @@
         return label
     }()
     
-    let altitudeLabel: UILabel = {
+    private let altitudeLabel: UILabel = {
         let label = UILabel()
         label.sizeToFit()
         label.textAlignment = .right
@@ -146,7 +145,7 @@
         return label
     }()
     
-    lazy var speakBtn: UIButton = {
+    private let speakBtn: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
@@ -158,7 +157,7 @@
         return button
     }()
     
-    lazy var speechBtn: UIButton = {
+    private let speechBtn: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
@@ -170,7 +169,7 @@
         return button
     }()
     
-    lazy var lightoffBtn: UIButton = {
+    private let lightoffBtn: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
@@ -182,7 +181,7 @@
         return button
     }()
     
-    lazy var spotlightBtn: UIButton = {
+    private let spotlightBtn: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
@@ -194,7 +193,7 @@
         return button
     }()
     
-    lazy var nospotBtn: UIButton = {
+    private let nospotBtn: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
@@ -206,7 +205,7 @@
         return button
     }()
     
-    lazy var startRecordingButton: UIButton = {
+    private let startRecordingButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
@@ -218,7 +217,7 @@
         return button
     }()
     
-    lazy var stopRecordingButton: UIButton = {
+    private let stopRecordingButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
@@ -230,7 +229,7 @@
         return button
     }()
     
-    lazy var titleButton: UIButton = {
+    private let titleButton: UIButton = {
         let button = UIButton(type: .system)
         button.frame = .init(x: 0, y: 0, width: 100, height: 32)
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -323,7 +322,7 @@
     
     @objc func hideBar(notification: NSNotification)  {
         let state = notification.object as! Bool
-        self.navigationController?.setNavigationBarHidden(state, animated: true)
+        navigationController?.setNavigationBarHidden(state, animated: true)
         UIView.animate(withDuration: 0.2, animations: {
             self.tabBarController?.hideTabBarAnimated(hide: state) //added
         }, completion: nil)

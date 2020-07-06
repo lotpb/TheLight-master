@@ -24,28 +24,28 @@ final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewContr
     private var resultsController: UITableViewController!
     private var filteredTitles = [String]()
 
-    var _feedCustItems = NSMutableArray()
-    var _feedLeadItems = NSMutableArray()
+    private var _feedCustItems = NSMutableArray()
+    private var _feedLeadItems = NSMutableArray()
     
     //var segmentedControl : UISegmentedControl!
-    let defaults = UserDefaults.standard
+    private let defaults = UserDefaults.standard
     
-    weak var dayYQL: NSArray!
-    weak var textYQL: NSArray!
+    private var dayYQL: NSArray!
+    private var textYQL: NSArray!
     
-    weak var symYQL: NSArray!
-    weak var tradeYQL: NSArray!
-    weak var changeYQL: NSArray!
+    private var symYQL: NSArray!
+    private var tradeYQL: NSArray!
+    private var changeYQL: NSArray!
 
-    var tempYQL: String!
-    var weathYQL: String!
-    var riseYQL: String!
-    var setYQL: String!
-    var humYQL: String!
-    var cityYQL: String!
-    var updateYQL: String!
+    private var tempYQL: String!
+    private var weathYQL: String!
+    private var riseYQL: String!
+    private var setYQL: String!
+    private var humYQL: String!
+    private var cityYQL: String!
+    private var updateYQL: String!
 
-    var label1: UILabel = {
+    private var label1: UILabel = {
         let label = UILabel()
         label.textColor = .black
         label.textAlignment = .right
@@ -53,7 +53,7 @@ final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewContr
         return label
     }()
     
-    var label2: UILabel = {
+    private var label2: UILabel = {
         let label = UILabel()
         label.textColor = .white
         label.textAlignment = .right
@@ -61,7 +61,7 @@ final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewContr
         return label
     }()
     
-    lazy var refreshControl: UIRefreshControl = {
+    private let refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = .clear //Color.Stat.navColor
         refreshControl.tintColor = .white
@@ -83,18 +83,18 @@ final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewContr
         setupTableView()
         setupNavigation()
         //setupSearch() //dont work
-        self.scrollWall!.addSubview(self.refreshControl)
+        self.scrollWall!.addSubview(refreshControl)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
     }
  
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
         
         // MARK: NavigationController Hidden
         NotificationCenter.default.addObserver(self, selector: #selector(StatisticVC.hideBar(notification:)), name: NSNotification.Name("hide"), object: nil)
@@ -107,7 +107,7 @@ final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewContr
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = true
+        tabBarController?.tabBar.isHidden = true
     }
     
     override func didReceiveMemoryWarning() {
@@ -120,7 +120,7 @@ final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewContr
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
 
-        self.navigationItem.searchController = searchController
+        navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         self.definesPresentationContext = true
     }
@@ -128,7 +128,7 @@ final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewContr
     private func setupNavigation() {
         navigationController?.navigationBar.prefersLargeTitles = false
         view.backgroundColor = .secondarySystemGroupedBackground
-        self.contentView.backgroundColor = .systemGroupedBackground
+        contentView.backgroundColor = .systemGroupedBackground
         if UIDevice.current.userInterfaceIdiom == .pad  {
             navigationItem.title = "TheLight Software - Statistics"
         } else {
@@ -138,27 +138,27 @@ final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewContr
     
     func setupTableView() {
         // MARK: - TableHeader
-        self.tableView?.register(StatHeaderViewCell.self, forCellReuseIdentifier: "Header")
+        tableView?.register(StatHeaderViewCell.self, forCellReuseIdentifier: "Header")
 
-        self.tableView!.delegate = self
-        self.tableView!.dataSource = self
-        self.tableView!.sizeToFit()
-        self.tableView!.clipsToBounds = true
-        self.tableView!.backgroundColor = .systemGroupedBackground
-        self.tableView!.tableFooterView = UIView(frame: .zero)
+        tableView!.delegate = self
+        tableView!.dataSource = self
+        tableView!.sizeToFit()
+        tableView!.clipsToBounds = true
+        tableView!.backgroundColor = .systemGroupedBackground
+        tableView!.tableFooterView = UIView(frame: .zero)
     }
     
     // MARK: - NavigationController Hidden
     @objc func hideBar(notification: NSNotification)  {
         let state = notification.object as! Bool
-        self.navigationController?.setNavigationBarHidden(state, animated: true)
+        navigationController?.setNavigationBarHidden(state, animated: true)
         UIView.animate(withDuration: 0.2, animations: {
             self.tabBarController?.hideTabBarAnimated(hide: state) //added
         }, completion: nil)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if (self.lastContentOffset > scrollView.contentOffset.y) {
+        if (lastContentOffset > scrollView.contentOffset.y) {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: false)
         } else {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: true)
@@ -166,14 +166,14 @@ final class StatisticVC: UIViewController, UITextFieldDelegate, UISplitViewContr
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        self.lastContentOffset = scrollView.contentOffset.y;
+        lastContentOffset = scrollView.contentOffset.y;
     }
     
     // MARK: - Refresh
     @objc func refreshData(_ sender:AnyObject) {
-        self.YahooFinanceLoad()
-        //self.tableView!.reloadData()
-        self.refreshControl.endRefreshing()
+        YahooFinanceLoad()
+        //tableView!.reloadData()
+        refreshControl.endRefreshing()
     }
     
     // MARK: - YahooFinance

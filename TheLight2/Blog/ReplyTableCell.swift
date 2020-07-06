@@ -9,7 +9,6 @@
 import UIKit
 import FirebaseDatabase
 
-
 @available(iOS 13.0, *)
 final class ReplyTableCell: UITableViewCell {
     
@@ -34,7 +33,6 @@ final class ReplyTableCell: UITableViewCell {
             var Liked:Int? = postReply?.liked as? Int
             if Liked == nil { Liked = 0 }
             replylikeLabel.text = "\(Liked!)"
-            
         }
     }
     
@@ -47,11 +45,11 @@ final class ReplyTableCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    let replyImageView: CustomImageView = {
+    public let replyImageView: CustomImageView = {
         let imageView = CustomImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "")
-        imageView.layer.cornerRadius = 22
+        imageView.layer.cornerRadius = imageView.width/2
         imageView.layer.masksToBounds = true
         imageView.contentMode = .scaleAspectFill
         imageView.layer.borderColor = UIColor.lightGray.cgColor
@@ -60,14 +58,14 @@ final class ReplyTableCell: UITableViewCell {
         return imageView
     }()
     
-    let replytitleLabel: UILabel = {
+    public let replytitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
         return label
     }()
     
-    let replysubtitleLabel: UILabel = {
+    public let replysubtitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
@@ -76,14 +74,14 @@ final class ReplyTableCell: UITableViewCell {
         return label
     }()
     
-    let replydateLabel: UILabel = {
+    public let replydateLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Uploaded by:"
         return label
     }()
     
-    let replylikeBtn: UIButton = {
+    public let replylikeBtn: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
@@ -92,7 +90,7 @@ final class ReplyTableCell: UITableViewCell {
         return button
     }()
     
-    let replyactionBtn: UIButton = {
+    public let replyactionBtn: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .lightGray
@@ -100,7 +98,7 @@ final class ReplyTableCell: UITableViewCell {
         return button
     }()
     
-    let replylikeLabel: UILabel = {
+    public let replylikeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "10"
@@ -108,7 +106,7 @@ final class ReplyTableCell: UITableViewCell {
         return label
     }()
     
-    func setupViews() {
+    private func setupViews() {
         
         addSubview(replyImageView)
         addSubview(replytitleLabel)

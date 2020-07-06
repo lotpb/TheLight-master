@@ -37,7 +37,7 @@ class EditFriendTableViewController: UITableViewController {
   @IBOutlet private weak var phoneTextField: UITextField!
   @IBOutlet private weak var saveButton: UIButton!
 
-  var friend: Friend?
+  public var friend: Friend?
 
   override func viewDidLoad() {
     super.viewDidLoad()

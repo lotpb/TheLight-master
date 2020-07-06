@@ -21,7 +21,7 @@ final class UserViewCell: UICollectionViewCell {
         }
     }
     
-    let customImageView: CustomImageView = {
+    public let customImageView: CustomImageView = {
         let imageView = CustomImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.isUserInteractionEnabled = true
@@ -31,7 +31,7 @@ final class UserViewCell: UICollectionViewCell {
         return imageView
     }()
     
-    let usertitleLabel: UILabel = {
+    public let usertitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .systemBackground
@@ -42,7 +42,7 @@ final class UserViewCell: UICollectionViewCell {
         return label
     }()
     
-    let loadingSpinner: UIActivityIndicatorView = {
+    public let loadingSpinner: UIActivityIndicatorView = {
         let aiv = UIActivityIndicatorView(style: .medium)
         aiv.translatesAutoresizingMaskIntoConstraints = false
         aiv.hidesWhenStopped = true

@@ -11,6 +11,7 @@ import MapKit
 
 @available(iOS 13.0, *)
 protocol AddGeotificationsViewControllerDelegate {
+    
     func addGeotificationViewController(controller: AddGeotificationVC, didAddCoordinate coordinate: CLLocationCoordinate2D, radius: Double, identifier: String, note: String, eventType: Geotification.EventType)
 }
 
@@ -25,7 +26,7 @@ final class AddGeotificationVC: UITableViewController {
     @IBOutlet weak var noteTextField: UITextField!
     @IBOutlet weak var mapView: MKMapView!
     
-    var delegate: AddGeotificationsViewControllerDelegate?
+    public var delegate: AddGeotificationsViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()

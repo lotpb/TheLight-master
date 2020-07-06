@@ -29,26 +29,26 @@ final class LookupData: UIViewController {
     weak var delegate:LookupDataDelegate?
     
     @IBOutlet weak var tableView: UITableView?
-    
+
+    public var lookupItem : String?
     //search
     private var searchController: UISearchController!
     private var resultsController = UITableViewController()
-    var filteredTitles = NSMutableArray()
-    var lookupItem : String?
-    var isFilltered = false
+    private var filteredTitles = NSMutableArray()
+    private var isFilltered = false
 
     //firebase
-    var ziplist = [ZipModel]()
-    var saleslist = [SalesModel]()
-    var joblist = [JobModel]()
-    var prodlist = [ProdModel]()
-    var adlist = [AdModel]()
-    var defaults = UserDefaults.standard
+    private var ziplist = [ZipModel]()
+    private var saleslist = [SalesModel]()
+    private var joblist = [JobModel]()
+    private var prodlist = [ProdModel]()
+    private var adlist = [AdModel]()
+    private var defaults = UserDefaults.standard
     //parse
-    var zipArray = NSMutableArray()
-    var salesArray = NSMutableArray()
-    var jobArray = NSMutableArray()
-    var adproductArray = NSMutableArray()
+    private var zipArray = NSMutableArray()
+    private var salesArray = NSMutableArray()
+    private var jobArray = NSMutableArray()
+    private var adproductArray = NSMutableArray()
 
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -66,12 +66,12 @@ final class LookupData: UIViewController {
         loadData()
         setupNavigation()
         setupTableView()
-        self.tableView!.addSubview(self.refreshControl)
+        tableView!.addSubview(refreshControl)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.barTintColor = ColorX.DGrayColor
+        navigationController?.navigationBar.barTintColor = ColorX.DGrayColor
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -99,12 +99,12 @@ final class LookupData: UIViewController {
     }
     
     func setupTableView() {
-        self.tableView!.delegate = self
-        self.tableView!.dataSource = self
-        self.tableView!.sizeToFit()
-        self.tableView!.clipsToBounds = true
-        self.tableView!.backgroundColor = .secondarySystemGroupedBackground
-        self.tableView!.tableFooterView = UIView(frame: .zero)
+        tableView!.delegate = self
+        tableView!.dataSource = self
+        tableView!.sizeToFit()
+        tableView!.clipsToBounds = true
+        tableView!.backgroundColor = .secondarySystemGroupedBackground
+        tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
         resultsController.tableView.backgroundColor = ColorX.LGrayColor
@@ -118,7 +118,7 @@ final class LookupData: UIViewController {
     // MARK: - Refresh
     @objc func refreshData(sender:AnyObject) {
         loadData()
-        self.refreshControl.endRefreshing()
+        refreshControl.endRefreshing()
     }
 
     // MARK: - Parse
@@ -278,7 +278,7 @@ final class LookupData: UIViewController {
     
     // MARK: - Segues
     func passDataBack() {
-        let indexPath = (self.tableView!.indexPathForSelectedRow! as NSIndexPath).row
+        let indexPath = (tableView!.indexPathForSelectedRow! as NSIndexPath).row
         if (!isFilltered) {
             if (lookupItem == "City") {
                 

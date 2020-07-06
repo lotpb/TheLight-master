@@ -30,13 +30,13 @@ import UIKit
 import ContactsUI
 
 class FriendsViewController: UITableViewController {
-  var friendsList = Friend.defaultContacts()
+  private var friendsList = Friend.defaultContacts()
   
   override func viewDidLoad() {
     super.viewDidLoad()
     navigationItem.titleView = UIImageView(image: UIImage(named: "follow")!)
-    self.tableView!.backgroundColor = .systemGray4
-    //self.tableView?.register(FriendCell.self, forCellReuseIdentifier: "FriendCell")
+    tableView!.backgroundColor = .systemGray4
+    //tableView?.register(FriendCell.self, forCellReuseIdentifier: "FriendCell")
 
   }
 

@@ -23,17 +23,17 @@ final class Lead: UIViewController {
     private let searchScope = ["name", "city", "phone", "date", "active"]
     
     //firebase
-    var leadlist = [LeadModel]()
-    var activeCount: Int?
-    var defaults = UserDefaults.standard
+    private var leadlist = [LeadModel]()
+    private var activeCount: Int?
+    private var defaults = UserDefaults.standard
     //parse
-    var _feedItems = NSMutableArray()
-    var _feedheadItems = NSMutableArray()
+    private var _feedItems = NSMutableArray()
+    private var _feedheadItems = NSMutableArray()
   
-    var pasteBoard = UIPasteboard.general
-    var objectIdLabel = String()
-    var titleLabel = String()
-    var dateLabel = String()
+    private var pasteBoard = UIPasteboard.general
+    private var objectIdLabel = String()
+    private var titleLabel = String()
+    private var dateLabel = String()
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -51,19 +51,19 @@ final class Lead: UIViewController {
         self.extendedLayoutIncludesOpaqueBars = true
         setupNavigation()
         setupTableView()
-        self.tableView!.addSubview(self.refreshControl)
+        tableView!.addSubview(refreshControl)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         refreshData(self)
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
         
         // MARK: NavigationController Hidden
         NotificationCenter.default.addObserver(self, selector: #selector(Lead.hideBar(notification:)), name: NSNotification.Name("hide"), object: nil)
@@ -75,7 +75,7 @@ final class Lead: UIViewController {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = true
+        tabBarController?.tabBar.isHidden = true
     }
     
     override func didReceiveMemoryWarning() {
@@ -98,19 +98,19 @@ final class Lead: UIViewController {
         self.definesPresentationContext = true
     }
     
-    func setupTableView() {
+    private func setupTableView() {
         // MARK: - TableHeader
-        self.tableView?.register(HeaderViewCell.self, forCellReuseIdentifier: "Header")
+        tableView?.register(HeaderViewCell.self, forCellReuseIdentifier: "Header")
 
-        self.tableView!.delegate = self
-        self.tableView!.dataSource = self
-        self.tableView!.sizeToFit()
-        self.tableView!.clipsToBounds = true
+        tableView!.delegate = self
+        tableView!.dataSource = self
+        tableView!.sizeToFit()
+        tableView!.clipsToBounds = true
         let bgView = UIView()
         bgView.backgroundColor = .secondarySystemGroupedBackground
         tableView!.backgroundView = bgView
-        self.tableView!.tableFooterView = UIView(frame: .zero)
-        self.tableView!.reloadData()
+        tableView!.tableFooterView = UIView(frame: .zero)
+        tableView!.reloadData()
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
         resultsController.tableView.backgroundColor = ColorX.LGrayColor
@@ -125,7 +125,7 @@ final class Lead: UIViewController {
     @objc func hideBar(notification: NSNotification) {
         if UIDevice.current.userInterfaceIdiom == .phone {
             let state = notification.object as! Bool
-            self.navigationController?.setNavigationBarHidden(state, animated: true)
+            navigationController?.setNavigationBarHidden(state, animated: true)
             
             UIView.animate(withDuration: 0.2, animations: {
                 self.tabBarController?.hideTabBarAnimated(hide: state) //added
@@ -134,7 +134,7 @@ final class Lead: UIViewController {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if (self.lastContentOffset > scrollView.contentOffset.y) {
+        if (lastContentOffset > scrollView.contentOffset.y) {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: false)
         } else {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: true)
@@ -142,14 +142,14 @@ final class Lead: UIViewController {
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        self.lastContentOffset = scrollView.contentOffset.y;
+        lastContentOffset = scrollView.contentOffset.y;
     }
     
     // MARK: - Refresh
     @objc func refreshData(_ sender:AnyObject) {
-        leadlist.removeAll() //fix
+        leadlist.removeAll() // FIXME: shouldn't crash
         loadData()
-        self.refreshControl.endRefreshing()
+        refreshControl.endRefreshing()
     }
     
     // MARK: - Button
@@ -159,7 +159,7 @@ final class Lead: UIViewController {
     }
     
     // MARK: - Parse
-    func loadData() {
+    private func loadData() {
         
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
 
@@ -219,7 +219,7 @@ final class Lead: UIViewController {
         }
     }
     
-    func deleteData(name: String) {
+    private func deleteData(name: String) {
         
         let alertController = UIAlertController(title: "Delete", message: "Confirm Delete", preferredStyle: .alert)
         let destroyAction = UIAlertAction(title: "Delete!", style: .destructive) { (action) in
@@ -277,6 +277,7 @@ final class Lead: UIViewController {
     
     // MARK: - Segues
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        MasterViewController.dateFormatter.dateFormat = "MMM dd yyyy"
         
         if segue.identifier == "leaddetailSegue" {
             let formatter = NumberFormatter()
@@ -312,7 +313,7 @@ final class Lead: UIViewController {
                 
             } else {
                 
-                indexPath = self.tableView?.indexPathForSelectedRow?.row
+                indexPath = tableView?.indexPathForSelectedRow?.row
                 if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     dateUpdated = (_feedItems[indexPath!] as AnyObject).value(forKey: "updatedAt") as! Date
                     LeadNo = (_feedItems[indexPath!] as AnyObject).value(forKey: "LeadNo") as? Int
@@ -354,9 +355,8 @@ final class Lead: UIViewController {
             if Active == nil {
                 Active = 0
             }
-            let dateFormat = DateFormatter()
-            dateFormat.dateFormat = "MMM dd yy"
-            VC.tbl16 = String(format: "%@", dateFormat.string(from: dateUpdated)) as String
+
+            VC.tbl16 = String(format: "%@", MasterViewController.dateFormatter.string(from: dateUpdated)) as String
             
             if navigationItem.searchController?.isActive == true {
                 //search
@@ -372,8 +372,8 @@ final class Lead: UIViewController {
                 VC.tbl24 = formatter.string(from: AdNo! as NSNumber)
                 VC.active = formatter.string(from: Active! as NSNumber)
                 VC.tbl25 = formatter.string(from: Active! as NSNumber)
-                VC.tbl21 = dateFormat.string(from: lead.aptdate as Date) as NSString
-                VC.date = dateFormat.string(from: lead.creationDate as Date)
+                VC.tbl21 = MasterViewController.dateFormatter.string(from: lead.aptdate as Date) as NSString
+                VC.date = MasterViewController.dateFormatter.string(from: lead.creationDate as Date)
                 VC.name = lead.lastname
                 VC.address = lead.address
                 VC.city = lead.city
@@ -419,7 +419,7 @@ final class Lead: UIViewController {
                     VC.leadNo = leadlist[indexPath!].leadId
                     VC.zip = formatter.string(from: Zip! as NSNumber)
                     VC.amount = formatter.string(from: Amount! as NSNumber)
-                    VC.date = dateFormat.string(from: leadlist[indexPath!].creationDate as Date)
+                    VC.date = MasterViewController.dateFormatter.string(from: leadlist[indexPath!].creationDate as Date)
                     VC.lastname = leadlist[indexPath!].lastname
                     VC.name = String(format: "%@ %@", leadlist[indexPath!].first, leadlist[indexPath!].lastname).removeWhiteSpace()
                     //controller.name = leadlist[indexPath!].lastname
@@ -434,7 +434,7 @@ final class Lead: UIViewController {
                     VC.tbl15 = leadlist[indexPath!].email as NSString
                     VC.tbl17 = leadlist[indexPath!].photo
 
-                    VC.tbl21 = dateFormat.string(from: leadlist[indexPath!].aptdate as Date) as NSString
+                    VC.tbl21 = MasterViewController.dateFormatter.string(from: leadlist[indexPath!].aptdate as Date) as NSString
                     VC.tbl22 = formatter.string(from: SalesNo! as NSNumber)
                     VC.tbl23 = formatter.string(from: JobNo! as NSNumber)
                     VC.tbl24 = formatter.string(from: AdNo! as NSNumber)
@@ -457,7 +457,7 @@ final class Lead: UIViewController {
             VC.lnewsTitle = Config.NewsLead
         }
 
-        if segue.identifier == "leaduserSegue" { // FIXME:
+        if segue.identifier == "leaduserSegue" { // TODO:
             //guard let controller = (segue.destination as! UINavigationController).topViewController as? LeadUserVC else { return }
             guard let VC = segue.destination as? LeadUserVC else { return }
             VC.formController = "Leads"
@@ -483,7 +483,6 @@ extension Lead: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         self.performSegue(withIdentifier: "leaddetailSegue", sender: self)
-        
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -601,7 +600,7 @@ extension Lead: UITableViewDataSource {
 }
 @available(iOS 13.0, *)
 extension Lead: UITableViewDelegate {
-    
+    // MARK: - TableView
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         if (tableView == self.tableView) {
@@ -641,10 +640,9 @@ extension Lead: UITableViewDelegate {
         }
         return nil
     }
-    
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -659,18 +657,17 @@ extension Lead: UITableViewDelegate {
             } else {
                 //firebase
                 deleteStr = leadlist[indexPath.row].leadId!
-                self.leadlist.remove(at: indexPath.row)
+                leadlist.remove(at: indexPath.row)
             }
-            self.deleteData(name: deleteStr!)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            self.refreshData(self)
+            deleteData(name: deleteStr!)
+            tableView.deleteRows(at: [indexPath], with: .left)
+            refreshData(self)
             
         } else if editingStyle == .insert {
             
         }
     }
-    
-    // MARK: - TableView
+
     func tableView(_ tableView: UITableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {
         return true
     }

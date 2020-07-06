@@ -36,7 +36,7 @@ struct NewsModel {
         self.storyLabel = dictionary["storyText"] as? String ?? ""
         self.liked = dictionary["liked"] as? NSNumber ?? 0
         self.dislikes = dictionary["dislikes"] as? NSNumber ?? 0
-        self.viewCount = dictionary["viewCount"] as? NSNumber ?? 0
+        viewCount = dictionary["viewCount"] as? NSNumber ?? 0
         
         let secondsFrom1970 = dictionary["creationDate"] as? Double ?? 0
         self.creationDate = Date(timeIntervalSince1970: secondsFrom1970)

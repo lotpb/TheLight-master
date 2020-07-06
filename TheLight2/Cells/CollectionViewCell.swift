@@ -30,7 +30,7 @@ class CollectionViewCell: UICollectionViewCell {
     
     //-----------youtube/SnapshotController---------
     
-    let snapImageView: CustomImageView = {
+    public let snapImageView: CustomImageView = {
         let imageView = CustomImageView()
         imageView.contentMode = .scaleAspectFill //.scaleAspectFill //.scaleAspectFit
         imageView.clipsToBounds = true
@@ -39,14 +39,14 @@ class CollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
-    var activityIndicator: UIActivityIndicatorView = {
+    public var activityIndicator: UIActivityIndicatorView = {
         let aiv = UIActivityIndicatorView(style: .medium)
         aiv.translatesAutoresizingMaskIntoConstraints = false
         aiv.hidesWhenStopped = true
         return aiv
     }()
     
-    let videoLengthLabel: UILabel = {
+    public let videoLengthLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "00:00"
@@ -56,7 +56,7 @@ class CollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    lazy var playBtn: UIButton = {
+    public let playBtn: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.alpha = 0.9
@@ -68,8 +68,8 @@ class CollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    var playerLayer2: AVPlayerLayer?
-    var player2: AVPlayer?
+    public var playerLayer2: AVPlayerLayer?
+    public var player2: AVPlayer?
     
     @objc func playVideo(sender: UITapGestureRecognizer) {
         
@@ -108,7 +108,7 @@ class CollectionViewCell: UICollectionViewCell {
         setupViews()
     }
     
-    func setupViews() {
+    public func setupViews() {
         
         addSubview(snapImageView)
         snapImageView.addSubview(activityIndicator)
@@ -140,7 +140,9 @@ class VideoCell: CollectionViewCell {
             
             guard let newsImageUrl = news?.imageUrl else {return}
             guard let imageUrl:URL = URL(string: newsImageUrl) else { return }
-            self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+            DispatchQueue.main.async {
+                self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+            }
             
             titleLabelnew.text = news?.newsTitle
             subtitleLabel.text = String(format: "%@, %@", (news?.newsDetail)!, "\(news?.viewCount ?? 0) views")
@@ -154,7 +156,7 @@ class VideoCell: CollectionViewCell {
         }
     }
     
-    let customImageView: CustomImageView = {
+    public let customImageView: CustomImageView = {
         let imageView = CustomImageView()
         imageView.isUserInteractionEnabled = true
         imageView.backgroundColor = .systemGray6
@@ -165,10 +167,10 @@ class VideoCell: CollectionViewCell {
         return imageView
     }()
     
-    let profileImageView: CustomImageView = {
+    public let profileImageView: CustomImageView = {
         let imageView = CustomImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 20
+        imageView.layer.cornerRadius = imageView.width/2
         imageView.layer.masksToBounds = true
         imageView.layer.borderColor = UIColor.lightGray.cgColor
         imageView.layer.borderWidth = 0.5
@@ -177,7 +179,7 @@ class VideoCell: CollectionViewCell {
         return imageView
     }()
     
-    let titleLabelnew: UILabel = {
+    public let titleLabelnew: UILabel = {
         let label = UILabel()
         label.text = ""
         label.numberOfLines = 0
@@ -185,7 +187,7 @@ class VideoCell: CollectionViewCell {
         return label
     }()
     
-    let subtitleLabel: UILabel = {
+    public let subtitleLabel: UILabel = {
         let label = UILabel()
         label.text = ""
         label.textColor = .lightGray
@@ -193,7 +195,7 @@ class VideoCell: CollectionViewCell {
         return label
     }()
     
-    let storyLabel: UILabel = { //maybe for ipad
+    public let storyLabel: UILabel = { //maybe for ipad
         let label = UILabel()
         label.text = "Comment by:"
         label.numberOfLines = 0
@@ -201,14 +203,14 @@ class VideoCell: CollectionViewCell {
         return label
     }()
     
-    let uploadbylabel: UILabel = {
+    public let uploadbylabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
         return label
     }()
     
-    let actionButton: UIButton = {
+    public let actionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .lightGray
@@ -216,7 +218,7 @@ class VideoCell: CollectionViewCell {
         return button
     }()
     
-    let likeBtn: UIButton = {
+    public let likeBtn: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
@@ -225,20 +227,20 @@ class VideoCell: CollectionViewCell {
         return button
     }()
     
-    lazy var buttonView: UIView = {
+    private let buttonView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    lazy var separatorView: UIView = {
+    private let separatorView: UIView = {
         let view = UIView()
         view.backgroundColor = .quaternaryLabel //UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    lazy var playButton: UIButton = {
+    public let playButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.alpha = 0.9
@@ -388,7 +390,7 @@ class VideoCell: CollectionViewCell {
                 subtitleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
                 subtitleLabel.heightAnchor.constraint(equalToConstant: 20),
                 
-                //fix view to make buttons work
+                // FIXME: view to make buttons work
                 buttonView.topAnchor.constraint(equalTo: customImageView.bottomAnchor, constant: 0),
                 buttonView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
                 buttonView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),

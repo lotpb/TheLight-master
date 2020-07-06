@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17132" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17105"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CardMapController" customModule="TheLight2" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CardMapController" customModule="TheLight" customModuleProvider="target">
             <connections>
-                <outlet property="addBtn" destination="b7v-AV-gzM" id="xAM-VI-GcJ"/>
-                <outlet property="distanceLabel" destination="nlT-RI-zUw" id="u4I-Pe-DwJ"/>
                 <outlet property="handleArea" destination="r6F-YW-eeF" id="QCb-cO-mdJ"/>
-                <outlet property="startLabel" destination="tY9-ap-c12" id="C5k-4K-K1u"/>
-                <outlet property="textView" destination="e6D-nC-pCp" id="0JT-HH-1c5"/>
-                <outlet property="timeLabel" destination="rGp-Dv-Y1t" id="a9A-Oa-BIT"/>
                 <outlet property="titleLabel" destination="jtg-Bv-Rbe" id="ffb-Gh-lb0"/>
                 <outlet property="view" destination="iN0-l3-epB" id="406-37-5Yg"/>
             </connections>
@@ -28,9 +25,9 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You're offline" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jtg-Bv-Rbe" userLabel="You're offline">
-                            <rect key="frame" x="129" y="24" width="117" height="24"/>
+                            <rect key="frame" x="128.5" y="24" width="118.5" height="24"/>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
-                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <color key="textColor" systemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
@@ -53,7 +50,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <color key="backgroundColor" systemColor="systemIndigoColor" red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" systemColor="systemIndigoColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="60" id="0Wa-7J-dC9"/>
                                 <constraint firstItem="tY9-ap-c12" firstAttribute="top" secondItem="GVv-ol-VMx" secondAttribute="top" constant="20" id="Z80-zn-xSc"/>
@@ -67,18 +64,18 @@
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="See upcoming promotions" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rGp-Dv-Y1t">
                                     <rect key="frame" x="50" y="21" width="180" height="18"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <color key="textColor" systemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="xmark.seal" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="5Nb-aF-Z9S">
-                                    <rect key="frame" x="10" y="14.5" width="30" height="31.5"/>
+                                    <rect key="frame" x="10" y="14" width="30" height="31.5"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="30" id="9bL-fA-Bc4"/>
                                         <constraint firstAttribute="width" constant="30" id="jPy-Ja-3K0"/>
                                     </constraints>
                                 </imageView>
                             </subviews>
-                            <color key="backgroundColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" systemColor="secondaryLabelColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="60" id="5hl-d5-2Bp"/>
                                 <constraint firstItem="5Nb-aF-Z9S" firstAttribute="leading" secondItem="bVH-b0-IyV" secondAttribute="leading" constant="10" id="Do8-Zz-qVr"/>
@@ -100,11 +97,11 @@
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="See driving time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nlT-RI-zUw">
                                     <rect key="frame" x="50" y="19" width="111" height="18"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <color key="textColor" systemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <color key="backgroundColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" systemColor="secondaryLabelColor"/>
                             <constraints>
                                 <constraint firstItem="YJg-BC-Jw5" firstAttribute="leading" secondItem="tvy-9p-2cF" secondAttribute="leading" constant="10" id="J1W-ZE-KXV"/>
                                 <constraint firstItem="YJg-BC-Jw5" firstAttribute="centerY" secondItem="tvy-9p-2cF" secondAttribute="centerY" id="diM-02-a93"/>
@@ -118,7 +115,7 @@
                             <subviews>
                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="e6D-nC-pCp">
                                     <rect key="frame" x="10" y="8" width="355" height="140"/>
-                                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                     <color key="textColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -153,7 +150,7 @@
                                     <state key="normal" image="magnifyingglass" catalog="system"/>
                                 </button>
                             </subviews>
-                            <color key="backgroundColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" systemColor="secondaryLabelColor"/>
                             <constraints>
                                 <constraint firstItem="b7v-AV-gzM" firstAttribute="top" secondItem="dvQ-mr-2f1" secondAttribute="top" constant="15" id="8pQ-In-x77"/>
                                 <constraint firstItem="ycK-Py-efo" firstAttribute="top" secondItem="dvQ-mr-2f1" secondAttribute="top" constant="15" id="GfW-v6-qdP"/>
@@ -184,6 +181,7 @@
                     </constraints>
                 </view>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="qZN-Of-IAe" secondAttribute="trailing" id="7gy-Li-Cac"/>
@@ -195,7 +193,6 @@
                 <constraint firstItem="r6F-YW-eeF" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="pZ1-IC-o7H"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <point key="canvasLocation" x="130.40000000000001" y="73.763118440779621"/>
         </view>
     </objects>
@@ -203,6 +200,24 @@
         <image name="magnifyingglass" catalog="system" width="128" height="115"/>
         <image name="trash.circle" catalog="system" width="128" height="121"/>
         <image name="wand.and.rays" catalog="system" width="128" height="121"/>
-        <image name="xmark.seal" catalog="system" width="128" height="122"/>
+        <image name="xmark.seal" catalog="system" width="128" height="125"/>
+        <systemColor name="darkTextColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="darkTextColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="darkTextColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemIndigoColor">
+            <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

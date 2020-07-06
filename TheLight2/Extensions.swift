@@ -11,6 +11,9 @@ import UIKit
 import MapKit
 
 var searchController: UISearchController!
+// Gradient
+let primaryColor = UIColor(red: 210/255, green: 109/255, blue: 180/255, alpha: 1)
+let secondaryColor = UIColor(red: 52/255, green: 148/255, blue: 230/255, alpha: 1)
 
 enum Config {
     static let NewsLead = "Company to expand to a new web advertising directive this week."
@@ -248,7 +251,7 @@ class CustomImageView: UIImageView {
         
         lastUrlUsedToLoadImage = urlString
         
-        self.image = nil
+        image = nil
         
         if let cacheImage = imageCache[urlString]{
             self.image = cacheImage
@@ -296,14 +299,14 @@ public extension String {
     var isValidEmailAddress: Bool { //valid email Valid
         let types: NSTextCheckingResult.CheckingType = [.link]
         let linkDetector = try? NSDataDetector(types: types.rawValue)
-        let range = NSRange(location: 0, length: self.count)
+        let range = NSRange(location: 0, length: count)
         let result = linkDetector?.firstMatch(in: self, options: .reportCompletion, range: range)
         let scheme = result?.url?.scheme ?? ""
-        return scheme == "mailto" && result?.range.length == self.count
+        return scheme == "mailto" && result?.range.length == count
     }
     // MARK: - begin and ends RemoveWhiteSpace  //EditData
     func removeWhiteSpace() -> String {
-        return self.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        return trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
     // MARK: - all RemoveWhiteSpace  //BlogEdit
     func removingWhitespaces() -> String {
@@ -353,10 +356,35 @@ extension UIView {
     //        layer.masksToBounds = false
     //    }
 
+    // Chat
+    public var width: CGFloat {
+        return frame.size.width
+    }
+
+    public var height: CGFloat {
+        return frame.size.height
+    }
+
+    public var top: CGFloat {
+        return frame.origin.y
+    }
+
+    public var bottom: CGFloat {
+        return frame.size.height + frame.origin.y
+    }
+
+    public var left: CGFloat {
+        return frame.origin.x
+    }
+
+    public var right: CGFloat {
+        return frame.size.width + frame.origin.x
+    }
+
     // loginVC
     func addVerticalGradientLayer(topColor:UIColor, bottomColor:UIColor) {
         let gradient = CAGradientLayer()
-        gradient.frame = self.bounds
+        gradient.frame = bounds
         gradient.colors = [
             topColor.cgColor,
             bottomColor.cgColor
@@ -364,7 +392,7 @@ extension UIView {
         gradient.locations = [0.0, 1.0]
         gradient.startPoint = CGPoint(x: 0, y: 0)
         gradient.endPoint = CGPoint(x: 0, y: 1)
-        self.layer.insertSublayer(gradient, at: 0)
+        layer.insertSublayer(gradient, at: 0)
     }
     // News - youtube
     func addConstraintsWithFormat(format: String, views: UIView...) {
@@ -382,22 +410,22 @@ extension UIView {
         translatesAutoresizingMaskIntoConstraints = false
         
         if let top = top {
-            self.topAnchor.constraint(equalTo: top, constant: paddingTop).isActive = true
+            topAnchor.constraint(equalTo: top, constant: paddingTop).isActive = true
         }
         if let left = left {
-            self.leftAnchor.constraint(equalTo: left, constant: paddingLeft).isActive = true
+            leftAnchor.constraint(equalTo: left, constant: paddingLeft).isActive = true
         }
         if let bottom = bottom {
-            self.bottomAnchor.constraint(equalTo: bottom, constant: -paddingBottom).isActive = true
+            bottomAnchor.constraint(equalTo: bottom, constant: -paddingBottom).isActive = true
         }
         if let right = right {
-            self.rightAnchor.constraint(equalTo: right, constant: -paddingRight).isActive = true
+            rightAnchor.constraint(equalTo: right, constant: -paddingRight).isActive = true
         }
         if width != 0 {
-            self.widthAnchor.constraint(equalToConstant: width).isActive = true
+            widthAnchor.constraint(equalToConstant: width).isActive = true
         }
         if height != 0 {
-            self.heightAnchor.constraint(equalToConstant: height).isActive = true
+            heightAnchor.constraint(equalToConstant: height).isActive = true
         }
     }
 }
@@ -427,7 +455,7 @@ extension NSRange {
 extension UISplitViewController: UISplitViewControllerDelegate {
     
     open override func viewDidLoad() { // FIX - remove bottom bar
-        self.extendedLayoutIncludesOpaqueBars = true
+        extendedLayoutIncludesOpaqueBars = true
     }
 } 
 
@@ -460,8 +488,8 @@ extension MKMapView {
 extension MKMapViewDelegate {
     // placeCell
     func FetchCity(_ coordinate : CLLocation, completion: @escaping (String?)->()){
-        CLGeocoder().reverseGeocodeLocation(coordinate) { (placemarks, error) in
-
+        CLGeocoder().reverseGeocodeLocation(coordinate) { [weak self] (placemarks, error) in
+            guard self != nil else { return }
             if let placemarks = placemarks{
                 let placemark = placemarks.first
                 if let city = placemark?.locality {
@@ -510,6 +538,6 @@ extension Date {
 }
 
 extension Notification.Name {
-    static let didLoginNotification = Notification.Name("didLoginNotification")
+    static let didLogInNotification = Notification.Name("didLogInNotification")
 }
 

@@ -20,10 +20,10 @@ final class CodeGenVC: UIViewController {
     @IBOutlet weak var imgQRCode: UIImageView!
     @IBOutlet weak var slider: UISlider!
     
-    var qrcodeImage: CIImage!
-    var defaults = UserDefaults.standard
+    private var qrcodeImage: CIImage!
+    private var defaults = UserDefaults.standard
     
-    let imageProfile: CustomImageView = {
+    private let imageProfile: CustomImageView = {
         let imageView = CustomImageView()
         imageView.backgroundColor = .systemGray
         imageView.contentMode = .scaleAspectFill
@@ -33,7 +33,7 @@ final class CodeGenVC: UIViewController {
         return imageView
     }()
     
-    lazy var generateBtn: UIButton = {
+    private let generateBtn: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
@@ -88,7 +88,7 @@ final class CodeGenVC: UIViewController {
         slider.thumbTintColor = .systemOrange
         
         setupNavigation()
-        setupForm()
+        //setupForm()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -119,7 +119,8 @@ final class CodeGenVC: UIViewController {
         }
     }
     
-    func setupForm() {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         
         view.addSubview(self.imageProfile)
         view.addSubview(self.generateBtn)

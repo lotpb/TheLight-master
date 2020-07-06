@@ -30,9 +30,6 @@ struct VisitModel {
     let longitude: Double
     let horizontalaccuracy: Double
 
-//    var location: CLLocation {
-//        return CLLocation(latitude: latitude, longitude: longitude)
-//    }
     
     //init(_ location: CLLocationCoordinate2D, date: Date, descriptionString: String) {
     init(dictionary: [String: Any]) {
@@ -44,6 +41,7 @@ struct VisitModel {
         self.desciption = dictionary["desciption"] as? String ?? ""
         self.horizontalaccuracy = dictionary["horizontal_accuracy"] as? Double ?? 0
 
+        //self.arrivaldate = Date(timeIntervalSince1970: dictionary["arrival_date"] as? Double ?? 0)
         self.arrivaldate = dictionary["arrival_date"] as! String
         self.departuredate = dictionary["departure_date"] as! String
     }

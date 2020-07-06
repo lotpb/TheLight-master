@@ -24,14 +24,14 @@ final class Vendor: UIViewController {
     private let searchScope = ["name", "city", "phone", "department"]
     
     //firebase
-    var vendlist = [VendModel]()
-    var activeCount: Int?
-    var defaults = UserDefaults.standard
+    private var vendlist = [VendModel]()
+    private var activeCount: Int?
+    private var defaults = UserDefaults.standard
     //parse
-    var _feedItems = NSMutableArray()
-    var _feedheadItems = NSMutableArray()
+    private var _feedItems = NSMutableArray()
+    private var _feedheadItems = NSMutableArray()
  
-    var pasteBoard = UIPasteboard.general
+    private var pasteBoard = UIPasteboard.general
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -42,6 +42,7 @@ final class Vendor: UIViewController {
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         return refreshControl
     }()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +50,7 @@ final class Vendor: UIViewController {
         setupNavigation()
         setupTableView()
         
-        self.tableView!.addSubview(self.refreshControl)
+        tableView!.addSubview(refreshControl)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -98,16 +99,16 @@ final class Vendor: UIViewController {
     
     func setupTableView() {
         // MARK: - TableHeader
-        self.tableView?.register(HeaderViewCell.self, forCellReuseIdentifier: "Header")
+        tableView?.register(HeaderViewCell.self, forCellReuseIdentifier: "Header")
         
-        self.tableView!.delegate = self
-        self.tableView!.dataSource = self
-        self.tableView!.sizeToFit()
-        self.tableView!.clipsToBounds = true
+        tableView!.delegate = self
+        tableView!.dataSource = self
+        tableView!.sizeToFit()
+        tableView!.clipsToBounds = true
         let bgView = UIView()
         bgView.backgroundColor = .secondarySystemGroupedBackground
         tableView!.backgroundView = bgView
-        self.tableView!.tableFooterView = UIView(frame: .zero)
+        tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
         resultsController.tableView.backgroundColor = ColorX.LGrayColor
@@ -122,7 +123,7 @@ final class Vendor: UIViewController {
     @objc func hideBar(notification: NSNotification)  {
         if UIDevice.current.userInterfaceIdiom == .phone  {
             let state = notification.object as! Bool
-            self.navigationController?.setNavigationBarHidden(state, animated: true)
+            navigationController?.setNavigationBarHidden(state, animated: true)
             UIView.animate(withDuration: 0.2, animations: {
                 self.tabBarController?.hideTabBarAnimated(hide: state) //added
             }, completion: nil)
@@ -143,9 +144,9 @@ final class Vendor: UIViewController {
     
     // MARK: - refresh
     @objc func refreshData(_ sender:AnyObject) {
-        vendlist.removeAll() //fix
+        vendlist.removeAll() // FIXME: shouldn't crash
         loadData()
-        self.refreshControl.endRefreshing()
+        refreshControl.endRefreshing()
     }
     
     // MARK: - Button
@@ -259,6 +260,7 @@ final class Vendor: UIViewController {
     // MARK: - Segues
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
+        MasterViewController.dateFormatter.dateFormat = "MMM dd yyyy"
         if segue.identifier == "vendordetailSegue" {
             
             let formatter = NumberFormatter()
@@ -286,7 +288,7 @@ final class Vendor: UIViewController {
                 
             } else {
                 
-                indexPath = self.tableView?.indexPathForSelectedRow?.row
+                indexPath = tableView?.indexPathForSelectedRow?.row
                 if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     dateUpdated = (_feedItems[indexPath!] as AnyObject).value(forKey: "updatedAt") as! Date
                     LeadNo = (_feedItems[indexPath!] as AnyObject).value(forKey: "VendorNo") as? Int
@@ -312,9 +314,8 @@ final class Vendor: UIViewController {
             if Active == nil {
                 Active = 0
             }
-            let dateFormat = DateFormatter()
-            dateFormat.dateFormat = "MMM dd yy"
-            VC.tbl16 = String(format: "%@", dateFormat.string(from: dateUpdated)) as String
+
+            VC.tbl16 = String(format: "%@", MasterViewController.dateFormatter.string(from: dateUpdated)) as String
             
             if navigationItem.searchController?.isActive == true {
                 //search
@@ -390,7 +391,7 @@ final class Vendor: UIViewController {
                     VC.tbl13 = vendlist[indexPath!].phone2
                     VC.tbl14 = vendlist[indexPath!].phone3
                     VC.tbl15 = vendlist[indexPath!].assistant as NSString
-                    VC.tbl16 = dateFormat.string(from: vendlist[indexPath!].lastUpdate as Date) as String
+                    VC.tbl16 = MasterViewController.dateFormatter.string(from: vendlist[indexPath!].lastUpdate as Date) as String
                     VC.tbl21 = vendlist[indexPath!].email as NSString
                     VC.tbl22 = vendlist[indexPath!].department
                     VC.tbl23 = vendlist[indexPath!].office
@@ -591,16 +592,15 @@ extension Vendor: UITableViewDelegate {
                 header.myLabel3.text = String(format: "%@%d", "Events\n", 0)
             }
             header.contentView.backgroundColor = ColorX.Vend.buttonColor//.secondarySystemFill //Color.Lead.navColor
-            self.tableView!.tableHeaderView = nil //header.header
+            tableView.tableHeaderView = nil //header.header
             
             return header.contentView
         }
         return nil
     }
     
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
     }
     
     internal func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

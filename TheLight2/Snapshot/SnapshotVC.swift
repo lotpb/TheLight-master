@@ -32,72 +32,72 @@ class SnapshotVC: UIViewController, UISplitViewControllerDelegate {
     private var filteredMenu = [String]()
     
     //firebase
-    var newslist = [NewsModel]()
-    var joblist = [JobModel]()
-    var userlist = [UserModel]()
-    var saleslist = [SalesModel]()
-    var employlist = [EmployModel]()
+    private var newslist = [NewsModel]()
+    private var joblist = [JobModel]()
+    private var userlist = [UserModel]()
+    private var saleslist = [SalesModel]()
+    private var employlist = [EmployModel]()
     
-    var newsStr : String!
-    var newsdateStr : Date!
-    var newsdetailStr : String!
-    var blogStr : String!
-    var blogdateStr : Date!
-    var blogpostStr : String!
+    private var newsStr : String!
+    private var newsdateStr : Date!
+    private var newsdetailStr : String!
+    private var blogStr : String!
+    private var blogdateStr : Date!
+    private var blogpostStr : String!
     
     //parse
-    var _feedNews = NSMutableArray() //news
-    var _feedJob = NSMutableArray() //job
-    var _feedUser = NSMutableArray() //user
-    var _feedSales = NSMutableArray() //salesman
-    var _feedItems5 = NSMutableArray() //employee
-    var _feedItems6 = NSMutableArray() //blog
-    var imageObject: PFObject!
-    var imageFile: PFFileObject!
+    private var _feedNews = NSMutableArray() //news
+    private var _feedJob = NSMutableArray() //job
+    private var _feedUser = NSMutableArray() //user
+    private var _feedSales = NSMutableArray() //salesman
+    private var _feedItems5 = NSMutableArray() //employee
+    private var _feedItems6 = NSMutableArray() //blog
+    private var imageObject: PFObject!
+    private var imageFile: PFFileObject!
     
-    var selectedImage : UIImage!
+    private var selectedImage : UIImage!
 
-    var selectedObjectId : String!
-    var selectedTitle : String!
-    var selectedName : String!
-    var selectedCreate : String!
-    var selectedEmail : String!
-    var selectedPhone : String!
-    var selectedDate : Date!
+    private var selectedObjectId : String!
+    private var selectedTitle : String!
+    private var selectedName : String!
+    private var selectedCreate : String!
+    private var selectedEmail : String!
+    private var selectedPhone : String!
+    private var selectedDate : Date!
     
-    var selectedState : String!
-    var selectedZip : String!
-    var selectedAmount : String!
-    var selectedComments : String!
-    var selectedActive : String!
+    private var selectedState : String!
+    private var selectedZip : String!
+    private var selectedAmount : String!
+    private var selectedComments : String!
+    private var selectedActive : String!
 
-    var selected11 : String!
-    var selected12 : String!
-    var selected13 : String!
-    var selected14 : String!
-    var selected15 : NSString!
-    var selected16 : String!
-    var selected21 : NSString!
-    var selected22 : String!
-    var selected23 : String!
-    var selected24 : String!
-    var selected25 : String!
-    var selected26 : NSString!
-    var selected27 : String!
+    private var selected11 : String!
+    private var selected12 : String!
+    private var selected13 : String!
+    private var selected14 : String!
+    private var selected15 : NSString!
+    private var selected16 : String!
+    private var selected21 : NSString!
+    private var selected22 : String!
+    private var selected23 : String!
+    private var selected24 : String!
+    private var selected25 : String!
+    private var selected26 : NSString!
+    private var selected27 : String!
     
-    var resultDateDiff : String!
-    var imageDetailurl : String?
+    private var resultDateDiff : String!
+    private var imageDetailurl : String?
     
-    var maintitle : UILabel!
-    var datetitle : UILabel!
-    var myLabel1 : UILabel!
+    private var maintitle : UILabel!
+    private var datetitle : UILabel!
+    private var myLabel1 : UILabel!
 
-    var calendar: EKCalendar!
-    var events: [EKEvent]?
+    private var calendar: EKCalendar!
+    private var events: [EKEvent]?
 
-    weak var textYQL: NSArray!
-    var tempYQL: String!
-    var weathYQL: String!
+    private weak var textYQL: NSArray!
+    private var tempYQL: String!
+    private var weathYQL: String!
 
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -113,7 +113,7 @@ class SnapshotVC: UIViewController, UISplitViewControllerDelegate {
         super.viewDidLoad()
         // MARK: - SplitView
         self.extendedLayoutIncludesOpaqueBars = true
-        //fixed - remove bottom bar
+        // FIXME: - remove bottom bar
         self.splitViewController?.delegate = self
         self.splitViewController?.preferredDisplayMode = .allVisible
 
@@ -122,18 +122,18 @@ class SnapshotVC: UIViewController, UISplitViewControllerDelegate {
         setupNavigation()
         setupNewsNavigationItems()
         loadEvents()
-        self.tableView.addSubview(self.refreshControl)
+        tableView.addSubview(refreshControl)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
         
         // MARK: NavigationController Hidden
         NotificationCenter.default.addObserver(self, selector: #selector(SnapshotVC.hideBar(notification:)), name: NSNotification.Name("hide"), object: nil)
@@ -151,7 +151,7 @@ class SnapshotVC: UIViewController, UISplitViewControllerDelegate {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = true
+        tabBarController?.tabBar.isHidden = true
     }
     
     override func didReceiveMemoryWarning() {
@@ -161,8 +161,8 @@ class SnapshotVC: UIViewController, UISplitViewControllerDelegate {
     
     func setupNavigation() {
         navigationController?.navigationBar.prefersLargeTitles = false
-        self.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-        self.navigationItem.leftItemsSupplementBackButton = true
+        navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+        navigationItem.leftItemsSupplementBackButton = true
         if UIDevice.current.userInterfaceIdiom == .pad  {
             navigationItem.title = "TheLight Software - Snapshot"
         } else {
@@ -172,13 +172,13 @@ class SnapshotVC: UIViewController, UISplitViewControllerDelegate {
     
     func setupTableView() {
         // MARK: - TableHeader
-        self.tableView?.register(SnapHeaderviewCell.self, forCellReuseIdentifier: "Header")
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        self.tableView.backgroundColor = .systemGroupedBackground
-        self.tableView.separatorColor = .red
-        self.tableView.separatorInset = .init(top: 0, left: 5, bottom: 0, right: 5) // .zero
-        self.tableView!.tableFooterView = UIView(frame: .zero)
+        tableView?.register(SnapHeaderviewCell.self, forCellReuseIdentifier: "Header")
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.backgroundColor = .systemGroupedBackground
+        tableView.separatorColor = .red
+        tableView.separatorInset = .init(top: 0, left: 5, bottom: 0, right: 5) // .zero
+        tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
         resultsController.tableView.sizeToFit()
@@ -191,14 +191,14 @@ class SnapshotVC: UIViewController, UISplitViewControllerDelegate {
     // MARK: - NavigationController Hidden
     @objc func hideBar(notification: NSNotification)  {
         let state = notification.object as! Bool
-        self.navigationController?.setNavigationBarHidden(state, animated: true)
+        navigationController?.setNavigationBarHidden(state, animated: true)
         UIView.animate(withDuration: 0.2, animations: {
             self.tabBarController?.hideTabBarAnimated(hide: state) //added
         }, completion: nil)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if (self.lastContentOffset > scrollView.contentOffset.y) {
+        if (lastContentOffset > scrollView.contentOffset.y) {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: false)
         } else {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: true)
@@ -206,7 +206,7 @@ class SnapshotVC: UIViewController, UISplitViewControllerDelegate {
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        self.lastContentOffset = scrollView.contentOffset.y;
+        lastContentOffset = scrollView.contentOffset.y;
     }
     
     // MARK: - refresh
@@ -217,7 +217,7 @@ class SnapshotVC: UIViewController, UISplitViewControllerDelegate {
         saleslist.removeAll()
         employlist.removeAll()
         loadData()
-        self.refreshControl.endRefreshing()
+        refreshControl.endRefreshing()
     }
     
     // MARK: - Load Data
@@ -406,16 +406,15 @@ class SnapshotVC: UIViewController, UISplitViewControllerDelegate {
     }
     
     // MARK: - Calender Events
-    // MARK: fix dont work
+    // FIXME: dont work
     func loadEvents() {
         
         // Create a date formatter instance to use for converting a string to a date
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
+        MasterViewController.dateFormatter.dateFormat = "yyyy-MM-dd"
         
         // Create start and end date NSDate instances to build a predicate for which events to select
-        let startDate = dateFormatter.date(from: "2016-01-01")
-        let endDate = dateFormatter.date(from: "2017-12-31")
+        let startDate = MasterViewController.dateFormatter.date(from: "2016-01-01")
+        let endDate = MasterViewController.dateFormatter.date(from: "2017-12-31")
         
         if let startDate = startDate, let endDate = endDate {
             let eventStore = EKEventStore()
@@ -620,7 +619,9 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
                 //let newsImageUrl = newslist[indexPath.item].imageUrl
                 //cell.snapImageView.loadImage(urlString: newsImageUrl)
                 let imageUrl:URL = URL(string: newslist[indexPath.item].imageUrl)!
-                cell.snapImageView.sd_setImage(with: imageUrl, completed: nil)
+                DispatchQueue.main.async {
+                    cell.snapImageView.sd_setImage(with: imageUrl, completed: nil)
+                }
 
                 myLabel1.text = newslist[indexPath.item].newsTitle
                 let videoDetailurl = newslist[indexPath.item].videoUrl
@@ -668,8 +669,10 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
             } else {
                 //firebase
                 let jobImageUrl = joblist[indexPath.item].imageUrl
-                cell.snapImageView.loadImage(urlString: jobImageUrl)
-                //cell.snapImageView.sd_setImage(with: jobImageUrl, completed: nil)
+                DispatchQueue.main.async {
+                    cell.snapImageView.loadImage(urlString: jobImageUrl)
+                    //cell.snapImageView.sd_setImage(with: jobImageUrl, completed: nil)
+                }
                 myLabel1.text = joblist[indexPath.item].description
             }
             cell.activityIndicator.stopAnimating()
@@ -699,7 +702,9 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
                 //let newsImageUrl = userlist[indexPath.item].profileImageUrl
                 //cell.snapImageView.loadImage(urlString: newsImageUrl)
                 let imageUrl:URL = URL(string: userlist[indexPath.item].profileImageUrl)!
-                cell.snapImageView.sd_setImage(with: imageUrl, completed: nil)
+                DispatchQueue.main.async {
+                    cell.snapImageView.sd_setImage(with: imageUrl, completed: nil)
+                }
                 myLabel1.text = userlist[indexPath.item].username
                 
             }
@@ -758,9 +763,11 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
                 //firebase
 
                 let newsImageUrl = employlist[indexPath.item].imageUrl
-                cell.snapImageView.loadImage(urlString: newsImageUrl)
-                //let imageUrl:URL = URL(string: employlist[indexPath.item].imageUrl)!
-                //cell.snapImageView.sd_setImage(with: imageUrl, completed: nil)
+                DispatchQueue.main.async {
+                    cell.snapImageView.loadImage(urlString: newsImageUrl)
+                    //let imageUrl:URL = URL(string: employlist[indexPath.item].imageUrl)!
+                    //cell.snapImageView.sd_setImage(with: imageUrl, completed: nil)
+                }
                 myLabel1.text = String(format: "%@ %@", employlist[indexPath.item].lastname, employlist[indexPath.item].company).removeWhiteSpace()
             }
             cell.activityIndicator.stopAnimating()
@@ -784,7 +791,7 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
                     let imageDetailurl = self.imageFile.url
                     let result1 = imageDetailurl!.contains("movie.mp4")
                     if (result1 == true) {
-                        //fix
+                        // FIXME:
                         self.performSegue(withIdentifier: "snapvideoSegue", sender: self)
                         
                         let storyboard = UIStoryboard(name: "News", bundle: nil)
@@ -840,9 +847,9 @@ extension SnapshotVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
                     self.selectedPhone = (self._feedUser[indexPath.row] as AnyObject).value(forKey: "phone") as? String
                     
                     let updated:Date = (self._feedUser[indexPath.row] as AnyObject).value(forKey: "createdAt") as! Date
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "MMM dd, yyyy"
-                    let createString = dateFormatter.string(from: updated)
+
+                    MasterViewController.dateFormatter.dateFormat = "MMM dd, yyyy"
+                    let createString = MasterViewController.dateFormatter.string(from: updated)
                     self.selectedCreate = createString
                 }
             } else {
@@ -1121,8 +1128,8 @@ extension SnapshotVC: UITableViewDataSource {
         cell.collectionView.delegate =  nil
         cell.collectionView.dataSource = nil
         cell.collectionView.backgroundColor = .secondarySystemGroupedBackground
-        cell.customImagelabel.backgroundColor = .clear //fixed
-        cell.customImageView.layer.borderColor = UIColor.clear.cgColor //fixed
+        cell.customImagelabel.backgroundColor = .clear // FIXME: shouldn't crash
+        cell.customImageView.layer.borderColor = UIColor.clear.cgColor // FIXME: shouldn't crash
         cell.backgroundColor =  .secondarySystemGroupedBackground
         cell.accessoryType = .none
 

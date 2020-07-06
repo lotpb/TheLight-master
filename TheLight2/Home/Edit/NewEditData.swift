@@ -15,21 +15,21 @@ import SDWebImage
 
 
 @available(iOS 13.0, *)
-final class NewEditData: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate , UITextFieldDelegate {
+final class NewEditData: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var tableView: UITableView?
     
-    var formController : String?
-    var formStatus : String?
-    var defaults = UserDefaults.standard
+    public var formController : String?
+    public var formStatus : String?
+    private var defaults = UserDefaults.standard
     
-    var objectId : String?
-    var active : String?
-    var frm11 : String?
-    var frm12 : String?
-    var frm13 : String?
-    var frm14 : Int?
-    var frm15 : String?
+    public var objectId : String?
+    public var active : String?
+    public var frm11 : String?
+    public var frm12 : String?
+    public var frm13 : String?
+    public var frm14 : Int?
+    public var frm15 : String?
     
     private var textframe: UITextField!
     private var salesNo : UITextField!
@@ -37,12 +37,12 @@ final class NewEditData: UIViewController, UIImagePickerControllerDelegate, UINa
     private var price: UITextField!
     private var zip: UITextField!
     
-    var image : UIImage!
-    var imageUrl: String?
-    var photo: String?
+    public var image : UIImage!
+    public var imageUrl: String?
+    public var photo: String?
     
-    var objects = [AnyObject]()
-    var pasteBoard = UIPasteboard.general
+    private var objects = [AnyObject]()
+    private var pasteBoard = UIPasteboard.general
     
     let activeImage: CustomImageView = { //tableheader
         let imageView = CustomImageView()
@@ -88,7 +88,7 @@ final class NewEditData: UIViewController, UIImagePickerControllerDelegate, UINa
         setupImageView()
         setupNavigationButtons()
         if formStatus == "New" {
-            self.frm11 = "Active"
+            frm11 = "Active"
         }
 
         if UIDevice.current.userInterfaceIdiom == .pad  {
@@ -97,22 +97,22 @@ final class NewEditData: UIViewController, UIImagePickerControllerDelegate, UINa
             navigationItem.title = String(format: "%@ %@", self.formStatus!, self.formController!)
         }
         self.navigationItem.largeTitleDisplayMode = .always
-        self.tableView!.addSubview(self.refreshControl)
+        tableView!.addSubview(refreshControl)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         if UIDevice.current.userInterfaceIdiom == .pad  {
-            self.navigationController?.navigationBar.barTintColor = .black
+            navigationController?.navigationBar.barTintColor = .black
         } else {
-            self.navigationController?.navigationBar.barTintColor = ColorX.Table.labelColor
+            navigationController?.navigationBar.barTintColor = ColorX.Table.labelColor
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-  
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -125,13 +125,13 @@ final class NewEditData: UIViewController, UIImagePickerControllerDelegate, UINa
         self.loadAvatarImage()
 
         if (formController == "Product") || (formController == "Jobs") || (formController == "Salesman") {
-        UIView.transition(with: self.plusPhotoButton, duration: 0.5, options: .transitionCrossDissolve, animations: {
-            if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
+            UIView.transition(with: self.plusPhotoButton, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
 
-            } else {
-                //firebase
-            }
-        }, completion: nil)
+                } else {
+                    //firebase
+                }
+            }, completion: nil)
         }
     }
     
@@ -142,30 +142,30 @@ final class NewEditData: UIViewController, UIImagePickerControllerDelegate, UINa
     
     func setupTableView() {
         
-        self.tableView!.delegate = self
-        self.tableView!.dataSource = self
-        self.tableView!.estimatedRowHeight = 110
-        self.tableView!.rowHeight = UITableView.automaticDimension
-        self.tableView!.backgroundColor = .secondarySystemGroupedBackground
-        self.tableView!.tableFooterView = UIView(frame: .zero)
+        tableView!.delegate = self
+        tableView!.dataSource = self
+        tableView!.estimatedRowHeight = 110
+        tableView!.rowHeight = UITableView.automaticDimension
+        tableView!.backgroundColor = .secondarySystemGroupedBackground
+        tableView!.tableFooterView = UIView(frame: .zero)
     }
     
     // MARK: - Refresh
     @objc func refreshData(_ sender:AnyObject) {
         
-        self.tableView!.reloadData()
-        self.refreshControl.endRefreshing()
+        tableView!.reloadData()
+        refreshControl.endRefreshing()
     }
     
     // MARK: - Switch
     @objc func changeSwitch(_ sender: UISwitch) {
         
         if (sender.isOn) {
-            self.frm11 = "Active"
+            frm11 = "Active"
         } else {
-            self.frm11 = ""
+            frm11 = ""
         }
-        self.tableView!.reloadData()
+        tableView!.reloadData()
     }
     
     // MARK: - Update Data
@@ -534,7 +534,7 @@ final class NewEditData: UIViewController, UIImagePickerControllerDelegate, UINa
                                       "State": self.salesNo.text ?? "",
                                       "zip": self.price.text ?? "",
                                       "zipNo": self.zip.text ?? "",
-                                      ] as [String: Any]
+                            ] as [String: Any]
                         
                         userRef.updateChildValues(values) { (err, ref) in
                             if err != nil {
@@ -702,27 +702,27 @@ extension NewEditData: UITableViewDataSource {
             }
             
             if (formController == "Salesman") {
-                self.salesman.placeholder = "Salesman"
+                self.salesman.placeholder = "Salesman..."
                 cell.textLabel!.text = "Salesman"
             }
                 
             else if (formController == "Product") {
-                self.salesman.placeholder = "Product"
+                self.salesman.placeholder = "Product..."
                 cell.textLabel!.text = "Product"
             }
                 
             else if (formController == "Advertiser") {
-                self.salesman.placeholder = "Advertiser"
+                self.salesman.placeholder = "Advertiser..."
                 cell.textLabel!.text = "Advertiser"
             }
                 
             else if (formController == "Jobs") {
-                self.salesman.placeholder = "Description"
+                self.salesman.placeholder = "Description..."
                 cell.textLabel!.text = "Description"
             }
                 
             else if (formController == "Zip") {
-                self.salesman.placeholder = "City"
+                self.salesman.placeholder = "City..."
                 cell.textLabel!.text = "City"
             }
             
@@ -739,27 +739,27 @@ extension NewEditData: UITableViewDataSource {
             }
             
             if (formController == "Salesman") {
-                self.salesNo.placeholder = "SalesNo"
+                self.salesNo.placeholder = "SalesNo..."
                 cell.textLabel!.text = "SalesNo"
             }
                 
             else if (formController == "Product") {
-                self.salesNo.placeholder = "ProductNo"
+                self.salesNo.placeholder = "ProductNo..."
                 cell.textLabel!.text = "ProductNo"
             }
                 
             else if (formController == "Advertiser") {
-                self.salesNo?.placeholder = "AdNo"
+                self.salesNo?.placeholder = "AdNo..."
                 cell.textLabel!.text = "AdNo"
             }
                 
             else if (formController == "Jobs") {
-                self.salesNo.placeholder = "JobNo"
+                self.salesNo.placeholder = "JobNo..."
                 cell.textLabel!.text = "JobNo"
             }
                 
             else if (formController == "Zip") {
-                self.salesNo.placeholder = "State"
+                self.salesNo.placeholder = "State..."
                 cell.textLabel!.text = "State"
             }
             
@@ -782,7 +782,7 @@ extension NewEditData: UITableViewDataSource {
             }
                 
             else if (formController == "Product") {
-                self.price.placeholder = "Price"
+                self.price.placeholder = "Price..."
                 //self.plusPhotoButton.imageView!.image = image
                 cell.textLabel!.text = "Price"
                 
@@ -800,7 +800,7 @@ extension NewEditData: UITableViewDataSource {
             }
                 
             else if (formController == "Zip") {
-                self.price.placeholder = "Zip"
+                self.price.placeholder = "Zip..."
                 cell.textLabel!.text = "Zip"
                 
                 if self.frm14 == nil {
@@ -830,7 +830,7 @@ extension NewEditData: UITableViewDataSource {
                 self.zip = textframe
                 self.zip!.adjustsFontSizeToFitWidth = true
                 
-                self.zip.placeholder = "ZipNo"
+                self.zip.placeholder = "ZipNo..."
                 cell.textLabel!.text = "ZipNo"
                 self.zip!.text = self.frm15
                 
@@ -839,200 +839,12 @@ extension NewEditData: UITableViewDataSource {
         }
         return cell
     }
-           // MARK: - AvatarImage
 
-        @objc func handlePlusPhoto() {
-
-                let imagePickerController = UIImagePickerController()
-                imagePickerController.delegate = self
-                imagePickerController.allowsEditing = true
-                present(imagePickerController, animated: true, completion: nil)
-            }
-
-           func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-
-               guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else { return }
-               plusPhotoButton.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
-               plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width / 2
-               plusPhotoButton.layer.masksToBounds = true
-               plusPhotoButton.layer.borderColor = UIColor.darkGray.cgColor
-               plusPhotoButton.layer.borderWidth = 3
-               setupAvatarImage()
-               dismiss(animated: true, completion: nil)
-           }
-
-           func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-               self.dismiss(animated: true)
-           }
-
-           func setupAvatarImage() { //dont work
-
-               let metadata = StorageMetadata()
-               metadata.contentType = "image/jpeg"
-
-               guard let userID = self.objectId else { return }
-
-                   if (formController == "Advertising") {
-
-                       let storageItem = Storage.storage().reference().child("Advertise_images").child(userID)
-                       guard let image = self.plusPhotoButton.imageView?.image else {return}
-                       if let newImage = image.jpegData(compressionQuality: 0.3)  {
-                           storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
-                               if error != nil{
-                                   print(error!)
-                                   return
-                               }
-                               storageItem.downloadURL(completion: { (url, error) in
-                                   if error != nil{
-                                       print(error!)
-                                       return
-                                   }
-
-                                   if let profilePhotoURL = url?.absoluteString {
-                                       let userRef = FirebaseRef.databaseAd.child(userID)
-                                       let values = [
-                                           "photo": profilePhotoURL] as [String: Any]
-                                       userRef.updateChildValues(values) { (error, ref) in
-                                           if error != nil {
-                                               self.showAlert(title:"Update Failure", message: "Failure updating the data")
-                                               return
-                                           } else {
-                                               self.showAlert(title: "Update Complete", message: "Successfully updated the data")
-                                           }
-                                       }
-                                   }
-                               })
-                           }
-                       }
-                   }
-                   if (formController == "Product") {
-
-                       let storageItem = Storage.storage().reference().child("Product_images").child(userID)
-                       guard let image = self.plusPhotoButton.imageView?.image else {return}
-                       if let newImage = image.jpegData(compressionQuality: 0.3)  {
-                           storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
-                               if error != nil{
-                                   print(error!)
-                                   return
-                               }
-                               storageItem.downloadURL(completion: { (url, error) in
-                                   if error != nil{
-                                       print(error!)
-                                       return
-                                   }
-
-                                   if let profilePhotoURL = url?.absoluteString {
-                                       let userRef = FirebaseRef.databaseProd.child(userID)
-                                       let values = [
-                                           "photo": profilePhotoURL] as [String: Any]
-                                       userRef.updateChildValues(values) { (error, ref) in
-                                           if error != nil {
-                                               self.showAlert(title:"Update Failure", message: "Failure updating the data")
-                                               return
-                                           } else {
-                                               self.showAlert(title: "Update Complete", message: "Successfully updated the data")
-                                           }
-                                       }
-                                   }
-                               })
-                           }
-                       }
-
-                   }
-                   if (formController == "Job") {
-
-                       let storageItem = Storage.storage().reference().child("Job_images").child(userID)
-                       guard let image = self.plusPhotoButton.imageView?.image else {return}
-                       if let newImage = image.jpegData(compressionQuality: 0.3)  {
-                           storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
-                               if error != nil{
-                                   print(error!)
-                                   return
-                               }
-                               storageItem.downloadURL(completion: { (url, error) in
-                                   if error != nil{
-                                       print(error!)
-                                       return
-                                   }
-
-                                   if let profilePhotoURL = url?.absoluteString {
-                                       let userRef = FirebaseRef.databaseJob.child(userID)
-                                       let values = [
-                                           "photo": profilePhotoURL] as [String: Any]
-                                       userRef.updateChildValues(values) { (error, ref) in
-                                           if error != nil {
-                                               self.showAlert(title:"Update Failure", message: "Failure updating the data")
-                                               return
-                                           } else {
-                                               self.showAlert(title: "Update Complete", message: "Successfully updated the data")
-                                           }
-                                       }
-                                   }
-                               })
-                           }
-                       }
-                   }
-                   if (formController == "Salesman") {
-
-                       let storageItem = Storage.storage().reference().child("Saleman_images").child(userID)
-                       guard let image = self.plusPhotoButton.imageView?.image else {return}
-                       if let newImage = image.jpegData(compressionQuality: 0.3)  {
-                           storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
-                               if error != nil{
-                                   print(error!)
-                                   return
-                               }
-                               storageItem.downloadURL(completion: { (url, error) in
-                                   if error != nil{
-                                       print(error!)
-                                       return
-                                   }
-
-                                   if let profilePhotoURL = url?.absoluteString {
-                                       let userRef = FirebaseRef.databaseSales.child(userID)
-                                       let values = [
-                                           "photo": profilePhotoURL] as [String: Any]
-                                       userRef.updateChildValues(values) { (error, ref) in
-                                           if error != nil {
-                                               self.showAlert(title:"Update Failure", message: "Failure updating the data")
-                                               return
-                                           } else {
-                                               self.showAlert(title: "Update Complete", message: "Successfully updated the data")
-                                           }
-                                       }
-                                   }
-                               })
-                           }
-                       }
-                   }
-
-           }
-        // MARK: - create AvatarImage
-        func loadAvatarImage() {
-            if (self.photo == nil) || (self.photo == "") {
-                self.photo = imageUrl
-            }
-            guard let temp = self.photo else {return}
-
-            if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
-
-            } else {
-                //firebase
-                guard let imageUrl:URL = URL(string: temp) else { return }
-                self.customImageView.sd_setImage(with: imageUrl, completed: nil)
-                
-                self.plusPhotoButton.layer.cornerRadius = self.plusPhotoButton.frame.width / 2
-                self.plusPhotoButton.layer.masksToBounds = true
-                self.plusPhotoButton.layer.borderColor = UIColor.systemBlue.cgColor
-                self.plusPhotoButton.layer.borderWidth = 3
-                self.plusPhotoButton.setImage(self.customImageView.image?.withRenderingMode(.alwaysOriginal), for: .normal)
-            }
-        }
-    }
+}
 
 @available(iOS 13.0, *)
 extension NewEditData: UITableViewDelegate {
-  
+
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
@@ -1070,21 +882,216 @@ extension NewEditData: UITableViewDelegate {
         pasteBoard.string = cell!.textLabel?.text
     }
 }
+extension NewEditData: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    // MARK: - AvatarImage
+
+    @objc func handlePlusPhoto() {
+
+        let picker = UIImagePickerController()
+        picker.sourceType = .photoLibrary
+        picker.delegate = self
+        picker.allowsEditing = true
+        present(picker, animated: true, completion: nil)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+
+        guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else { return }
+        plusPhotoButton.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
+        plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width / 2
+        plusPhotoButton.layer.masksToBounds = true
+        plusPhotoButton.layer.borderColor = UIColor.darkGray.cgColor
+        plusPhotoButton.layer.borderWidth = 3
+        setupAvatarImage()
+        dismiss(animated: true, completion: nil)
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true)
+    }
+
+    func setupAvatarImage() { //dont work
+
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+
+        guard let userID = self.objectId else { return }
+
+        if (formController == "Advertising") {
+
+            let storageItem = Storage.storage().reference().child("Advertise_images").child(userID)
+            guard let image = self.plusPhotoButton.imageView?.image else {return}
+            if let newImage = image.jpegData(compressionQuality: 0.3)  {
+                storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
+                    if error != nil{
+                        print(error!)
+                        return
+                    }
+                    storageItem.downloadURL(completion: { (url, error) in
+                        if error != nil{
+                            print(error!)
+                            return
+                        }
+
+                        if let profilePhotoURL = url?.absoluteString {
+                            let userRef = FirebaseRef.databaseAd.child(userID)
+                            let values = [
+                                "photo": profilePhotoURL] as [String: Any]
+                            userRef.updateChildValues(values) { (error, ref) in
+                                if error != nil {
+                                    self.showAlert(title:"Update Failure", message: "Failure updating the data")
+                                    return
+                                } else {
+                                    self.showAlert(title: "Update Complete", message: "Successfully updated the data")
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+        }
+        if (formController == "Product") {
+
+            let storageItem = Storage.storage().reference().child("Product_images").child(userID)
+            guard let image = self.plusPhotoButton.imageView?.image else {return}
+            if let newImage = image.jpegData(compressionQuality: 0.3)  {
+                storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
+                    if error != nil{
+                        print(error!)
+                        return
+                    }
+                    storageItem.downloadURL(completion: { (url, error) in
+                        if error != nil{
+                            print(error!)
+                            return
+                        }
+
+                        if let profilePhotoURL = url?.absoluteString {
+                            let userRef = FirebaseRef.databaseProd.child(userID)
+                            let values = [
+                                "photo": profilePhotoURL] as [String: Any]
+                            userRef.updateChildValues(values) { (error, ref) in
+                                if error != nil {
+                                    self.showAlert(title:"Update Failure", message: "Failure updating the data")
+                                    return
+                                } else {
+                                    self.showAlert(title: "Update Complete", message: "Successfully updated the data")
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+
+        }
+        if (formController == "Job") {
+
+            let storageItem = Storage.storage().reference().child("Job_images").child(userID)
+            guard let image = self.plusPhotoButton.imageView?.image else {return}
+            if let newImage = image.jpegData(compressionQuality: 0.3)  {
+                storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
+                    if error != nil{
+                        print(error!)
+                        return
+                    }
+                    storageItem.downloadURL(completion: { (url, error) in
+                        if error != nil{
+                            print(error!)
+                            return
+                        }
+
+                        if let profilePhotoURL = url?.absoluteString {
+                            let userRef = FirebaseRef.databaseJob.child(userID)
+                            let values = [
+                                "photo": profilePhotoURL] as [String: Any]
+                            userRef.updateChildValues(values) { (error, ref) in
+                                if error != nil {
+                                    self.showAlert(title:"Update Failure", message: "Failure updating the data")
+                                    return
+                                } else {
+                                    self.showAlert(title: "Update Complete", message: "Successfully updated the data")
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+        }
+        if (formController == "Salesman") {
+
+            let storageItem = Storage.storage().reference().child("Saleman_images").child(userID)
+            guard let image = self.plusPhotoButton.imageView?.image else {return}
+            if let newImage = image.jpegData(compressionQuality: 0.3)  {
+                storageItem.putData(newImage, metadata: metadata) { (metadata, error) in
+                    if error != nil{
+                        print(error!)
+                        return
+                    }
+                    storageItem.downloadURL(completion: { (url, error) in
+                        if error != nil{
+                            print(error!)
+                            return
+                        }
+
+                        if let profilePhotoURL = url?.absoluteString {
+                            let userRef = FirebaseRef.databaseSales.child(userID)
+                            let values = [
+                                "photo": profilePhotoURL] as [String: Any]
+                            userRef.updateChildValues(values) { (error, ref) in
+                                if error != nil {
+                                    self.showAlert(title:"Update Failure", message: "Failure updating the data")
+                                    return
+                                } else {
+                                    self.showAlert(title: "Update Complete", message: "Successfully updated the data")
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+        }
+
+    }
+    // MARK: - create AvatarImage
+    func loadAvatarImage() {
+        if (self.photo == nil) || (self.photo == "") {
+            self.photo = imageUrl
+        }
+        guard let temp = self.photo else {return}
+
+        if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
+
+        } else {
+            //firebase
+            guard let imageUrl:URL = URL(string: temp) else { return }
+            DispatchQueue.main.async {
+                self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+            }
+
+            self.plusPhotoButton.layer.cornerRadius = self.plusPhotoButton.frame.width / 2
+            self.plusPhotoButton.layer.masksToBounds = true
+            self.plusPhotoButton.layer.borderColor = UIColor.systemBlue.cgColor
+            self.plusPhotoButton.layer.borderWidth = 3
+            self.plusPhotoButton.setImage(self.customImageView.image?.withRenderingMode(.alwaysOriginal), for: .normal)
+        }
+    }
+
+}
 
 // MARK: - UISearchBar Delegate
 @available(iOS 13.0, *)
 extension NewEditData: UISearchBarDelegate {
     /*
-    func searchButton(_ sender: AnyObject) {
-        searchController = UISearchController(searchResultsController: resultsController)
-        searchController.searchResultsUpdater = self
-        definesPresentationContext = true
-        searchController.searchBar.scopeButtonTitles = ["name", "city", "phone", "date", "active"]
-        //searchController.searchBar.scopeButtonTitles = searchScope
-        searchController.searchBar.barTintColor = .brown
-        tableView!.tableFooterView = UIView(frame: .zero)
-        self.present(searchController, animated: true)
-    } */
+     func searchButton(_ sender: AnyObject) {
+     searchController = UISearchController(searchResultsController: resultsController)
+     searchController.searchResultsUpdater = self
+     definesPresentationContext = true
+     searchController.searchBar.scopeButtonTitles = ["name", "city", "phone", "date", "active"]
+     //searchController.searchBar.scopeButtonTitles = searchScope
+     searchController.searchBar.barTintColor = .brown
+     tableView!.tableFooterView = UIView(frame: .zero)
+     self.present(searchController, animated: true)
+     } */
 }
 @available(iOS 13.0, *)
 extension NewEditData: UISearchResultsUpdating {

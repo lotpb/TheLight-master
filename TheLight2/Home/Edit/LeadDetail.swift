@@ -18,16 +18,16 @@ import MobileCoreServices //kUTTypeImage
 import SDWebImage
 
 @available(iOS 13.0, *)
-final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     
     // MARK: NavigationController Hidden
     private var lastContentOffset: CGFloat = 0.0
-    let defaults = UserDefaults.standard
+    private let defaults = UserDefaults.standard
     
-    var tableData = NSMutableArray()
-    var tableData2 = NSMutableArray()
-    var tableData3 = NSMutableArray()
-    var tableData4 = NSMutableArray()
+    private var tableData = NSMutableArray()
+    private var tableData2 = NSMutableArray()
+    private var tableData3 = NSMutableArray()
+    private var tableData4 = NSMutableArray()
     
     @IBOutlet weak var scrollWall: UIScrollView?
     @IBOutlet weak var contentView: UIView!
@@ -38,89 +38,89 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
     @IBOutlet weak var listTableView2: UITableView?
     @IBOutlet weak var newsTableView: UITableView?
     
-    var formController : String?
-    var status : String?
-    var imagePicker: UIImagePickerController!
+    public var formController : String?
+    private var status : String?
+    private var imagePicker: UIImagePickerController!
     
-    var objectId : String?
-    var custNo : String?
-    var leadNo : String?
-    var date : String?
-    var first : String?
-    var lastname : String?
-    var company : String?
-    var name : String?
-    var address : String?
-    var city : String?
-    var state : String?
-    var zip : String?
-    var amount : String?
-    var tbl11 : String?
-    var tbl12 : String?
-    var tbl13 : String?
-    var tbl14 : String?
-    var tbl15 : NSString?
-    var tbl16 : String?
-    var tbl17 : String?
-    var tbl21 : NSString?
-    var tbl22 : String?
-    var tbl23 : String!
-    var tbl24 : String?
-    var tbl25 : String?
-    var tbl26 : NSString?
-    var tbl27 : String? //employee company
-    var photo : String?
-    var imageUrl : String?
-    var comments : String?
-    var active : String?
+    public var objectId : String?
+    public var custNo : String?
+    public var leadNo : String?
+    public var date : String?
+    public var first : String?
+    public var lastname : String?
+    public var company : String?
+    public var name : String?
+    public var address : String?
+    public var city : String?
+    public var state : String?
+    public var zip : String?
+    public var amount : String?
+    public var tbl11 : String?
+    public var tbl12 : String?
+    public var tbl13 : String?
+    public var tbl14 : String?
+    public var tbl15 : NSString?
+    public var tbl16 : String?
+    public var tbl17 : String?
+    public var tbl21 : NSString?
+    public var tbl22 : String?
+    public var tbl23 : String!
+    public var tbl24 : String?
+    public var tbl25 : String?
+    public var tbl26 : NSString?
+    public var tbl27 : String? //employee company
+    public var photo : String?
+    public var imageUrl : String?
+    public var comments : String?
+    public var active : String?
     
-    var t11 : String?
-    var t12 : String?
-    var t13 : String?
-    var t14 : String?
-    var t15 : NSString?
-    var t16 : String?
-    var t17 : String?
-    var t21 : NSString?
-    var t22 : String?
-    var t23 : String!
-    var t24 : String?
-    var t25 : String?
-    var t26 : NSString?
-    var t27 : NSString?
+    private var t11 : String?
+    private var t12 : String?
+    private var t13 : String?
+    private var t14 : String?
+    private var t15 : NSString?
+    private var t16 : String?
+    private var t17 : String?
+    private var t21 : NSString?
+    private var t22 : String?
+    private var t23 : String!
+    private var t24 : String?
+    private var t25 : String?
+    private var t26 : NSString?
+    private var t27 : NSString?
     
-    var l1datetext : String?
-    var lnewsTitle : String?
+    public var l1datetext : String?
+    public var lnewsTitle : String?
     
-    var l11 : String?
-    var l12 : String?
-    var l13 : String?
-    var l14 : String?
-    var l15 : String?
-    var l16 : String?
-    var l17 : String?
+    public var l11 : String?
+    public var l12 : String?
+    public var l13 : String?
+    public var l14 : String?
+    public var l15 : String?
+    public var l16 : String?
+    public var l17 : String?
     
-    var l21 : String?
-    var l22 : String?
-    var l23 : String?
-    var l24 : String?
-    var l25 : String?
-    var l26 : String?
-    var l27 : String?
+    public var l21 : String?
+    public var l22 : String?
+    public var l23 : String?
+    public var l24 : String?
+    public var l25 : String?
+    public var l26 : String?
+    public var l27 : String?
     
-    var p1 : String?
-    var p12 : String?
-    var complete : String?
-    var salesman : String?
-    var jobdescription : String?
-    var advertiser : String?
+    public var p1 : String?
+    public var p12 : String?
+    public var complete : String?
+    public var salesman : String?
+    public var jobdescription : String?
+    public var advertiser : String?
     
-    var savedEventId : String?
-    var getEmail : String?
-    var emailTitle :String?
-    var messageBody:String?
+    private var savedEventId : String?
+    private var getEmail : String?
+    private var emailTitle :String?
+    private var messageBody:String?
 
-    let labelname: UILabel = {
+    private let labelname: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
@@ -130,7 +130,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         return label
     }()
 
-    let following: UILabel = {
+    private let following: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
@@ -141,7 +141,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         return label
     }()
 
-    lazy var activebutton: UIButton = {
+    private let activebutton: UIButton = {
         let button = UIButton(type: .system)
         button.isUserInteractionEnabled = true
         button.setImage(UIImage(systemName: "star.fill"), for: .normal)
@@ -149,7 +149,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         return button
     }()
 
-    let labelamount: UILabel = {
+    private let labelamount: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
@@ -160,7 +160,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         return label
     }()
 
-    let labeladdress: UILabel = {
+    private let labeladdress: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
@@ -170,7 +170,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         return label
     }()
 
-    let labelcity: UILabel = {
+    private let labelcity: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .label
@@ -179,7 +179,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         return label
     }()
 
-   let labeldatetext: UILabel = {
+   private let labeldatetext: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
@@ -189,7 +189,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         return label
     }()
 
-    let labeldate: UILabel = {
+    private let labeldate: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
@@ -199,7 +199,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         return label
     }()
 
-    let plusPhotoButton: UIButton = {
+    private let plusPhotoButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysTemplate), for: .normal)
@@ -208,13 +208,13 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         return button
     }()
 
-    let customImageView: UIImageView = { //firebase
+    private let customImageView: UIImageView = { //firebase
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
 
-    let labelNo: UILabel = {
+    private let labelNo: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
@@ -224,7 +224,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         return label
     }()
 
-    let mySwitch: UISwitch = {
+    private let mySwitch: UISwitch = {
         let button = UISwitch()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isEnabled = true
@@ -234,7 +234,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         return button
     }()
     
-    lazy var mapButton: UIButton = {
+    private let mapButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .systemBlue
@@ -247,7 +247,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         return button
     }()
     
-    lazy var refreshControl: UIRefreshControl = {
+    private let refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = ColorX.Lead.navColor
         refreshControl.tintColor = .white
@@ -282,7 +282,6 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
 
         setupNavigationButtons()
         //Leave this setup below
-        setupConstraints()
         setupTableView()
         setupForm()
         setupFonts()
@@ -296,7 +295,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
             navigationItem.title = String(format: "%@ %@", "\(self.formController!)", "Profile")
         }
         self.navigationItem.largeTitleDisplayMode = .never
-        self.mainView!.addSubview(self.refreshControl)
+        self.mainView!.addSubview(refreshControl)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -335,7 +334,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         navigationItem.rightBarButtonItems = [actionBtn,editBtn]
     }
     
-    func setupTableView() {
+    private func setupTableView() {
         self.listTableView!.rowHeight = 30
         self.listTableView2!.rowHeight = 30
         self.newsTableView!.estimatedRowHeight = 100
@@ -343,7 +342,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         self.newsTableView!.tableFooterView = UIView(frame: .zero)
     }
     
-    func setupForm() {
+    private func setupForm() {
         mainView?.backgroundColor = .secondarySystemGroupedBackground
         contentView?.backgroundColor = .secondarySystemGroupedBackground
         tableView?.backgroundColor = .secondarySystemGroupedBackground
@@ -362,7 +361,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         tableView!.layer.masksToBounds = true
     }
     
-    func setupSwitch() {
+    private func setupSwitch() {
         if (self.formController == "Leads") {
             if (self.tbl11 == "Sold") {
                 self.mySwitch.setOn(true, animated:true)
@@ -372,7 +371,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         }
     }
     
-    func setupFonts() {
+    private func setupFonts() {
         if UIDevice.current.userInterfaceIdiom == .pad  {
             labelamount.font = Font.Detail.ipadAmount
             labelname.font = Font.Detail.ipadname
@@ -399,7 +398,8 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         }
     }
     
-    func setupConstraints() {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
 
         mainView?.addSubview(labelname)
         mainView?.addSubview(following)
@@ -491,16 +491,16 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
     @objc func refreshData() {
         //loadAvatarImage()
         loadData()
-        self.listTableView!.reloadData()
-        self.listTableView2!.reloadData()
-        self.newsTableView!.reloadData()
-        self.refreshControl.endRefreshing()
+        listTableView!.reloadData()
+        listTableView2!.reloadData()
+        newsTableView!.reloadData()
+        refreshControl.endRefreshing()
     }
     
     // MARK: - NavigationController Hidden
     @objc func hideBar(notification: NSNotification)  {
         let state = notification.object as! Bool
-        self.navigationController?.setNavigationBarHidden(state, animated: true)
+        navigationController?.setNavigationBarHidden(state, animated: true)
         UIView.animate(withDuration: 0.2, animations: {
             self.tabBarController?.hideTabBarAnimated(hide: state) //added
         }, completion: nil)
@@ -528,7 +528,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         self.performSegue(withIdentifier: "showmapSegue", sender: self)
     }
     
-    func followButton() {
+    private func followButton() {
         
         if(self.active == "1") {
             self.following.text = "Following"
@@ -539,7 +539,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         }
     }
     
-    func statButton() {
+    private func statButton() {
         self.performSegue(withIdentifier: "statisticSegue", sender: self)
     }
     
@@ -565,7 +565,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
     }
     
     // MARK: - LoadFieldData
-    func fieldData() {
+    private func fieldData() {
 
         if (self.customImageView.image == nil) {
             self.customImageView.image = self.plusPhotoButton.imageView?.image
@@ -890,7 +890,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         self.present(alertController, animated: true)
     }
     
-    func callPhone() {
+    private func callPhone() {
         
         let phoneNo : String?
         if UIDevice.current.userInterfaceIdiom == .phone  {
@@ -919,7 +919,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         }
     }
     
-    func openurl() {
+    private func openurl() {
         
         if (self.tbl26 != NSNull() && self.tbl26 != "0") {
             
@@ -942,7 +942,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         }
     }
     
-    func sendEmail() {
+    private func sendEmail() {
         
         if (formController == "Leads") || (formController == "Customer") {
             if ((self.tbl15 != NSNull()) || (self.tbl15 != "0")) {
@@ -966,7 +966,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         }
     }
     
-    func getEmail(_ emailfield: NSString) {
+    private func getEmail(_ emailfield: NSString) {
       
         let email = MFMailComposeViewController()
         email.mailComposeDelegate = self
@@ -977,11 +977,11 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         self.present(email, animated: true)
     }
 
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+    public func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         dismiss(animated: true)
     }
     
-    func addEvent() {
+    private func addEvent() {
         
         let eventStore = EKEventStore()
         let itemText = defaults.string(forKey: "eventtitleKey")!
@@ -998,7 +998,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         }
     }
     
-    func createEvent(_ eventStore: EKEventStore, title: String, startDate: Date, endDate: Date) {
+    private func createEvent(_ eventStore: EKEventStore, title: String, startDate: Date, endDate: Date) {
         
         let event = EKEvent(eventStore: eventStore)
         event.title = title
@@ -1019,7 +1019,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         }
     }
     
-    func createContact() {
+    private func createContact() {
         
         let newContact = CNMutableContact()
         
@@ -1191,7 +1191,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
     }
     
      // FIXME:
-    func getBirthday() {
+    private func getBirthday() {
         
         let nameStr: String
         if (formController == "Leads") || (formController == "Customer") {
@@ -1207,11 +1207,9 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate, U
         let contact = contacts[0]
  
         if ((contact.birthday as NSDateComponents?)?.date as Date?) != nil {
-           
-            let formatter = DateFormatter()
-            formatter.timeZone = .current
-            formatter.dateFormat = "MMM-dd-yyyy"
-            let stringDate = formatter.string(from: contact.birthday!.date!)
+
+            MasterViewController.dateFormatter.dateFormat = "MMM-dd-yyyy"
+            let stringDate = MasterViewController.dateFormatter.string(from: contact.birthday!.date!)
 
             self.showAlert(title: "\(nameStr) Birthday", message: stringDate)
         } else {
@@ -1449,7 +1447,7 @@ extension LeadDetail: UITableViewDataSource {
         } else if (tableView == self.newsTableView) {
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! TableViewCell
-            cell.customImageView.isHidden = true //fix
+            cell.customImageView.isHidden = true // FIXME: shouldn't crash
             
             if UIDevice.current.userInterfaceIdiom == .pad  {
                 cell.leadtitleDetail!.font = Font.Detail.ipadnewstitle
@@ -1485,16 +1483,15 @@ extension LeadDetail: UITableViewDataSource {
             } else {
                 
                 let dateStr = self.date
-                let dateFormatter = DateFormatter()
                 
                 if ((defaults.string(forKey: "backendKey")) == "Parse") {
-                    dateFormatter.dateFormat = "yyyy-MM-dd"
+                    MasterViewController.dateFormatter.dateFormat = "yyyy-MM-dd"
                 } else {
                     //firebase
-                    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss +zzzz"
+                    MasterViewController.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss +zzzz"
                 }
                 
-                let date1 = dateFormatter.date(from: dateStr!)
+                let date1 = MasterViewController.dateFormatter.date(from: dateStr!)
                 let date2 = Date()
                 let calendar = Calendar.current
                 if date1 != nil {
@@ -1524,107 +1521,112 @@ extension LeadDetail: UITableViewDataSource {
         }
     }
 
-    // MARK: - AvatarImage
+}
+extension LeadDetail: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+       // MARK: - AvatarImage
 
- @objc func handlePlusPhoto() {
+    @objc func handlePlusPhoto() {
 
-         let imagePickerController = UIImagePickerController()
-         imagePickerController.delegate = self
-         imagePickerController.allowsEditing = true
-         present(imagePickerController, animated: true, completion: nil)
-     }
-
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-
-        guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else { return }
-        plusPhotoButton.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
-        plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width / 2
-        plusPhotoButton.layer.masksToBounds = true
-        plusPhotoButton.layer.borderColor = UIColor.darkGray.cgColor
-        plusPhotoButton.layer.borderWidth = 3
-        setupAvatarImage()
-        dismiss(animated: true, completion: nil)
-    }
-
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        self.dismiss(animated: true)
-    }
-
-    func setupAvatarImage() { //dont work
-
-        guard let userID = self.objectId else {return}
-
-        var storageItem1: StorageReference?
-        var userRef1: DatabaseReference?
-
-        if (formController == "Leads") {
-            storageItem1 = Storage.storage().reference().child("Lead_images").child(userID)
-            userRef1 = FirebaseRef.databaseLeads.child(userID)
-
-        } else if (formController == "Customer") {
-            storageItem1 = Storage.storage().reference().child("Customer_images").child(userID)
-            userRef1 = FirebaseRef.databaseCust.child(userID)
-
-        } else if (formController == "Vendor") {
-            storageItem1 = Storage.storage().reference().child("Vendor_images").child(userID)
-            userRef1 = FirebaseRef.databaseVendor.child(userID)
-
-        } else if (formController == "Employee") {
-            storageItem1 = Storage.storage().reference().child("Employee_images").child(userID)
-            userRef1 = FirebaseRef.databaseEmply.child(userID)
+            let picker = UIImagePickerController()
+            picker.sourceType = .photoLibrary
+            picker.delegate = self
+            picker.allowsEditing = true
+            present(picker, animated: true, completion: nil)
         }
 
-        let metadata = StorageMetadata()
-        metadata.contentType = "image/jpeg"
+       public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
 
-        guard let image = self.plusPhotoButton.imageView?.image else {return}
-        if let newImage = image.jpegData(compressionQuality: 0.3)  {
-            storageItem1!.putData(newImage, metadata: metadata) { (metadata, error) in
-                if error != nil{
-                    print(error!.localizedDescription)
-                    return
-                }
-                storageItem1!.downloadURL(completion: { (url, error) in
-                    if error != nil{
-                        print(error!.localizedDescription)
-                        return
-                    }
-                    if let profilePhotoURL = url?.absoluteString {
-                        let values = [
-                            "photo": profilePhotoURL] as [String: Any]
-                        userRef1!.updateChildValues(values) { (error, ref) in
-                            if error != nil {
-                                self.showAlert(title:"Update Failure", message: "Failure updating the data")
-                                return
-                            } else {
-                                self.showAlert(title: "Update Complete", message: "Successfully updated the data")
-                            }
-                        }
-                    }
-                })
-            }
-        }
-    }
+           guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else { return }
+           plusPhotoButton.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
+           plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width / 2
+           plusPhotoButton.layer.masksToBounds = true
+           plusPhotoButton.layer.borderColor = UIColor.darkGray.cgColor
+           plusPhotoButton.layer.borderWidth = 3
+           setupAvatarImage()
+           dismiss(animated: true, completion: nil)
+       }
 
-    // MARK: - create AvatarImage
-    func loadAvatarImage() {
-        if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
+       public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+           self.dismiss(animated: true)
+       }
 
-        } else {
-            //firebase
-            if (self.photo == nil) || (self.photo == "") {
-                self.photo = imageUrl
-            }
+       private func setupAvatarImage() { //dont work
 
-            guard let temp = self.photo else {return}
-            guard let imageUrl:URL = URL(string: temp) else { return }
-            self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+           guard let userID = self.objectId else {return}
 
-            self.plusPhotoButton.setImage(self.customImageView.image?.withRenderingMode(.alwaysOriginal), for: .normal)
-            self.plusPhotoButton.layer.cornerRadius = self.plusPhotoButton.frame.width / 2
-            self.plusPhotoButton.layer.masksToBounds = true
-            self.plusPhotoButton.layer.borderColor = UIColor.systemBlue.cgColor
-            self.plusPhotoButton.layer.borderWidth = 3
-        }
-    }
+           var storageItem1: StorageReference?
+           var userRef1: DatabaseReference?
+
+           if (formController == "Leads") {
+               storageItem1 = Storage.storage().reference().child("Lead_images").child(userID)
+               userRef1 = FirebaseRef.databaseLeads.child(userID)
+
+           } else if (formController == "Customer") {
+               storageItem1 = Storage.storage().reference().child("Customer_images").child(userID)
+               userRef1 = FirebaseRef.databaseCust.child(userID)
+
+           } else if (formController == "Vendor") {
+               storageItem1 = Storage.storage().reference().child("Vendor_images").child(userID)
+               userRef1 = FirebaseRef.databaseVendor.child(userID)
+
+           } else if (formController == "Employee") {
+               storageItem1 = Storage.storage().reference().child("Employee_images").child(userID)
+               userRef1 = FirebaseRef.databaseEmply.child(userID)
+           }
+
+           let metadata = StorageMetadata()
+           metadata.contentType = "image/jpeg"
+
+           guard let image = self.plusPhotoButton.imageView?.image else {return}
+           if let newImage = image.jpegData(compressionQuality: 0.3)  {
+               storageItem1!.putData(newImage, metadata: metadata) { (metadata, error) in
+                   if error != nil{
+                       print(error!.localizedDescription)
+                       return
+                   }
+                   storageItem1!.downloadURL(completion: { (url, error) in
+                       if error != nil{
+                           print(error!.localizedDescription)
+                           return
+                       }
+                       if let profilePhotoURL = url?.absoluteString {
+                           let values = [
+                               "photo": profilePhotoURL] as [String: Any]
+                           userRef1!.updateChildValues(values) { (error, ref) in
+                               if error != nil {
+                                   self.showAlert(title:"Update Failure", message: "Failure updating the data")
+                                   return
+                               } else {
+                                   self.showAlert(title: "Update Complete", message: "Successfully updated the data")
+                               }
+                           }
+                       }
+                   })
+               }
+           }
+       }
+
+       // MARK: - create AvatarImage
+       private func loadAvatarImage() {
+           if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
+
+           } else {
+               //firebase
+               if (self.photo == nil) || (self.photo == "") {
+                   self.photo = imageUrl
+               }
+
+               guard let temp = self.photo else {return}
+               guard let imageUrl:URL = URL(string: temp) else { return }
+               DispatchQueue.main.async {
+                   self.customImageView.sd_setImage(with: imageUrl, completed: nil)
+               }
+
+               self.plusPhotoButton.setImage(self.customImageView.image?.withRenderingMode(.alwaysOriginal), for: .normal)
+               self.plusPhotoButton.layer.cornerRadius = self.plusPhotoButton.frame.width / 2
+               self.plusPhotoButton.layer.masksToBounds = true
+               self.plusPhotoButton.layer.borderColor = UIColor.systemBlue.cgColor
+               self.plusPhotoButton.layer.borderWidth = 3
+           }
+       }
 }

@@ -25,7 +25,7 @@ final class News: UICollectionViewController, SearchDelegate {
     private var searchController: UISearchController!
     private var resultsController: UITableViewController!
     
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "  Home"
         label.textColor = .systemGray
@@ -37,9 +37,9 @@ final class News: UICollectionViewController, SearchDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.titleLabel.frame = .init(x: 0, y: 0, width: view.frame.width - 32, height: 30)
-        self.navigationItem.titleView = self.titleLabel
-        self.navigationItem.largeTitleDisplayMode = .never
+        titleLabel.frame = .init(x: 0, y: 0, width: view.frame.width - 32, height: 30)
+        navigationItem.titleView = self.titleLabel
+        navigationItem.largeTitleDisplayMode = .never
 
         setupCollectionView()
         setupMenuBar()
@@ -48,13 +48,13 @@ final class News: UICollectionViewController, SearchDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
         
         //TabBar Badge
         let tabArray = self.tabBarController?.tabBar.items as NSArray?
@@ -70,7 +70,7 @@ final class News: UICollectionViewController, SearchDelegate {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = true
+        tabBarController?.tabBar.isHidden = true
         //TabBar Badge
         let tabArray = self.tabBarController?.tabBar.items as NSArray?
         let tabItem = tabArray?.object(at: 3) as! UITabBarItem
@@ -90,7 +90,7 @@ final class News: UICollectionViewController, SearchDelegate {
         }
         
         //added below
-        self.view.addSubview(collectionView!)
+        view.addSubview(collectionView!)
         collectionView?.contentInset = .init(top: 100,left: 0,bottom: 0,right: 0)
         collectionView?.scrollIndicatorInsets = .init(top: 100,left: 0,bottom: 0,right: 0)
         collectionView?.isPagingEnabled = true
@@ -116,7 +116,7 @@ final class News: UICollectionViewController, SearchDelegate {
     // MARK: - NavigationController Hidden
     @objc func hideBar(notification: NSNotification) {
         let state = notification.object as! Bool
-        self.navigationController?.setNavigationBarHidden(state, animated: true)
+        navigationController?.setNavigationBarHidden(state, animated: true)
         UIView.animate(withDuration: 0.2, animations: {
             self.tabBarController?.hideTabBarAnimated(hide: state) //added
         }, completion: nil)
@@ -213,7 +213,7 @@ final class News: UICollectionViewController, SearchDelegate {
     func scrollToMenuIndex(menuIndex: Int) {
         
         let indexPath = IndexPath(item: menuIndex, section: 0)
-        self.collectionView?.scrollToItem(at: indexPath, at: .right, animated: true)
+        collectionView?.scrollToItem(at: indexPath, at: .right, animated: true)
         
         setTitleForIndex(index: menuIndex)
     }

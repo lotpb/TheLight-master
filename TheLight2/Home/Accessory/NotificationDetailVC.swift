@@ -19,11 +19,11 @@ final class NotificationDetailVC: UIViewController, UNUserNotificationCenterDele
     let celltitle = UIFont.systemFont(ofSize: 16)
     let cellsubtitle = UIFont.systemFont(ofSize: 12)
     
-    let center = UNUserNotificationCenter.current()
-    var filteredString = NSMutableArray()
-    var objects = [AnyObject]()
+    private let center = UNUserNotificationCenter.current()
+    private var filteredString = NSMutableArray()
+    private var objects = [AnyObject]()
     
-    lazy var refreshControl: UIRefreshControl = {
+    private var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = .clear
         refreshControl.tintColor = .white
@@ -40,13 +40,13 @@ final class NotificationDetailVC: UIViewController, UNUserNotificationCenterDele
         setupNavigationButtons()
         setupTableView()
         
-        self.tableView!.addSubview(self.refreshControl)
+        tableView!.addSubview(refreshControl)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        //self.navigationController?.navigationBar.barTintColor = .systemOrange
+        //navigationController?.navigationBar.barTintColor = .systemOrange
     }
     
     override func didReceiveMemoryWarning() {
@@ -67,21 +67,21 @@ final class NotificationDetailVC: UIViewController, UNUserNotificationCenterDele
     }
     
     func setupTableView() {
-        self.tableView!.delegate = self
-        self.tableView!.dataSource = self
-        self.tableView!.rowHeight = 85
+        tableView!.delegate = self
+        tableView!.dataSource = self
+        tableView!.rowHeight = 85
         if #available(iOS 13.0, *) {
-            self.tableView!.backgroundColor = .systemGray4
+            tableView!.backgroundColor = .systemGray4
         } else {
-            self.tableView!.backgroundColor = ColorX.LGrayColor
+            tableView!.backgroundColor = ColorX.LGrayColor
         }
-        self.tableView!.tableFooterView = UIView(frame: .zero)
+        tableView!.tableFooterView = UIView(frame: .zero)
     }
     
     // MARK: - refresh
     @objc func refreshData(_ sender:AnyObject) {
-        self.tableView!.reloadData()
-        self.refreshControl.endRefreshing()
+        tableView!.reloadData()
+        refreshControl.endRefreshing()
     }
     
     // MARK: - Buttons
@@ -90,7 +90,7 @@ final class NotificationDetailVC: UIViewController, UNUserNotificationCenterDele
         UIApplication.shared.applicationIconBadgeNumber = 0
         center.removeAllPendingNotificationRequests()
         //UIApplication.shared.cancelAllLocalNotifications()
-        self.tableView!.reloadData()
+        tableView!.reloadData()
     }
 }
 extension NotificationDetailVC: UITableViewDataSource {
@@ -118,7 +118,7 @@ extension NotificationDetailVC: UITableViewDataSource {
             cell.textLabel!.font = celltitle
             cell.detailTextLabel!.font = celltitle
         }
-        //fix
+        // FIXME: shouldn't crash
         center.getPendingNotificationRequests { (requests) in
             //if let requests > 0
         }

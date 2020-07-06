@@ -19,8 +19,8 @@ protocol MeProfileHeaderDelegate {
 @available(iOS 13.0, *)
 final class MeProfileHeader: UICollectionViewCell {
     
-    var delegate: MeProfileHeaderDelegate?
-    var defaults = UserDefaults.standard
+    public var delegate: MeProfileHeaderDelegate?
+    private var defaults = UserDefaults.standard
     
     var user: UserModel? {
         didSet {
@@ -162,7 +162,7 @@ final class MeProfileHeader: UICollectionViewCell {
  
         addSubview(profileImageView)
         profileImageView.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, paddingTop: 12, paddingLeft: 12, paddingBottom: 0, paddingRight: 0, width: 80, height: 80)
-        profileImageView.layer.cornerRadius = 80 / 2
+        profileImageView.layer.cornerRadius = profileImageView.width/2
         profileImageView.clipsToBounds = true
         
         setupBottomToolbar() //dont move

@@ -23,17 +23,17 @@ final class Customer: UIViewController {
     private let searchScope = ["name", "city", "phone", "date", "active"]
     
     //firebase
-    var custlist = [CustModel]()
-    var activeCount: Int?
-    var defaults = UserDefaults.standard
+    private var custlist = [CustModel]()
+    private var activeCount: Int?
+    private var defaults = UserDefaults.standard
     //parse
-    var _feedItems = NSMutableArray()
-    var _feedheadItems = NSMutableArray()
+    private var _feedItems = NSMutableArray()
+    private var _feedheadItems = NSMutableArray()
 
-    var pasteBoard = UIPasteboard.general
-    var objectIdLabel = String()
-    var titleLabel = String()
-    var dateLabel = String()
+    private var pasteBoard = UIPasteboard.general
+    private var objectIdLabel = String()
+    private var titleLabel = String()
+    private var dateLabel = String()
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -44,28 +44,27 @@ final class Customer: UIViewController {
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         return refreshControl
     }()
-    
-    
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.extendedLayoutIncludesOpaqueBars = true
         setupNavigation()
         setupTableView()
-
-        self.tableView!.addSubview(self.refreshControl)
+        tableView!.addSubview(refreshControl)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         refreshData(self)
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
         // MARK: NavigationController Hidden
         NotificationCenter.default.addObserver(self, selector: #selector(Customer.hideBar(notification:)), name: NSNotification.Name("hide"), object: nil)
         
@@ -76,7 +75,7 @@ final class Customer: UIViewController {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = true
+        tabBarController?.tabBar.isHidden = true
     }
     
     override func didReceiveMemoryWarning() {
@@ -105,14 +104,14 @@ final class Customer: UIViewController {
         // MARK: - TableHeader
         tableView?.register(HeaderViewCell.self, forCellReuseIdentifier: "Header")
         
-        self.tableView!.delegate = self
-        self.tableView!.dataSource = self
-        self.tableView!.sizeToFit()
-        self.tableView!.clipsToBounds = true
+        tableView!.delegate = self
+        tableView!.dataSource = self
+        tableView!.sizeToFit()
+        tableView!.clipsToBounds = true
         let bgView = UIView()
         bgView.backgroundColor = .secondarySystemGroupedBackground
         tableView!.backgroundView = bgView
-        self.tableView!.tableFooterView = UIView(frame: .zero)
+        tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
         resultsController.tableView.backgroundColor = ColorX.LGrayColor
@@ -127,7 +126,7 @@ final class Customer: UIViewController {
     @objc func hideBar(notification: NSNotification)  {
         if UIDevice.current.userInterfaceIdiom == .phone {
             let state = notification.object as! Bool
-            self.navigationController?.setNavigationBarHidden(state, animated: true)
+            navigationController?.setNavigationBarHidden(state, animated: true)
             UIView.animate(withDuration: 0.2, animations: {
                 self.tabBarController?.hideTabBarAnimated(hide: state) //added
             }, completion: nil)
@@ -148,9 +147,9 @@ final class Customer: UIViewController {
     
     // MARK: - refresh
     @objc func refreshData(_ sender:AnyObject) {
-        custlist.removeAll() //fix
+        custlist.removeAll() // FIXME: shouldn't crash
         loadData()
-        self.refreshControl.endRefreshing()
+        refreshControl.endRefreshing()
     }
     
     // MARK: - Button
@@ -279,7 +278,8 @@ final class Customer: UIViewController {
     
     // MARK: - Segues
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+
+        MasterViewController.dateFormatter.dateFormat = "MMM dd yyyy"
         if segue.identifier == "custdetailSegue" {
             
             let formatter = NumberFormatter()
@@ -319,7 +319,7 @@ final class Customer: UIViewController {
                 
             } else {
  
-                indexPath = self.tableView?.indexPathForSelectedRow?.row
+                indexPath = tableView?.indexPathForSelectedRow?.row
                 if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     
                     dateUpdated = (_feedItems[indexPath!] as AnyObject).value(forKey: "updatedAt") as? Date
@@ -375,9 +375,8 @@ final class Customer: UIViewController {
             if Quan == nil {
                 Quan = 0
             }
-            let dateFormat = DateFormatter()
-            dateFormat.dateFormat = "MMM dd yy"
-            VC.tbl16 = String(format: "%@", dateFormat.string(from: dateUpdated!)) as String
+
+            VC.tbl16 = String(format: "%@", MasterViewController.dateFormatter.string(from: dateUpdated!)) as String
             
             
             if navigationItem.searchController?.isActive == true {
@@ -394,7 +393,7 @@ final class Customer: UIViewController {
                 VC.tbl25 = formatter.string(from: Quan! as NSNumber)
                 VC.active = formatter.string(from: Active! as NSNumber)
                 VC.objectId = cust.custId
-                VC.date = dateFormat.string(from: cust.creationDate as Date)
+                VC.date = MasterViewController.dateFormatter.string(from: cust.creationDate as Date)
                 VC.name = cust.lastname
                 VC.address = cust.address
                 VC.city = cust.city
@@ -404,9 +403,9 @@ final class Customer: UIViewController {
                 VC.tbl13 = cust.contractor
                 VC.tbl14 = cust.spouse
                 VC.tbl15 = cust.email as NSString
-                VC.tbl21 = dateFormat.string(from: cust.start as Date) as NSString
+                VC.tbl21 = MasterViewController.dateFormatter.string(from: cust.start as Date) as NSString
                 VC.tbl26 = cust.rate as NSString
-                VC.complete = dateFormat.string(from: cust.completion as Date)
+                VC.complete = MasterViewController.dateFormatter.string(from: cust.completion as Date)
                 VC.photo = cust.photo
                 VC.comments = cust.comments
                 
@@ -447,7 +446,7 @@ final class Customer: UIViewController {
 
                     VC.active = formatter.string(from: Active! as NSNumber)
                     VC.objectId = custlist[indexPath!].custId
-                    VC.date = dateFormat.string(from: custlist[indexPath!].creationDate as Date)
+                    VC.date = MasterViewController.dateFormatter.string(from: custlist[indexPath!].creationDate as Date)
                     VC.lastname = custlist[indexPath!].lastname
                     VC.name = String(format: "%@ %@", custlist[indexPath!].first, custlist[indexPath!].lastname).removeWhiteSpace()
                     //controller.name = custlist[indexPath!].lastname
@@ -465,8 +464,8 @@ final class Customer: UIViewController {
                     VC.tbl23 = formatter.string(from: JobNo! as NSNumber)
                     VC.tbl24 = formatter.string(from: AdNo! as NSNumber)
                     VC.tbl25 = formatter.string(from: Quan! as NSNumber)
-                    VC.tbl26 = dateFormat.string(from: custlist[indexPath!].start as Date) as NSString
-                    VC.tbl27 = dateFormat.string(from: custlist[indexPath!].completion as Date)
+                    VC.tbl26 = MasterViewController.dateFormatter.string(from: custlist[indexPath!].start as Date) as NSString
+                    VC.tbl27 = MasterViewController.dateFormatter.string(from: custlist[indexPath!].completion as Date)
                     VC.photo = custlist[indexPath!].photo as String
                     VC.comments = custlist[indexPath!].comments
                     //controller.complete = dateFormat.string(from: custlist[indexPath!].completion as Date)
@@ -706,7 +705,7 @@ extension Customer: UITableViewDelegate {
                     header.myLabel3.text = String(format: "%@%d", "Events\n", 3)
                 }
                 header.contentView.backgroundColor = .systemBlue //Color.Cust.labelColor1
-                self.tableView!.tableHeaderView = nil //header.header
+                tableView.tableHeaderView = nil //header.header
                 
                 return header.contentView
             }
@@ -714,9 +713,8 @@ extension Customer: UITableViewDelegate {
         return nil
     }
     
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

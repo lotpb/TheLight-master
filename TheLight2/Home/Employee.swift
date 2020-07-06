@@ -23,14 +23,14 @@ final class Employee: UIViewController {
     private let searchScope = ["name", "city", "phone", "title"]
     
     //firebase
-    var employlist = [EmployModel]()
-    var activeCount: Int?
-    var defaults = UserDefaults.standard
+    private var employlist = [EmployModel]()
+    private var activeCount: Int?
+    private var defaults = UserDefaults.standard
     //parse
-    var _feedItems = NSMutableArray()
-    var _feedheadItems = NSMutableArray()
+    private var _feedItems = NSMutableArray()
+    private var _feedheadItems = NSMutableArray()
 
-    var pasteBoard = UIPasteboard.general
+    private var pasteBoard = UIPasteboard.general
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -41,7 +41,7 @@ final class Employee: UIViewController {
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         return refreshControl
     }()
-    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,27 +49,27 @@ final class Employee: UIViewController {
         setupNavigation()
         setupTableView()
         
-        self.tableView!.addSubview(self.refreshControl)
+        tableView!.addSubview(refreshControl)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         refreshData(self)
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
         
         // MARK: NavigationController Hidden
         NotificationCenter.default.addObserver(self, selector: #selector(Employee.hideBar(notification:)), name: NSNotification.Name("hide"), object: nil)
 
         if UIDevice.current.userInterfaceIdiom == .pad  {
-            self.navigationController?.navigationBar.barTintColor = .black
+            navigationController?.navigationBar.barTintColor = .black
         } else {
-            self.navigationController?.navigationBar.barTintColor = ColorX.Employ.navColor
+            navigationController?.navigationBar.barTintColor = ColorX.Employ.navColor
         }
     }
     
@@ -77,7 +77,7 @@ final class Employee: UIViewController {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = true
+        tabBarController?.tabBar.isHidden = true
     }
     
     override func didReceiveMemoryWarning() {
@@ -104,16 +104,16 @@ final class Employee: UIViewController {
     
     func setupTableView() {
         // MARK: - TableHeader
-        self.tableView?.register(HeaderViewCell.self, forCellReuseIdentifier: "Header")
+        tableView?.register(HeaderViewCell.self, forCellReuseIdentifier: "Header")
         
-        self.tableView!.delegate = self
-        self.tableView!.dataSource = self
-        self.tableView!.sizeToFit()
-        self.tableView!.clipsToBounds = true
+        tableView!.delegate = self
+        tableView!.dataSource = self
+        tableView!.sizeToFit()
+        tableView!.clipsToBounds = true
         let bgView = UIView()
         bgView.backgroundColor = .secondarySystemGroupedBackground
         tableView!.backgroundView = bgView
-        self.tableView!.tableFooterView = UIView(frame: .zero)
+        tableView!.tableFooterView = UIView(frame: .zero)
         
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
         resultsController.tableView.backgroundColor = ColorX.LGrayColor
@@ -128,7 +128,7 @@ final class Employee: UIViewController {
     @objc func hideBar(notification: NSNotification)  {
         if UIDevice.current.userInterfaceIdiom == .phone  {
             let state = notification.object as! Bool
-            self.navigationController?.setNavigationBarHidden(state, animated: true)
+            navigationController?.setNavigationBarHidden(state, animated: true)
             UIView.animate(withDuration: 0.2, animations: {
                 self.tabBarController?.hideTabBarAnimated(hide: state) //added
             }, completion: nil)
@@ -136,7 +136,7 @@ final class Employee: UIViewController {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if (self.lastContentOffset > scrollView.contentOffset.y) {
+        if (lastContentOffset > scrollView.contentOffset.y) {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: false)
         } else {
             NotificationCenter.default.post(name: NSNotification.Name("hide"), object: true)
@@ -144,14 +144,14 @@ final class Employee: UIViewController {
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        self.lastContentOffset = scrollView.contentOffset.y;
+        lastContentOffset = scrollView.contentOffset.y;
     }
     
     // MARK: - refresh
     @objc func refreshData(_ sender:AnyObject) {
-        employlist  .removeAll() //fix
+        employlist  .removeAll() // FIXME: shouldn't crash
         loadData()
-        self.refreshControl.endRefreshing()
+        refreshControl.endRefreshing()
     }
     
     // MARK: - Button
@@ -288,7 +288,7 @@ final class Employee: UIViewController {
                 
             } else {
                 
-                indexPath = self.tableView?.indexPathForSelectedRow?.row
+                indexPath = tableView?.indexPathForSelectedRow?.row
                 if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     
                     dateUpdated = (_feedItems[indexPath!] as AnyObject).value(forKey: "updatedAt") as! Date
@@ -314,9 +314,8 @@ final class Employee: UIViewController {
             if Active == nil {
                 Active = 0
             }
-            let dateFormat = DateFormatter()
-            dateFormat.dateFormat = "MMM dd yy"
-            VC.tbl16 = String(format: "%@", dateFormat.string(from: dateUpdated)) as String
+
+            VC.tbl16 = String(format: "%@", MasterViewController.dateFormatter.string(from: dateUpdated)) as String
             
             if navigationItem.searchController?.isActive == true {
                 //search
@@ -399,7 +398,7 @@ final class Employee: UIViewController {
                     VC.tbl13 = employlist[indexPath!].cellphone
                     VC.tbl14 = employlist[indexPath!].ss
                     VC.tbl15 = employlist[indexPath!].middle as NSString
-                    VC.tbl16 = dateFormat.string(from: employlist[indexPath!].lastUpdate as Date) as String
+                    VC.tbl16 = MasterViewController.dateFormatter.string(from: employlist[indexPath!].lastUpdate as Date) as String
                     VC.tbl17 = employlist[indexPath!].photo
                     VC.tbl21 = employlist[indexPath!].email as NSString
                     VC.tbl22 = employlist[indexPath!].department
@@ -449,7 +448,7 @@ final class Employee: UIViewController {
             case "phone":
                 target = employ.homephone
             case "title":
-                target = employ.title //fix
+                target = employ.title // FIXME: shouldn't crash
             default:
                 target = String(format: "%@ %@ %@", employ.first, employ.lastname, employ.company).removeWhiteSpace()
             }
@@ -604,16 +603,15 @@ extension Employee: UITableViewDelegate {
                 header.myLabel3.text = String(format: "%@%d", "Events\n", 3)
             }
             header.contentView.backgroundColor = ColorX.Employ.buttonColor //Color.Lead.navColor
-            self.tableView!.tableHeaderView = nil //header.header
+            tableView.tableHeaderView = nil //header.header
             
             return header.contentView
         }
         return nil
     }
     
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
     }
     
     internal func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

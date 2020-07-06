@@ -18,15 +18,16 @@ final class MeProfileGridCell: UICollectionViewCell {
 
             let imageUrlString = post?.imageUrl
             guard let imageUrl:URL = URL(string: imageUrlString!) else { return }
-            self.photoImageView.sd_setImage(with: imageUrl, completed: nil)
-            
+            DispatchQueue.main.async {
+                self.photoImageView.sd_setImage(with: imageUrl, completed: nil)
+            }
             self.playButton.isHidden = post?.videoUrl == ""
         }
     }
     
-    var MeProfileController: MeProfileVC?
+    private var MeProfileController: MeProfileVC?
     
-    lazy var photoImageView: UIImageView = {
+    public let photoImageView: UIImageView = {
         let iv = UIImageView()
         iv.backgroundColor = .lightGray
         iv.contentMode = .scaleAspectFill
@@ -36,7 +37,7 @@ final class MeProfileGridCell: UICollectionViewCell {
         return iv
     }()
     
-    lazy var playButton: UIButton = {
+    public let playButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.alpha = 0.9

@@ -36,7 +36,7 @@ class FriendCell: UITableViewCell {
     didSet {
 
       contactImageView.layer.masksToBounds = true
-      contactImageView.layer.cornerRadius = 22.0
+      contactImageView.layer.cornerRadius = contactImageView.width/2
     }
   }
   

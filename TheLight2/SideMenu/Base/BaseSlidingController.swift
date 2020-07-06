@@ -151,7 +151,7 @@ class BaseSlidingController: UIViewController {
             
         default:
             blueView.isHidden = true
-            self.navigationController?.popToRootViewController(animated: true)
+            navigationController?.popToRootViewController(animated: true)
         }
         
         redView.addSubview(rightViewController.view)

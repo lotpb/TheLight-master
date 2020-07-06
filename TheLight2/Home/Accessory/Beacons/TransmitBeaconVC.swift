@@ -40,13 +40,13 @@ final class TransmitBeaconVC: UIViewController, CBPeripheralManagerDelegate {
         lblStatus.textColor = .label
 
         if UIDevice.current.userInterfaceIdiom == .pad  {
-            self.lblStatus?.font = Font.Snapshot.celltitlePad
-            self.txtMajor?.font = Font.Snapshot.celltitlePad
-            self.txtMinor?.font = Font.Snapshot.celltitlePad
-            self.majorLabel?.font = Font.Snapshot.celltitlePad
-            self.minorLabel?.font = Font.Snapshot.celltitlePad
-            self.beaconBroadlabel?.font = Font.Snapshot.celltitlePad
-            self.lblBTStatus?.font = Font.celltitle18l
+            lblStatus?.font = Font.Snapshot.celltitlePad
+            txtMajor?.font = Font.Snapshot.celltitlePad
+            txtMinor?.font = Font.Snapshot.celltitlePad
+            majorLabel?.font = Font.Snapshot.celltitlePad
+            minorLabel?.font = Font.Snapshot.celltitlePad
+            beaconBroadlabel?.font = Font.Snapshot.celltitlePad
+            lblBTStatus?.font = Font.celltitle18l
         } else {
             
         }
@@ -115,7 +115,7 @@ final class TransmitBeaconVC: UIViewController, CBPeripheralManagerDelegate {
             txtMajor.isEnabled = false
             txtMinor.isEnabled = false
             isBroadcasting = true
-            self.view.backgroundColor = .systemGray
+            view.backgroundColor = .systemGray
 
 
         } else {
@@ -130,7 +130,7 @@ final class TransmitBeaconVC: UIViewController, CBPeripheralManagerDelegate {
             txtMajor.isEnabled = true
             txtMinor.isEnabled = true
             isBroadcasting = false
-            self.view.backgroundColor = .secondarySystemGroupedBackground
+            view.backgroundColor = .secondarySystemGroupedBackground
         } 
     }
     

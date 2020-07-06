@@ -22,76 +22,76 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     // MARK: NavigationController Hidden
     private var lastContentOffset: CGFloat = 0.0
     
-    var datePickerView : UIDatePicker = UIDatePicker()
-    var pickerView : UIPickerView = UIPickerView()
+    private var datePickerView : UIDatePicker = UIDatePicker()
+    private var pickerView : UIPickerView = UIPickerView()
     private var pickOption = ["Call", "Follow", "Looks Good", "Future", "Bought", "Dead", "Cancel", "Sold"]
     private var pickRate = ["A", "B", "C", "D", "F"]
     private var pickContract = ["A & S Home Improvement", "Islandwide Gutters", "Ashland Home Improvement", "John Kat Windows", "Jose Rosa", "Peter Balsamo"]
     
-    var date : UITextField!
-    var address : UITextField!
-    var city : UITextField!
-    var state : UITextField!
-    var zip : UITextField!
-    var aptDate : UITextField!
-    var phone : UITextField!
-    var salesman : UITextField!
-    var jobName : UITextField!
-    var adName : UITextField!
-    var amount : UITextField!
-    var email : UITextField!
-    var spouse : UITextField!
-    var callback : UITextField!
-    var start : UITextField! //cust
-    var complete : UITextField! //cust
-    var comment : UITextView!
-    var photo : UITextField!
+    private var date : UITextField!
+    private var address : UITextField!
+    private var city : UITextField!
+    private var state : UITextField!
+    private var zip : UITextField!
+    private var aptDate : UITextField!
+    private var phone : UITextField!
+    private var salesman : UITextField!
+    private var jobName : UITextField!
+    private var adName : UITextField!
+    private var amount : UITextField!
+    private var email : UITextField!
+    private var spouse : UITextField!
+    private var callback : UITextField!
+    private var start : UITextField! //cust
+    private var complete : UITextField! //cust
+    private var comment : UITextView!
+    public var photo : UITextField!
     
-    var formController : String?
-    var status : String?
-    var objectId : String?
-    var custNo : String?
-    var leadNo : String?
-    var time : String?
+    public var formController : String?
+    public var status : String?
+    public var objectId : String?
+    public var custNo : String?
+    public var leadNo : String?
+    public var time : String?
 
-    var rate : String? //cust
-    var saleNo : String?
-    var jobNo : String?
-    var adNo : String?
+    private var rate : String? //cust
+    public var saleNo : String?
+    public var jobNo : String?
+    public var adNo : String?
     
-    var frm11 : String?
-    var frm12 : String?
-    var frm13 : String?
-    var frm14 : String?
-    var frm15 : String?
-    var frm16 : String?
-    var frm17 : String?
-    var frm18 : String?
-    var frm19 : String?
-    var frm20 : String?
-    var frm21 : String?
-    var frm22 : String?
-    var frm23 : String?
-    var frm24 : String?
-    var frm25 : String?
-    var frm26 : String?
-    var frm27 : String?
-    var frm28 : String?
-    var frm29 : String?
-    var frm30 : NSString?
-    var frm31 : String? //start
-    var frm32 : String? //completion
-    var profileImage : UIImage?
+    public var frm11 : String?
+    public var frm12 : String?
+    public var frm13 : String?
+    public var frm14 : String?
+    public var frm15 : String?
+    public var frm16 : String?
+    public var frm17 : String?
+    public var frm18 : String?
+    public var frm19 : String?
+    public var frm20 : String?
+    public var frm21 : String?
+    public var frm22 : String?
+    public var frm23 : String?
+    public var frm24 : String?
+    public var frm25 : String?
+    public var frm26 : String?
+    public var frm27 : String?
+    public var frm28 : String?
+    public var frm29 : String?
+    public var frm30 : NSString?
+    public var frm31 : String? //start
+    public var frm32 : String? //completion
+    public var profileImage : UIImage?
     
-    var defaults = UserDefaults.standard
-    var simpleStepper : UIStepper!
-    var lookupItem : String?
-    var pasteBoard = UIPasteboard.general
+    private var defaults = UserDefaults.standard
+    private var simpleStepper : UIStepper!
+    private var lookupItem : String?
+    private var pasteBoard = UIPasteboard.general
 
     let profileImageView: CustomImageView = {
         let imageView = CustomImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 37.5
+        imageView.layer.cornerRadius = imageView.width/2
         imageView.layer.masksToBounds = true
         imageView.layer.borderColor = UIColor.systemBackground.cgColor
         imageView.layer.borderWidth = 2.0
@@ -100,7 +100,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         return imageView
     }()
 
-    let editlabel: UILabel = {
+    private let editlabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Edit"
@@ -109,7 +109,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         return label
     }()
 
-    lazy var first: UITextField = {
+    private let first: UITextField = {
         let textField = UITextField()
         textField.layer.borderColor = UIColor.secondaryLabel.cgColor
         textField.layer.borderWidth = 0.7
@@ -122,7 +122,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         return textField
     }()
 
-    lazy var last: UITextField = {
+    private let last: UITextField = {
         let textField = UITextField()
         textField.layer.borderColor = UIColor.secondaryLabel.cgColor
         textField.layer.borderWidth = 0.7
@@ -135,7 +135,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         return textField
     }()
 
-    lazy var company: UITextField = {
+    private let company: UITextField = {
         let textField = UITextField()
         textField.layer.borderColor = UIColor.secondaryLabel.cgColor
         textField.layer.borderWidth = 0.7
@@ -148,7 +148,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         return textField
     }()
 
-    let activeImage: CustomImageView = {
+    private let activeImage: CustomImageView = {
         let imageView = CustomImageView()
         imageView.layer.masksToBounds = true
         imageView.contentMode = .scaleAspectFill
@@ -167,11 +167,11 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         passFieldData()
         setupTableView()
         setupNavigation()
-        setupForm()
+        //setupForm()
         clearFormData()
         
         if (status == "New") {
-            self.frm30 = "1"
+            frm30 = "1"
         }
         
         if (status == "Edit") {
@@ -185,19 +185,19 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
 
         
         loadFormData()
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         if UIDevice.current.userInterfaceIdiom == .pad  {
-            self.navigationController?.navigationBar.barTintColor = .black
+            navigationController?.navigationBar.barTintColor = .black
         } else {
-            self.navigationController?.navigationBar.barTintColor = ColorX.DGrayColor
+            navigationController?.navigationBar.barTintColor = ColorX.DGrayColor
         }
         
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
         // MARK: NavigationController Hidden
         NotificationCenter.default.addObserver(self, selector: #selector(EditData.hideBar(notification:)), name: NSNotification.Name("hide"), object: nil)
         
@@ -213,7 +213,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
         //TabBar Hidden
-        self.tabBarController?.tabBar.isHidden = true
+        tabBarController?.tabBar.isHidden = true
     }
     
     override func didReceiveMemoryWarning() {
@@ -232,36 +232,37 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
     }
     
-    func setupTableView() {
+    private func setupTableView() {
         
-        self.tableView!.delegate = self
-        self.tableView!.dataSource = self
-        self.tableView!.estimatedRowHeight = 44
-        self.tableView!.rowHeight = UITableView.automaticDimension
-        self.tableView!.backgroundColor = .clear
-        self.tableView!.tableFooterView = UIView(frame: .zero)
+        tableView!.delegate = self
+        tableView!.dataSource = self
+        tableView!.estimatedRowHeight = 44
+        tableView!.rowHeight = UITableView.automaticDimension
+        tableView!.backgroundColor = .clear
+        tableView!.tableFooterView = UIView(frame: .zero)
     }
     
-    func setupForm() {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
 
-        self.profileImageView.image = profileImage
-        self.pickerView.delegate = self
-        self.pickerView.dataSource = self
+        profileImageView.image = profileImage
+        pickerView.delegate = self
+        pickerView.dataSource = self
         NotificationCenter.default.addObserver(self, selector: (#selector(EditData.updatePicker)), name: UITextField.textDidBeginEditingNotification, object: nil)
 
         self.first.autocapitalizationType = .words
-        if (self.formController == "Vendor") {
-            self.last.autocapitalizationType = .none
+        if (formController == "Vendor") {
+            last.autocapitalizationType = .none
         } else {
-            self.last.autocapitalizationType = .words
+            last.autocapitalizationType = .words
         }
-        self.company.autocapitalizationType = .words
+        company.autocapitalizationType = .words
 
-        self.mainView?.addSubview(profileImageView)
-        self.mainView?.addSubview(editlabel)
-        self.mainView?.addSubview(first)
-        self.mainView?.addSubview(last)
-        self.mainView?.addSubview(company)
+        mainView?.addSubview(profileImageView)
+        mainView?.addSubview(editlabel)
+        mainView?.addSubview(first)
+        mainView?.addSubview(last)
+        mainView?.addSubview(company)
 
         NSLayoutConstraint.activate([
 
@@ -295,7 +296,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     // MARK: - NavigationController Hidden
     @objc func hideBar(notification: NSNotification)  {
         let state = notification.object as! Bool
-        self.navigationController?.setNavigationBarHidden(state, animated: true)
+        navigationController?.setNavigationBarHidden(state, animated: true)
         UIView.animate(withDuration: 0.2, animations: {
             self.tabBarController?.hideTabBarAnimated(hide: state) //added
         }, completion: nil)
@@ -335,7 +336,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     // MARK: - TextField
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {   //delegate method
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {   //delegate method
         textField.resignFirstResponder()
         return true
     }
@@ -345,11 +346,11 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         self.pickerView.reloadAllComponents()
     }
     
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+    public func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         
         if callback.isFirstResponder {
             return pickOption.count
@@ -362,7 +363,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
     }
     
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    public func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         
         if callback.isFirstResponder {
             return "\(pickOption[row])"
@@ -387,22 +388,20 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     // MARK: - Datepicker
     @objc func handleDatePicker(_ sender: UIDatePicker) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM dd yy"
 
         if date.isFirstResponder {
-            self.date?.text = dateFormatter.string(from: sender.date)
+            self.date?.text = MasterViewController.dateFormatter.string(from: sender.date)
         } else if aptDate.isFirstResponder {
-            self.aptDate?.text = dateFormatter.string(from: sender.date)
+            self.aptDate?.text = MasterViewController.dateFormatter.string(from: sender.date)
         } else if start.isFirstResponder {
-            self.start?.text = dateFormatter.string(from: sender.date)
+            self.start?.text = MasterViewController.dateFormatter.string(from: sender.date)
         } else if complete.isFirstResponder {
-            self.complete?.text = dateFormatter.string(from: sender.date)
+            self.complete?.text = MasterViewController.dateFormatter.string(from: sender.date)
         }
     }
     
     // MARK: - FieldData Header
-    func passFieldData() {
+    private func passFieldData() {
         /*
          if (self.formController == "Leads" || self.formController == "Customer") {
          self.last.borderStyle = UITextBorderStyle.roundedRect
@@ -442,18 +441,18 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             if (self.status == "New") {
                 self.company.isHidden = true
             } else {
-                self.company.placeholder = "Contractor"
+                self.company.placeholder = "Contractor..."
                 self.company.inputView = self.pickerView
             }
         } else if (self.formController == "Vendor") {
-            self.first.placeholder = "Company"
+            self.first.placeholder = "Company..."
             self.last.placeholder = "Webpage"
-            self.company.placeholder = "Manager"
+            self.company.placeholder = "Manager..."
             
         } else if (formController == "Employee") {
-            self.first.placeholder = "First"
-            self.last.placeholder = "Last"
-            self.company.placeholder = "Subcontractor"
+            self.first.placeholder = "First..."
+            self.last.placeholder = "Last..."
+            self.company.placeholder = "Subcontractor..."
             
         } else {
             self.company.isHidden = true
@@ -462,7 +461,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     // MARK: - Load Data
-    func loadData() {
+    private func loadData() {
 
         if (self.formController == "Leads") {
             
@@ -565,7 +564,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     // MARK: - Load Form Data
-    func loadFormData() {
+    private func loadFormData() {
         
         if (self.first.text == "") {
             self.first.text = defaults.string(forKey: "first")
@@ -579,7 +578,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     // MARK: Clear Form Data
-    func clearFormData() {
+    private func clearFormData() {
         
             self.defaults.removeObject(forKey: "first")
             self.defaults.removeObject(forKey: "last")
@@ -587,7 +586,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     // MARK: Save Form Data
-    func saveFormData() {
+    private func saveFormData() {
         
         if (self.first.text != "") {
             self.defaults.set(self.first.text, forKey: "first")
@@ -687,16 +686,11 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             var Quan = self.callback.text
             if Quan == nil { Quan = "" }
             let myQuan = numberFormatter.number(from: Quan! as String)
-            
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MMM dd yy"
-            dateFormatter.timeZone = .current
-            
-            
+
             if (self.formController == "Leads") {
 
                 let item = self.aptDate.text
-                let currentDate:NSDate = dateFormatter.date(from: item!)! as NSDate
+                let currentDate:NSDate = MasterViewController.dateFormatter.date(from: item!)! as NSDate
                 let myTimeStamp = NSNumber(value: Int(currentDate.timeIntervalSince1970))
                 
                 if (self.status == "Edit") { //Edit Lead
@@ -845,11 +839,11 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             } else if (self.formController == "Customer") {
 
                 guard let start = self.start.text else {return}
-                let startDate:NSDate = dateFormatter.date(from: start)! as NSDate
+                let startDate:NSDate = MasterViewController.dateFormatter.date(from: start)! as NSDate
                 let myStart = NSNumber(value: Int(startDate.timeIntervalSince1970))
                 
                 guard let completion = self.complete.text else {return}
-                let completionDate:NSDate = dateFormatter.date(from: completion)! as NSDate
+                let completionDate:NSDate = MasterViewController.dateFormatter.date(from: completion)! as NSDate
                 let myCompletion = NSNumber(value: Int(completionDate.timeIntervalSince1970))
                 
                 if (self.status == "Edit") { //Edit Customer
@@ -1400,16 +1394,14 @@ extension EditData: UITableViewDataSource {
         let textviewframe: UITextView?
         let aptframe: UITextField? //zip field
         
-        let dateFormatter = DateFormatter()
-        
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
-            dateFormatter.dateFormat = "yyyy-MM-dd"
+            MasterViewController.dateFormatter.dateFormat = "yyyy-MM-dd"
         } else {
             //firebase
-            dateFormatter.dateFormat = "MMM dd yy"
+            //EditData.dateFormatter.dateFormat = "MMM dd yy"
         }
         
-        let dateString = dateFormatter.string(from: (Date()) as Date)
+        let dateString = MasterViewController.dateFormatter.string(from: (Date()) as Date)
         
         aptframe = UITextField(frame: .init(x: 220, y: 7, width: 80, height: 30))
         
@@ -1505,15 +1497,15 @@ extension EditData: UITableViewDataSource {
             }
             
             if (self.formController == "Vendor") {
-                self.date?.placeholder = "Profession"
+                self.date?.placeholder = "Profession..."
                 cell.textLabel!.text = "Profession"
                 
             } else if (self.formController == "Employee") {
-                self.date!.placeholder = "Title"
+                self.date!.placeholder = "Title..."
                 cell.textLabel!.text = "Title"
                 
             } else {
-                self.date?.placeholder = "Date"
+                self.date?.placeholder = "Date..."
                 cell.textLabel!.text = "Date"
             }
             
@@ -1527,7 +1519,7 @@ extension EditData: UITableViewDataSource {
             } else {
                 self.address!.text = self.frm14
             }
-            self.address!.placeholder = "Address"
+            self.address!.placeholder = "Address..."
             cell.textLabel!.text = "Address"
             cell.contentView.addSubview(self.address!)
             
@@ -1540,7 +1532,7 @@ extension EditData: UITableViewDataSource {
                 self.city!.text = self.frm15
             }
             cell.accessoryType = .disclosureIndicator
-            self.city!.placeholder = "City"
+            self.city!.placeholder = "City..."
             cell.textLabel!.text = "City"
             cell.contentView.addSubview(self.city!)
             
@@ -1552,12 +1544,12 @@ extension EditData: UITableViewDataSource {
             } else {
                 self.state!.text = self.frm16
             }
-            self.state!.placeholder = "State"
+            self.state!.placeholder = "State..."
             cell.textLabel!.text = "State"
             cell.contentView.addSubview(self.state!)
             
             self.zip = aptframe
-            self.zip!.placeholder = "Zip"
+            self.zip!.placeholder = "Zip..."
             if self.frm17 == nil {
                 self.zip!.text = ""
             } else {
@@ -1575,16 +1567,16 @@ extension EditData: UITableViewDataSource {
                 self.aptDate!.text = self.frm19
             }
             if (self.formController == "Customer") {
-                self.aptDate!.placeholder = "Rate"
+                self.aptDate!.placeholder = "Rate..."
                 cell.textLabel!.text = "Rate"
                 self.aptDate?.inputView = self.pickerView
                 
             } else if (self.formController == "Vendor") {
-                self.aptDate!.placeholder = "Assistant"
+                self.aptDate!.placeholder = "Assistant...."
                 cell.textLabel!.text = "Assistant"
                 
             } else if (self.formController == "Employee") {
-                self.aptDate!.placeholder = "Middle"
+                self.aptDate!.placeholder = "Middle..."
                 cell.textLabel!.text = "Middle"
                 
             } else { //leads
@@ -1592,7 +1584,7 @@ extension EditData: UITableViewDataSource {
                     self.aptDate?.text = dateString
                 }
                 self.aptDate!.tag = 4
-                self.aptDate!.placeholder = "Apt Date"
+                self.aptDate!.placeholder = "Apt Date..."
                 cell.textLabel!.text = "Apt Date"
                 self.aptDate!.inputView = datePickerView
                 datePickerView.datePickerMode = UIDatePicker.Mode.date
@@ -1604,7 +1596,7 @@ extension EditData: UITableViewDataSource {
         } else if (indexPath.row == 6) {
             
             self.phone = textframe
-            self.phone!.placeholder = "Phone"
+            self.phone!.placeholder = "Phone..."
             if (self.frm20 == nil) {
                 self.phone!.text = defaults.string(forKey: "areacodeKey")
             } else {
@@ -1625,15 +1617,15 @@ extension EditData: UITableViewDataSource {
             }
             
             if (self.formController == "Vendor") {
-                self.salesman!.placeholder = "Phone 1"
+                self.salesman!.placeholder = "Phone 1..."
                 cell.textLabel!.text = "Phone 1"
                 
             } else if (self.formController == "Employee") {
-                self.salesman!.placeholder = "Work Phone"
+                self.salesman!.placeholder = "Work Phone..."
                 cell.textLabel!.text = "Work Phone"
                 
             } else {
-                self.salesman!.placeholder = "Salesman"
+                self.salesman!.placeholder = "Salesman..."
                 cell.textLabel!.text = "Salesman"
                 cell.accessoryType = .disclosureIndicator
             }
@@ -1657,7 +1649,7 @@ extension EditData: UITableViewDataSource {
                 self.jobName!.placeholder = "Cell Phone"
                 cell.textLabel!.text = "Cell Phone"
             } else {
-                self.jobName!.placeholder = "Job"
+                self.jobName!.placeholder = "Job..."
                 cell.textLabel!.text = "Job"
                 cell.accessoryType = .disclosureIndicator
             }
@@ -1674,15 +1666,15 @@ extension EditData: UITableViewDataSource {
             }
 
             if (self.formController == "Vendor") {
-                self.adName!.placeholder = "Phone 3"
+                self.adName!.placeholder = "Phone 3..."
                 cell.textLabel!.text = "phone 3"
                 
             } else if (self.formController == "Employee") {
-                self.adName!.placeholder = "Social Security"
+                self.adName!.placeholder = "Social Security..."
                 cell.textLabel!.text = "Social Sec"
                 
             } else if (self.formController == "Customer") {
-                self.adName!.placeholder = "Product"
+                self.adName!.placeholder = "Product..."
                 cell.textLabel!.text = "Product"
                 
             } else {
@@ -1713,7 +1705,7 @@ extension EditData: UITableViewDataSource {
                 }
             }
             
-            self.amount!.placeholder = "Amount"
+            self.amount!.placeholder = "Amount..."
             if self.frm24 == nil {
                 self.amount!.text = ""
             } else {
@@ -1722,7 +1714,7 @@ extension EditData: UITableViewDataSource {
             cell.textLabel!.text = "Amount"
             
             if ((self.formController == "Vendor") || (self.formController == "Employee")) {
-                self.amount!.placeholder = "Department"
+                self.amount!.placeholder = "Department..."
                 cell.textLabel!.text = "Department"
             }
             
@@ -1732,7 +1724,7 @@ extension EditData: UITableViewDataSource {
             
             self.email = textframe
             self.email.autocapitalizationType = .none
-            self.email!.placeholder = "Email"
+            self.email!.placeholder = "Email..."
             if self.frm25 == nil {
                 self.email!.text = ""
             } else {
@@ -1744,7 +1736,7 @@ extension EditData: UITableViewDataSource {
             
         } else if(indexPath.row == 12) {
             self.spouse = textframe
-            self.spouse!.placeholder = "Spouse"
+            self.spouse!.placeholder = "Spouse..."
             
             if self.frm26 == nil {
                 self.spouse!.text = ""
@@ -1753,10 +1745,10 @@ extension EditData: UITableViewDataSource {
             }
             
             if (formController == "Vendor") {
-                self.spouse!.placeholder = "Office"
+                self.spouse!.placeholder = "Office..."
                 cell.textLabel!.text = "Office"
             } else if (formController == "Employee") {
-                self.spouse!.placeholder = "Country"
+                self.spouse!.placeholder = "Country..."
                 cell.textLabel!.text = "Country"
             } else {
                 cell.textLabel!.text = "Spouse"
@@ -1774,7 +1766,7 @@ extension EditData: UITableViewDataSource {
             }
             
             if (self.formController == "Customer") {
-                self.callback!.placeholder = "Quan"
+                self.callback!.placeholder = "Quan..."
                 cell.textLabel!.text = "# Windows"
                 
                 let simpleStepper = UIStepper(frame: .zero)
@@ -1796,11 +1788,11 @@ extension EditData: UITableViewDataSource {
                 cell.textLabel!.text = ""
             }
             else if (self.formController == "Employee") {
-                self.callback!.placeholder = "Manager"
+                self.callback!.placeholder = "Manager..."
                 cell.textLabel!.text = "Manager"
             }
             else {
-                self.callback!.placeholder = "Call Back"
+                self.callback!.placeholder = "Call Back..."
                 cell.textLabel!.text = "Call Back"
                 self.callback?.inputView = self.pickerView
             }
@@ -1820,7 +1812,7 @@ extension EditData: UITableViewDataSource {
         } else if(indexPath.row == 15) {
             if (self.formController == "Customer") {
                 self.start = textframe
-                self.start!.placeholder = "Start Date"
+                self.start!.placeholder = "Start Date..."
                 if self.frm31 == nil {
                     self.start!.text = ""
                 } else {
@@ -1832,7 +1824,7 @@ extension EditData: UITableViewDataSource {
                 cell.contentView.addSubview(self.start!)
             } else {
                 self.photo = textframe
-                self.photo!.placeholder = "Photo"
+                self.photo!.placeholder = "Photo..."
                 if self.frm29 == nil {
                     self.photo!.text = ""
                 } else {
@@ -1844,7 +1836,7 @@ extension EditData: UITableViewDataSource {
             
         } else if(indexPath.row == 16) {
             self.complete = textframe
-            self.complete!.placeholder = "Completion Date"
+            self.complete!.placeholder = "Completion Date..."
             
             if self.frm32 == nil {
                 self.complete!.text = ""
@@ -1857,7 +1849,7 @@ extension EditData: UITableViewDataSource {
             cell.contentView.addSubview(self.complete!)
         } else if(indexPath.row == 17) {
             self.photo = textframe
-            self.photo!.placeholder = "Photo"
+            self.photo!.placeholder = "Photo..."
             if self.frm29 == nil {
                 self.photo!.text = ""
             } else {

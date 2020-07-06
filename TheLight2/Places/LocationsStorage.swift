@@ -42,9 +42,9 @@ class LocationsStorage {
         let fileManager = FileManager.default
         documentsURL = try! fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
         self.fileManager = fileManager
-        
+
         let jsonDecoder = JSONDecoder()
-        
+
         let locationFilesURLs = try! fileManager.contentsOfDirectory(at: documentsURL,
                                                                      includingPropertiesForKeys: nil)
         locations = locationFilesURLs.compactMap { url -> Location? in
@@ -57,23 +57,24 @@ class LocationsStorage {
             return try? jsonDecoder.decode(Location.self, from: data)
             }.sorted(by: { $0.date > $1.date })
     }
-    
+
     func saveLocationOnDisk(_ location: Location) {
         let encoder = JSONEncoder()
         let timestamp = location.date.timeIntervalSince1970
         let fileURL = documentsURL.appendingPathComponent("\(timestamp)")
-        
+
         let data = try! encoder.encode(location)
         try! data.write(to: fileURL)
-        
+
         locations.append(location)
-        
+
         NotificationCenter.default.post(name: .newLocationSaved, object: self, userInfo: ["location": location])
     }
-    
+
     func saveCLLocationToDisk(_ clLocation: CLLocation) {
         let currentDate = Date()
-        AppDelegate.geoCoder.reverseGeocodeLocation(clLocation) { placemarks, _ in
+        AppDelegate.geoCoder.reverseGeocodeLocation(clLocation) { [weak self] placemarks, _ in
+            guard let self = self else { return }
             if let place = placemarks?.first {
                 let location = Location(clLocation.coordinate, date: currentDate, descriptionString: "\(place)")
                 self.saveLocationOnDisk(location)

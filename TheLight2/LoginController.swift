@@ -6,45 +6,56 @@
 //  Copyright © 2015 Peter Balsamo. All rights reserved.
 //
 
-import Foundation
 import UIKit
 import Parse
-import Firebase
-//import FirebaseDatabase
 import FirebaseAuth
 import FirebaseStorage
 import LocalAuthentication
 import FBSDKLoginKit
 import GoogleSignIn
-//import TwitterKit
 import MapKit
 import GeoFire
 
 
-final class LoginController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+final class LoginController: UIViewController, UITextFieldDelegate {
 
     let ipadtitle = UIFont.systemFont(ofSize: 20)
     let celltitle = UIFont.systemFont(ofSize: 18)
 
-    @IBOutlet weak var mapView: MKMapView?
-    @IBOutlet weak var mainView: UIView!
-    @IBOutlet weak var bottomView: UIView!
-
-    @IBOutlet weak var forgotPassword: UIButton?
-    @IBOutlet weak var authentButton: UIButton!
-
-    var defaults = UserDefaults.standard
-    var pictureData : Data?
-    var user : PFUser?
+    private var defaults = UserDefaults.standard
+    private var pictureData: Data?
+    private var user: PFUser?
     //firebase
-    var users: UserModel?
-    var userimage : UIImage?
-    var userimageView : UIImageView?
+    private var users: UserModel?
+    private var userimage: UIImage?
     //Facebook
-    var profileUrl: String?
+    private var profileUrl: String?
     //Google
-    private var googleButton : GIDSignInButton = GIDSignInButton()
+    private let googleButton: GIDSignInButton = GIDSignInButton()
     private var loginObserver: NSObjectProtocol?
+
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.clipsToBounds = true
+        return scrollView
+    }()
+
+    private let mainView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private let mapView: MKMapView = {
+        let map = MKMapView()
+        map.translatesAutoresizingMaskIntoConstraints = false
+        return map
+    }()
+
+    private let userimageView: UIImageView = {
+        let imageView = UIImageView()
+        return imageView
+    }()
 
     private let FBloginButton: FBLoginButton = {
         let button = FBLoginButton()
@@ -52,7 +63,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         return button
     }()
 
-    lazy var usernameField: UITextField = {
+    private let usernameField: UITextField = {
         let textField = UITextField()
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
@@ -69,7 +80,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         return textField
     }()
 
-    lazy var passwordField: UITextField = {
+    private let passwordField: UITextField = {
         let textField = UITextField()
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
@@ -86,7 +97,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         return textField
     }()
 
-    lazy var reEnterPasswordField: UITextField = {
+    private let reEnterPasswordField: UITextField = {
         let textField = UITextField()
         textField.layer.cornerRadius = 12
         textField.layer.borderWidth = 0.7
@@ -100,7 +111,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         return textField
     }()
 
-    lazy var emailField: UITextField = {
+    private let emailField: UITextField = {
         let textField = UITextField()
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
@@ -118,7 +129,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         return textField
     }()
 
-    lazy var phoneField: UITextField = {
+    private let phoneField: UITextField = {
         let textField = UITextField()
         textField.layer.cornerRadius = 12
         textField.layer.borderWidth = 0.7
@@ -132,7 +143,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         return textField
     }()
 
-    let plusPhotoButton: UIButton = {
+    private let plusPhotoButton: UIButton = {
         let button = UIButton(type: .system)
         button.layer.borderColor = UIColor.clear.cgColor
         button.layer.borderWidth = 3
@@ -142,7 +153,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         return button
     }()
 
-    let loginBtn: UIButton = {
+    private let loginBtn: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Sign-In", for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -152,7 +163,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         return button
     }()
 
-    let registerBtn: UIButton = {
+    private let registerBtn: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Create an Account", for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -162,7 +173,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         return button
     }()
 
-    let backloginBtn: UIButton = {
+    private let backloginBtn: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Already have an account? Sign in", for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -172,18 +183,31 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         return button
     }()
 
+    private let forgotPassword: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Forgot password", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.addTarget(self, action: #selector(passwordReset), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    private let authentButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Authenticate", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.contentHorizontalAlignment = .right
+        button.addTarget(self, action: #selector(authenticateUser), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Gradient
-        bottomView.addVerticalGradientLayer(topColor: primaryColor, bottomColor: secondaryColor)
-
-        mainView.addSubview(plusPhotoButton)
-        plusPhotoButton.anchor(top: mainView.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 15, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 140, height: 140)
-        plusPhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-
+        scrollView.isUserInteractionEnabled = true //does nothing
         // Google
-        loginObserver = NotificationCenter.default.addObserver(forName: .didLoginNotification, object: nil, queue: .main, using: { [weak self] _ in
+        loginObserver = NotificationCenter.default.addObserver(forName: .didLogInNotification, object: nil, queue: .main, using: { [weak self] _ in
             guard let strongSelf = self else {
                 return
             }
@@ -205,8 +229,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         setupDefaults()
         setupView()
         setupFont()
-        setupConstraints()
-        self.mapView?.showsUserLocation = true
+        mapView.showsUserLocation = true
     }
 
     deinit {
@@ -226,8 +249,8 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         observeKeyboardNotifications()
         // Animate Buttons
         UIView.animate(withDuration: 0.5, delay: 0.3, options: [], animations: {
-            self.googleButton.frame = .init(x: self.view.frame.width - 125, y: 320, width: 110, height: 40)
-            self.FBloginButton.frame = .init(x: 10, y: 325, width: 110, height: 40)
+            self.googleButton.frame = .init(x: self.view.frame.width - 125, y: 395, width: 110, height: 40)
+            self.FBloginButton.frame = .init(x: 10, y: 400, width: 110, height: 40)
         }, completion: nil
         )
     }
@@ -243,110 +266,140 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
 
     func setupFont() {
         if UIDevice.current.userInterfaceIdiom == .pad  {
-            self.usernameField.font = ipadtitle
-            self.passwordField.font = ipadtitle
-            self.reEnterPasswordField.font = ipadtitle
-            self.emailField.font = ipadtitle
-            self.phoneField.font = ipadtitle
+            usernameField.font = ipadtitle
+            passwordField.font = ipadtitle
+            reEnterPasswordField.font = ipadtitle
+            emailField.font = ipadtitle
+            phoneField.font = ipadtitle
         } else {
-            self.usernameField.font = celltitle
-            self.passwordField.font = celltitle
-            self.reEnterPasswordField.font = celltitle
-            self.emailField.font = celltitle
-            self.phoneField.font = celltitle
+            usernameField.font = celltitle
+            passwordField.font = celltitle
+            reEnterPasswordField.font = celltitle
+            emailField.font = celltitle
+            phoneField.font = celltitle
         }
     }
 
     private func setupView() {
 
         if ((defaults.string(forKey: "registerKey") == nil)) {
-            self.registerBtn.setTitle("Register", for: .normal)
-            self.loginBtn.isHidden = true //hide login button no user is regsitered
-            self.forgotPassword?.isHidden = true
-            self.authentButton?.isHidden = true
-            self.FBloginButton.isHidden = true
-            self.googleButton.isHidden = true
-            self.emailField.isHidden = false
-            self.phoneField.isHidden = false
-            self.plusPhotoButton.isHidden = false
+            registerBtn.setTitle("Register", for: .normal)
+            loginBtn.isHidden = true //hide login button no user is regsitered
+            forgotPassword.isHidden = true
+            authentButton.isHidden = true
+            FBloginButton.isHidden = true
+            googleButton.isHidden = true
+            emailField.isHidden = false
+            phoneField.isHidden = false
+            plusPhotoButton.isHidden = false
         } else {
-            self.reEnterPasswordField .isHidden = true
-            self.registerBtn.isHidden = false
-            self.forgotPassword!.isHidden = false
-            self.FBloginButton.isHidden = false
-            self.googleButton.isHidden = false
-            self.emailField.isHidden = true
-            self.phoneField.isHidden = true
-            self.backloginBtn.isHidden = true
-            self.plusPhotoButton.isHidden = true
+            reEnterPasswordField .isHidden = true
+            registerBtn.isHidden = false
+            forgotPassword.isHidden = false
+            FBloginButton.isHidden = false
+            googleButton.isHidden = false
+            emailField.isHidden = true
+            phoneField.isHidden = true
+            backloginBtn.isHidden = true
+            plusPhotoButton.isHidden = true
             // Keychain
             //self.usernameField!.text = KeychainWrapper.standard.string(forKey: "usernameKey")
             //self.passwordField!.text = KeychainWrapper.standard.string(forKey: "passwordKey")
         }
-
         self.passwordField.text = ""
     }
 
-    func setupConstraints() {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
 
-        self.mainView?.addSubview(FBloginButton)
-        self.mainView?.addSubview(googleButton)
-        self.mainView?.addSubview(usernameField)
-        self.mainView?.addSubview(passwordField)
-        self.mainView?.addSubview(reEnterPasswordField)
-        self.mainView?.addSubview(emailField)
-        self.mainView?.addSubview(phoneField)
-        self.mainView?.addSubview(loginBtn)
-        self.mainView?.addSubview(registerBtn)
-        self.mainView?.addSubview(backloginBtn)
+        scrollView.frame = view.bounds
+        // Gradient
+        scrollView.addVerticalGradientLayer(topColor: primaryColor, bottomColor: secondaryColor)
 
-        mapView?.translatesAutoresizingMaskIntoConstraints = false
-        if UIDevice.current.userInterfaceIdiom == .pad  {
-            mapView?.heightAnchor.constraint(equalToConstant: 380).isActive = true
-        } else {
-            mapView?.heightAnchor.constraint(equalToConstant: 175).isActive = true
-        }
+        view.addSubview(scrollView)
+        scrollView.addSubview(mainView)
+        scrollView.addSubview(mapView)
+        scrollView.addSubview(FBloginButton)
+        scrollView.addSubview(googleButton)
+        scrollView.addSubview(usernameField)
+        scrollView.addSubview(passwordField)
+        scrollView.addSubview(reEnterPasswordField)
+        scrollView.addSubview(emailField)
+        scrollView.addSubview(phoneField)
+        scrollView.addSubview(loginBtn)
+        scrollView.addSubview(registerBtn)
+        scrollView.addSubview(backloginBtn)
+        scrollView.addSubview(forgotPassword)
+        scrollView.addSubview(authentButton)
+        mainView.addSubview(plusPhotoButton)
 
+        plusPhotoButton.anchor(top: mainView.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 55, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 140, height: 140)
+        plusPhotoButton.centerXAnchor.constraint(equalTo: mainView.centerXAnchor).isActive = true
+
+        //mapView.translatesAutoresizingMaskIntoConstraints = false
+        //mapView.heightAnchor.constraint(equalToConstant: 380).isActive = true
+
+        let guide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
-            usernameField.topAnchor.constraint(equalTo: mapView!.bottomAnchor, constant: 15),
-            usernameField.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 10),
+            mainView.topAnchor.constraint(equalTo: view.topAnchor),
+            mainView.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+            mainView.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+            mainView.bottomAnchor.constraint(equalTo: guide.bottomAnchor),
+
+            mapView.topAnchor.constraint(equalTo: mainView.topAnchor),
+            mapView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor),
+            mapView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor),
+            mapView.heightAnchor.constraint(equalTo: mainView.widthAnchor, multiplier: 9.0/16.0),
+
+            usernameField.topAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 15),
+            usernameField.leadingAnchor.constraint( equalTo: mainView.leadingAnchor, constant: 10),
             usernameField.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -10),
             usernameField.heightAnchor.constraint(equalToConstant: 40),
 
             passwordField.topAnchor.constraint(equalTo: usernameField.bottomAnchor, constant: 10),
-            passwordField.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 10),
+            passwordField.leadingAnchor.constraint( equalTo: mainView.leadingAnchor, constant: 10),
             passwordField.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -10),
             passwordField.heightAnchor.constraint(equalToConstant: 40),
 
             reEnterPasswordField.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 10),
-            reEnterPasswordField.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 10),
+            reEnterPasswordField.leadingAnchor.constraint( equalTo: mainView.leadingAnchor, constant: 10),
             reEnterPasswordField.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -10),
             reEnterPasswordField.heightAnchor.constraint(equalToConstant: 40),
 
             emailField.topAnchor.constraint(equalTo: reEnterPasswordField.bottomAnchor, constant: 10),
-            emailField.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 10),
+            emailField.leadingAnchor.constraint( equalTo: mainView.leadingAnchor, constant: 10),
             emailField.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -10),
             emailField.heightAnchor.constraint(equalToConstant: 40),
 
             phoneField.topAnchor.constraint(equalTo: emailField.bottomAnchor, constant: 10),
-            phoneField.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 10),
+            phoneField.leadingAnchor.constraint( equalTo: mainView.leadingAnchor, constant: 10),
             phoneField.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -10),
             phoneField.heightAnchor.constraint(equalToConstant: 40),
 
             loginBtn.topAnchor.constraint(equalTo: emailField.bottomAnchor, constant: 15),
-            loginBtn.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 10),
+            loginBtn.leadingAnchor.constraint( equalTo: mainView.leadingAnchor, constant: 10),
             loginBtn.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -10),
             loginBtn.heightAnchor.constraint(equalToConstant: 40),
 
             registerBtn.topAnchor.constraint(equalTo: loginBtn.bottomAnchor, constant: 15),
-            registerBtn.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 10),
+            registerBtn.leadingAnchor.constraint( equalTo: mainView.leadingAnchor, constant: 10),
             registerBtn.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -10),
             registerBtn.heightAnchor.constraint(equalToConstant: 40),
 
             backloginBtn.topAnchor.constraint(equalTo: registerBtn.bottomAnchor, constant: 15),
-            backloginBtn.leadingAnchor.constraint( equalTo: mainView!.leadingAnchor, constant: 10),
+            backloginBtn.leadingAnchor.constraint( equalTo: mainView.leadingAnchor, constant: 10),
             backloginBtn.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -10),
             backloginBtn.heightAnchor.constraint(equalToConstant: 40),
+
+            forgotPassword.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 5),
+            forgotPassword.leadingAnchor.constraint( equalTo: mainView.leadingAnchor, constant: 10),
+            forgotPassword.widthAnchor.constraint(equalToConstant: 125),
+            forgotPassword.heightAnchor.constraint(equalToConstant: 30),
+
+            authentButton.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 5),
+            authentButton.trailingAnchor.constraint( equalTo: mainView.trailingAnchor, constant: -10),
+            authentButton.widthAnchor.constraint(equalToConstant: 125),
+            authentButton.heightAnchor.constraint(equalToConstant: 30),
         ])
     }
 
@@ -412,23 +465,23 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
 
     @IBAction func returnLogin(_ sender:AnyObject) {
 
-        self.view.endEditing(true)
+        view.endEditing(true)
         keyboardHide()
-        self.registerBtn.setTitle("Create an Account", for: .normal)
-        self.usernameField.text = defaults.string(forKey: "usernameKey")
-        self.passwordField.isHidden = false
-        self.loginBtn.isHidden = false
-        self.registerBtn.isHidden = false
-        self.forgotPassword?.isHidden = false
-        self.authentButton?.isHidden = false
-        self.backloginBtn.isHidden = true
-        self.reEnterPasswordField.isHidden = true
-        self.emailField.isHidden = true
-        self.phoneField.isHidden = true
-        self.FBloginButton.isHidden = false
-        self.googleButton.isHidden = false
-        self.plusPhotoButton.isHidden = true
-        self.mapView?.isHidden = false
+        registerBtn.setTitle("Create an Account", for: .normal)
+        usernameField.text = defaults.string(forKey: "usernameKey")
+        passwordField.isHidden = false
+        loginBtn.isHidden = false
+        registerBtn.isHidden = false
+        forgotPassword.isHidden = false
+        authentButton.isHidden = false
+        backloginBtn.isHidden = true
+        reEnterPasswordField.isHidden = true
+        emailField.isHidden = true
+        phoneField.isHidden = true
+        FBloginButton.isHidden = false
+        googleButton.isHidden = false
+        plusPhotoButton.isHidden = true
+        mapView.isHidden = false
         setupDefaults()
     }
 
@@ -437,22 +490,22 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
 
         if (self.registerBtn.titleLabel!.text == "Create an Account") {
 
-            self.registerBtn.setTitle("Register", for: .normal)
-            self.usernameField.text = ""
-            self.loginBtn.isHidden = true
-            self.forgotPassword?.isHidden = true
-            self.authentButton?.isHidden = true
-            self.backloginBtn.isHidden = false
-            self.reEnterPasswordField.isHidden = false
-            self.emailField.isHidden = false
-            self.phoneField.isHidden = false
-            self.FBloginButton.isHidden = true
-            self.googleButton.isHidden = true
-            self.plusPhotoButton.isHidden = false
-            self.mapView?.isHidden = true
+            registerBtn.setTitle("Register", for: .normal)
+            usernameField.text = ""
+            loginBtn.isHidden = true
+            forgotPassword.isHidden = true
+            authentButton.isHidden = true
+            backloginBtn.isHidden = false
+            reEnterPasswordField.isHidden = false
+            emailField.isHidden = false
+            phoneField.isHidden = false
+            FBloginButton.isHidden = true
+            googleButton.isHidden = true
+            plusPhotoButton.isHidden = false
+            mapView.isHidden = true
 
         } else {
-            if (self.usernameField.text == "" || self.emailField.text == "" || self.passwordField.text == "" || self.reEnterPasswordField.text == "") {
+            if (usernameField.text == "" || emailField.text == "" || passwordField.text == "" || reEnterPasswordField.text == "") {
 
                 self.showAlert(title: "Oooops", message: "You must complete all fields")
             } else {
@@ -463,7 +516,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
 
     func checkPasswordsMatch() {
 
-        if self.passwordField.text == self.reEnterPasswordField.text {
+        if passwordField.text == reEnterPasswordField.text {
             registerNewUser()
         } else {
             self.showAlert(title: "Oooops", message: "Your entered passwords do not match")
@@ -480,10 +533,10 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
 
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
 
-            if (self.plusPhotoButton.imageView?.image == nil) {
-                self.plusPhotoButton.imageView?.image = UIImage(named:"profile-rabbit-toy.png")
+            if (plusPhotoButton.imageView?.image == nil) {
+                plusPhotoButton.imageView?.image = UIImage(named:"profile-rabbit-toy.png")
             }
-            pictureData = self.plusPhotoButton.imageView?.image?.jpegData(compressionQuality: 0.9)
+            pictureData = plusPhotoButton.imageView?.image?.jpegData(compressionQuality: 0.9)
             let file = PFFileObject(name: "Image.jpg", data: pictureData!)
 
             let user = PFUser()
@@ -605,9 +658,9 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
             }
             print(url)
 
-            self.usernameField.text = name
-            self.emailField.text = email
-            self.passwordField.text = "united"
+            usernameField.text = name
+            emailField.text = email
+            passwordField.text = "united"
             //self.profileUrl = url
 
 //            URLSession.shared.dataTask(with: url, completionHandler: { data, _, _ in
@@ -638,7 +691,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
             }
 
             print("Successfully logged into Firebase with Google")
-            NotificationCenter.default.post(name: .didLoginNotification, object: nil)
+            NotificationCenter.default.post(name: .didLogInNotification, object: nil)
             self.registerNewUser()
             self.saveDefaults()
             self.refreshLocation()
@@ -652,12 +705,12 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
     }
 
     // MARK: - Password Reset
-    @IBAction func passwordReset(_ sender:AnyObject) {
+    @objc func passwordReset(_ sender:AnyObject) {
         
         self.usernameField.isHidden = true
         self.loginBtn.isHidden = true
         self.passwordField.isHidden = true
-        self.authentButton!.isHidden = true
+        self.authentButton.isHidden = true
         self.backloginBtn.isHidden = false
         self.registerBtn.isHidden = true
         self.emailField.isHidden = false
@@ -688,7 +741,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
     
     // MARK: - Authenticate
 
-    @IBAction func authenticateUser(_ sender: AnyObject) {
+    @objc func authenticateUser(_ sender: AnyObject) {
         
         let ctx = LAContext()
         let myLocalizedReasonString = "Biometric Authntication testing !!"
@@ -755,7 +808,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
             guard let uid = Auth.auth().currentUser?.uid else {return}
             let geofireRef = FirebaseRef.databaseRoot.child("users_locations")
             let geoFire = GeoFire(firebaseRef: geofireRef)
-            geoFire.setLocation(CLLocation(latitude: (mapView?.userLocation.coordinate.latitude)!, longitude: (mapView?.userLocation.coordinate.longitude)!), forKey: uid)
+            geoFire.setLocation(CLLocation(latitude: (mapView.userLocation.coordinate.latitude), longitude: (mapView.userLocation.coordinate.longitude)), forKey: uid)
         }
     }
     
@@ -816,18 +869,20 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
             self.view.frame = .init(x: 0, y: -10, width: self.view.frame.width, height: self.view.frame.height)
             }, completion: nil)
     }
-    
+
+}
+extension LoginController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     // MARK: - AvatarImage
 
     @objc func handlePlusPhoto () {
 
         let picker = UIImagePickerController()
-        picker.allowsEditing = true
         picker.sourceType = .photoLibrary
         picker.delegate = self
+        picker.allowsEditing = true
         present(picker, animated:true)
     }
-    
+
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
 
         guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else { return }
@@ -842,10 +897,10 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
         if let userID = Auth.auth().currentUser?.uid {
             //let storageRef = Storage.storage().reference().child("profile_images/\(uid)")
             let storageRef = Storage.storage().reference().child("profile_images").child(userID)
-            guard let image = userimageView?.image else {return}
+            guard let image = userimageView.image else {return}
 
             if let newImage = image.jpegData(compressionQuality: 0.9)  {
-                
+
                 let metadata = StorageMetadata()
                 metadata.contentType = "image/jpeg"
 
@@ -880,6 +935,7 @@ final class LoginController: UIViewController, UITextFieldDelegate, UIImagePicke
             }
         }
     }
+
 }
 extension LoginController: LoginButtonDelegate {
         // MARK: - Facebook
@@ -948,7 +1004,6 @@ extension LoginController: LoginButtonDelegate {
                     print("Successfully logged user in")
                     strongSelf.navigationController?.dismiss(animated: true, completion: nil)
                 })
-
 
                 self.usernameField.text = "\(firstName) \(lastName)"
                 self.emailField.text = "\(email)"

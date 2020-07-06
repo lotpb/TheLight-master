@@ -17,15 +17,15 @@ final class MusicController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var noContactsLabel: UILabel!
     
-    var activeDownloads = [String: Download]()
-    let defaultSession = Foundation.URLSession(configuration: URLSessionConfiguration.default)
-    var dataTask: URLSessionDataTask?
+    private var activeDownloads = [String: Download]()
+    private let defaultSession = Foundation.URLSession(configuration: URLSessionConfiguration.default)
+    private var dataTask: URLSessionDataTask?
     
-    var videoPlayer: AVPlayer? = AVPlayer()
-    var searchResults = [Track]()
+    private var videoPlayer: AVPlayer? = AVPlayer()
+    private var searchResults = [Track]()
 
     
-    lazy var tapRecognizer: UITapGestureRecognizer = {
+    private var tapRecognizer: UITapGestureRecognizer = {
         var recognizer = UITapGestureRecognizer(target:self, action: #selector(dismissKeyboard))
         return recognizer
     }()
@@ -43,17 +43,17 @@ final class MusicController: UIViewController {
         view.backgroundColor = .secondarySystemGroupedBackground
         noContactsLabel.isHidden = false
         noContactsLabel.text = "Search to Retrieve Apple Music Library..."
-        self.tableView!.backgroundColor = .systemGray4
+        tableView!.backgroundColor = .systemGray4
         tableView.isHidden = true
         tableView.tableFooterView = UIView()
         _ = self.downloadsSession
         
         if UIDevice.current.userInterfaceIdiom == .pad  {
             navigationItem.title = "TheLight - Music"
-            self.noContactsLabel.font = Font.celltitle20l
+            noContactsLabel.font = Font.celltitle20l
         } else {
             navigationItem.title = "Music"
-            self.noContactsLabel.font = Font.celltitle16r
+            noContactsLabel.font = Font.celltitle16r
         }
         self.navigationItem.largeTitleDisplayMode = .always
     }

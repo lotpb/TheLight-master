@@ -45,27 +45,27 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
     @IBOutlet weak var userLabel: UILabel!
     @IBOutlet weak var mapLabel: UILabel!
 
-    var status : String?
-    var objectId : String?
-    var username : String?
-    var create : String?
-    var update : String?
-    var email : String?
-    var phone : String?
+    public var status : String?
+    public var objectId : String?
+    public var username : String?
+    public var create : String?
+    public var update : String?
+    public var email : String?
+    public var phone : String?
+    public var userimage : UIImage?
     
-    var user : PFUser?
-    var userquery : PFObject?
-    var userimage : UIImage?
-    var pickImage : UIImage?
-    var pictureData : Data?
+    private var user : PFUser?
+    private var userquery : PFObject?
+    private var pickImage : UIImage?
+    private var pictureData : Data?
     
-    var imagePicker: UIImagePickerController!
-    var activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style .medium)
+    private var picker: UIImagePickerController!
+    private var activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style .medium)
  
-    var emailTitle :NSString?
-    var messageBody:NSString?
+    private var emailTitle :NSString?
+    private var messageBody:NSString?
     
-    lazy var editProfileBtn: UIButton = {
+    private let editProfileBtn: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Edit Photo", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
@@ -74,7 +74,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         return button
     }()
     
-    lazy var updateBtn: UIButton = {
+    private let updateBtn: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Update", for: .normal)
         button.layer.cornerRadius = 24.0
@@ -85,7 +85,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         return button
     }()
     
-    lazy var callBtn: UIButton = {
+    private let callBtn: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Call", for: .normal)
         button.layer.cornerRadius = 24.0
@@ -96,7 +96,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         return button
     }()
     
-    lazy var emailBtn: UIButton = {
+    private let emailBtn: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Email", for: .normal)
         button.layer.cornerRadius = 24.0
@@ -107,7 +107,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         return button
     }()
 
-    lazy var createLabel: UILabel = {
+    private let createLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .label
@@ -117,7 +117,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         return label
     }()
 
-    lazy var updatetitle: UILabel = {
+    private let updatetitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "last update:"
@@ -128,7 +128,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         return label
     }()
 
-    lazy var updateLabel: UILabel = {
+    private let updateLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "none"
@@ -149,8 +149,8 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         emailTitle = defaults.string(forKey: "emailtitleKey")! as NSString
         messageBody = defaults.string(forKey: "emailmessageKey")! as NSString
         
-        self.emailField?.keyboardType = .emailAddress
-        self.phoneField?.keyboardType = .numbersAndPunctuation
+        emailField?.keyboardType = .emailAddress
+        phoneField?.keyboardType = .numbersAndPunctuation
         
         if status == "Edit" {
             setupMapData()
@@ -158,13 +158,13 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         setupForm()
         setupBorder()
         setupFonts()
-        setupConstraints()
+
         if UIDevice.current.userInterfaceIdiom == .pad  {
             navigationItem.title = "TheLight - User Profile"
         } else {
             navigationItem.title = "User Profile"
         }
-        self.navigationItem.largeTitleDisplayMode = .always
+        navigationItem.largeTitleDisplayMode = .always
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -196,13 +196,13 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         bottomBorder.borderWidth = width1
         bottomBorder.borderColor = UIColor.darkGray.cgColor
         bottomBorder.frame = .init(x: 0, y: self.mainView!.frame.size.height-1, width: view.frame.size.width, height: 0.5)
-        self.mainView?.layer.masksToBounds = true
-        self.mainView?.layer.addSublayer(bottomBorder)
+        mainView?.layer.masksToBounds = true
+        mainView?.layer.addSublayer(bottomBorder)
     }
     
     func setupForm() {
         
-        self.view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemBackground
         mainView?.backgroundColor = .systemBackground
         mapContainerView?.backgroundColor = .systemBackground
         infoLabel.textColor = .systemBlue
@@ -213,21 +213,21 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         mapLabel?.textColor = .label
         
         if status == "Edit" {
-            self.usernameField?.text = self.username
-            self.emailField?.text = self.email
-            self.phoneField?.text = self.phone
-            self.createLabel.text = self.create
-            self.updateLabel.text = self.update
-            self.userimageView?.image = self.userimage
+            usernameField?.text = username
+            emailField?.text = email
+            phoneField?.text = phone
+            createLabel.text = create
+            updateLabel.text = update
+            userimageView?.image = userimage
         } else {
-            self.userimageView?.image = #imageLiteral(resourceName: "profile-rabbit-toy")
+            userimageView?.image = #imageLiteral(resourceName: "profile-rabbit-toy")
         }
         
-        self.userimageView?.contentMode = .scaleAspectFill
-        self.userimageView?.backgroundColor = .white
-        self.userimageView?.isUserInteractionEnabled = true
-        self.userimageView?.layer.masksToBounds = true
-        self.userimageView?.layer.cornerRadius = 60.0
+        userimageView?.contentMode = .scaleAspectFill
+        userimageView?.backgroundColor = .white
+        userimageView?.isUserInteractionEnabled = true
+        userimageView?.layer.masksToBounds = true
+        userimageView?.layer.cornerRadius = 60.0
         
         mapView?.delegate = self
         mapView?.layer.borderColor = UIColor.lightGray.cgColor
@@ -245,7 +245,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
                 let coordinate = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
                 let span = MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
                 let region = MKCoordinateRegion(center: coordinate, span: span)
-                self.mapView!.setRegion(region, animated: true)
+                mapView!.setRegion(region, animated: true)
                 
                 let annotation = MKPointAnnotation()
                 annotation.title = userquery!.object(forKey: "username") as? String
@@ -313,7 +313,9 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         }
     }
     
-    func setupConstraints() {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
         mainView.addSubview(editProfileBtn)
         mainView.addSubview(createLabel)
         mainView.addSubview(updatetitle)
@@ -366,7 +368,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         stackView.distribution = .fillEqually
         containView.addSubview(stackView)
         
-        stackView.anchor(top: phoneField?.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 10, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: self.view.frame.width, height: 50)
+        stackView.anchor(top: phoneField?.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 10, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: view.frame.width, height: 50)
     }
     
     // MARK: - Button
@@ -376,13 +378,14 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
         return}
 
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            let imagePicker = UIImagePickerController()
-            imagePicker.allowsEditing = true
-            imagePicker.sourceType = .camera
-            imagePicker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera)!
-            imagePicker.delegate = self
-            imagePicker.showsCameraControls = true
-            self.present(imagePicker, animated: true)
+            let picker = UIImagePickerController()
+            picker.sourceType = .camera
+            picker.delegate = self
+            picker.allowsEditing = true
+            picker.videoQuality = .typeMedium
+            picker.showsCameraControls = true
+            picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera)!
+            self.present(picker, animated: true)
         } else {
             self.showAlert(title: "Alert!", message: "Camera not available")
         }
@@ -394,12 +397,12 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
             return}
 
             if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-                imagePicker = UIImagePickerController()
-                imagePicker.sourceType = .photoLibrary
-                imagePicker.mediaTypes = [kUTTypeImage as String]
-                imagePicker.allowsEditing = true
-                imagePicker.delegate = self
-                self.present(imagePicker, animated: false)
+                picker = UIImagePickerController()
+                picker.sourceType = .photoLibrary
+                picker.delegate = self
+                picker.allowsEditing = true
+                picker.mediaTypes = [kUTTypeImage as String]
+                self.present(picker, animated: false)
             } else {
                 self.showAlert(title: "Alert!", message: "you are not authorize")
             }
@@ -424,7 +427,7 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
 
         self.activityIndicator.center = self.userimageView!.center
         self.activityIndicator.startAnimating()
-        self.view.addSubview(activityIndicator)
+        view.addSubview(activityIndicator)
 
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
 

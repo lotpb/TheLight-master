@@ -20,11 +20,11 @@ import AVFoundation
 @available(iOS 13.0, *)
 final class MasterViewController: UITableViewController, UISplitViewControllerDelegate {
 
-    var collapseDetailViewController: Bool = true
-    let defaults = UserDefaults.standard
+    private var collapseDetailViewController: Bool = true
+    private let defaults = UserDefaults.standard
     
     //firebase
-    var currentUser: UserModel?
+    public var currentUser: UserModel?
 
     private var menuItems = ["Snapshot","Statistics","Leads","Customers","Vendors","Employee","Sub Data","Geotify","Search Places","Music","YouTube","Contacts","Spot Beacon","Transmit Beacon", "Show Detail"]
     //search
@@ -32,16 +32,23 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     private var resultsController = UITableViewController()
     private var filteredMenu = [String]()
     
-    var currentItem = "" //Snapshot"
-    var player : AVAudioPlayer! = nil
-    var objects = [AnyObject]()
+    private var currentItem = "" //Snapshot"
+    private var player : AVAudioPlayer! = nil
+    private var objects = [AnyObject]()
 
-    weak var symYQL: NSArray!
-    weak var tradeYQL: NSArray!
-    weak var changeYQL: NSArray!
+    private weak var symYQL: NSArray!
+    private weak var tradeYQL: NSArray!
+    private weak var changeYQL: NSArray!
 
-    var tempYQL: String!
-    var textYQL: String!
+    private var tempYQL: String!
+    private var textYQL: String!
+
+    public static let dateFormatter: DateFormatter = {
+        let formattre = DateFormatter()
+        formattre.dateFormat = "MMM dd yy"
+        formattre.timeZone = .current
+        return formattre
+    }()
 
 
     override func viewDidLoad() {
@@ -66,9 +73,9 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
 
 
         self.extendedLayoutIncludesOpaqueBars = true
-        self.splitViewController?.delegate = self
-        self.splitViewController?.preferredDisplayMode = .allVisible
-        self.splitViewController?.maximumPrimaryColumnWidth = 350
+        splitViewController?.delegate = self
+        splitViewController?.preferredDisplayMode = .allVisible
+        splitViewController?.maximumPrimaryColumnWidth = 350
 
         setupNavigation()
         setupTableView()
@@ -95,11 +102,11 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             }
         }
         
-        self.refreshControl?.backgroundColor = .clear //Color.Lead.navColor
-        self.refreshControl?.tintColor = .white
+        refreshControl?.backgroundColor = .clear //Color.Lead.navColor
+        refreshControl?.tintColor = .white
         let attributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        self.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: attributes)
-        self.refreshControl?.addTarget(self, action: #selector(self.refreshData), for: .valueChanged)
+        refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: attributes)
+        refreshControl?.addTarget(self, action: #selector(self.refreshData), for: .valueChanged)
 
         registerLogin()
     }
@@ -108,7 +115,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
         super.viewDidAppear(animated)
         refreshData()
         fetchUserIds()
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -171,12 +178,12 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     func setupTableView() {
 
         // MARK: - TableHeader
-        self.tableView?.register(MainHeaderViewCell.self, forCellReuseIdentifier: "Header")
+        tableView?.register(MainHeaderViewCell.self, forCellReuseIdentifier: "Header")
 
-        self.tableView!.delegate = self
-        self.tableView!.dataSource = self
-        self.tableView!.backgroundColor = .systemGroupedBackground
-        self.tableView!.tableFooterView = UIView(frame: .zero)
+        tableView!.delegate = self
+        tableView!.dataSource = self
+        tableView!.backgroundColor = .systemGroupedBackground
+        tableView!.tableFooterView = UIView(frame: .zero)
 
         resultsController.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UserFoundCell")
         resultsController.tableView.backgroundColor = .systemGroupedBackground
@@ -191,8 +198,8 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
         if UIDevice.current.userInterfaceIdiom == .phone {
             //self.updateYahoo()
         }
-        self.tableView.reloadData()
-        self.refreshControl?.endRefreshing()
+        tableView.reloadData()
+        refreshControl?.endRefreshing()
     }
 
     // MARK: - Button
@@ -256,10 +263,8 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
         }
     }
 
-
-    
     // MARK: - VersionCheck
-    //fix
+    // TODO:
     func versionCheck() {
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
             /*
@@ -278,7 +283,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             } */
         } else {
 
-            let numVer = self.defaults.string(forKey: "versionKey")
+            let numVer = defaults.string(forKey: "versionKey")
             
             FirebaseRef.databaseRoot.child("Version")
                 .queryOrdered(byChild: "version")

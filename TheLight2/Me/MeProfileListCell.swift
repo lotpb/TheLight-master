@@ -61,7 +61,7 @@ final class MeProfileListCell: UICollectionViewCell {
     let profileImageView: CustomImageView = {
         let imageView = CustomImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 15
+        imageView.layer.cornerRadius = imageView.width/2
         imageView.layer.masksToBounds = true
         imageView.layer.borderColor = UIColor.lightGray.cgColor
         imageView.layer.borderWidth = 0.5
