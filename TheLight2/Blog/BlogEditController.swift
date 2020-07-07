@@ -219,7 +219,7 @@ final class BlogEditController: UIViewController {
     
     private func deleteBlog(name: String) {
         
-        let alertController = UIAlertController(title: "Delete", message: "Confirm Delete", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Delete", message: "Confirm Delete", preferredStyle: .alert)
         let destroyAction = UIAlertAction(title: "Delete!", style: .destructive) { (action) in
             
             if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
@@ -254,9 +254,9 @@ final class BlogEditController: UIViewController {
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
             return
         }
-        alertController.addAction(cancelAction)
-        alertController.addAction(destroyAction)
-        self.present(alertController, animated: true) {
+        alert.addAction(cancelAction)
+        alert.addAction(destroyAction)
+        self.present(alert, animated: true) {
         }
     }
     
@@ -266,7 +266,7 @@ final class BlogEditController: UIViewController {
         let hitPoint = sender.convert(CGPoint.zero, to: self.listTableView)
         let indexPath = self.listTableView!.indexPathForRow(at: hitPoint)
         
-        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         let replyAction = UIAlertAction(title: "Reply", style: .default) { (alert: UIAlertAction!) in
             
@@ -331,18 +331,18 @@ final class BlogEditController: UIViewController {
         
         let dismissAction = UIAlertAction(title: "Close", style: UIAlertAction.Style.cancel) { (action) in
         }
-        actionSheet.addAction(replyAction)
-        actionSheet.addAction(editAction)
-        actionSheet.addAction(copyAction)
-        actionSheet.addAction(deleteAction)
-        actionSheet.addAction(dismissAction)
+        alert.addAction(replyAction)
+        alert.addAction(editAction)
+        alert.addAction(copyAction)
+        alert.addAction(deleteAction)
+        alert.addAction(dismissAction)
         
-        if let popover = actionSheet.popoverPresentationController {
+        if let popover = alert.popoverPresentationController {
             popover.sourceView = sender
-            actionSheet.popoverPresentationController?.permittedArrowDirections = .any
+            alert.popoverPresentationController?.permittedArrowDirections = .any
             //actionSheet.popoverPresentationController?.sourceRect = .init(x: 0, y: 0, width: 0, height: 0)
         }
-        self.present(actionSheet, animated: true)
+        self.present(alert, animated: true)
     }
     
     // MARK: - Load Data

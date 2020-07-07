@@ -39,7 +39,6 @@ final class Web: UIViewController, UISplitViewControllerDelegate, SFSafariViewCo
     }()
 
     var url: URL?
-
        var detailItem: AnyObject? {
            didSet {
                self.configureWeb()

@@ -450,9 +450,9 @@ final class BlogNewController: UIViewController, UITextFieldDelegate, UITextView
     // MARK: Camera
     @objc func shootPhoto(_ sender: AnyObject) {
         let layout = UICollectionViewFlowLayout()
-        let photoSelectorController = PhotoSelectorController(collectionViewLayout: layout)
+        let photo = PhotoSelectorController(collectionViewLayout: layout)
         
-        let navController = UINavigationController(rootViewController: photoSelectorController)
+        let navController = UINavigationController(rootViewController: photo)
         present(navController, animated: true)
     }
 //------------------------------------------------------------------

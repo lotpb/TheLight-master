@@ -241,7 +241,7 @@ final class NotificationVC: UIViewController {
     
     @objc func actionButton(_ sender: AnyObject) {
         
-        let alertController = UIAlertController(title:nil, message:nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title:nil, message:nil, preferredStyle: .actionSheet)
         
         let buttonSix = UIAlertAction(title: "Membership Status", style: .default, handler: { (action)  in
             self.memberNotification()
@@ -260,16 +260,16 @@ final class NotificationVC: UIViewController {
         let buttonCancel = UIAlertAction(title: "Cancel", style: .cancel) { (action)  in
             
         }
-        alertController.addAction(buttonSix)
-        alertController.addAction(newBog)
-        alertController.addAction(heyYou)
-        alertController.addAction(promo)
-        alertController.addAction(buttonCancel)
+        alert.addAction(buttonSix)
+        alert.addAction(newBog)
+        alert.addAction(heyYou)
+        alert.addAction(promo)
+        alert.addAction(buttonCancel)
         
-        if let popoverController = alertController.popoverPresentationController {
+        if let popoverController = alert.popoverPresentationController {
             popoverController.barButtonItem = sender as? UIBarButtonItem
         }
-        self.present(alertController, animated: true)
+        self.present(alert, animated: true)
     }
     
     @objc func editButton(_ sender:AnyObject) {

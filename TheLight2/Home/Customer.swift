@@ -222,7 +222,7 @@ final class Customer: UIViewController {
     
     func deleteData(name: String) {
         
-        let alertController = UIAlertController(title: "Delete", message: "Confirm Delete", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Delete", message: "Confirm Delete", preferredStyle: .alert)
         let destroyAction = UIAlertAction(title: "Delete!", style: .destructive) { (action) in
             
             if ((self.defaults.string(forKey: "backendKey")) == "Parse") {
@@ -254,9 +254,9 @@ final class Customer: UIViewController {
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
             self.refreshData(self)
         }
-        alertController.addAction(cancelAction)
-        alertController.addAction(destroyAction)
-        self.present(alertController, animated: true) {
+        alert.addAction(cancelAction)
+        alert.addAction(destroyAction)
+        self.present(alert, animated: true) {
         }
     }
     

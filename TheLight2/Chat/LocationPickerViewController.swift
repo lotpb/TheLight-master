@@ -50,7 +50,6 @@ final class LocationPickerViewController: UIViewController {
             guard let coordinates = self.coordinates else {
                 return
             }
-
             // drop a pin on that location
             let pin = MKPointAnnotation()
             pin.coordinate = coordinates

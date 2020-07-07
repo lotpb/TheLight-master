@@ -79,24 +79,24 @@ final class ChatViewController: MessagesViewController {
     }
 
     private func presentInputActionSheet() {
-        let actionSheet = UIAlertController(title: "Attach Media",
+        let alert = UIAlertController(title: "Attach Media",
                                             message: "What would you like to attach?",
                                             preferredStyle: .actionSheet)
-        actionSheet.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] _ in
+        alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] _ in
             self?.presentPhotoInputActionsheet()
         }))
-        actionSheet.addAction(UIAlertAction(title: "Video", style: .default, handler: { [weak self]  _ in
+        alert.addAction(UIAlertAction(title: "Video", style: .default, handler: { [weak self]  _ in
             self?.presentVideoInputActionsheet()
         }))
-        actionSheet.addAction(UIAlertAction(title: "Audio", style: .default, handler: {  _ in
+        alert.addAction(UIAlertAction(title: "Audio", style: .default, handler: {  _ in
 
         }))
-        actionSheet.addAction(UIAlertAction(title: "Location", style: .default, handler: { [weak self]  _ in
+        alert.addAction(UIAlertAction(title: "Location", style: .default, handler: { [weak self]  _ in
             self?.presentLocationPicker()
         }))
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
 
-        present(actionSheet, animated: true)
+        present(alert, animated: true)
     }
 
     private func presentLocationPicker() {
@@ -143,10 +143,10 @@ final class ChatViewController: MessagesViewController {
     }
 
     private func presentPhotoInputActionsheet() {
-        let actionSheet = UIAlertController(title: "Attach Photo",
+        let alert = UIAlertController(title: "Attach Photo",
                                             message: "Where would you like to attach a photo from",
                                             preferredStyle: .actionSheet)
-        actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { [weak self] _ in
+        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { [weak self] _ in
 
             let picker = UIImagePickerController()
             picker.sourceType = .camera
@@ -155,7 +155,7 @@ final class ChatViewController: MessagesViewController {
             self?.present(picker, animated: true)
 
         }))
-        actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { [weak self] _ in
+        alert.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { [weak self] _ in
 
             let picker = UIImagePickerController()
             picker.sourceType = .photoLibrary
@@ -164,16 +164,16 @@ final class ChatViewController: MessagesViewController {
             self?.present(picker, animated: true)
 
         }))
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
 
-        present(actionSheet, animated: true)
+        present(alert, animated: true)
     }
 
     private func presentVideoInputActionsheet() {
-        let actionSheet = UIAlertController(title: "Attach Video",
+        let alert = UIAlertController(title: "Attach Video",
                                             message: "Where would you like to attach a video from?",
                                             preferredStyle: .actionSheet)
-        actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { [weak self] _ in
+        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { [weak self] _ in
 
             let picker = UIImagePickerController()
             picker.sourceType = .camera
@@ -184,7 +184,7 @@ final class ChatViewController: MessagesViewController {
             self?.present(picker, animated: true)
 
         }))
-        actionSheet.addAction(UIAlertAction(title: "Library", style: .default, handler: { [weak self] _ in
+        alert.addAction(UIAlertAction(title: "Library", style: .default, handler: { [weak self] _ in
 
             let picker = UIImagePickerController()
             picker.sourceType = .photoLibrary
@@ -195,9 +195,9 @@ final class ChatViewController: MessagesViewController {
             self?.present(picker, animated: true)
 
         }))
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
 
-        present(actionSheet, animated: true)
+        present(alert, animated: true)
     }
 
     private func listenForMessages(id: String, shouldScrollToBottom: Bool) {
@@ -362,7 +362,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
         // Send Message
         if isNewConversation {
             // create convo in database
-            DatabaseManager.shared.createNewConversation(with: otherUserEmail, name: self.title ?? "User", firstMessage: mmessage, completion: { [weak self]success in
+            DatabaseManager.shared.createNewConversation(with: otherUserEmail, name: self.title ?? "User", firstMessage: mmessage, completion: { [weak self] success in
                 if success {
                     print("message sent")
                     self?.isNewConversation = false
@@ -372,7 +372,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
                     self?.messageInputBar.inputTextView.text = nil
                 }
                 else {
-                    print("faield ot send")
+                    print("failed to send")
                 }
             })
         }

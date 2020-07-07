@@ -38,6 +38,7 @@ final class LoginViewController: UIViewController {
         field.layer.borderWidth = 1
         field.layer.borderColor = UIColor.lightGray.cgColor
         field.placeholder = "Email Address..."
+        field.keyboardType = .emailAddress
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
         field.leftViewMode = .always
         field.backgroundColor = .secondarySystemBackground
@@ -209,7 +210,12 @@ final class LoginViewController: UIViewController {
             UserDefaults.standard.set(email, forKey: "email")
 
             print("Logged In User: \(user)")
-            strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+            //strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+
+            let storyboard = UIStoryboard(name: "Chat", bundle: nil)
+            let VC:UIViewController = storyboard.instantiateViewController(withIdentifier: "chatTabBarId") as UIViewController
+            VC.modalPresentationStyle = .fullScreen
+            strongSelf.present(VC, animated: true)
         })
     }
 

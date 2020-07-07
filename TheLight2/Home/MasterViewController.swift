@@ -108,7 +108,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
         refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: attributes)
         refreshControl?.addTarget(self, action: #selector(self.refreshData), for: .valueChanged)
 
-        registerLogin()
+        validateAuth()
     }
  
     override func viewDidAppear(_ animated: Bool) {
@@ -146,16 +146,18 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
         return controller.collapseDetailViewController
     }
 
-    func registerLogin() {
-        /// MARK: - Register login
-        if (!(defaults.bool(forKey: "registerKey")) || defaults.bool(forKey: "loginKey")) {
+    private func validateAuth() {
+        /// MARK: - validateAuth
+        //if (!(defaults.bool(forKey: "registerKey")) || defaults.bool(forKey: "loginKey")) {
             if FirebaseAuth.Auth.auth().currentUser == nil {
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let VC : UIViewController = storyboard.instantiateViewController(withIdentifier: "loginIDController") as UIViewController
-                VC.modalPresentationStyle = .fullScreen
-                self.present(VC, animated: true)
+                DispatchQueue.main.async {
+                    let vc = LoginController()
+                    //let nav = UINavigationController(rootViewController: vc)
+                    vc.modalPresentationStyle = .fullScreen
+                    self.present(vc, animated: true)
+                }
             }
-        }
+        //}
     }
 
     func setupNavigation() {
@@ -205,7 +207,7 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
     // MARK: - Button
     @objc func actionButton(_ sender: AnyObject) {
 
-        let alertController = UIAlertController(title:nil, message:nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title:nil, message:nil, preferredStyle: .actionSheet)
         
         let setting = UIAlertAction(title: "Settings", style: .default, handler: { (action) in
             let settingsUrl = URL(string:UIApplication.openSettingsURLString)
@@ -226,17 +228,17 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
         let buttonCancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
         }
         
-        alertController.addAction(setting)
-        alertController.addAction(buttonTwo)
-        alertController.addAction(buttonThree)
-        alertController.addAction(buttonFour)
-        alertController.addAction(buttonSocial)
-        alertController.addAction(buttonCancel)
+        alert.addAction(setting)
+        alert.addAction(buttonTwo)
+        alert.addAction(buttonThree)
+        alert.addAction(buttonFour)
+        alert.addAction(buttonSocial)
+        alert.addAction(buttonCancel)
         
-        if let popoverController = alertController.popoverPresentationController {
+        if let popoverController = alert.popoverPresentationController {
             popoverController.barButtonItem = sender as? UIBarButtonItem
         }
-        self.present(alertController, animated: true)
+        self.present(alert, animated: true)
     }
     
      // MARK: - playSound
@@ -355,14 +357,15 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             }
         } else {
             //firebase
-            Auth.auth().signIn(withEmail: useremail, password: userpassword, completion: { (user, err) in
-                if let err = err {
-                    print("Failed to login:", err)
-                    self.handleLogout()
+            Auth.auth().signIn(withEmail: useremail, password: userpassword, completion: { [weak self] user, error in
+                guard let strongSelf = self else { return }
+                if let error = error {
+                    print("Failed to login:", error)
+                    strongSelf.handleLogout()
                     //self.simpleAlert(title: "Oooops", message: "Your username and password does not match")
                     return
                 }
-                print("Succesfully logged back in with user:", user?.user.uid ?? "")
+                print("Succesfully logged In user:", user?.user.uid ?? "")
             })
         }
     }
@@ -373,10 +376,12 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
             try Auth.auth().signOut()
 
             UIApplication.shared.applicationIconBadgeNumber = 0
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc = storyboard.instantiateViewController(withIdentifier: "loginIDController")
-            vc.modalPresentationStyle = .fullScreen
-            self.present(vc, animated: true)
+            DispatchQueue.main.async {
+                let vc = LoginController()
+                //let nav = UINavigationController(rootViewController: vc)
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
+            }
         }
         catch let error as NSError {
             print(error.localizedDescription)

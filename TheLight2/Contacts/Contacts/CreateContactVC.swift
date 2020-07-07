@@ -106,9 +106,10 @@ final class CreateContactVC: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true)
         guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else { return }
+        
         self.contactImageView.image = image
-        self.dismiss(animated: true)
     }
     
     

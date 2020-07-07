@@ -103,8 +103,8 @@ final class QRScannerController: UIViewController {
             return
         }
         
-        let alertPrompt = UIAlertController(title: "Open App", message: "You're going to open \(decodedURL)", preferredStyle: .actionSheet)
-        let confirmAction = UIAlertAction(title: "Confirm", style: UIAlertAction.Style.default, handler: { (action) -> Void in
+        let alert = UIAlertController(title: "Open App", message: "You're going to open \(decodedURL)", preferredStyle: .actionSheet)
+        let confirmAction = UIAlertAction(title: "Confirm", style: .default, handler: { (action) -> Void in
             
             if let url = URL(string: decodedURL) {
                 if UIApplication.shared.canOpenURL(url) {
@@ -115,10 +115,10 @@ final class QRScannerController: UIViewController {
         
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil)
         
-        alertPrompt.addAction(confirmAction)
-        alertPrompt.addAction(cancelAction)
+        alert.addAction(confirmAction)
+        alert.addAction(cancelAction)
         
-        present(alertPrompt, animated: true)
+        present(alert, animated: true)
     }
     
 }

@@ -842,7 +842,7 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     // MARK: - Actions
     @objc func actionButton(_ sender: AnyObject) {
         
-        let alertController = UIAlertController(title:nil, message:nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title:nil, message:nil, preferredStyle: .actionSheet)
         
         let addr = UIAlertAction(title: "Add Contact", style: .default, handler: { (action) in
             self.createContact()
@@ -869,25 +869,25 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
         let buttonCancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
         }
         
-        alertController.addAction(phone)
-        alertController.addAction(email)
-        alertController.addAction(addr)
+        alert.addAction(phone)
+        alert.addAction(email)
+        alert.addAction(addr)
         if (formController == "Leads") {
-            alertController.addAction(new)
+            alert.addAction(new)
         }
         if (formController == "Vendor") {
-            alertController.addAction(web)
+            alert.addAction(web)
         }
         if !(formController == "Employee") {
-            alertController.addAction(cal)
+            alert.addAction(cal)
         }
-        alertController.addAction(bday)
-        alertController.addAction(buttonCancel)
+        alert.addAction(bday)
+        alert.addAction(buttonCancel)
         
-        if let popoverController = alertController.popoverPresentationController {
+        if let popoverController = alert.popoverPresentationController {
             popoverController.barButtonItem = sender as? UIBarButtonItem
         }
-        self.present(alertController, animated: true)
+        self.present(alert, animated: true)
     }
     
     private func callPhone() {
@@ -1534,17 +1534,18 @@ extension LeadDetail: UIImagePickerControllerDelegate, UINavigationControllerDel
             present(picker, animated: true, completion: nil)
         }
 
-       public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
 
-           guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else { return }
-           plusPhotoButton.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
-           plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width / 2
-           plusPhotoButton.layer.masksToBounds = true
-           plusPhotoButton.layer.borderColor = UIColor.darkGray.cgColor
-           plusPhotoButton.layer.borderWidth = 3
-           setupAvatarImage()
-           dismiss(animated: true, completion: nil)
-       }
+        picker.dismiss(animated: true, completion: nil)
+        guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else { return }
+
+        plusPhotoButton.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
+        plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width / 2
+        plusPhotoButton.layer.masksToBounds = true
+        plusPhotoButton.layer.borderColor = UIColor.darkGray.cgColor
+        plusPhotoButton.layer.borderWidth = 3
+        setupAvatarImage()
+    }
 
        public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
            self.dismiss(animated: true)

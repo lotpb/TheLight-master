@@ -16,13 +16,13 @@ final class TabBarController: UITabBarController, UISplitViewControllerDelegate 
         super.viewDidLoad()
         
         // MARK: - Register login
-        if Auth.auth().currentUser == nil {
-            DispatchQueue.main.async {
-                let loginController = LoginController()
-                let navController = UINavigationController(rootViewController: loginController)
-                self.present(navController, animated: true)
-            }
-        }
+//        if Auth.auth().currentUser == nil {
+//            DispatchQueue.main.async {
+//                let loginController = LoginController()
+//                let navController = UINavigationController(rootViewController: loginController)
+//                self.present(navController, animated: true)
+//            }
+//        }
         setupSplitViewController()
         setupTabBar()
     }

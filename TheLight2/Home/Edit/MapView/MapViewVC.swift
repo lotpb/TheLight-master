@@ -717,7 +717,7 @@ final class MapViewVC: UIViewController {
     
     @objc func shareButton(_ sender: AnyObject) {
         
-        let alertController = UIAlertController(title:"", message:"", preferredStyle: .actionSheet)
+        let alert = UIAlertController(title:"", message:"", preferredStyle: .actionSheet)
         
         let buttonOne = UIAlertAction(title: "Show Traffic", style: .default, handler: { (action) in
             self.trafficBtnTapped(self)
@@ -746,20 +746,20 @@ final class MapViewVC: UIViewController {
         let buttonCancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
         }
         
-        alertController.addAction(buttonOne)
-        alertController.addAction(buttonTwo)
-        alertController.addAction(buttonThree)
-        alertController.addAction(buttonFour)
-        alertController.addAction(buttonFive)
-        alertController.addAction(buttonSix)
-        alertController.addAction(buttonSeven)
-        alertController.addAction(buttonEight)
-        alertController.addAction(buttonCancel)
+        alert.addAction(buttonOne)
+        alert.addAction(buttonTwo)
+        alert.addAction(buttonThree)
+        alert.addAction(buttonFour)
+        alert.addAction(buttonFive)
+        alert.addAction(buttonSix)
+        alert.addAction(buttonSeven)
+        alert.addAction(buttonEight)
+        alert.addAction(buttonCancel)
         
-        if let popoverController = alertController.popoverPresentationController {
+        if let popoverController = alert.popoverPresentationController {
             popoverController.barButtonItem = sender as? UIBarButtonItem
         }
-        self.present(alertController, animated: true)
+        self.present(alert, animated: true)
     }
 
     // MARK: - Card Setup

@@ -173,7 +173,7 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
         let yearCount = calendar.component(.year, from: date)
         let yearCount1 = calendar.component(.year, from: date) - 1
         
-        let alertController = UIAlertController(title:"Send reports to:", message:"eunited@optonline", preferredStyle: .actionSheet)
+        let alert = UIAlertController(title:"Send reports to:", message:"eunited@optonline", preferredStyle: .actionSheet)
         
         let buttonOne = UIAlertAction(title: "\(monthStr) \(String(yearCount))", style: .default, handler: { (action) in
 
@@ -193,17 +193,17 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
         let buttonCancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
         }
         
-        alertController.addAction(buttonOne)
-        alertController.addAction(buttonTwo)
-        alertController.addAction(buttonThree)
-        alertController.addAction(buttonFour)
-        alertController.addAction(buttonLast)
-        alertController.addAction(buttonCancel)
+        alert.addAction(buttonOne)
+        alert.addAction(buttonTwo)
+        alert.addAction(buttonThree)
+        alert.addAction(buttonFour)
+        alert.addAction(buttonLast)
+        alert.addAction(buttonCancel)
         
-        if let popoverController = alertController.popoverPresentationController {
+        if let popoverController = alert.popoverPresentationController {
             popoverController.barButtonItem = sender as? UIBarButtonItem
         }
-        self.present(alertController, animated: true)
+        self.present(alert, animated: true)
     }
     
     @objc func alertButton(_ sender: AnyObject) {

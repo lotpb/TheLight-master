@@ -319,7 +319,7 @@ struct ScndPage : View {
 
                             let credential =  PhoneAuthProvider.provider().credential(withVerificationID: self.ID, verificationCode: self.code)
 
-                             Auth.auth().signIn(with: credential) { (res, err) in
+                             Auth.auth().signIn(with: credential) { res, err in
 
                                  if err != nil{
 

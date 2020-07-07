@@ -410,13 +410,14 @@ final class UserDetailController: UIViewController, UINavigationControllerDelega
 }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
+
+        picker.dismiss(animated: true)
         guard let image = info[.originalImage] as? UIImage else { return }
+        
             self.userimageView?.contentMode = .scaleAspectFill
             self.userimageView?.clipsToBounds = true
             self.userimageView?.image = image
             updateUsersProfile()
-            dismiss(animated: true)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

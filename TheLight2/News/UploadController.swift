@@ -516,8 +516,7 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
             isPickImage = true
             handleImageSelectedForInfo(_info: info as [String : AnyObject])
         }
-        
-        dismiss(animated: true)
+        picker.dismiss(animated: true)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -537,8 +536,6 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
         newsImageView.contentMode = .scaleAspectFill
         newsImageView.clipsToBounds = true
         newsImageView.image = selectedImageFromPicker
-        
-        //picImage = selectedImageFromPicker
     }
     
     private func uploadToFirebaseStorageUsingImage(image: UIImage, completion: @escaping (_ imageUrl: String) -> ()) {
@@ -617,11 +614,6 @@ extension UploadController: UIImagePickerControllerDelegate, UINavigationControl
     
     private func updateNews() {
         //firebase
-        /*
-         guard case self.objectId = Auth.auth().currentUser?.uid else {
-         self.simpleAlert(title: "Alert!", message: "Updates not allowed for this member")
-         return
-         } */
         
         guard let userID = self.objectId else { return }
         

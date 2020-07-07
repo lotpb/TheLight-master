@@ -34,7 +34,7 @@ final class RegisterViewController: UIViewController {
 
     private let firstNameField: UITextField = {
         let field = UITextField()
-        field.autocapitalizationType = .none
+        field.autocapitalizationType = .words
         field.autocorrectionType = .no
         field.returnKeyType = .continue
         field.layer.cornerRadius = 12
@@ -49,7 +49,7 @@ final class RegisterViewController: UIViewController {
 
     private let lastNameField: UITextField = {
         let field = UITextField()
-        field.autocapitalizationType = .none
+        field.autocapitalizationType = .words
         field.autocorrectionType = .no
         field.returnKeyType = .continue
         field.layer.cornerRadius = 12
@@ -71,6 +71,7 @@ final class RegisterViewController: UIViewController {
         field.layer.borderWidth = 1
         field.layer.borderColor = UIColor.lightGray.cgColor
         field.placeholder = "Email Address..."
+        field.keyboardType = .emailAddress
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
         field.leftViewMode = .always
         field.backgroundColor = .secondarySystemBackground
@@ -301,7 +302,7 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
                                                 self?.presentCamera()
 
         }))
-        actionSheet.addAction(UIAlertAction(title: "Chose Photo",
+        actionSheet.addAction(UIAlertAction(title: "Choose Photo",
                                             style: .default,
                                             handler: { [weak self] _ in
 

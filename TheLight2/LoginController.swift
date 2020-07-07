@@ -31,7 +31,7 @@ final class LoginController: UIViewController, UITextFieldDelegate {
     //Facebook
     private var profileUrl: String?
     //Google
-    private let googleButton: GIDSignInButton = GIDSignInButton()
+    private let googleButton = GIDSignInButton()
     private var loginObserver: NSObjectProtocol?
 
     private let scrollView: UIScrollView = {
@@ -563,7 +563,7 @@ final class LoginController: UIViewController, UITextFieldDelegate {
         } else {
             // firebase
             //let phone = phoneField.text ?? ""
-            Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
+            Auth.auth().createUser(withEmail: email, password: password, completion: { user, error in
                 guard error == nil else {
                     print("Failed to create user: ", error!)
                     return
@@ -641,9 +641,7 @@ final class LoginController: UIViewController, UITextFieldDelegate {
             return
         }
 
-        guard let user = user else {
-            return
-        }
+        guard let user = user else { return }
 
         guard let email = user.profile.email,
             let name = user.profile.name else {
@@ -663,27 +661,13 @@ final class LoginController: UIViewController, UITextFieldDelegate {
             passwordField.text = "united"
             //self.profileUrl = url
 
-//            URLSession.shared.dataTask(with: url, completionHandler: { data, _, _ in
-//                guard let data = data else {
-//                    return
-//                }
-//            })
-//
-//            DatabaseManager.shared.userExist(with: email, completion: { exist in
-//                if !exist {
-//                    DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName,
-//                                                                        lastName: LastName,
-//                                                                        emailAddress: email))
-//                }
-//            })
-
         }
         guard let authentication = user.authentication else { return }
 
         let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
                                                        accessToken: authentication.accessToken)
 
-        Auth.auth().signIn(with: credential, completion:  { (result, error) in
+        Auth.auth().signIn(with: credential, completion:  { result, error in
             guard result != nil, error == nil else {
                 //if let error = error {
                 print("Failed to create a Firebase User with Google account: ", error!)
@@ -784,7 +768,7 @@ final class LoginController: UIViewController, UITextFieldDelegate {
         } else {
             self.emailField.text = "eunited@optonline.net"
             self.passwordField.text = "united"
-            Auth.auth().signIn(withEmail: emailField.text!, password: passwordField.text!, completion: { (user, err) in
+            Auth.auth().signIn(withEmail: emailField.text!, password: passwordField.text!, completion: { user, error in
                 if user != nil {
                     self.saveDefaults()
                     self.refreshLocation()
@@ -885,11 +869,11 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
 
+        picker.dismiss(animated: true, completion: nil)
         guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else { return }
+
         plusPhotoButton.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
         plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width / 2
-
-        dismiss(animated: true, completion: nil)
     }
 
     func updateUsersProfile() {
@@ -897,7 +881,7 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
         if let userID = Auth.auth().currentUser?.uid {
             //let storageRef = Storage.storage().reference().child("profile_images/\(uid)")
             let storageRef = Storage.storage().reference().child("profile_images").child(userID)
-            guard let image = userimageView.image else {return}
+            guard let image = userimageView.image else { return }
 
             if let newImage = image.jpegData(compressionQuality: 0.9)  {
 
@@ -968,13 +952,6 @@ extension LoginController: LoginButtonDelegate {
                         return
                 }
 
-    //            DatabaseManager.shared.userExist(with: email, completion: { exist in
-    //                if !exist {
-    //                    DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName,
-    //                                                                        lastName: LastName,
-    //                                                                        emailAddress: email))
-    //                }
-    //            })
     //
     //            guard let userName = result["name"] as? String,
     //                let email = result["email"] as? String else {

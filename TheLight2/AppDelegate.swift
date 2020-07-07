@@ -304,14 +304,14 @@ extension AppDelegate {
         DispatchQueue.main.sync {
             if UIApplication.shared.applicationState == .active {
 
-                let view = window?.rootViewController
-                let alert = UIAlertController(title: "Geofence crossed", message: message, preferredStyle: .alert)
-                let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-                alert.addAction(action)
-                view?.present(alert, animated: true, completion: nil)
+//                let view = window?.rootViewController
+//                let alert = UIAlertController(title: "Geofence crossed", message: message, preferredStyle: .alert)
+//                let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+//                alert.addAction(action)
+//                view?.present(alert, animated: true, completion: nil)
 
-                //guard let message = note(from: region.identifier) else { return }
-                //window?.rootViewController?.showAlert(title: "Alert", message: message)
+                guard let message = note(from: region.identifier) else { return }
+                window?.rootViewController?.showAlert(title: "Geofence crossed", message: message)
 
             } else {
 

@@ -30,7 +30,7 @@ extension DatabaseManager {
 
     /// Returns dictionary node at child path
     public func getDataFor(path: String, completion: @escaping (Result<Any, Error>) -> Void) {
-        database.child("\(path)").observeSingleEvent(of: .value) { snapshot in
+        FirebaseRef.databaseChat.child("\(path)").observeSingleEvent(of: .value) { snapshot in
             guard let value = snapshot.value else {
                 completion(.failure(DatabaseError.failedToFetch))
                 return
@@ -52,7 +52,7 @@ extension DatabaseManager {
                            completion: @escaping ((Bool) -> Void)) {
 
         let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
-        database.child(safeEmail).observeSingleEvent(of: .value, with: { snapshot in
+        FirebaseRef.databaseChat.child(safeEmail).observeSingleEvent(of: .value, with: { snapshot in
             guard snapshot.value as? [String: Any] != nil else {
                 completion(false)
                 return
@@ -65,7 +65,7 @@ extension DatabaseManager {
 
     /// Inserts new user to database
     public func insertUser(with user: ChatAppUser, completion: @escaping (Bool) -> Void) {
-        database.child(user.safeEmail).setValue([
+        FirebaseRef.databaseChat.child(user.safeEmail).setValue([
             "first_name": user.firstName,
             "last_name": user.lastName
         ], withCompletionBlock: { [weak self] error, _ in
@@ -80,7 +80,7 @@ extension DatabaseManager {
                 return
             }
 
-            strongSelf.database.child("usersChat").observeSingleEvent(of: .value, with: { snapshot in
+            strongSelf.database.child("Chat").child("usersChat").observeSingleEvent(of: .value, with: { snapshot in
                 if var usersCollection = snapshot.value as? [[String: String]] {
                     // append to user dictionary
                     let newElement = [
@@ -89,7 +89,7 @@ extension DatabaseManager {
                     ]
                     usersCollection.append(newElement)
 
-                    strongSelf.database.child("usersChat").setValue(usersCollection, withCompletionBlock: { error, _ in
+                    strongSelf.database.child("Chat").child("usersChat").setValue(usersCollection, withCompletionBlock: { error, _ in
                         guard error == nil else {
                             completion(false)
                             return
@@ -107,7 +107,7 @@ extension DatabaseManager {
                         ]
                     ]
 
-                    strongSelf.database.child("usersChat").setValue(newCollection, withCompletionBlock: { error, _ in
+                    strongSelf.database.child("Chat").child("usersChat").setValue(newCollection, withCompletionBlock: { error, _ in
                         guard error == nil else {
                             completion(false)
                             return
@@ -122,7 +122,7 @@ extension DatabaseManager {
 
     /// Gets all users from database
     public func getAllUsers(completion: @escaping (Result<[[String: String]], Error>) -> Void) {
-        database.child("usersChat").observeSingleEvent(of: .value, with: { snapshot in
+        FirebaseRef.databaseChat.child("usersChat").observeSingleEvent(of: .value, with: { snapshot in
             guard let value = snapshot.value as? [[String: String]] else {
                 completion(.failure(DatabaseError.failedToFetch))
                 return
@@ -194,7 +194,7 @@ extension DatabaseManager {
         }
         let safeEmail = DatabaseManager.safeEmail(emailAddress: currentEmail)
 
-        let ref = database.child("\(safeEmail)")
+        let ref = FirebaseRef.databaseChat.child("\(safeEmail)")
 
         ref.observeSingleEvent(of: .value, with: { [weak self] snapshot in
             guard var userNode = snapshot.value as? [String: Any] else {
@@ -253,15 +253,15 @@ extension DatabaseManager {
                 ]
             ]
             // Update recipient conversaiton entry
-            self?.database.child("\(otherUserEmail)/conversations").observeSingleEvent(of: .value, with: { [weak self] snapshot in
+            self?.database.child("Chat").child("\(otherUserEmail)/conversations").observeSingleEvent(of: .value, with: { [weak self] snapshot in
                 if var conversatoins = snapshot.value as? [[String: Any]] {
                     // append
                     conversatoins.append(recipient_newConversationData)
-                    self?.database.child("\(otherUserEmail)/conversations").setValue(conversatoins)
+                    self?.database.child("Chat").child("\(otherUserEmail)/conversations").setValue(conversatoins)
                 }
                 else {
                     // create
-                    self?.database.child("\(otherUserEmail)/conversations").setValue([recipient_newConversationData])
+                    self?.database.child("Chat").child("\(otherUserEmail)/conversations").setValue([recipient_newConversationData])
                 }
             })
 
@@ -324,9 +324,14 @@ extension DatabaseManager {
             break
         case .photo(_):
             break
-        case .video(_):
+        case .video(let mediaItem):
+            if let targetUrlString = mediaItem.url?.absoluteString {
+                message = targetUrlString
+            }
             break
-        case .location(_):
+        case .location(let locationData):
+            let location = locationData.location
+            message = "\(location.coordinate.longitude),\(location.coordinate.latitude)"
             break
         case .emoji(_):
             break
@@ -363,7 +368,7 @@ extension DatabaseManager {
 
         print("adding convo: \(conversationID)")
 
-        database.child("\(conversationID)").setValue(value, withCompletionBlock: { error, _ in
+        FirebaseRef.databaseChat.child("\(conversationID)").setValue(value, withCompletionBlock: { error, _ in
             guard error == nil else {
                 completion(false)
                 return
@@ -374,7 +379,7 @@ extension DatabaseManager {
 
     /// Fetches and returns all conversations for the user with passed in email
     public func getAllConversations(for email: String, completion: @escaping (Result<[Conversation], Error>) -> Void) {
-        database.child("\(email)/conversations").observe(.value, with: { snapshot in
+        FirebaseRef.databaseChat.child("\(email)/conversations").observe(.value, with: { snapshot in
             guard let value = snapshot.value as? [[String: Any]] else{
                 completion(.failure(DatabaseError.failedToFetch))
                 return
@@ -406,7 +411,7 @@ extension DatabaseManager {
 
     /// Gets all mmessages for a given conversatino
     public func getAllMessagesForConversation(with id: String, completion: @escaping (Result<[Message], Error>) -> Void) {
-        database.child("\(id)/messages").observe(.value, with: { snapshot in
+        FirebaseRef.databaseChat.child("\(id)/messages").observe(.value, with: { snapshot in
             guard let value = snapshot.value as? [[String: Any]] else{
                 completion(.failure(DatabaseError.failedToFetch))
                 return
@@ -450,15 +455,15 @@ extension DatabaseManager {
                     kind = .video(media)
                 }
                 else if type == "location" {
-//                    let locationComponents = content.components(separatedBy: ",")
-//                    guard let longitude = Double(locationComponents[0]),
-//                        let latitude = Double(locationComponents[1]) else {
-//                        return nil
-//                    }
-//                    print("Rendering location; long=\(longitude) | lat=\(latitude)")
-//                    let location = LocationChat(location: CLLocation(latitude: latitude, longitude: longitude),
-//                                            size: CGSize(width: 300, height: 300))
-//                    kind = .location(location)
+                    let locationComponents = content.components(separatedBy: ",")
+                    guard let longitude = Double(locationComponents[0]),
+                        let latitude = Double(locationComponents[1]) else {
+                        return nil
+                    }
+                    print("Rendering location; long=\(longitude) | lat=\(latitude)")
+                    let location = LocationChat(location: CLLocation(latitude: latitude, longitude: longitude),
+                                            size: CGSize(width: 300, height: 300))
+                    kind = .location(location)
                 }
                 else {
                     kind = .text(content)
@@ -494,7 +499,7 @@ extension DatabaseManager {
 
         let currentEmail = DatabaseManager.safeEmail(emailAddress: myEmail)
 
-        database.child("\(conversation)/messages").observeSingleEvent(of: .value, with: { [weak self] snapshot in
+        FirebaseRef.databaseChat.child("\(conversation)/messages").observeSingleEvent(of: .value, with: { [weak self] snapshot in
             guard let strongSelf = self else {
                 return
             }
@@ -556,13 +561,13 @@ extension DatabaseManager {
 
             currentMessages.append(newMessageEntry)
 
-            strongSelf.database.child("\(conversation)/messages").setValue(currentMessages) { error, _ in
+            strongSelf.database.child("Chat").child("\(conversation)/messages").setValue(currentMessages) { error, _ in
                 guard error == nil else {
                     completion(false)
                     return
                 }
 
-                strongSelf.database.child("\(currentEmail)/conversations").observeSingleEvent(of: .value, with: { snapshot in
+                strongSelf.database.child("Chat").child("\(currentEmail)/conversations").observeSingleEvent(of: .value, with: { snapshot in
                     var databaseEntryConversations = [[String: Any]]()
                     let updatedValue: [String: Any] = [
                         "date": dateString,
@@ -610,7 +615,7 @@ extension DatabaseManager {
                         ]
                     }
 
-                    strongSelf.database.child("\(currentEmail)/conversations").setValue(databaseEntryConversations, withCompletionBlock: { error, _ in
+                    strongSelf.database.child("Chat").child("\(currentEmail)/conversations").setValue(databaseEntryConversations, withCompletionBlock: { error, _ in
                         guard error == nil else {
                             completion(false)
                             return
@@ -618,7 +623,7 @@ extension DatabaseManager {
 
 
                         // Update latest message for recipient user
-                        strongSelf.database.child("\(otherUserEmail)/conversations").observeSingleEvent(of: .value, with: { snapshot in
+                        strongSelf.database.child("Chat").child("\(otherUserEmail)/conversations").observeSingleEvent(of: .value, with: { snapshot in
                             let updatedValue: [String: Any] = [
                                 "date": dateString,
                                 "is_read": false,
@@ -672,7 +677,7 @@ extension DatabaseManager {
                                 ]
                             }
 
-                            strongSelf.database.child("\(otherUserEmail)/conversations").setValue(databaseEntryConversations, withCompletionBlock: { error, _ in
+                            strongSelf.database.child("Chat").child("\(otherUserEmail)/conversations").setValue(databaseEntryConversations, withCompletionBlock: { error, _ in
                                 guard error == nil else {
                                     completion(false)
                                     return
@@ -698,7 +703,7 @@ extension DatabaseManager {
         // Get all conversations for current user
         // delete conversation in collection with target id
         // reset those conversations for the user in database
-        let ref = database.child("\(safeEmail)/conversations")
+        let ref = FirebaseRef.databaseChat.child("\(safeEmail)/conversations")
         ref.observeSingleEvent(of: .value) { snapshot in
             if var conversations = snapshot.value as? [[String: Any]] {
                 var positionToRemove = 0
@@ -715,7 +720,7 @@ extension DatabaseManager {
                 ref.setValue(conversations, withCompletionBlock: { error, _  in
                     guard error == nil else {
                         completion(false)
-                        print("faield to write new conversatino array")
+                        print("faild to write new conversatino array")
                         return
                     }
                     print("deleted conversaiton")
@@ -732,7 +737,7 @@ extension DatabaseManager {
         }
         let safeSenderEmail = DatabaseManager.safeEmail(emailAddress: senderEmail)
 
-        database.child("\(safeRecipientEmail)/conversations").observeSingleEvent(of: .value, with: { snapshot in
+        FirebaseRef.databaseChat.child("\(safeRecipientEmail)/conversations").observeSingleEvent(of: .value, with: { snapshot in
             guard let collection = snapshot.value as? [[String: Any]] else {
                 completion(.failure(DatabaseError.failedToFetch))
                 return
@@ -773,7 +778,6 @@ struct ChatAppUser {
     }
 
     var profilePictureFileName: String {
-        //afraz9-gmail-com_profile_picture.png
         return "\(safeEmail)_profile_picture.png"
     }
 }

@@ -225,7 +225,7 @@ struct LoginHomeSigninEmailUI: View {
 
         if self.email != "" && self.pass != ""{
 
-            Auth.auth().signIn(withEmail: self.email, password: self.pass) { (res, err) in
+            Auth.auth().signIn(withEmail: self.email, password: self.pass) { res, err in
 
                 if err != nil{
 
