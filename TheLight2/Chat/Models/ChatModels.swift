@@ -9,6 +9,7 @@
 import Foundation
 import CoreLocation
 import MessageKit
+import AVFoundation // added
 
 struct Message: MessageType {
     public var sender: SenderType
@@ -37,7 +38,7 @@ extension MessageKind {
         case .contact(_):
             return "contact"
         case .custom(_):
-            return "customc"
+            return "custom"
         }
     }
 }
@@ -58,4 +59,20 @@ struct Media: MediaItem {
 struct LocationChat: LocationItem {
     var location: CLLocation
     var size: CGSize
+}
+
+struct Audiotem: AudioItem {
+
+    var url: URL
+    var size: CGSize
+    var duration: Float
+
+    init(url: URL) {
+        self.url = url
+        self.size = CGSize(width: 160, height: 35)
+        // compute duration
+        let audioAsset = AVURLAsset(url: url)
+        self.duration = Float(CMTimeGetSeconds(audioAsset.duration))
+    }
+
 }

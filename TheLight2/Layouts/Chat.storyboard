@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17132" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yQM-Pg-3uU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17132" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -25,24 +25,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xEQ-sC-IEI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1591" y="-177"/>
-        </scene>
-        <!--Tab Bar Controller-->
-        <scene sceneID="OUE-Hh-hSV">
-            <objects>
-                <tabBarController storyboardIdentifier="chatTabBarId" id="yQM-Pg-3uU" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="tH6-8u-UCO">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="Lar-SH-RNU" kind="relationship" relationship="viewControllers" id="tkA-62-iIf"/>
-                        <segue destination="7Yc-8b-Wml" kind="relationship" relationship="viewControllers" id="P4V-AA-0Of"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="T1n-pm-y4J" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-965" y="-928"/>
         </scene>
         <!--Profile-->
         <scene sceneID="ifi-Ag-IvS">
@@ -80,13 +62,13 @@
         <!--Profile-->
         <scene sceneID="fj5-YL-33g">
             <objects>
-                <viewController id="UDM-dW-nWR" customClass="ProfileViewController" customModule="TheLight" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="profileId" id="UDM-dW-nWR" customClass="ProfileViewController" customModule="TheLight" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QIV-DR-ekd">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0kn-X5-ZeF">
-                                <rect key="frame" x="0.0" y="140" width="414" height="673"/>
+                                <rect key="frame" x="0.0" y="140" width="414" height="722"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>

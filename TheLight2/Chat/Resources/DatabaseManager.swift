@@ -305,43 +305,38 @@ extension DatabaseManager {
     }
 
     private func finishCreatingConversation(name: String, conversationID: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
-//        {
-//            "id": String,
-//            "type": text, photo, video,
-//            "content": String,
-//            "date": Date(),
-//            "sender_email": String,
-//            "isRead": true/false,
-//        }
-        let messageDate = firstMessage.sentDate
-        let dateString = ChatViewController.dateFormatter.string(from: messageDate)
+    //        {
+    //            "id": String,
+    //            "type": text, photo, video,
+    //            "content": String,
+    //            "date": Date(),
+    //            "sender_email": String,
+    //            "isRead": true/false,
+    //        }
+            let messageDate = firstMessage.sentDate
+            let dateString = ChatViewController.dateFormatter.string(from: messageDate)
 
-        var message = ""
-        switch firstMessage.kind {
-        case .text(let messageText):
-            message = messageText
-        case .attributedText(_):
-            break
-        case .photo(_):
-            break
-        case .video(let mediaItem):
-            if let targetUrlString = mediaItem.url?.absoluteString {
-                message = targetUrlString
+            var message = ""
+            switch firstMessage.kind {
+            case .text(let messageText):
+                message = messageText
+            case .attributedText(_):
+                break
+            case .photo(_):
+                break
+            case .video(_):
+                break
+            case .location(_):
+                break
+            case .emoji(_):
+                break
+            case .audio(_):
+                break
+            case .contact(_):
+                break
+            case .custom(_):
+                break
             }
-            break
-        case .location(let locationData):
-            let location = locationData.location
-            message = "\(location.coordinate.longitude),\(location.coordinate.latitude)"
-            break
-        case .emoji(_):
-            break
-        case .audio(_):
-            break
-        case .contact(_):
-            break
-        case .custom(_):
-            break
-        }
 
         guard let myEmmail = UserDefaults.standard.value(forKey: "email") as? String else {
             completion(false)
@@ -438,20 +433,20 @@ extension DatabaseManager {
                     let media = Media(url: imageUrl,
                                       image: nil,
                                       placeholderImage: placeHolder,
-                                      size: CGSize(width: 300, height: 300))
+                                      size: CGSize(width: 240, height: 240))
                     kind = .photo(media)
                 }
                 else if type == "video" {
-                    // photo
+                    // video
                     guard let videoUrl = URL(string: content),
-                        let placeHolder = UIImage(named: "video_placeholder") else {
+                          let placeHolder = UIImage(systemName: "play.fill") else {
                             return nil
                     }
 
                     let media = Media(url: videoUrl,
                                       image: nil,
                                       placeholderImage: placeHolder,
-                                      size: CGSize(width: 300, height: 300))
+                                      size: CGSize(width: 240, height: 240))
                     kind = .video(media)
                 }
                 else if type == "location" {
@@ -462,7 +457,7 @@ extension DatabaseManager {
                     }
                     print("Rendering location; long=\(longitude) | lat=\(latitude)")
                     let location = LocationChat(location: CLLocation(latitude: latitude, longitude: longitude),
-                                            size: CGSize(width: 300, height: 300))
+                                            size: CGSize(width: 240, height: 240))
                     kind = .location(location)
                 }
                 else {
@@ -511,7 +506,7 @@ extension DatabaseManager {
 
             let messageDate = newMessage.sentDate
             let dateString = ChatViewController.dateFormatter.string(from: messageDate)
-
+            
             var message = ""
             switch newMessage.kind {
             case .text(let messageText):

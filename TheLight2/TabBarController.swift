@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import FirebaseAuth
+//import FirebaseAuth
 
 @available(iOS 13.0, *)
 final class TabBarController: UITabBarController, UISplitViewControllerDelegate {
@@ -84,10 +84,13 @@ final class TabBarController: UITabBarController, UISplitViewControllerDelegate 
         let myTab6 = MeProfileVC(collectionViewLayout: layout6)
 
         let storyboard7 = UIStoryboard(name: "Chat", bundle: nil)
-        let myTab7 = storyboard7.instantiateViewController(withIdentifier: "chatTabBarId")
+        let myTab7 = storyboard7.instantiateViewController(withIdentifier: "chatId")
+
+        let storyboard8 = UIStoryboard(name: "Chat", bundle: nil)
+        let myTab8 = storyboard8.instantiateViewController(withIdentifier: "profileId")
 
         let navController1 = UINavigationController(rootViewController: myTab1)
-        navController1.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 1)
+        navController1.tabBarItem = UITabBarItem(title: "Chat", image: UIImage(systemName: "house.fill"), tag: 1)
         
         let navController2 = UINavigationController(rootViewController: myTab2)
         navController2.tabBarItem = UITabBarItem(title: "Blog", image: UIImage(systemName: "square.and.pencil"), tag: 2)
@@ -106,8 +109,11 @@ final class TabBarController: UITabBarController, UISplitViewControllerDelegate 
 
         let navController7 = myTab7
         navController7.tabBarItem = UITabBarItem(title: "Chat", image: UIImage(systemName: "person.2.fill"), tag: 7)
+
+        let navController8 = myTab8
+        navController8.tabBarItem = UITabBarItem(title: "Chat Profile", image: UIImage(systemName: "person.crop.circle"), tag: 8)
         
-        viewControllers = [navController1, navController2, navController3, navController4, navController5, navController6, navController7]
+        viewControllers = [navController1, navController2, navController3, navController4, navController5, navController6, navController7, navController8]
         
         tabBarController?.viewControllers = viewControllers
 

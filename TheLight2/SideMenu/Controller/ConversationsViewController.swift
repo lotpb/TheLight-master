@@ -149,6 +149,7 @@ final class ConversationsViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
         tableView.frame = view.bounds
         noConversationsLabel.frame = CGRect(x: 10,
                                             y: (view.height-100)/2,
