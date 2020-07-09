@@ -210,12 +210,11 @@ final class LoginViewController: UIViewController {
             UserDefaults.standard.set(email, forKey: "email")
 
             print("Logged In User: \(user)")
-            //strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+            strongSelf.navigationController?.dismiss(animated: true, completion: nil)
 
-            let storyboard = UIStoryboard(name: "Chat", bundle: nil)
-            let VC:UIViewController = storyboard.instantiateViewController(withIdentifier: "chatTabBarId") as UIViewController
-            VC.modalPresentationStyle = .fullScreen
-            strongSelf.present(VC, animated: true)
+            let storyboard7 = UIStoryboard(name: "Chat", bundle: nil)
+            let vc = storyboard7.instantiateViewController(withIdentifier: "chatId")
+            self?.navigationController?.pushViewController(vc, animated: true)
         })
     }
 

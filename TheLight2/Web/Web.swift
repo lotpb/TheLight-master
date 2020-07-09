@@ -31,21 +31,25 @@ final class Web: UIViewController, UISplitViewControllerDelegate, SFSafariViewCo
     
     lazy var webView: WKWebView = {
         let config = WKWebViewConfiguration()
+        let preferences = WKPreferences()
+        config.preferences = preferences
         let webView: WKWebView = WKWebView(frame: CGRect.zero, configuration: config)
-        webView.navigationDelegate = self
-        webView.uiDelegate = self
-        
         return webView
     }()
 
     var url: URL?
-       var detailItem: AnyObject? {
-           didSet {
-               self.configureWeb()
-           }
-       }
+    var detailItem: AnyObject? {
+        didSet {
+            self.configureWeb()
+        }
+    }
     
-    
+    override func loadView() {
+        super.loadView()
+        webView.uiDelegate = self
+        webView.navigationDelegate = self
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // MARK: - SplitView

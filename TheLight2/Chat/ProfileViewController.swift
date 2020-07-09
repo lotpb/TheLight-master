@@ -87,7 +87,13 @@ final class ProfileViewController: UIViewController {
                            forCellReuseIdentifier: "cell")
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.tableFooterView = UIView(frame: .zero)
         tableView.tableHeaderView = createTableHeader()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        tableView.reloadData()
     }
 
     func createTableHeader() -> UIView? {

@@ -80,6 +80,33 @@ final class ChatViewController: MessagesViewController {
         messageInputBar.inputTextView.keyboardType = .twitter
     }
 
+
+//    func loadFirstMessages() {
+//        DispatchQueue.global(qos: .userInitiated).async {
+//            let count = UserDefaults.standard.MessagesCount()
+//            DatabaseManager.shared.getAllMessagesForConversation(count: count) { messages in
+//                DispatchQueue.main.async {
+//                    self.messageList = messages
+//                    self.messagesCollectionView.reloadData()
+//                    self.messagesCollectionView.scrollToBottom()
+//                }
+//            }
+//        }
+//    }
+//
+//    @objc
+//    func loadMoreMessages() {
+//        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 1) {
+//            DatabaseManager.shared.getAllMessagesForConversation(count: 20) { messages in
+//                DispatchQueue.main.async {
+//                    self.messageList.insert(contentsOf: messages, at: 0)
+//                    self.messagesCollectionView.reloadDataAndKeepOffset()
+//                    self.refreshControl.endRefreshing()
+//                }
+//            }
+//        }
+//    }
+
     private func setupInputButton() {
         let button = InputBarButtonItem()
         button.setSize(CGSize(width: 35, height: 35), animated: false)
@@ -436,6 +463,70 @@ extension ChatViewController: MessagesDataSource, MessagesLayoutDelegate, Messag
         fatalError("Self Sender is nil, email should be cached")
     }
 
+    // MARK: - new added Text Messages
+    func textColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+        return isFromCurrentSender(message: message) ? .white : .darkText
+    }
+
+    func detectorAttributes(for detector: DetectorType, and message: MessageType, at indexPath: IndexPath) -> [NSAttributedString.Key: Any] {
+        switch detector {
+        case .hashtag, .mention: return [.foregroundColor: UIColor.blue]
+        default: return MessageLabel.defaultAttributes
+        }
+    }
+
+    func enabledDetectors(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [DetectorType] {
+        return [.url, .address, .phoneNumber, .date, .transitInformation, .mention, .hashtag]
+    }
+
+    func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
+
+        let tail: MessageStyle.TailCorner = isFromCurrentSender(message: message) ? .bottomRight : .bottomLeft
+        return .bubbleTail(tail, .curved)
+    }
+
+    func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        if isTimeLabelVisible(at: indexPath) {
+            return NSAttributedString(string: MessageKitDateFormatter.shared.string(from: message.sentDate), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 10), NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+        }
+        return nil
+    }
+
+    func cellTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        if isTimeLabelVisible(at: indexPath) {
+            return 18
+        }
+        return 0
+    }
+
+    func cellBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        return 17
+    }
+
+    func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        return 20
+    }
+
+    func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        return (!isNextMessageSameSender(at: indexPath) && isFromCurrentSender(message: message)) ? 16 : 0
+    }
+
+    func isTimeLabelVisible(at indexPath: IndexPath) -> Bool {
+        return indexPath.section % 3 == 0 && !isPreviousMessageSameSender(at: indexPath)
+    }
+
+    func isPreviousMessageSameSender(at indexPath: IndexPath) -> Bool {
+        guard indexPath.section - 1 >= 0 else { return false }
+        return messages[indexPath.section].messageId == messages[indexPath.section - 1].messageId
+    }
+
+    func isNextMessageSameSender(at indexPath: IndexPath) -> Bool {
+        guard indexPath.section + 1 < messages.count else { return false }
+        return messages[indexPath.section].messageId == messages[indexPath.section + 1].messageId
+    }
+
+
+    // MARK: - All Messages
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
         return messages[indexPath.section]
     }

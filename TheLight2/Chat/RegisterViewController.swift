@@ -110,10 +110,10 @@ final class RegisterViewController: UIViewController {
         title = "Log In"
         view.backgroundColor = .systemBackground
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Register",
-                                                            style: .done,
-                                                            target: self,
-                                                            action: #selector(didTapRegister))
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Register",
+//                                                            style: .done,
+//                                                            target: self,
+//                                                            action: #selector(didTapRegister))
 
         registerButton.addTarget(self,
                               action: #selector(registerButtonTapped),
@@ -184,6 +184,10 @@ final class RegisterViewController: UIViewController {
         firstNameField.resignFirstResponder()
         lastNameField.resignFirstResponder()
 
+        if (self.imageView.image == nil){
+            alertUserLoginError()
+        }
+
         guard let firstName = firstNameField.text,
             let lastName = lastNameField.text,
             let email = emailField.text,
@@ -247,8 +251,10 @@ final class RegisterViewController: UIViewController {
                         })
                     }
                 })
-
                 strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+                let storyboard7 = UIStoryboard(name: "Chat", bundle: nil)
+                let vc = storyboard7.instantiateViewController(withIdentifier: "chatId")
+                self?.navigationController?.pushViewController(vc, animated: true)
             })
         })
     }
