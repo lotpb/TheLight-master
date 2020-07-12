@@ -111,10 +111,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         app .configureWithTransparentBackground()
         app.backgroundColor = .systemBackground
 
-        app.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.label]
+        app.titleTextAttributes = [
+            .foregroundColor:UIColor.label]
         app.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor:UIColor.label,
-            NSAttributedString.Key.font:UIFont.boldSystemFont(ofSize: 32)]
+            .foregroundColor:UIColor.label,
+            .font:UIFont.boldSystemFont(ofSize: 32)]
 
         UINavigationBar.appearance().standardAppearance = app
         UINavigationBar.appearance().scrollEdgeAppearance = app

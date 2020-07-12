@@ -29,7 +29,7 @@ final class Web: UIViewController, UISplitViewControllerDelegate, SFSafariViewCo
                       "http://www.appcoda.com/tutorials/",
                       "http://www.cultofmac.com/category/news/"]
     
-    lazy var webView: WKWebView = {
+    lazy private var webView: WKWebView = {
         let config = WKWebViewConfiguration()
         let preferences = WKPreferences()
         config.preferences = preferences

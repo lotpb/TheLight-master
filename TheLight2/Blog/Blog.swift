@@ -45,12 +45,11 @@ final class Blog: UIViewController {
     private var titleLabel = String()
     private var profileImageView : UIImageView?
 
-    lazy var refreshControl: UIRefreshControl = {
+    lazy private var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = .clear //Color.twitterText
         refreshControl.tintColor = .white
-        let attributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: attributes)
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         return refreshControl
     }()
@@ -626,7 +625,7 @@ extension Blog: UITableViewDataSource {
             let myText = NSString(string: cell.blogsubtitleLabel.text!)
             let attributedText = NSMutableAttributedString(string: myText as String)
             
-            let boldRange = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24), NSAttributedString.Key.foregroundColor: ColorX.Blog.weblinkText]
+            let boldRange = [.font: UIFont.boldSystemFont(ofSize: 24), NSAttributedString.Key.foregroundColor: ColorX.Blog.weblinkText]
             let highlightedRange = [NSAttributedString.Key.backgroundColor: ColorX.Blog.phonelinkText]
             let underlinedRange = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue]
             let tintedRange1 = [NSAttributedString.Key.foregroundColor: ColorX.Blog.weblinkText]

@@ -92,7 +92,7 @@ final class PlacesCollectionView: UICollectionViewController, UIGestureRecognize
         navigationItem.title = "MileIQ"
         navigationController?.navigationBar.barTintColor = .systemBackground
         navigationController?.navigationBar.tintColor = .systemGray
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor:UIColor.black]
         
         self.navigationItem.largeTitleDisplayMode = .never
         

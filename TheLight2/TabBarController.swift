@@ -90,7 +90,7 @@ final class TabBarController: UITabBarController, UISplitViewControllerDelegate 
         let myTab8 = storyboard8.instantiateViewController(withIdentifier: "profileId")
 
         let navController1 = UINavigationController(rootViewController: myTab1)
-        navController1.tabBarItem = UITabBarItem(title: "Chat", image: UIImage(systemName: "house.fill"), tag: 1)
+        navController1.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 1)
         
         let navController2 = UINavigationController(rootViewController: myTab2)
         navController2.tabBarItem = UITabBarItem(title: "Blog", image: UIImage(systemName: "square.and.pencil"), tag: 2)

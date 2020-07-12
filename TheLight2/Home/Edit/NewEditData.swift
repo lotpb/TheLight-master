@@ -69,7 +69,7 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
         return imageView
     }() 
     
-    lazy var refreshControl: UIRefreshControl = {
+    lazy private var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = .clear
         refreshControl.tintColor = .black

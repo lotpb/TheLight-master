@@ -294,6 +294,24 @@ enum Direction {
     case none
 }
 
+//extension UserDefaults {
+//
+//    static let messagesKey = "mockMessages"
+//
+//    // MARK: Mock Messages
+//    func setMockMessages(count: Int) {
+//        set(count, forKey: UserDefaults.messagesKey)
+//        synchronize()
+//    }
+//
+//    func MessagesCount() -> Int {
+//        if let value = object(forKey: UserDefaults.messagesKey) as? Int {
+//            return value
+//        }
+//        return 20
+//    }
+//}
+
 public extension String {
     
     var isValidEmailAddress: Bool { //valid email Valid
@@ -332,7 +350,7 @@ extension UIColor {
         return UIColor(red: red/255, green: green/255, blue: blue/255, alpha: 1)
     }
 }
-
+//MeProfileListCell
 extension UIImageView {
     func load(url: URL) {
         DispatchQueue.global().async { [weak self] in

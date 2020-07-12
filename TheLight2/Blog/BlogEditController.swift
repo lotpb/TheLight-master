@@ -51,7 +51,7 @@ final class BlogEditController: UIViewController {
     private var myText: NSString = ""
     private var myInput: String = ""
     
-    lazy var refreshControl: UIRefreshControl = {
+    lazy private var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = ColorX.twitterText
         refreshControl.tintColor = .black
@@ -538,7 +538,7 @@ extension BlogEditController: UITableViewDataSource {
             let myText = NSString(string: self.subject!)
             let attributedText = NSMutableAttributedString(string: myText as String)
             
-            let boldRange = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24), NSAttributedString.Key.foregroundColor: ColorX.Blog.weblinkText]
+            let boldRange = [.font: UIFont.boldSystemFont(ofSize: 24), NSAttributedString.Key.foregroundColor: ColorX.Blog.weblinkText]
             let highlightedRange = [NSAttributedString.Key.backgroundColor: ColorX.Blog.phonelinkText]
             let underlinedRange = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue]
             let tintedRange1 = [NSAttributedString.Key.foregroundColor: ColorX.Blog.weblinkText]

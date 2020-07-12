@@ -67,19 +67,6 @@ final class ChatViewController: MessagesViewController {
         setupInputButton()
     }
 
-    func configureMessageInputBar() {
-        messageInputBar.delegate = self
-        messageInputBar.inputTextView.backgroundColor = .secondarySystemGroupedBackground
-        //messageInputBar.inputTextView.placeholderTextColor =
-        messageInputBar.inputTextView.layer.borderColor = UIColor.lightGray.cgColor
-        messageInputBar.inputTextView.layer.borderWidth = 0.5
-        messageInputBar.inputTextView.layer.cornerRadius = 16.0
-        messageInputBar.inputTextView.layer.masksToBounds = true
-        messageInputBar.inputTextView.textContainerInset = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 36)
-        messageInputBar.inputTextView.scrollIndicatorInsets = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
-        messageInputBar.inputTextView.keyboardType = .twitter
-    }
-
 
 //    func loadFirstMessages() {
 //        DispatchQueue.global(qos: .userInitiated).async {
@@ -107,7 +94,23 @@ final class ChatViewController: MessagesViewController {
 //        }
 //    }
 
+    private func configureMessageInputBar() {
+        messageInputBar.delegate = self
+        messageInputBar.isTranslucent = true
+        messageInputBar.separatorLine.isHidden = true
+        messageInputBar.inputTextView.backgroundColor = .secondarySystemGroupedBackground
+        messageInputBar.inputTextView.placeholderTextColor = .placeholderText
+        messageInputBar.inputTextView.layer.borderColor = UIColor.lightGray.cgColor
+        messageInputBar.inputTextView.layer.borderWidth = 0.5
+        messageInputBar.inputTextView.layer.cornerRadius = 16.0
+        messageInputBar.inputTextView.layer.masksToBounds = true
+        messageInputBar.inputTextView.textContainerInset = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 36)
+        messageInputBar.inputTextView.scrollIndicatorInsets = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
+        messageInputBar.inputTextView.keyboardType = .twitter
+    }
+
     private func setupInputButton() {
+        // left attach button
         let button = InputBarButtonItem()
         button.setSize(CGSize(width: 35, height: 35), animated: false)
         button.setImage(UIImage(systemName: "paperclip"), for: .normal)
@@ -116,6 +119,60 @@ final class ChatViewController: MessagesViewController {
         }
         messageInputBar.setLeftStackViewWidthConstant(to: 36, animated: false)
         messageInputBar.setStackViewItems([button], forStack: .left, animated: false)
+
+        // custom send button
+        let boldFont = UIImage.SymbolConfiguration(pointSize: 36, weight: .semibold, scale: .large)
+        let sendImage = UIImage(systemName: "arrow.up.circle.fill", withConfiguration: boldFont)
+        messageInputBar.sendButton.image = sendImage?.withTintColor(.systemBlue, renderingMode: .alwaysOriginal)
+
+        messageInputBar.setRightStackViewWidthConstant(to: 36, animated: false)
+        messageInputBar.sendButton.imageView?.backgroundColor = .systemBlue
+        messageInputBar.sendButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 0)
+        messageInputBar.sendButton.setSize(CGSize(width: 36, height: 36), animated: false)
+        messageInputBar.sendButton.title = nil
+        messageInputBar.sendButton.imageView?.layer.cornerRadius = 18
+        // custom #text count label
+        let charCountButton = InputBarButtonItem()
+            .configure {
+                $0.title = "0/140"
+                $0.contentHorizontalAlignment = .right
+                $0.setTitleColor(UIColor(white: 0.6, alpha: 1), for: .normal)
+                $0.titleLabel?.font = UIFont.systemFont(ofSize: 10, weight: .bold)
+                $0.setSize(CGSize(width: 50, height: 25), animated: false)
+            }.onTextViewDidChange { (item, textView) in
+                item.title = "\(textView.text.count)/140"
+                let isOverLimit = textView.text.count > 140
+                item.inputBarAccessoryView?.shouldManageSendButtonEnabledState = !isOverLimit // Disable automated management when over limit
+                if isOverLimit {
+                    item.inputBarAccessoryView?.sendButton.isEnabled = false
+                }
+                let color = isOverLimit ? .red : UIColor(white: 0.6, alpha: 1)
+                item.setTitleColor(color, for: .normal)
+        }
+        let bottomItems = [.flexibleSpace, charCountButton]
+        messageInputBar.setStackViewItems(bottomItems, forStack: .bottom, animated: false)
+
+        // This just adds some more flare
+        messageInputBar.sendButton
+            .onEnabled { item in
+                UIView.animate(withDuration: 0.3, animations: {
+                    item.imageView?.backgroundColor = .white
+                })
+            }.onDisabled { item in
+                UIView.animate(withDuration: 0.3, animations: {
+                    item.imageView?.backgroundColor = .lightGray
+                })
+        }
+        configureInputBarPadding()
+    }
+
+    private func configureInputBarPadding() {
+        // Entire InputBar padding
+        messageInputBar.padding.bottom = 8
+        // or MiddleContentView padding
+        messageInputBar.middleContentViewPadding.right = -38
+        // or InputTextView padding
+        messageInputBar.inputTextView.textContainerInset.bottom = 8
     }
 
     private func presentInputActionSheet() {
@@ -463,14 +520,20 @@ extension ChatViewController: MessagesDataSource, MessagesLayoutDelegate, Messag
         fatalError("Self Sender is nil, email should be cached")
     }
 
-    // MARK: - new added Text Messages
+    // MARK: - MessagesDisplayDelegate
+
     func textColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
-        return isFromCurrentSender(message: message) ? .white : .darkText
+        return isFromCurrentSender(message: message) ? .white : .white
     }
 
     func detectorAttributes(for detector: DetectorType, and message: MessageType, at indexPath: IndexPath) -> [NSAttributedString.Key: Any] {
         switch detector {
-        case .hashtag, .mention: return [.foregroundColor: UIColor.blue]
+        case .hashtag, .mention:
+            if isFromCurrentSender(message: message) {
+                return [.foregroundColor: UIColor.white]
+            } else {
+                return [.foregroundColor: UIColor.blue]
+            }
         default: return MessageLabel.defaultAttributes
         }
     }
@@ -479,18 +542,53 @@ extension ChatViewController: MessagesDataSource, MessagesLayoutDelegate, Messag
         return [.url, .address, .phoneNumber, .date, .transitInformation, .mention, .hashtag]
     }
 
+    // MARK: - All Messages
+
+    func backgroundColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+        let sender = message.sender
+        if sender.senderId == selfSender?.senderId {
+            // our message that we've sent
+            return .link
+        }
+        return .secondarySystemBackground
+    }
+
     func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
 
         let tail: MessageStyle.TailCorner = isFromCurrentSender(message: message) ? .bottomRight : .bottomLeft
         return .bubbleTail(tail, .curved)
     }
 
+    // MARK: - MessagesDataSource
+
     func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         if isTimeLabelVisible(at: indexPath) {
-            return NSAttributedString(string: MessageKitDateFormatter.shared.string(from: message.sentDate), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 10), NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+            return NSAttributedString(string: MessageKitDateFormatter.shared.string(from: message.sentDate), attributes: [
+                                        .font: UIFont.boldSystemFont(ofSize: 10),
+                                        .foregroundColor: UIColor.darkGray])
         }
         return nil
     }
+
+    func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        if !isPreviousMessageSameSender(at: indexPath) {
+            let name = message.sender.displayName
+            return NSAttributedString(string: name, attributes: [
+                                        .font: UIFont.preferredFont(forTextStyle: .caption1)])
+        }
+        return nil
+    }
+
+    func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+
+        if !isNextMessageSameSender(at: indexPath) && isFromCurrentSender(message: message) {
+            return NSAttributedString(string: "Delivered", attributes: [
+                                        .font: UIFont.preferredFont(forTextStyle: .caption1)])
+        }
+        return nil
+    }
+
+    // MARK: - MessagesLayoutDelegate
 
     func cellTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         if isTimeLabelVisible(at: indexPath) {
@@ -499,17 +597,20 @@ extension ChatViewController: MessagesDataSource, MessagesLayoutDelegate, Messag
         return 0
     }
 
-    func cellBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return 17
-    }
-
     func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return 20
+        return !isPreviousMessageSameSender(at: indexPath) ? 0 : 0 // 20 : 0
     }
 
     func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return (!isNextMessageSameSender(at: indexPath) && isFromCurrentSender(message: message)) ? 16 : 0
     }
+
+
+    func cellBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        return 17
+    }
+
+    // MARK: - Helpers
 
     func isTimeLabelVisible(at indexPath: IndexPath) -> Bool {
         return indexPath.section % 3 == 0 && !isPreviousMessageSameSender(at: indexPath)
@@ -526,7 +627,8 @@ extension ChatViewController: MessagesDataSource, MessagesLayoutDelegate, Messag
     }
 
 
-    // MARK: - All Messages
+    // MARK: - UICollectionViewDataSource
+
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
         return messages[indexPath.section]
     }
@@ -549,16 +651,6 @@ extension ChatViewController: MessagesDataSource, MessagesLayoutDelegate, Messag
         default:
             break
         }
-    }
-
-    func backgroundColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
-        let sender = message.sender
-        if sender.senderId == selfSender?.senderId {
-            // our message that we've sent
-            return .link
-        }
-
-        return .secondarySystemBackground
     }
 
     func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {

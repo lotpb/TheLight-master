@@ -50,7 +50,7 @@ final class LookupData: UIViewController {
     private var jobArray = NSMutableArray()
     private var adproductArray = NSMutableArray()
 
-    lazy var refreshControl: UIRefreshControl = {
+    lazy private var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = .clear
         refreshControl.tintColor = .black

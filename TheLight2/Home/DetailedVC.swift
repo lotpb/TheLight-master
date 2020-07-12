@@ -304,7 +304,9 @@
     
     private func setupNavigation() {
         
-        UINavigationBar.appearance().largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white, NSAttributedString.Key.font:UIFont.boldSystemFont(ofSize: 26)]
+        UINavigationBar.appearance().largeTitleTextAttributes = [
+            .foregroundColor:UIColor.white,
+            .font:UIFont.boldSystemFont(ofSize: 26)]
         self.navigationItem.largeTitleDisplayMode = .always
         
         let searchButton = UIBarButtonItem(title: "Light", style: .plain, target: self, action: #selector(lightcamera))
@@ -686,7 +688,7 @@
     // MARK: - Speak red text
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, willSpeakRangeOfSpeechString characterRange: NSRange, utterance: AVSpeechUtterance) {
         let mutableAttributedString = NSMutableAttributedString(string: utterance.speechString)
-        mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.red, range: characterRange)
+        mutableAttributedString.addAttribute(.foregroundColor, value: UIColor.red, range: characterRange)
         subject.attributedText = mutableAttributedString
     }
     

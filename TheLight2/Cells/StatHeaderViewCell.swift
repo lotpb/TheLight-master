@@ -34,7 +34,7 @@ final class StatHeaderViewCell: UITableViewCell {
 
     lazy var headView: UIView = {
         let view = UIView()
-        view.backgroundColor = .secondarySystemGroupedBackground
+        view.backgroundColor = .systemGray5 //.secondarySystemGroupedBackground
         view.layer.cornerRadius = 10.0
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

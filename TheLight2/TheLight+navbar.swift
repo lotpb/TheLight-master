@@ -51,10 +51,12 @@ public extension UIViewController {
         app .configureWithTransparentBackground()
         app.backgroundColor = .systemBackground
         
-        app.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.label]
+        app.titleTextAttributes = [
+            .foregroundColor:UIColor.label]
+
         app.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor:UIColor.label,
-            NSAttributedString.Key.font:UIFont.boldSystemFont(ofSize: 24)]
+            .foregroundColor:UIColor.label,
+            .font:UIFont.boldSystemFont(ofSize: 24)]
         
         navigationController?.navigationBar.standardAppearance = app
         navigationController?.navigationBar.scrollEdgeAppearance = app
@@ -68,10 +70,11 @@ public extension UIViewController {
         app .configureWithTransparentBackground()
         app.backgroundColor = .systemBackground
         
-        app.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.systemRed]
+        app.titleTextAttributes = [
+            .foregroundColor:UIColor.systemRed]
         app.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor:UIColor.systemRed,
-            NSAttributedString.Key.font:UIFont.boldSystemFont(ofSize: 24)]
+            .foregroundColor:UIColor.systemRed,
+            .font:UIFont.boldSystemFont(ofSize: 24)]
         
         navigationController?.navigationBar.standardAppearance = app
         navigationController?.navigationBar.scrollEdgeAppearance = app
@@ -92,18 +95,19 @@ public extension UIViewController {
         navigationItem.titleView = titleImageView
         
         let app = UINavigationBarAppearance()
-               app .configureWithTransparentBackground()
-               app.backgroundColor = .systemBackground
-               
-               app.titleTextAttributes = [NSAttributedString.Key.foregroundColor:ColorX.twitterline]
-               app.largeTitleTextAttributes = [
-                   NSAttributedString.Key.foregroundColor:UIColor.white,
-                   NSAttributedString.Key.font:UIFont.boldSystemFont(ofSize: 24)]
-               
-               navigationController?.navigationBar.standardAppearance = app
-               navigationController?.navigationBar.scrollEdgeAppearance = app
-               navigationController?.navigationBar.isTranslucent = true
-               navigationController?.navigationBar.backgroundColor = UIColor.clear
+        app .configureWithTransparentBackground()
+        app.backgroundColor = .systemBackground
+
+        app.titleTextAttributes = [
+            .foregroundColor:ColorX.twitterline]
+        app.largeTitleTextAttributes = [
+            .foregroundColor:UIColor.white,
+            .font:UIFont.boldSystemFont(ofSize: 24)]
+
+        navigationController?.navigationBar.standardAppearance = app
+        navigationController?.navigationBar.scrollEdgeAppearance = app
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.backgroundColor = UIColor.clear
         
         let separator = UIView(frame: .init(x: 0, y: 0, width: view.frame.size.width, height: 0.5))
         separator.translatesAutoresizingMaskIntoConstraints = false

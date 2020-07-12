@@ -151,8 +151,11 @@ final class MeProfileHeader: UICollectionViewCell {
     }
     
     func updateAttributeText(value: Int, name: String) -> NSAttributedString{
-        let attributedText = NSMutableAttributedString(string: "\(value)\n", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)])
-        attributedText.append(NSAttributedString(string: name, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)]))
+        let attributedText = NSMutableAttributedString(string: "\(value)\n", attributes: [
+                                                        .font: UIFont.boldSystemFont(ofSize: 18)])
+        attributedText.append(NSAttributedString(string: name, attributes: [
+                                                    .foregroundColor: UIColor.lightGray,
+                                                    .font: UIFont.systemFont(ofSize: 14)]))
         
         return attributedText
     }

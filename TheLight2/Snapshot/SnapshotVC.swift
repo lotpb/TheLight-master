@@ -99,7 +99,7 @@ class SnapshotVC: UIViewController, UISplitViewControllerDelegate {
     private var tempYQL: String!
     private var weathYQL: String!
 
-    lazy var refreshControl: UIRefreshControl = {
+    lazy private var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = .clear
         refreshControl.tintColor = .white
