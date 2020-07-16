@@ -24,10 +24,10 @@ final class ProfileViewController: UIViewController {
                            forCellReuseIdentifier: ProfileTableViewCell.identifier)
 
         data.append(ProfileViewModel(viewModelType: .info,
-                                     title: "Name: \(UserDefaults.standard.value(forKey:"name") as? String ?? "No Name")",
+                                     title: "\(UserDefaults.standard.value(forKey:"name") as? String ?? "No Name")",
                                      handler: nil))
         data.append(ProfileViewModel(viewModelType: .info,
-                                     title: "Email: \(UserDefaults.standard.value(forKey:"email") as? String ?? "No Email")",
+                                     title: "\(UserDefaults.standard.value(forKey:"email") as? String ?? "No Email")",
                                      handler: nil))
         data.append(ProfileViewModel(viewModelType: .logout, title: "Log Out", handler: { [weak self] in
 
@@ -87,12 +87,14 @@ final class ProfileViewController: UIViewController {
                            forCellReuseIdentifier: "cell")
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.backgroundColor = .systemGroupedBackground
         tableView.tableFooterView = UIView(frame: .zero)
         tableView.tableHeaderView = createTableHeader()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        //data.removeAll()
         tableView.reloadData()
     }
 
@@ -110,7 +112,7 @@ final class ProfileViewController: UIViewController {
                                         width: view.width,
                                         height: 300))
 
-        headerView.backgroundColor = .link
+        headerView.backgroundColor = .systemBackground
 
         let imageView = UIImageView(frame: CGRect(x: (headerView.width-150) / 2,
                                                   y: 75,
@@ -147,6 +149,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         let viewModel = data[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.identifier,
                                                  for: indexPath) as! ProfileTableViewCell
+        cell.backgroundColor = .secondarySystemGroupedBackground
         cell.setUp(with: viewModel)
         return cell
     }

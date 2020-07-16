@@ -22,6 +22,7 @@
 		AF190E55249CF74000BA52D6 /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF190E54249CF74000BA52D6 /* VideoPlayerViewController.swift */; };
 		AF1D8D97242BA09B00CBD07C /* MapViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1D8D96242BA09A00CBD07C /* MapViewVC.swift */; };
 		AF1D8D9B242BA61500CBD07C /* CardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF1D8D9A242BA61400CBD07C /* CardViewController.xib */; };
+		AF2094CB24BDEB0F005594A2 /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AF2094CA24BDEB0F005594A2 /* Chat.storyboard */; };
 		AF24556422BC3A4900E36583 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF24556022BC3A4900E36583 /* SceneDelegate.swift */; };
 		AF26EF791F4B0A8F0035EAE3 /* UserWarningSpeakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF26EF781F4B0A8E0035EAE3 /* UserWarningSpeakManager.swift */; };
 		AF28425A2476AD3800079C91 /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2842592476AD3800079C91 /* FriendsViewController.swift */; };
@@ -149,7 +150,6 @@
 		AFBA4C4121CC462100F70CBE /* Supporting.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFBA4C4021CC462100F70CBE /* Supporting.storyboard */; };
 		AFBDE876249A5026003C5A5F /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBDE875249A5026003C5A5F /* ChatViewController.swift */; };
 		AFBDE878249A53E8003C5A5F /* NewConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBDE877249A53E8003C5A5F /* NewConversationViewController.swift */; };
-		AFBDE87A249A5F7A003C5A5F /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFBDE879249A5F7A003C5A5F /* Chat.storyboard */; };
 		AFBDE87C249A9F21003C5A5F /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBDE87B249A9F21003C5A5F /* DatabaseManager.swift */; };
 		AFBE77A32177729C00403CB2 /* MenuItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBE779F2177729700403CB2 /* MenuItemCell.swift */; };
 		AFBE77A42177729C00403CB2 /* SpacerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBE77A02177729900403CB2 /* SpacerView.swift */; };
@@ -216,6 +216,7 @@
 		AF190E54249CF74000BA52D6 /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
 		AF1D8D96242BA09A00CBD07C /* MapViewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewVC.swift; sourceTree = "<group>"; };
 		AF1D8D9A242BA61400CBD07C /* CardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardViewController.xib; sourceTree = "<group>"; };
+		AF2094CA24BDEB0F005594A2 /* Chat.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Chat.storyboard; path = TheLight2/Layouts/Chat.storyboard; sourceTree = "<group>"; };
 		AF24556022BC3A4900E36583 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = TheLight2/SceneDelegate.swift; sourceTree = "<group>"; };
 		AF26EF781F4B0A8E0035EAE3 /* UserWarningSpeakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWarningSpeakManager.swift; sourceTree = "<group>"; };
 		AF26EF7C1F4B0C420035EAE3 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Settings.bundle; path = TheLight2/Settings.bundle; sourceTree = "<group>"; };
@@ -349,7 +350,6 @@
 		AFBA4C4021CC462100F70CBE /* Supporting.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Supporting.storyboard; path = TheLight2/Layouts/Supporting.storyboard; sourceTree = "<group>"; };
 		AFBDE875249A5026003C5A5F /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ChatViewController.swift; path = TheLight2/SideMenu/Controller/ChatViewController.swift; sourceTree = SOURCE_ROOT; };
 		AFBDE877249A53E8003C5A5F /* NewConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NewConversationViewController.swift; path = TheLight2/SideMenu/Controller/NewConversationViewController.swift; sourceTree = SOURCE_ROOT; };
-		AFBDE879249A5F7A003C5A5F /* Chat.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Chat.storyboard; path = TheLight2/Layouts/Chat.storyboard; sourceTree = "<group>"; };
 		AFBDE87B249A9F21003C5A5F /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DatabaseManager.swift; path = TheLight2/Chat/Resources/DatabaseManager.swift; sourceTree = SOURCE_ROOT; };
 		AFBE779F2177729700403CB2 /* MenuItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuItemCell.swift; sourceTree = "<group>"; };
 		AFBE77A02177729900403CB2 /* SpacerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpacerView.swift; sourceTree = "<group>"; };
@@ -927,7 +927,7 @@
 				AFA6127320DFCC9E00B34288 /* Mapsearch.storyboard */,
 				AF2842612476AD6700079C91 /* Contacts.storyboard */,
 				AFBA4C4021CC462100F70CBE /* Supporting.storyboard */,
-				AFBDE879249A5F7A003C5A5F /* Chat.storyboard */,
+				AF2094CA24BDEB0F005594A2 /* Chat.storyboard */,
 			);
 			name = Storyboards;
 			sourceTree = "<group>";
@@ -1068,7 +1068,7 @@
 				AFF21E83216A3DE900927BDB /* MileIQ.storyboard in Resources */,
 				AF59446A22A4C511003B2E4B /* Customer.json in Resources */,
 				AF5C9E9822BEC940003D4A75 /* Preview Assets.xcassets in Resources */,
-				AFBDE87A249A5F7A003C5A5F /* Chat.storyboard in Resources */,
+				AF2094CB24BDEB0F005594A2 /* Chat.storyboard in Resources */,
 				AF0AEB1D1F4B1CBF00F0CCD7 /* Settings.bundle in Resources */,
 				AF0315A921AAF22200E3E2E8 /* Home.storyboard in Resources */,
 				AF0AEB2C1F4B1DF300F0CCD7 /* MobyDick.mp3 in Resources */,

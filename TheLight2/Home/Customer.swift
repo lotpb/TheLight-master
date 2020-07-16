@@ -469,7 +469,6 @@ final class Customer: UIViewController {
                     VC.comments = custlist[indexPath!].comments
                     //controller.complete = dateFormat.string(from: custlist[indexPath!].completion as Date)
                 }
-                
             }
             
             VC.l11 = "First"; VC.l21 = "Rate"

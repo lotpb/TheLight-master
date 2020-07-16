@@ -95,9 +95,15 @@ final class ChatViewController: MessagesViewController {
 //    }
 
     private func configureMessageInputBar() {
+
+        messageInputBar.layer.shadowColor = UIColor.black.cgColor
+        messageInputBar.layer.shadowRadius = 4
+        messageInputBar.layer.shadowOpacity = 0.3
+        messageInputBar.layer.shadowOffset = CGSize(width: 0, height: 0)
+        messageInputBar.separatorLine.isHidden = true
+
         messageInputBar.delegate = self
         messageInputBar.isTranslucent = true
-        messageInputBar.separatorLine.isHidden = true
         messageInputBar.inputTextView.backgroundColor = .secondarySystemGroupedBackground
         messageInputBar.inputTextView.placeholderTextColor = .placeholderText
         messageInputBar.inputTextView.layer.borderColor = UIColor.lightGray.cgColor
@@ -563,9 +569,7 @@ extension ChatViewController: MessagesDataSource, MessagesLayoutDelegate, Messag
 
     func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         if isTimeLabelVisible(at: indexPath) {
-            return NSAttributedString(string: MessageKitDateFormatter.shared.string(from: message.sentDate), attributes: [
-                                        .font: UIFont.boldSystemFont(ofSize: 10),
-                                        .foregroundColor: UIColor.darkGray])
+            return NSAttributedString(string: MessageKitDateFormatter.shared.string(from: message.sentDate), attributes: [.font: UIFont.boldSystemFont(ofSize: 10), .foregroundColor: UIColor.darkGray])
         }
         return nil
     }

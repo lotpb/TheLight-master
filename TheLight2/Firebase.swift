@@ -8,7 +8,6 @@
 
 import Foundation
 import FirebaseDatabase
-//import CoreLocation
 
 struct FirebaseRef {
     
@@ -27,14 +26,6 @@ struct FirebaseRef {
     static let databaseJob: DatabaseReference = databaseRoot.child("Job")
     static let databaseProd: DatabaseReference = databaseRoot.child("Product")
     static let databaseSales: DatabaseReference = databaseRoot.child("Salesman")
-
-    //static let databaseUpdatingLocations: DatabaseReference = databaseRoot.child("update_locations")
-    //static let databaseSignificantChange: DatabaseReference = databaseRoot.child("significant_change")
-    //static let databaseHeading: DatabaseReference = databaseRoot.child("headings")
-
-    //let postStorageRef = Storage.storage().reference.child("Customer_images").child(userID)
-
-    //static let databaseUsers: Storage.storage().reference().child("Customer_images").child(userID)
 }
 
 extension Database {

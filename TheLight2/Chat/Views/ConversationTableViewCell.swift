@@ -16,21 +16,25 @@ class ConversationTableViewCell: UITableViewCell {
     private let userImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 50
+        imageView.layer.cornerRadius = 25
         imageView.layer.masksToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
 
     private let userNameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 21, weight: .semibold)
+        label.font = .systemFont(ofSize: 18, weight: .semibold)
+        label.numberOfLines = 1
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
     private let userMessageLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 19, weight: .regular)
-        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 16, weight: .regular)
+        label.numberOfLines = 2
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
@@ -48,26 +52,33 @@ class ConversationTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        userImageView.frame = CGRect(x: 10,
-                                     y: 10,
-                                     width: 100,
-                                     height: 100)
+        self.addSubview(userImageView)
+        self.addSubview(userNameLabel)
+        self.addSubview(userMessageLabel)
 
-        userNameLabel.frame = CGRect(x: userImageView.right + 10,
-                                     y: 10,
-                                     width: contentView.width - 20 - userImageView.width,
-                                     height: (contentView.height-20)/2)
+        NSLayoutConstraint.activate([
+            userImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
+            userImageView.leadingAnchor.constraint( equalTo: self.leadingAnchor, constant: 10),
+            userImageView.widthAnchor.constraint(equalToConstant: 50),
+            userImageView.heightAnchor.constraint(equalToConstant: 50),
 
-        userMessageLabel.frame = CGRect(x: userImageView.right + 10,
-                                        y: userNameLabel.bottom + 10,
-                                        width: contentView.width - 20 - userImageView.width,
-                                        height: (contentView.height-20)/2)
+            userNameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
+            userNameLabel.leftAnchor.constraint( equalTo: userImageView.rightAnchor, constant: 10),
+            userNameLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -15),
+            userNameLabel.heightAnchor.constraint(equalToConstant: 22),
 
+            userMessageLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: 3),
+            userMessageLabel.leftAnchor.constraint( equalTo: userNameLabel.leftAnchor, constant: 0),
+            userMessageLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -15),
+            userNameLabel.heightAnchor.constraint(equalToConstant: 45),
+            //userNameLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -50),
+        ])
     }
 
     public func configure(with model: Conversation) {
         userMessageLabel.text = model.latestMessage.text
         userNameLabel.text = model.name
+        userMessageLabel.textColor = .lightGray
 
         let path = "images/\(model.otherUserEmail)_profile_picture.png"
         StorageManager.shared.downloadURL(for: path, completion: { [weak self] result in

@@ -42,17 +42,20 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // MARK: MileIQ
         //if (defaults.bool(forKey: "geotifyKey"))  {
 
-            let options: UNAuthorizationOptions = [.badge, .sound, .alert]
-            center.requestAuthorization(options: options) { granted, error in
-                if granted {
-                    self.locationManager.delegate = self
-
-                    self.locationManager.startMonitoringVisits()
-                    self.locationManager.allowsBackgroundLocationUpdates = true
-                    //self.locationManager.pausesLocationUpdatesAutomatically = false
-                    self.locationManager.startUpdatingLocation()  // 2
-                }
+        let options: UNAuthorizationOptions = [.badge, .sound, .alert]
+        center.requestAuthorization(options: options) { granted, error in
+            if granted {
+                //self.locationManager.requestWhenInUseAuthorization()
+                self.locationManager.requestAlwaysAuthorization()
+                self.locationManager.startMonitoringVisits()
+                self.locationManager.startMonitoringSignificantLocationChanges()
+                self.locationManager.delegate = self
+                self.locationManager.allowsBackgroundLocationUpdates = true
+                self.locationManager.showsBackgroundLocationIndicator = true
+                self.locationManager.pausesLocationUpdatesAutomatically = false
+                self.locationManager.startUpdatingLocation()
             }
+        }
         //}
 
         // MARK: Firebase
@@ -69,13 +72,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                    registerBackgroundTaks()
                }
         set3DTouch()
-        self.askAlwaysPermission()
+        application.applicationIconBadgeNumber = 0
 
         return true
-    }
-
-    func askAlwaysPermission() {
-      locationManager.requestAlwaysAuthorization()
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
@@ -172,7 +171,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - System
     func applicationDidBecomeActive(_ application: UIApplication) {
         AppEvents.activateApp()
-        application.applicationIconBadgeNumber = 0 //dont work anymore
         center.removeAllPendingNotificationRequests()
         center.removeAllDeliveredNotifications()
     }
@@ -299,41 +297,69 @@ extension AppDelegate {
     
     /// MARK: - Geotify
     func handleEvent(forRegion region: CLRegion!, didEnter: Bool) {
-        let message = didEnter ? "Alert! You have entered the region ⚾️" : "Alert! You have exited the region ⚾️"
-        //guard let message = note(from: region.identifier) else { return }
-        DispatchQueue.main.sync {
-            if UIApplication.shared.applicationState == .active {
 
-//                let view = window?.rootViewController
-//                let alert = UIAlertController(title: "Geofence crossed", message: message, preferredStyle: .alert)
-//                let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-//                alert.addAction(action)
-//                view?.present(alert, animated: true, completion: nil)
-
-                guard let message = note(from: region.identifier) else { return }
-                window?.rootViewController?.showAlert(title: "Geofence crossed", message: message)
-
-            } else {
-
-                guard let body = note(from: region.identifier) else { return }
-                let content = UNMutableNotificationContent()
-                content.title = message
-                content.body = body
-                content.badge = UIApplication.shared.applicationIconBadgeNumber + 1 as NSNumber
-                content.sound = .default //UNNotificationSound(named: UNNotificationSoundName(rawValue: "Tornado.caf"))
-                content.categoryIdentifier = "myCategory"
-
-                let trigger = UNLocationNotificationTrigger(region: region, repeats: false)
-                //let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-
-                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-                center.add(request)
-            }
+        guard let reminder = note(from: region.identifier) else {
+            notifyUser(title: "Reminder notifiction error", subtitle: "One of your notifications has just been triggered but error restriving notification data", notes: nil)
+            return
         }
+
+        let message = didEnter ? "Alert! 🚘 You have entered the region " : "Alert! ⚾️ You have exited the region "
+
         UserWarningSpeakManager.warning.startSpeaking(message)
         let FeedbackGenerator = UINotificationFeedbackGenerator()
         FeedbackGenerator.notificationOccurred(.warning)
+        
+        notifyUser(title: message, subtitle: reminder.description, notes: "Geofence crossed")
+
+
+        //guard let message = note(from: region.identifier) else { return }
+//        if UIApplication.shared.applicationState == .active {
+//
+//            //guard let message = note(from: region.identifier) else { return }
+//            //window?.rootViewController?.showAlert(title: "Geofence crossed", message: "Crap out")
+//
+//            window?.rootViewController?.showAlert(title: nil, message: message)
+//
+//        } else {
+//
+//            guard let body = note(from: region.identifier) else { return }
+//            let content = UNMutableNotificationContent()
+//            content.title = message
+//            content.subtitle = note(from: region.description)!
+//            content.body = body
+//            content.badge = UIApplication.shared.applicationIconBadgeNumber + 1 as NSNumber
+//            content.sound = .default
+//            content.categoryIdentifier = "myCategory"
+//
+//            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+//            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+//            center.add(request)
+//        }
+
+    }
+
+    /// MARK: - Geotify Notification
+    func notifyUser(title: String, subtitle: String, notes: String?) {
+        // show an alert if applocation is active
+        if UIApplication.shared.applicationState == .active {
+            window?.rootViewController?.showAlert(title: title, message: subtitle)
+        } else {
+            let content = UNMutableNotificationContent()
+            content.title = title
+            content.subtitle = subtitle
+            if let notes = notes {
+                content.body = notes
+            }
+            content.badge = UIApplication.shared.applicationIconBadgeNumber + 1 as NSNumber
+            content.sound = .defaultCritical //UNNotificationSound(named: UNNotificationSoundName(rawValue: "Tornado.caf"))
+            content.categoryIdentifier = "myCategory"
+            let request = UNNotificationRequest(identifier: "Notification", content: content, trigger: nil)
+            center.add(request, withCompletionHandler: { (error) in
+                if let error = error {
+                    print(error)
+                }
+            })
+        }
     }
     
     /// MARK: - Geotify Note
@@ -379,7 +405,6 @@ extension AppDelegate: CLLocationManagerDelegate {
         
         if region is CLCircularRegion {
             self.handleEvent(forRegion: region, didEnter: true)
-
             //geoSubtitle = "enter \(region.notifyOnEntry), \(region.notifyOnExit)"
         }
     }
@@ -389,9 +414,6 @@ extension AppDelegate: CLLocationManagerDelegate {
         
         if region is CLCircularRegion {
             self.handleEvent(forRegion: region, didEnter: false)
-            let FeedbackGenerator = UINotificationFeedbackGenerator()
-            FeedbackGenerator.notificationOccurred(.warning)
-            UserWarningSpeakManager.warning.startSpeaking("Alert! You have exited the region")
             //geoSubtitle = "exit \(region.notifyOnEntry), \(region.notifyOnExit)"
             //UserWarningSpeakManager.warning.stopSpeaking()
         }
@@ -420,13 +442,12 @@ extension AppDelegate: CLLocationManagerDelegate {
         let clLocation = CLLocation(latitude: visit.coordinate.latitude, longitude: visit.coordinate.longitude)
         
         // Get location description
-        AppDelegate.geoCoder.reverseGeocodeLocation(clLocation) { [weak self] placemarks, _ in
-            guard let self = self else { return }
+        AppDelegate.geoCoder.reverseGeocodeLocation(clLocation, completionHandler: { placemarks, _ in
             if let place = placemarks?.first {
                 let description = "\(place)"
                 self.newVisitReceived(visit, description: description)
             }
-        }
+        })
     }
     
     func newVisitReceived(_ visit: CLVisit, description: String) {

@@ -158,7 +158,6 @@ struct Font {
     static let celltitle12l = UIFont.systemFont(ofSize: 12, weight: .light)
     
     struct Blog {
-        
         static let celltitlePad = Font.celltitle22m
         static let cellsubtitlePad = Font.celltitle22r
         static let celldatePad = Font.celltitle18l
