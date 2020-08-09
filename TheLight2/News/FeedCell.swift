@@ -40,7 +40,7 @@ class FeedCell: CollectionViewCell, UICollectionViewDataSource, UICollectionView
         return cv
     }()
     
-    let newsImageview: CustomImageView = { //firebase only
+    private let newsImageview: CustomImageView = { //firebase only
         let imageView = CustomImageView()
         imageView.backgroundColor = .black
         imageView.contentMode = .scaleAspectFill //.scaleAspectFill //.scaleAspectFit

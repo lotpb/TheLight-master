@@ -261,8 +261,7 @@ final class Employee: UIViewController {
         
         if segue.identifier == "employdetailSegue" {
             
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .none
+            MasterViewController.numberFormatter.numberStyle = .none
             
             let VC = (segue.destination as! UINavigationController).topViewController as! LeadDetail
             VC.formController = "Employee"
@@ -321,9 +320,9 @@ final class Employee: UIViewController {
                 let employ: EmployModel
                 employ = filteredTitles[indexPath!]
                 
-                VC.leadNo =  formatter.string(from: LeadNo! as NSNumber)
-                VC.active = formatter.string(from: Active! as NSNumber)
-                VC.zip = formatter.string(from: Zip! as NSNumber)
+                VC.leadNo =  MasterViewController.numberFormatter.string(from: LeadNo! as NSNumber)
+                VC.active = MasterViewController.numberFormatter.string(from: Active! as NSNumber)
+                VC.zip = MasterViewController.numberFormatter.string(from: Zip! as NSNumber)
                 VC.objectId = employlist[indexPath!].employeeId
                 VC.date = employlist[indexPath!].email
                 VC.name = String(format: "%@ %@ %@", employ.first, employ.lastname, employ.company).removeWhiteSpace()
@@ -350,8 +349,8 @@ final class Employee: UIViewController {
                 
                 if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     
-                    VC.leadNo =  formatter.string(from: LeadNo! as NSNumber)
-                    VC.active = formatter.string(from: Active! as NSNumber)
+                    VC.leadNo =  MasterViewController.numberFormatter.string(from: LeadNo! as NSNumber)
+                    VC.active = MasterViewController.numberFormatter.string(from: Active! as NSNumber)
                     VC.objectId = (_feedItems[indexPath!] as AnyObject).value(forKey: "objectId") as? String
                     VC.date = (_feedItems[indexPath!] as AnyObject).value(forKey: "Email") as? String
                     VC.name = String(format: "%@ %@ %@", ((_feedItems[indexPath!] as AnyObject).value(forKey: "First") as? String)!, ((_feedItems[indexPath!] as AnyObject).value(forKey: "Last") as? String)!, ((_feedItems[indexPath!] as AnyObject).value(forKey: "Company") as? String)!).removeWhiteSpace()
@@ -378,9 +377,9 @@ final class Employee: UIViewController {
                 } else {
                     
                     //firebase
-                    VC.leadNo =  formatter.string(from: LeadNo! as NSNumber)
-                    VC.active = formatter.string(from: Active! as NSNumber)
-                    VC.zip = formatter.string(from: Zip! as NSNumber)
+                    VC.leadNo =  MasterViewController.numberFormatter.string(from: LeadNo! as NSNumber)
+                    VC.active = MasterViewController.numberFormatter.string(from: Active! as NSNumber)
+                    VC.zip = MasterViewController.numberFormatter.string(from: Zip! as NSNumber)
                     VC.objectId = employlist[indexPath!].employeeId
                     VC.leadNo = employlist[indexPath!].employeeId
                     VC.date = employlist[indexPath!].email

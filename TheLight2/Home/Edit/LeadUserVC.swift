@@ -191,9 +191,8 @@ final class LeadUserVC: UIViewController, UITableViewDelegate, UITableViewDataSo
             }
             
         } else {
-            
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .currency
+
+            MasterViewController.numberFormatter.numberStyle = .currency
             
             if ((defaults.string(forKey: "backendKey")) == "Parse") {
                 cell.blogtitleLabel!.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "LastName") as? String
@@ -201,7 +200,7 @@ final class LeadUserVC: UIViewController, UITableViewDelegate, UITableViewDataSo
                 cell.blogmsgDateLabel!.text = (MasterViewController.dateFormatter.string(from: date)as String??)!
                 var CommentCount:Int? = (_feedItems[indexPath.row] as AnyObject).value(forKey: "Amount")as? Int
                 if CommentCount == nil { CommentCount = 0 }
-                cell.commentLabel?.text = formatter.string(from: CommentCount! as NSNumber)
+                cell.commentLabel?.text = MasterViewController.numberFormatter.string(from: CommentCount! as NSNumber)
             } else {
                 //firebase
                 

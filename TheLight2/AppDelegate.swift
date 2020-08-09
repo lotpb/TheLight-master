@@ -25,9 +25,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     var defaults = UserDefaults.standard
     
     let locationManager = CLLocationManager() //geotify
-    //mileIQ
-    var destLocation: CLLocation? // for distance calculation
-    var distance = 0.0
+
     //journal
     static let geoCoder = CLGeocoder()
 
@@ -40,23 +38,22 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         // MARK: MileIQ
-        //if (defaults.bool(forKey: "geotifyKey"))  {
-
-        let options: UNAuthorizationOptions = [.badge, .sound, .alert]
-        center.requestAuthorization(options: options) { granted, error in
-            if granted {
-                //self.locationManager.requestWhenInUseAuthorization()
-                self.locationManager.requestAlwaysAuthorization()
-                self.locationManager.startMonitoringVisits()
-                self.locationManager.startMonitoringSignificantLocationChanges()
-                self.locationManager.delegate = self
-                self.locationManager.allowsBackgroundLocationUpdates = true
-                self.locationManager.showsBackgroundLocationIndicator = true
-                self.locationManager.pausesLocationUpdatesAutomatically = false
-                self.locationManager.startUpdatingLocation()
+        if (defaults.bool(forKey: "geotifyKey"))  {
+            let options: UNAuthorizationOptions = [.badge, .sound, .alert]
+            center.requestAuthorization(options: options) { granted, error in
+                if granted {
+                    //self.locationManager.requestWhenInUseAuthorization()
+                    self.locationManager.requestAlwaysAuthorization()
+                    self.locationManager.startMonitoringVisits()
+                    self.locationManager.startMonitoringSignificantLocationChanges()
+                    self.locationManager.delegate = self
+                    self.locationManager.allowsBackgroundLocationUpdates = true
+                    self.locationManager.showsBackgroundLocationIndicator = true
+                    self.locationManager.pausesLocationUpdatesAutomatically = false
+                    self.locationManager.startUpdatingLocation()
+                }
             }
         }
-        //}
 
         // MARK: Firebase
         FirebaseApp.configure()
@@ -68,9 +65,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         registerLocalNotification()
         registerCategories()
         // MARK: BackGround Tasks
-               if UserDefaults.standard.bool(forKey: "AllowBackgroundFetch") {
-                   registerBackgroundTaks()
-               }
+        if defaults.bool(forKey: "AllowBackgroundFetch") {
+            registerBackgroundTaks()
+        }
         set3DTouch()
         application.applicationIconBadgeNumber = 0
 
@@ -167,7 +164,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         center.add(request)
     }
 
-
     // MARK: - System
     func applicationDidBecomeActive(_ application: UIApplication) {
         AppEvents.activateApp()
@@ -177,7 +173,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         cancelAllPandingBGTask()
-        //fireBackgrounfNotification()
         scheduleAppRefresh()
     }
 
@@ -227,7 +222,7 @@ extension AppDelegate {
         let notificationRequest = UNNotificationRequest(identifier: "local_notification", content: notificationContent, trigger: notificationTrigger)
 
         // Add Request to User Notification Center
-        UNUserNotificationCenter.current().add(notificationRequest) { (error) in
+        center.add(notificationRequest) { (error) in
             if let error = error {
                 print("Unable to Add Notification Request (\(error), \(error.localizedDescription))")
             }
@@ -299,57 +294,34 @@ extension AppDelegate {
     func handleEvent(forRegion region: CLRegion!, didEnter: Bool) {
 
         guard let reminder = note(from: region.identifier) else {
-            notifyUser(title: "Reminder notifiction error", subtitle: "One of your notifications has just been triggered but error restriving notification data", notes: nil)
+            notifyUser(title: "Reminder notifiction error", subtitle: "One of your notifications has just been triggered but error restriving notification data", notes: "")
             return
         }
 
-        let message = didEnter ? "Alert! 🚘 You have entered the region " : "Alert! ⚾️ You have exited the region "
+        let message = didEnter ? "Alert! 🚘 You have entered the region " : "Alert! 🚘 You have exited the region "
 
         UserWarningSpeakManager.warning.startSpeaking(message)
         let FeedbackGenerator = UINotificationFeedbackGenerator()
         FeedbackGenerator.notificationOccurred(.warning)
         
-        notifyUser(title: message, subtitle: reminder.description, notes: "Geofence crossed")
-
-
-        //guard let message = note(from: region.identifier) else { return }
-//        if UIApplication.shared.applicationState == .active {
-//
-//            //guard let message = note(from: region.identifier) else { return }
-//            //window?.rootViewController?.showAlert(title: "Geofence crossed", message: "Crap out")
-//
-//            window?.rootViewController?.showAlert(title: nil, message: message)
-//
-//        } else {
-//
-//            guard let body = note(from: region.identifier) else { return }
-//            let content = UNMutableNotificationContent()
-//            content.title = message
-//            content.subtitle = note(from: region.description)!
-//            content.body = body
-//            content.badge = UIApplication.shared.applicationIconBadgeNumber + 1 as NSNumber
-//            content.sound = .default
-//            content.categoryIdentifier = "myCategory"
-//
-//            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-//            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-//            center.add(request)
-//        }
-
+        notifyUser(title: message, subtitle: "Geofence crossed", notes: reminder.description)
     }
 
     /// MARK: - Geotify Notification
-    func notifyUser(title: String, subtitle: String, notes: String?) {
-        // show an alert if applocation is active
+    func notifyUser(title: String, subtitle: String?, notes: String) {
+
         if UIApplication.shared.applicationState == .active {
+
             window?.rootViewController?.showAlert(title: title, message: subtitle)
+
         } else {
             let content = UNMutableNotificationContent()
             content.title = title
+            content.body = notes
+            if let subtitle = subtitle {
             content.subtitle = subtitle
-            if let notes = notes {
-                content.body = notes
             }
+
             content.badge = UIApplication.shared.applicationIconBadgeNumber + 1 as NSNumber
             content.sound = .defaultCritical //UNNotificationSound(named: UNNotificationSoundName(rawValue: "Tornado.caf"))
             content.categoryIdentifier = "myCategory"
@@ -391,8 +363,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         if response.actionIdentifier == "delete" {
             print("Delete")
         }
-
-        //print("Notification being triggered - didReceive")
         completionHandler()
     }
 }
@@ -442,7 +412,9 @@ extension AppDelegate: CLLocationManagerDelegate {
         let clLocation = CLLocation(latitude: visit.coordinate.latitude, longitude: visit.coordinate.longitude)
         
         // Get location description
-        AppDelegate.geoCoder.reverseGeocodeLocation(clLocation, completionHandler: { placemarks, _ in
+        AppDelegate.geoCoder.reverseGeocodeLocation(clLocation, completionHandler: { [weak self] placemarks, _ in
+            guard let self = self else { return }
+
             if let place = placemarks?.first {
                 let description = "\(place)"
                 self.newVisitReceived(visit, description: description)

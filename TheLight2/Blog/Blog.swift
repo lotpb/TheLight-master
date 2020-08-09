@@ -389,7 +389,6 @@ final class Blog: UIViewController {
     
     // MARK: - imgLoadSegue
     @objc func imgLoadSegue(sender: UITapGestureRecognizer) {
-    //@objc func imgLoadSegue(_ sender: UITapGestureRecognizer) {
         if ((defaults.string(forKey: "backendKey")) == "Parse") {
             titleLabel = ((_feedItems.object(at: (sender.view!.tag)) as AnyObject).value(forKey: "PostBy") as? String)!
         } else {

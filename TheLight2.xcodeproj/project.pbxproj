@@ -209,7 +209,6 @@
 		AF0A16BB20166FD100D7AFDF /* QRCodeReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeReader.swift; sourceTree = "<group>"; };
 		AF0AEB2F1F4B220200F0CCD7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		AF0C5DC5216CE630008862EE /* AccountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountCell.swift; sourceTree = "<group>"; };
-		AF0E15F41EE5D37B0061681C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreLocation.framework; sourceTree = "<group>"; };
 		AF12AABE234CFBE7008793B3 /* SplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SplitViewController.swift; path = TheLight2/SplitViewController.swift; sourceTree = "<group>"; };
 		AF144BD221694B890025E081 /* VisitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VisitModel.swift; path = TheLight2/Model/VisitModel.swift; sourceTree = "<group>"; };
 		AF190E52249CF6C700BA52D6 /* LocationPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerViewController.swift; sourceTree = "<group>"; };
@@ -429,7 +428,6 @@
 			isa = PBXGroup;
 			children = (
 				AF3752222298356700579D81 /* WebKit.framework */,
-				AF0E15F41EE5D37B0061681C /* CoreLocation.framework */,
 				AF0AEB2F1F4B220200F0CCD7 /* CoreLocation.framework */,
 				AFA5616E1ED3169C000EF656 /* MapKit.framework */,
 				2C9D920C40EFD7EA10EE4680 /* Pods_TheLight2.framework */,

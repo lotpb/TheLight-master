@@ -281,8 +281,7 @@ final class Customer: UIViewController {
         MasterViewController.dateFormatter.dateFormat = "MMM dd yyyy"
         if segue.identifier == "custdetailSegue" {
             
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .none
+            MasterViewController.numberFormatter.numberStyle = .none
             
             let VC = (segue.destination as! UINavigationController).topViewController as! LeadDetail
             VC.formController = "Customer"
@@ -383,14 +382,14 @@ final class Customer: UIViewController {
                 let cust: CustModel
                 cust = filteredTitles[indexPath!]
                 
-                VC.leadNo = formatter.string(from: LeadNo! as NSNumber)
-                VC.zip = formatter.string(from: Zip! as NSNumber)
-                VC.amount = formatter.string(from: Amount! as NSNumber)
-                VC.tbl22 = formatter.string(from: SalesNo! as NSNumber)
-                VC.tbl23 = formatter.string(from: JobNo! as NSNumber)
-                VC.tbl24 = formatter.string(from: AdNo! as NSNumber)
-                VC.tbl25 = formatter.string(from: Quan! as NSNumber)
-                VC.active = formatter.string(from: Active! as NSNumber)
+                VC.leadNo = MasterViewController.numberFormatter.string(from: LeadNo! as NSNumber)
+                VC.zip = MasterViewController.numberFormatter.string(from: Zip! as NSNumber)
+                VC.amount = MasterViewController.numberFormatter.string(from: Amount! as NSNumber)
+                VC.tbl22 = MasterViewController.numberFormatter.string(from: SalesNo! as NSNumber)
+                VC.tbl23 = MasterViewController.numberFormatter.string(from: JobNo! as NSNumber)
+                VC.tbl24 = MasterViewController.numberFormatter.string(from: AdNo! as NSNumber)
+                VC.tbl25 = MasterViewController.numberFormatter.string(from: Quan! as NSNumber)
+                VC.active = MasterViewController.numberFormatter.string(from: Active! as NSNumber)
                 VC.objectId = cust.custId
                 VC.date = MasterViewController.dateFormatter.string(from: cust.creationDate as Date)
                 VC.name = cust.lastname
@@ -412,15 +411,15 @@ final class Customer: UIViewController {
                 
                 if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     
-                    VC.custNo = formatter.string(from: CustNo! as NSNumber)
-                    VC.leadNo = formatter.string(from: LeadNo! as NSNumber)
-                    VC.zip = formatter.string(from: Zip! as NSNumber)
-                    VC.amount = formatter.string(from: Amount! as NSNumber)
-                    VC.tbl22 = formatter.string(from: SalesNo! as NSNumber)
-                    VC.tbl23 = formatter.string(from: JobNo! as NSNumber)
-                    VC.tbl24 = formatter.string(from: AdNo! as NSNumber)
-                    VC.tbl25 = formatter.string(from: Quan! as NSNumber)
-                    VC.active = formatter.string(from: Active! as NSNumber)
+                    VC.custNo = MasterViewController.numberFormatter.string(from: CustNo! as NSNumber)
+                    VC.leadNo = MasterViewController.numberFormatter.string(from: LeadNo! as NSNumber)
+                    VC.zip = MasterViewController.numberFormatter.string(from: Zip! as NSNumber)
+                    VC.amount = MasterViewController.numberFormatter.string(from: Amount! as NSNumber)
+                    VC.tbl22 = MasterViewController.numberFormatter.string(from: SalesNo! as NSNumber)
+                    VC.tbl23 = MasterViewController.numberFormatter.string(from: JobNo! as NSNumber)
+                    VC.tbl24 = MasterViewController.numberFormatter.string(from: AdNo! as NSNumber)
+                    VC.tbl25 = MasterViewController.numberFormatter.string(from: Quan! as NSNumber)
+                    VC.active = MasterViewController.numberFormatter.string(from: Active! as NSNumber)
                     VC.objectId = (_feedItems[indexPath!] as AnyObject).value(forKey: "objectId") as? String
                     VC.date = (_feedItems[indexPath!] as AnyObject).value(forKey: "Date") as? String
                     VC.name = (_feedItems[indexPath!] as AnyObject).value(forKey: "LastName") as? String
@@ -440,10 +439,10 @@ final class Customer: UIViewController {
                 } else {
                     //firebase
                     VC.leadNo = custlist[indexPath!].custId
-                    VC.zip = formatter.string(from: Zip! as NSNumber)
-                    VC.amount = formatter.string(from: Amount! as NSNumber)
+                    VC.zip = MasterViewController.numberFormatter.string(from: Zip! as NSNumber)
+                    VC.amount = MasterViewController.numberFormatter.string(from: Amount! as NSNumber)
 
-                    VC.active = formatter.string(from: Active! as NSNumber)
+                    VC.active = MasterViewController.numberFormatter.string(from: Active! as NSNumber)
                     VC.objectId = custlist[indexPath!].custId
                     VC.date = MasterViewController.dateFormatter.string(from: custlist[indexPath!].creationDate as Date)
                     VC.lastname = custlist[indexPath!].lastname
@@ -459,10 +458,10 @@ final class Customer: UIViewController {
                     VC.tbl15 = custlist[indexPath!].email as NSString
                     VC.tbl17 = custlist[indexPath!].photo as String
                     VC.tbl21 = custlist[indexPath!].rate as NSString
-                    VC.tbl22 = formatter.string(from: SalesNo! as NSNumber)
-                    VC.tbl23 = formatter.string(from: JobNo! as NSNumber)
-                    VC.tbl24 = formatter.string(from: AdNo! as NSNumber)
-                    VC.tbl25 = formatter.string(from: Quan! as NSNumber)
+                    VC.tbl22 = MasterViewController.numberFormatter.string(from: SalesNo! as NSNumber)
+                    VC.tbl23 = MasterViewController.numberFormatter.string(from: JobNo! as NSNumber)
+                    VC.tbl24 = MasterViewController.numberFormatter.string(from: AdNo! as NSNumber)
+                    VC.tbl25 = MasterViewController.numberFormatter.string(from: Quan! as NSNumber)
                     VC.tbl26 = MasterViewController.dateFormatter.string(from: custlist[indexPath!].start as Date) as NSString
                     VC.tbl27 = MasterViewController.dateFormatter.string(from: custlist[indexPath!].completion as Date)
                     VC.photo = custlist[indexPath!].photo as String
@@ -612,12 +611,12 @@ extension Customer: UITableViewDataSource {
                 cell.myLabel10.text = (_feedItems[indexPath.row] as AnyObject).value(forKey: "Date") as? String
                 
                 var Amount:Int? = (_feedItems[indexPath.row] as AnyObject).value(forKey: "Amount")as? Int
-                let formatter = NumberFormatter()
-                formatter.numberStyle = .currency
+
+                MasterViewController.numberFormatter.numberStyle = .currency
                 if Amount == nil {
                     Amount = 0
                 }
-                cell.myLabel20.text = formatter.string(from: Amount! as NSNumber)
+                cell.myLabel20.text = MasterViewController.numberFormatter.string(from: Amount! as NSNumber)
                 
                 if ((_feedItems[indexPath.row] as AnyObject).value(forKey: "Comments") as? String == nil) || ((_feedItems[indexPath.row] as AnyObject).value(forKey: "Comments") as? String == "") {
                     cell.custreplyButton!.tintColor = .lightGray

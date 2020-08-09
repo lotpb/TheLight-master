@@ -29,9 +29,10 @@ final class Web: UIViewController, UISplitViewControllerDelegate, SFSafariViewCo
                       "http://www.appcoda.com/tutorials/",
                       "http://www.cultofmac.com/category/news/"]
     
-    lazy private var webView: WKWebView = {
+    private var webView: WKWebView = {
         let config = WKWebViewConfiguration()
         let preferences = WKPreferences()
+        preferences.javaScriptEnabled = true
         config.preferences = preferences
         let webView: WKWebView = WKWebView(frame: CGRect.zero, configuration: config)
         return webView

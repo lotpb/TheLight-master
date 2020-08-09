@@ -20,14 +20,14 @@ final class News: UICollectionViewController, SearchDelegate {
     
     private var tabBarStr: String?
     
-    private let titles = ["Home", "Trending", "Subscriptions", "Account"]
+    private let titles = ["News", "Trending", "Subscriptions", "Account"]
     
     private var searchController: UISearchController!
     private var resultsController: UITableViewController!
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "  Home"
+        label.text = "  News"
         label.textColor = .systemGray
         label.font = UIFont.systemFont(ofSize: 20)
         return label
@@ -91,8 +91,8 @@ final class News: UICollectionViewController, SearchDelegate {
         
         //added below
         view.addSubview(collectionView!)
-        collectionView?.contentInset = .init(top: 100,left: 0,bottom: 0,right: 0)
-        collectionView?.scrollIndicatorInsets = .init(top: 100,left: 0,bottom: 0,right: 0)
+        collectionView?.contentInset = .init(top: 245,left: 0,bottom: 0,right: 0)
+        collectionView?.scrollIndicatorInsets = .init(top: 245,left: 0,bottom: 0,right: 0)
         collectionView?.isPagingEnabled = true
         collectionView?.isDirectionalLockEnabled = true
         collectionView?.bounces = false
@@ -224,10 +224,6 @@ final class News: UICollectionViewController, SearchDelegate {
             titleLabel.text = "\(titles[index])"
         }
     }
-    
-//    @IBSegueAction func SwiftUIVC(_ coder: NSCoder) -> UIViewController? {
-//        return UIHostingController(coder: coder, rootView: BookListViewUI())
-//    }
 
     @objc func handleMore() {
         //show menu
@@ -278,7 +274,7 @@ final class News: UICollectionViewController, SearchDelegate {
 extension News: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return .init(width: view.frame.width, height: view.frame.height - 50)
+        return .init(width: view.frame.width, height: view.frame.height - 0)
     }
 }
 

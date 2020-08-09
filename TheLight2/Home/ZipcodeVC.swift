@@ -285,12 +285,11 @@ final class ZipcodeVC: UIViewController {
                     let indexPath = tableView!.indexPathForSelectedRow!.row
                     if ((defaults.string(forKey: "backendKey")) == "Parse") {
                         
-                        let numberFormatter = NumberFormatter()
-                        numberFormatter.numberStyle = .none
+                        MasterViewController.numberFormatter.numberStyle = .none
                         
                         var Zip = (_feedItems[indexPath] as AnyObject).value(forKey: "zipCode") as? String
                         if Zip == nil { Zip = "0" }
-                        let myZip =  numberFormatter.number(from: Zip! as String)
+                        let myZip =  MasterViewController.numberFormatter.number(from: Zip! as String)
                         
                         VC.objectId = (_feedItems[indexPath] as AnyObject).value(forKey: "objectId") as? String
                         //VC.frm11 = (_feedItems[indexPath] as AnyObject).value(forKey: "Active") as? String

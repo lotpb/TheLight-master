@@ -44,7 +44,7 @@ class PlaceCell: UICollectionViewCell {
                 }
             }
 
-            let dateStr = mapStart!.arrivaldate
+            let dateStr = mapStart!.departuredate
             let date = DateUtils.dateFromString(string: dateStr, format: "yyyy/MM/dd HH:mm:ss Z")
             titleTimeLabel.text = DateUtils.stringFromDate(date: date, format: "h:mm a")
 

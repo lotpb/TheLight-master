@@ -51,7 +51,6 @@ final class MapViewVC: UIViewController {
     private let locationManager = CLLocationManager()
     private let regionInMeters: Double = 10000
     private var previousLocation: CLLocation?
-    private let geoCoder = CLGeocoder()
     private var directionsArray: [MKDirections] = []
 
     private var destStr: String?
@@ -423,7 +422,7 @@ final class MapViewVC: UIViewController {
             startPoint = ""
         }
         
-        geoCoder.geocodeAddressString(destStr!) { (placemarks, error) in
+        AppDelegate.geoCoder.geocodeAddressString(destStr!) { (placemarks, error) in
             
             guard placemarks != nil else {
                 return
@@ -904,9 +903,9 @@ extension MapViewVC: MKMapViewDelegate {
         guard center.distance(from: previousLocation) > 50 else { return }
         self.previousLocation = center
         
-        geoCoder.cancelGeocode()
+        AppDelegate.geoCoder.cancelGeocode()
         
-        geoCoder.reverseGeocodeLocation(center) { [weak self] (placemarks, error) in
+        AppDelegate.geoCoder.reverseGeocodeLocation(center) { [weak self] (placemarks, error) in
             guard let self = self else { return }
             
             if let _ = error {

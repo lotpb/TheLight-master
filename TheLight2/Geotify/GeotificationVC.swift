@@ -78,7 +78,7 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, UI
     private let titleBtn: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Geotify: 0", for: .normal)
-        button.backgroundColor = .black
+        button.backgroundColor = .secondarySystemGroupedBackground
         button.layer.cornerRadius = 24.0
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.borderWidth = 3.0
@@ -149,12 +149,12 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, UI
         return button
     }()
     
-    static let numberFormatter: NumberFormatter =  { //speed label
-        let mf = NumberFormatter()
-        mf.minimumFractionDigits = 0
-        mf.maximumFractionDigits = 0
-        return mf
-    }()
+//    static let numberFormatter: NumberFormatter =  { //speed label
+//        let mf = NumberFormatter()
+//        mf.minimumFractionDigits = 0
+//        mf.maximumFractionDigits = 0
+//        return mf
+//    }()
     
     private let speedLabel: UILabel = {
         let label = UILabel()
@@ -237,7 +237,10 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, UI
             locationManager.activityType = .automotiveNavigation
             locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
             locationManager.allowsBackgroundLocationUpdates = true //added
-            locationManager.pausesLocationUpdatesAutomatically = true
+            locationManager.pausesLocationUpdatesAutomatically = false
+
+            locationManager.distanceFilter = 1.0
+            locationManager.headingFilter = 0.1
         }
         //journal
         let annotations = LocationsStorage.shared.locations.map { annotationForLocation($0) }
@@ -301,6 +304,7 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, UI
 
         self.mapView.delegate = self
         self.mapView.showsUserLocation = true
+        centerViewOnUser()
         self.mapView.userTrackingMode = .follow //.followWithHeading
         self.mapView.isZoomEnabled = true
         self.mapView.isScrollEnabled = true
@@ -698,6 +702,15 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, UI
             locationManager.stopMonitoring(for: circularRegion)
         }
     }
+
+    private func centerViewOnUser() {
+        guard let location = locationManager.location?.coordinate else {return}
+
+        let span:MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+
+        let coordinateRegion = MKCoordinateRegion(center: location, span: span)
+            mapView.setRegion(coordinateRegion, animated: true)
+    }
     
     //MARK: - Regions
 
@@ -705,7 +718,7 @@ final class GeotificationVC: UIViewController, UISplitViewControllerDelegate, UI
         
         let coordinates = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         circle = MKCircle(center: coordinates, radius: 200000)
-        self.mapView.setRegion(MKCoordinateRegion(center: coordinates, span: MKCoordinateSpan(latitudeDelta: 7, longitudeDelta: 7)), animated: true)
+        //self.mapView.setRegion(MKCoordinateRegion(center: coordinates, span: MKCoordinateSpan(latitudeDelta: 7, longitudeDelta: 7)), animated: true)
         self.mapView.addOverlay(circle)
     }
 
@@ -867,7 +880,7 @@ extension GeotificationVC: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
 
         // MARK: - getAddress
-        CLGeocoder().reverseGeocodeLocation(manager.location!) { [weak self] (placemarks, error)->Void in
+        AppDelegate.geoCoder.reverseGeocodeLocation(manager.location!) { [weak self] (placemarks, error)->Void in
             guard let self = self else { return }
             if (error != nil) {
                 self.showAlert(title: "Alert", message: "Reverse geocoder failed with error" + error!.localizedDescription)
@@ -885,7 +898,7 @@ extension GeotificationVC: CLLocationManagerDelegate {
         // MARK: - Map Info
         if let location = locations.last { //locations.first
             altitudeLabel.text = String(format: "Alt: %.2f", location.altitude)
-            speedLabel.text = String(format: "Speed: %.0f", location.speed)
+            speedLabel.text = String(format: "Speed: %.0f", manager.location!.speed)
             coarseLabel.text = String(format: "Course: %.0f", location.course) //"\(location.course)˚"
         }
     }

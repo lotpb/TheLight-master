@@ -262,8 +262,7 @@ final class Vendor: UIViewController {
         MasterViewController.dateFormatter.dateFormat = "MMM dd yyyy"
         if segue.identifier == "vendordetailSegue" {
             
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .none
+            MasterViewController.numberFormatter.numberStyle = .none
             
             let VC = (segue.destination as! UINavigationController).topViewController as! LeadDetail
             VC.formController = "Vendor"
@@ -321,15 +320,15 @@ final class Vendor: UIViewController {
                 let vend: VendModel
                 vend = filteredTitles[indexPath!]
                 
-                VC.leadNo =  formatter.string(from: LeadNo! as NSNumber)
-                VC.active = formatter.string(from: Active! as NSNumber)
+                VC.leadNo =  MasterViewController.numberFormatter.string(from: LeadNo! as NSNumber)
+                VC.active = MasterViewController.numberFormatter.string(from: Active! as NSNumber)
                 VC.objectId = vend.vendId
                 VC.date = vend.webpage
                 VC.name = vend.vendor
                 VC.address = vend.address
                 VC.city = vend.city
                 VC.state = vend.state
-                VC.zip = formatter.string(from: Zip! as NSNumber)
+                VC.zip = MasterViewController.numberFormatter.string(from: Zip! as NSNumber)
                 VC.amount = vend.profession
                 VC.tbl11 = vend.phone
                 VC.tbl12 = vend.phone1
@@ -349,8 +348,8 @@ final class Vendor: UIViewController {
                 
                 if ((defaults.string(forKey: "backendKey")) == "Parse") {
                     
-                    VC.leadNo =  formatter.string(from: LeadNo! as NSNumber)
-                    VC.active = formatter.string(from: Active! as NSNumber)
+                    VC.leadNo =  MasterViewController.numberFormatter.string(from: LeadNo! as NSNumber)
+                    VC.active = MasterViewController.numberFormatter.string(from: Active! as NSNumber)
                     VC.objectId = (_feedItems[indexPath!] as AnyObject).value(forKey: "objectId") as? String
                     VC.date = (_feedItems[indexPath!] as AnyObject).value(forKey: "WebPage") as? String
                     VC.name = (_feedItems[indexPath!] as AnyObject).value(forKey: "Vendor") as? String
@@ -374,8 +373,8 @@ final class Vendor: UIViewController {
                 } else {
                     
                     //firebase
-                    VC.leadNo =  formatter.string(from: LeadNo! as NSNumber)
-                    VC.active = formatter.string(from: Active! as NSNumber)
+                    VC.leadNo = MasterViewController.numberFormatter.string(from: LeadNo! as NSNumber)
+                    VC.active = MasterViewController.numberFormatter.string(from: Active! as NSNumber)
                     VC.leadNo = vendlist[indexPath!].vendId
                     VC.objectId = vendlist[indexPath!].vendId
                     VC.date = vendlist[indexPath!].webpage
@@ -383,7 +382,7 @@ final class Vendor: UIViewController {
                     VC.address = vendlist[indexPath!].address
                     VC.city = vendlist[indexPath!].city
                     VC.state = vendlist[indexPath!].state
-                    VC.zip = formatter.string(from: Zip! as NSNumber)
+                    VC.zip = MasterViewController.numberFormatter.string(from: Zip! as NSNumber)
                     VC.amount = vendlist[indexPath!].profession
                     VC.tbl11 = vendlist[indexPath!].phone
                     VC.tbl12 = vendlist[indexPath!].phone1

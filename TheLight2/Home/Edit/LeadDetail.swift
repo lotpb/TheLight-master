@@ -666,13 +666,12 @@ final class LeadDetail: UIViewController, MFMailComposeViewControllerDelegate {
     
         if (self.formController == "Leads" || self.formController == "Customer") {
             
-            let formatter = NumberFormatter()
-            var Amount:NSNumber? = formatter.number(from: amount! as String)
-            formatter.numberStyle = .currency
+            var Amount:NSNumber? = MasterViewController.numberFormatter.number(from: amount! as String)
+            MasterViewController.numberFormatter.numberStyle = .currency
             if Amount == nil {
                 Amount = 0
             }
-            labelamount.text =  formatter.string(from: Amount!)
+            labelamount.text =  MasterViewController.numberFormatter.string(from: Amount!)
             
             if self.salesman != nil {
                 t22 = self.salesman

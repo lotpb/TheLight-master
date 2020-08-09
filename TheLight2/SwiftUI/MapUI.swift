@@ -76,8 +76,8 @@ struct MapView : UIViewRepresentable {
             let location = locations.last
             let point = MKPointAnnotation()
 
-            let georeader = CLGeocoder()
-            georeader.reverseGeocodeLocation(location!) { (places, err) in
+            //let georeader = CLGeocoder()
+            AppDelegate.geoCoder.reverseGeocodeLocation(location!) { (places, err) in
                 if err != nil{
                     print((err?.localizedDescription)!)
                     return

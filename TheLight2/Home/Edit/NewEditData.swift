@@ -342,8 +342,7 @@ final class NewEditData: UIViewController, UITextFieldDelegate {
                 
             } else if (self.formController == "Product") {
                 
-                let numberFormatter = NumberFormatter()
-                let myPrice : NSNumber = numberFormatter.number(from: self.price.text!)!
+                let myPrice : NSNumber = MasterViewController.numberFormatter.number(from: self.price.text!)!
                 
                 if (self.formStatus == "Edit") { //Edit Products
                     

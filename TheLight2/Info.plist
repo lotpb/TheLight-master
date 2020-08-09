@@ -47,7 +47,7 @@
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
-		<false/>
+		<true/>
 		<key>UISceneConfigurations</key>
 		<dict>
 			<key>UIWindowSceneSessionRoleApplication</key>
@@ -171,5 +171,7 @@
 	<string>Can we use your Siri?</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Can we use your Speech?</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>This app wants to track</string>
 </dict>
 </plist>

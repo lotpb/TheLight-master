@@ -22,7 +22,7 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     // MARK: NavigationController Hidden
     private var lastContentOffset: CGFloat = 0.0
     
-    private var datePickerView : UIDatePicker = UIDatePicker()
+    private var datePickerView = UIDatePicker(frame: .zero)
     private var pickerView : UIPickerView = UIPickerView()
     private var pickOption = ["Call", "Follow", "Looks Good", "Future", "Bought", "Dead", "Cancel", "Sold"]
     private var pickRate = ["A", "B", "C", "D", "F"]
@@ -650,42 +650,44 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             
         } else {
             
-            let numberFormatter = NumberFormatter()
-            numberFormatter.numberStyle = .none
+            MasterViewController.numberFormatter.numberStyle = .none
+
+            MasterViewController.dateFormatter.dateFormat = "MMM dd yyyy"
+            MasterViewController.dateFormatter.timeZone = .current
             
-            let myActive : NSNumber = numberFormatter.number(from: self.frm30! as String)!
+            let myActive : NSNumber = MasterViewController.numberFormatter.number(from: self.frm30! as String)!
             
             var Cust = self.custNo
             if Cust == nil { Cust = "" }
-            let myCust = numberFormatter.number(from: Cust! as String)
+            let myCust = MasterViewController.numberFormatter.number(from: Cust! as String)
             
             var Lead = self.leadNo
             if Lead == nil { Lead = "" }
-            let myLead = numberFormatter.number(from: Lead! as String)
+            let myLead = MasterViewController.numberFormatter.number(from: Lead! as String)
             
             var Amount = (self.amount.text)
             if Amount == nil { Amount = "" }
-            let myAmount =  numberFormatter.number(from: Amount!)
+            let myAmount =  MasterViewController.numberFormatter.number(from: Amount!)
             
             var Zip = self.zip.text
             if Zip == nil { Zip = "" }
-            let myZip = numberFormatter.number(from: Zip!)
+            let myZip = MasterViewController.numberFormatter.number(from: Zip!)
             
             var Sale = self.saleNo
             if Sale == nil { Sale = "" }
-            let mySale = numberFormatter.number(from: Sale!)
+            let mySale = MasterViewController.numberFormatter.number(from: Sale!)
             
             var Job = self.jobNo
             if Job == nil { Job = "" }
-            let myJob = numberFormatter.number(from: Job! as String)
+            let myJob = MasterViewController.numberFormatter.number(from: Job! as String)
             
             var Ad = self.adNo
             if Ad == nil { Ad = "" }
-            let myAd = numberFormatter.number(from: Ad! as String)
+            let myAd = MasterViewController.numberFormatter.number(from: Ad! as String)
             
             var Quan = self.callback.text
             if Quan == nil { Quan = "" }
-            let myQuan = numberFormatter.number(from: Quan! as String)
+            let myQuan = MasterViewController.numberFormatter.number(from: Quan! as String)
 
             if (self.formController == "Leads") {
 
@@ -1014,11 +1016,11 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                 
                 var Active = (self.frm30)
                 if Active == nil { Active = "0" }
-                let myActive =  numberFormatter.number(from: Active! as String)
+                let myActive =  MasterViewController.numberFormatter.number(from: Active! as String)
                 
                 var Lead = (self.leadNo)
                 if Lead == nil { Lead = "-1" }
-                let myLead =  numberFormatter.number(from: Lead! as String)
+                let myLead =  MasterViewController.numberFormatter.number(from: Lead! as String)
                 
                 if (self.status == "Edit") { //Edit Vendor
                     
@@ -1168,11 +1170,11 @@ final class EditData: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                 
                 var Active = (self.frm30)
                 if Active == nil { Active = "0" }
-                let myActive =  numberFormatter.number(from: Active! as String)
+                let myActive =  MasterViewController.numberFormatter.number(from: Active! as String)
                 
                 var Lead = (self.leadNo)
                 if Lead == nil { Lead = "-1" }
-                let myLead =  numberFormatter.number(from: Lead!)
+                let myLead =  MasterViewController.numberFormatter.number(from: Lead!)
                 
                 if (self.status == "Edit") { //Edit Employee
                     

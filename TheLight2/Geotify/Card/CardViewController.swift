@@ -162,6 +162,39 @@ class CardViewController: UIViewController {
         return label
     }()
 
+    private let centerTLabel: UILabel = {
+        let label = UILabel()
+        label.text = "◆ Promotion"
+        label.font = Font.celltitle12r
+        label.backgroundColor = .clear
+        label.textColor = .label
+        label.sizeToFit()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let centerLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Complete 48 trips for $130 extra"
+        label.font = Font.celltitle26r
+        label.backgroundColor = .clear
+        label.textColor = .label
+        label.sizeToFit()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let centerBLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Quest ends Monday 4:00 AM"
+        label.font = Font.celltitle16r
+        label.backgroundColor = .clear
+        label.textColor = .label
+        label.sizeToFit()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -190,6 +223,9 @@ class CardViewController: UIViewController {
         mainView.addSubview(promoBtn)
         mainView.addSubview(driveBtn)
         mainView.addSubview(segmentedControl)
+        mainView.addSubview(centerTLabel)
+        mainView.addSubview(centerLabel)
+        mainView.addSubview(centerBLabel)
 
         view.addSubview(offLineBtn)
         view.addSubview(searchBtn)
@@ -231,7 +267,14 @@ class CardViewController: UIViewController {
             centerView.topAnchor.constraint(equalTo: topView.bottomAnchor, constant: 10),
             centerView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 10),
             centerView.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -10),
-            centerView.heightAnchor.constraint(equalToConstant: 100),
+            centerView.heightAnchor.constraint(equalToConstant: 110),
+
+            centerTLabel.topAnchor.constraint(equalTo: centerView.topAnchor, constant: 10),
+            centerTLabel.leftAnchor.constraint(equalTo: centerView.leftAnchor, constant: 15),
+            centerLabel.leftAnchor.constraint(equalTo: centerView.leftAnchor, constant: 15),
+            centerLabel.centerYAnchor.constraint(equalTo: centerView.centerYAnchor),
+            centerBLabel.topAnchor.constraint(equalTo: centerLabel.bottomAnchor, constant: 2),
+            centerBLabel.leftAnchor.constraint(equalTo: centerView.leftAnchor, constant: 15),
 
             promoView.topAnchor.constraint(equalTo: centerView.bottomAnchor, constant: 10),
             promoView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 10),

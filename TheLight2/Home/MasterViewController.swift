@@ -50,6 +50,12 @@ final class MasterViewController: UITableViewController, UISplitViewControllerDe
         return formattre
     }()
 
+    public static let numberFormatter: NumberFormatter = {
+            let numberFormatter = NumberFormatter()
+            numberFormatter.numberStyle = .none
+            return numberFormatter
+        }()
+
 
     override func viewDidLoad() {
         super.viewDidLoad()

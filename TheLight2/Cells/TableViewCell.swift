@@ -117,12 +117,11 @@ final class TableViewCell: UITableViewCell {
             myLabel10.text = MasterViewController.dateFormatter.string(from: (custpost?.creationDate)!) as String
             
             var Amount = custpost?.amount as? Int
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .currency
+            MasterViewController.numberFormatter.numberStyle = .currency
             if Amount == nil {
                 Amount = 0
             }
-            myLabel20.text = formatter.string(from: Amount! as NSNumber)
+            myLabel20.text = MasterViewController.numberFormatter.string(from: Amount! as NSNumber)
             
             if custpost?.comments == "" {
                 custreplyButton!.tintColor = .lightGray
